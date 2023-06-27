@@ -1,0 +1,192 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\Bitmap.cpp">
+      <Filter>Graphics\Direct2D</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\Brush.cpp">
+      <Filter>Graphics\Direct2D</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\Cursor.cpp">
+      <Filter>Graphics\Direct2D</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\D2DFactory.cpp">
+      <Filter>Graphics\Direct2D</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\DWriteFactory.cpp">
+      <Filter>Graphics\Direct2D</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\Font.cpp">
+      <Filter>Graphics\Direct2D</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\ImagingFactory.cpp">
+      <Filter>Graphics\Direct2D</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\RenderTarget.cpp">
+      <Filter>Graphics\Direct2D</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\Theme.cpp">
+      <Filter>Graphics\Direct2D</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Application.cpp">
+      <Filter>Desktop</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\AppWindow.cpp">
+      <Filter>Desktop</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Overlapped.cpp">
+      <Filter>Desktop</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Window.cpp">
+      <Filter>Desktop</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Frame.cpp">
+      <Filter>Desktop</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\OpenFileDialog.cpp">
+      <Filter>Desktop\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\SaveFileDialog.cpp">
+      <Filter>Desktop\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\Icon.cpp">
+      <Filter>Graphics\Direct2D</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\MessageBox.cpp">
+      <Filter>Desktop\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\Dialog.cpp">
+      <Filter>Desktop\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\PathEdit.cpp">
+      <Filter>UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Storage\Clipboard.cpp">
+      <Filter>Storage</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\DialogHelper.cpp">
+      <Filter>Desktop\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Culture\LanguageHelper.cpp">
+      <Filter>Culture</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Devices\ClockHelper.cpp">
+      <Filter>Devices</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\Bitmap.h">
+      <Filter>Graphics\Direct2D</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\Brush.h">
+      <Filter>Graphics\Direct2D</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\Cursor.h">
+      <Filter>Graphics\Direct2D</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\D2DFactory.h">
+      <Filter>Graphics\Direct2D</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\DWriteFactory.h">
+      <Filter>Graphics\Direct2D</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\Font.h">
+      <Filter>Graphics\Direct2D</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\ImagingFactory.h">
+      <Filter>Graphics\Direct2D</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\RenderTarget.h">
+      <Filter>Graphics\Direct2D</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\Theme.h">
+      <Filter>Graphics\Direct2D</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Application.h">
+      <Filter>Desktop</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\AppWindow.h">
+      <Filter>Desktop</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Overlapped.h">
+      <Filter>Desktop</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Window.h">
+      <Filter>Desktop</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Frame.h">
+      <Filter>Desktop</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\OpenFileDialog.h">
+      <Filter>Desktop\Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\SaveFileDialog.h">
+      <Filter>Desktop\Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\Icon.h">
+      <Filter>Graphics\Direct2D</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Strings\Exception.h">
+      <Filter>Resources\Strings</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\MessageBox.h">
+      <Filter>Desktop\Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\Dialog.h">
+      <Filter>Desktop\Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\PathEdit.h">
+      <Filter>UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Strings\Files.h">
+      <Filter>Resources\Strings</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Clipboard.h">
+      <Filter>Storage</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\DialogHelper.h">
+      <Filter>Desktop\Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Culture\LanguageHelper.h">
+      <Filter>Culture</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Devices\ClockHelper.h">
+      <Filter>Devices</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{b0c105a0-17ac-4956-b2bc-33bc32db5344}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Direct2D">
+      <UniqueIdentifier>{ef0a6273-b647-4760-9d9c-78b985652d2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Desktop">
+      <UniqueIdentifier>{669d1369-7960-4a96-97a7-d84dc1f11691}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Desktop\Dialogs">
+      <UniqueIdentifier>{fbbcb3b3-060e-4db7-9dc3-6661151a3a6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{76cae65f-3025-4bb7-aa81-97ef57f4adb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Strings">
+      <UniqueIdentifier>{b875c4a6-2169-48b0-9b3f-b0a3f3393c88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{0e05da9c-3f6f-40b4-908d-6821b6eac7d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Controls">
+      <UniqueIdentifier>{0f3b6cfb-67b1-4356-b599-1a5942b2389f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Storage">
+      <UniqueIdentifier>{f8b30e27-2ce5-4ed2-8246-e734ed4c37bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Culture">
+      <UniqueIdentifier>{ec9990a8-de7b-40bc-9025-c43f89716a41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Devices">
+      <UniqueIdentifier>{1bd87a5f-bd1d-42e3-a68f-0d7f4714b4b5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

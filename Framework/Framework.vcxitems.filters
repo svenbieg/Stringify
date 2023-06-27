@@ -1,0 +1,300 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="UI">
+      <UniqueIdentifier>{f7ee2fa4-9b62-427e-80f5-9604105b9bc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Controls">
+      <UniqueIdentifier>{f6583b3b-00bf-4522-b83f-6914a21f4624}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Input">
+      <UniqueIdentifier>{a1c719cb-ee00-4626-bbb7-29973e47345a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Controls\Menus">
+      <UniqueIdentifier>{9d6b4b18-33aa-4317-881b-b3ca81577add}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{74740d04-f2ce-4feb-a15a-222599650d29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Strings">
+      <UniqueIdentifier>{d654fe4f-5342-4673-aece-40817803ec51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Icons">
+      <UniqueIdentifier>{2cea5834-02ac-4360-9fed-4f25ab67824b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Bitmaps">
+      <UniqueIdentifier>{8281babd-030d-4a71-a6f3-caf7d0fc3f6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework">
+      <UniqueIdentifier>{7f3f7724-1c77-4c03-ac48-e0133e1c70ff}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Input\KeyEvent.cpp">
+      <Filter>UI\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Input\PointerEvent.cpp">
+      <Filter>UI\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Input\VirtualKey.cpp">
+      <Filter>UI\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Frame.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Window.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Button.cpp">
+      <Filter>UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Canvas.cpp">
+      <Filter>UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Control.cpp">
+      <Filter>UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Grid.cpp">
+      <Filter>UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Group.cpp">
+      <Filter>UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\HyperLink.cpp">
+      <Filter>UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Image.cpp">
+      <Filter>UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Interactive.cpp">
+      <Filter>UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Label.cpp">
+      <Filter>UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Panel.cpp">
+      <Filter>UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\ScrollBar.cpp">
+      <Filter>UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\ScrollBox.cpp">
+      <Filter>UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\SplitView.cpp">
+      <Filter>UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\StackPanel.cpp">
+      <Filter>UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\TextBlock.cpp">
+      <Filter>UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\WrapPanel.cpp">
+      <Filter>UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\MenuBar.cpp">
+      <Filter>UI\Controls\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\MenuHelper.cpp">
+      <Filter>UI\Controls\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\PopupMenu.cpp">
+      <Filter>UI\Controls\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\ToolBar.cpp">
+      <Filter>UI\Controls\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\ToolBarItem.cpp">
+      <Filter>UI\Controls\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\ToolBarPanel.cpp">
+      <Filter>UI\Controls\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\ToolTip.cpp">
+      <Filter>UI\Controls\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\MenuBarItem.cpp">
+      <Filter>UI\Controls\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\PopupMenuItem.cpp">
+      <Filter>UI\Controls\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Input\Shortcut.cpp">
+      <Filter>UI\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\Menu.cpp">
+      <Filter>UI\Controls\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\MenuItem.cpp">
+      <Filter>UI\Controls\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\TabView.cpp">
+      <Filter>UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\ComboBox.cpp">
+      <Filter>UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\EditBox.cpp">
+      <Filter>UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\ProgressBar.cpp">
+      <Filter>UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Input.cpp">
+      <Filter>UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\TextBox.cpp">
+      <Filter>UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Resources\Bitmaps\Edit.cpp">
+      <Filter>Resources\Bitmaps</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\EditMenu.cpp">
+      <Filter>UI\Controls\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Application.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Input\KeyEvent.h">
+      <Filter>UI\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Input\PointerEvent.h">
+      <Filter>UI\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Input\VirtualKey.h">
+      <Filter>UI\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Frame.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Window.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Button.h">
+      <Filter>UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Canvas.h">
+      <Filter>UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Control.h">
+      <Filter>UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Grid.h">
+      <Filter>UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Group.h">
+      <Filter>UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\HyperLink.h">
+      <Filter>UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Image.h">
+      <Filter>UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Interactive.h">
+      <Filter>UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Label.h">
+      <Filter>UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Panel.h">
+      <Filter>UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\ScrollBar.h">
+      <Filter>UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\ScrollBox.h">
+      <Filter>UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\SplitView.h">
+      <Filter>UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\StackPanel.h">
+      <Filter>UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\WrapPanel.h">
+      <Filter>UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\MenuBar.h">
+      <Filter>UI\Controls\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\MenuHelper.h">
+      <Filter>UI\Controls\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\PopupMenu.h">
+      <Filter>UI\Controls\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\ToolBar.h">
+      <Filter>UI\Controls\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\ToolBarItem.h">
+      <Filter>UI\Controls\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\ToolBarPanel.h">
+      <Filter>UI\Controls\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\ToolTip.h">
+      <Filter>UI\Controls\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Alignment.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Orientation.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\MenuBarItem.h">
+      <Filter>UI\Controls\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\PopupMenuItem.h">
+      <Filter>UI\Controls\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Input\Shortcut.h">
+      <Filter>UI\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\Menu.h">
+      <Filter>UI\Controls\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\MenuItem.h">
+      <Filter>UI\Controls\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\TabView.h">
+      <Filter>UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\TextBlock.h">
+      <Filter>UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\ComboBox.h">
+      <Filter>UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\EditBox.h">
+      <Filter>UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\ProgressBar.h">
+      <Filter>UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Input.h">
+      <Filter>UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Strings\Edit.h">
+      <Filter>Resources\Strings</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Icons\Edit.h">
+      <Filter>Resources\Icons</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\TextBox.h">
+      <Filter>UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Bitmaps\Edit.h">
+      <Filter>Resources\Bitmaps</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\EditMenu.h">
+      <Filter>UI\Controls\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Application.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

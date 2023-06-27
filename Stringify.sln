@@ -1,0 +1,53 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33530.505
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Default", "Default\Default.vcxitems", "{E356BD3B-D09B-4FDA-ACD2-403372FCEAC1}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Common", "Common\Common.vcxitems", "{35B6FC43-74CC-4727-9058-44A0BB340350}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Framework", "Framework\Framework.vcxitems", "{D136CB92-4C67-4B20-9C09-594D324E3F51}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Windows", "Windows\Windows.vcxitems", "{D3561CA0-0F75-4B37-B166-D8BEA51D7A9E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Windows.Desktop", "Windows.Desktop\Windows.Desktop.vcxitems", "{0360ACE2-9F06-419D-AC64-A9E24FAB3F24}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Stringify", "Stringify\Stringify.vcxproj", "{3A0E30D6-4D73-4EEE-94E2-6E0FE7507EFB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
+		Release|Win32 = Release|Win32
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3A0E30D6-4D73-4EEE-94E2-6E0FE7507EFB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3A0E30D6-4D73-4EEE-94E2-6E0FE7507EFB}.Debug|Win32.Build.0 = Debug|Win32
+		{3A0E30D6-4D73-4EEE-94E2-6E0FE7507EFB}.Debug|x64.ActiveCfg = Debug|x64
+		{3A0E30D6-4D73-4EEE-94E2-6E0FE7507EFB}.Debug|x64.Build.0 = Debug|x64
+		{3A0E30D6-4D73-4EEE-94E2-6E0FE7507EFB}.Release|Win32.ActiveCfg = Release|Win32
+		{3A0E30D6-4D73-4EEE-94E2-6E0FE7507EFB}.Release|Win32.Build.0 = Release|Win32
+		{3A0E30D6-4D73-4EEE-94E2-6E0FE7507EFB}.Release|x64.ActiveCfg = Release|x64
+		{3A0E30D6-4D73-4EEE-94E2-6E0FE7507EFB}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DDD96574-6280-451A-8975-C05E7E382677}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Windows.Desktop\Windows.Desktop.vcxitems*{0360ace2-9f06-419d-ac64-a9e24fab3f24}*SharedItemsImports = 9
+		Common\Common.vcxitems*{35b6fc43-74cc-4727-9058-44a0bb340350}*SharedItemsImports = 9
+		Common\Common.vcxitems*{3a0e30d6-4d73-4eee-94e2-6e0fe7507efb}*SharedItemsImports = 4
+		Default\Default.vcxitems*{3a0e30d6-4d73-4eee-94e2-6e0fe7507efb}*SharedItemsImports = 4
+		Framework\Framework.vcxitems*{3a0e30d6-4d73-4eee-94e2-6e0fe7507efb}*SharedItemsImports = 4
+		Windows.Desktop\Windows.Desktop.vcxitems*{3a0e30d6-4d73-4eee-94e2-6e0fe7507efb}*SharedItemsImports = 4
+		Windows\Windows.vcxitems*{3a0e30d6-4d73-4eee-94e2-6e0fe7507efb}*SharedItemsImports = 4
+		Framework\Framework.vcxitems*{d136cb92-4c67-4b20-9c09-594d324e3f51}*SharedItemsImports = 9
+		Windows\Windows.vcxitems*{d3561ca0-0f75-4b37-b166-d8bea51d7a9e}*SharedItemsImports = 9
+		Default\Default.vcxitems*{e356bd3b-d09b-4fda-acd2-403372fceac1}*SharedItemsImports = 9
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{D136CB92-4C67-4B20-9C09-594D324E3F51}</ItemsProjectGuid>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+   </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_FRAMEWORK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Application.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Resources\Bitmaps\Edit.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Button.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Canvas.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\ComboBox.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Control.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\EditBox.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Grid.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Group.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\HyperLink.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Image.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Input.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Interactive.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Label.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\EditMenu.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\Menu.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\MenuBar.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\MenuBarItem.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\MenuHelper.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\MenuItem.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\PopupMenu.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\PopupMenuItem.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\ToolBar.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\ToolBarItem.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\ToolBarPanel.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\ToolTip.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Panel.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\ProgressBar.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\ScrollBar.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\ScrollBox.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\SplitView.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\StackPanel.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\TabView.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\TextBlock.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\TextBox.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\WrapPanel.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Frame.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Input\KeyEvent.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Input\PointerEvent.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Input\Shortcut.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Input\VirtualKey.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Window.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Application.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Bitmaps\Edit.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Icons\Edit.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Strings\Edit.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Alignment.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Button.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Canvas.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\ComboBox.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Control.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\EditBox.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Grid.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Group.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\HyperLink.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Image.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Input.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Interactive.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Label.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\EditMenu.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\Menu.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\MenuBar.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\MenuBarItem.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\MenuHelper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\MenuItem.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\PopupMenu.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\PopupMenuItem.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\ToolBar.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\ToolBarItem.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\ToolBarPanel.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\ToolTip.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Panel.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\ProgressBar.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\ScrollBar.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\ScrollBox.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\SplitView.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\StackPanel.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\TabView.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\TextBlock.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\TextBox.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\WrapPanel.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Frame.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Input\KeyEvent.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Input\PointerEvent.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Input\Shortcut.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Input\VirtualKey.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Orientation.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Window.h" />
+  </ItemGroup>
+</Project>

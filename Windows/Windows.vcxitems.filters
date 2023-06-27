@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Storage\Filesystem\File.cpp">
+      <Filter>Storage\Filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Storage\Filesystem\FileHelper.cpp">
+      <Filter>Storage\Filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)ResourceHelper.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Devices\Timer.cpp">
+      <Filter>Devices</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Network\GatewayHelper.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Network\Tls\TlsSocket.cpp">
+      <Filter>Network\Tls</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Network\Udp\UdpSocket.cpp">
+      <Filter>Network\Udp</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Network\Tcp\TcpSocket.cpp">
+      <Filter>Network\Tcp</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)TimeHelper.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Security\Rsa\RsaKey.cpp">
+      <Filter>Security\Rsa</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Storage\Filesystem\Directory.cpp">
+      <Filter>Storage\Filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Storage\NamedPipe.cpp">
+      <Filter>Storage</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)System\ProcessClient.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)System\ProcessServer.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)ExceptionHelper.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Storage\Filesystem\VolumeFile.cpp">
+      <Filter>Storage\Filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Devices\Serial\SerialPort.cpp">
+      <Filter>Devices\Serial</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)System\ThreadPoolTimer.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)TaskClass.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)TaskHelper.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)CommandLine.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)MemoryHelper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)TypeHelper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ComPointer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Filesystem\File.h">
+      <Filter>Storage\Filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Filesystem\FileHelper.h">
+      <Filter>Storage\Filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ResourceHelper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ErrorHelper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Devices\Timer.h">
+      <Filter>Devices</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Network\GatewayHelper.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Network\Tls\TlsSocket.h">
+      <Filter>Network\Tls</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Network\Udp\UdpSocket.h">
+      <Filter>Network\Udp</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Network\Tcp\TcpSocket.h">
+      <Filter>Network\Tcp</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)TimeHelper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Security\Rsa\RsaKey.h">
+      <Filter>Security\Rsa</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Filesystem\Directory.h">
+      <Filter>Storage\Filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Convertible.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Storage\NamedPipe.h">
+      <Filter>Storage</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)System\ProcessClient.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)System\ProcessServer.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ExceptionHelper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Filesystem\VolumeFile.h">
+      <Filter>Storage\Filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Devices\Serial\SerialPort.h">
+      <Filter>Devices\Serial</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)System\ThreadPoolTimer.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Icons\Icon.h">
+      <Filter>Resources\Icons</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)TaskClass.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)TaskHelper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)CommandLine.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Configuration">
+      <UniqueIdentifier>{61d22161-d5b4-4650-b9bd-48e65b4ed405}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Storage">
+      <UniqueIdentifier>{416a67ed-a1c8-42c0-9a54-093a6fc3a814}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Storage\Filesystem">
+      <UniqueIdentifier>{1cd11fcc-313d-4d53-92be-3a3725ddeab5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Devices">
+      <UniqueIdentifier>{013f2d65-483c-4294-82ab-1caa3b953664}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network">
+      <UniqueIdentifier>{2b796857-2a44-4cde-adbb-95821dc6973f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network\Tcp">
+      <UniqueIdentifier>{dca15038-0f80-43aa-85a8-6ea8109774a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network\Udp">
+      <UniqueIdentifier>{c211fccc-8282-4698-bcf8-179a86876148}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network\Tls">
+      <UniqueIdentifier>{44a8065f-55ab-4139-9657-6c39607041f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Security">
+      <UniqueIdentifier>{c4f285b3-d150-448e-9673-e3d22ce99e20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Security\Rsa">
+      <UniqueIdentifier>{a2dd239d-2deb-45ff-9df6-dc85aa9851a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System">
+      <UniqueIdentifier>{9aaccf89-84f8-48aa-82a3-96bbba05efd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Devices\Serial">
+      <UniqueIdentifier>{5dd8d286-e064-4cd0-99ba-7f07a4f64883}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{351993b9-6546-42b7-8026-efc2b5162ee3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Icons">
+      <UniqueIdentifier>{e9a9e26a-b0b2-40a0-ac3e-ee403b7396e6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Configuration\Configuration.props">
+      <Filter>Configuration</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Configuration\Compiler.props">
+      <Filter>Configuration</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Configuration\Globals.props">
+      <Filter>Configuration</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Configuration\Default.props">
+      <Filter>Configuration</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Configuration\ProjectConfigurations.props">
+      <Filter>Configuration</Filter>
+    </None>
+  </ItemGroup>
+</Project>
