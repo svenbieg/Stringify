@@ -5,6 +5,13 @@
 #pragma once
 
 
+//=======
+// Using
+//=======
+
+#include "Collections/StringList.h"
+
+
 //==============
 // Command-Line
 //==============
@@ -12,19 +19,19 @@
 class CommandLine: public Object
 {
 public:
+	// Using
+	using StringList=Collections::StringList;
+
 	// Con-/Destructors
-	CommandLine(LPSTR CommandLine);
-	~CommandLine();
+	CommandLine(LPTSTR CommandLine);
 
 	// Common
-	static Handle<CommandLine> Current;
-	LPCSTR GetArgument(UINT Id)const;
-	UINT GetArgumentCount()const { return uCount; }
-	BOOL HasArgument(LPCTSTR Argument);
+	Handle<StringList> Arguments;
+	LPCTSTR Begin();
+	static Handle<CommandLine> Get();
 
 private:
 	// Common
-	LPSTR ScanArgument(LPSTR CommandLine, LPSTR* Argument, UINT* Length);
-	LPSTR* ppArgs;
-	UINT uCount;
+	LPCTSTR ScanArgument(LPCTSTR CommandLine, LPCTSTR* Argument, UINT* Length);
+	static Handle<CommandLine> hCurrent;
 };

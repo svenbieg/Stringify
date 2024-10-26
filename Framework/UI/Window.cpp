@@ -9,7 +9,7 @@
 // Using
 //=======
 
-#include "Frame.h"
+#include "UI/Frame.h"
 
 using namespace Graphics;
 using namespace UI::Controls;
@@ -43,7 +43,7 @@ return Background;
 
 Graphics::RECT Window::GetClientRect()const
 {
-return RECT(0, 0, rcRect.GetWidth(), rcRect.GetHeight());
+return RECT(0, 0, m_Rect.GetWidth(), m_Rect.GetHeight());
 }
 
 Handle<Graphics::Font> Window::GetFont()
@@ -65,7 +65,7 @@ return Parent->GetFrame();
 
 Graphics::POINT Window::GetFrameOffset()const
 {
-POINT pt(rcRect.Left, rcRect.Top);
+POINT pt(m_Rect.Left, m_Rect.Top);
 if(Parent)
 	pt+=Parent->GetFrameOffset();
 return pt;
@@ -74,13 +74,7 @@ return pt;
 Graphics::RECT Window::GetFrameRect()const
 {
 POINT offset=this->GetFrameOffset();
-SIZE size=rcRect.GetSize();
-RECT rc_frame;
-rc_frame.Left=offset.Left;
-rc_frame.Top=offset.Top;
-rc_frame.Right=offset.Left+size.Width;
-rc_frame.Bottom=offset.Top+size.Height;
-return rc_frame;
+return m_Rect.SetPosition(offset);
 }
 
 Graphics::SIZE Window::GetMinSize(RenderTarget* target)
@@ -96,15 +90,10 @@ for(auto it=Children->First(); it->HasCurrent(); it->MoveNext())
 	auto control=Convert<Control>(child);
 	if(control)
 		child_size.AddPadding(control->Margin*scale);
-	size.Width=MAX(size.Width, child_size.Width);
-	size.Height=MAX(size.Height, child_size.Height);
+	size.Width=Max(size.Width, child_size.Width);
+	size.Height=Max(size.Height, child_size.Height);
 	}
 return size.Max(MinSize*scale);
-}
-
-Graphics::POINT Window::GetOffset()const
-{
-return POINT(rcRect.Left, rcRect.Top);
 }
 
 FLOAT Window::GetScaleFactor()const
@@ -113,6 +102,20 @@ if(!Parent)
 	return Scale;
 FLOAT scale=Parent->GetScaleFactor();
 return Scale*scale;
+}
+
+Graphics::POINT Window::GetScreenOffset()const
+{
+POINT pt(m_Rect.Left, m_Rect.Top);
+if(Parent)
+	pt+=Parent->GetScreenOffset();
+return pt;
+}
+
+Graphics::RECT Window::GetScreenRect()const
+{
+POINT offset=GetScreenOffset();
+return m_Rect.SetPosition(offset);
 }
 
 Handle<Graphics::RenderTarget> Window::GetTarget()
@@ -125,9 +128,7 @@ return frame->GetTarget();
 
 Handle<Graphics::Theme> Window::GetTheme()
 {
-auto frame=this->GetFrame();
-if(!frame)
-	return Theme::Default;
+auto frame=GetFrame();
 return frame->GetTheme();
 }
 
@@ -147,14 +148,15 @@ return nullptr;
 
 VOID Window::Invalidate(BOOL rearrange)
 {
-SetFlag(uFlags, WindowFlags::Repaint);
-if(GetFlag(uFlags, WindowFlags::Rearrange))
+SetFlag(m_Flags, WindowFlags::Repaint);
+if(GetFlag(m_Flags, WindowFlags::Rearrange))
 	return;
 if(rearrange)
-	SetFlag(uFlags, WindowFlags::Rearrange);
+	SetFlag(m_Flags, WindowFlags::Rearrange);
+BOOL transparent=false;
 if(Parent)
 	{
-	BOOL transparent=true;
+	transparent=true;
 	auto background=this->GetBackgroundBrush();
 	if(background)
 		{
@@ -163,14 +165,16 @@ if(Parent)
 			transparent=false;
 		}
 	transparent|=rearrange;
-	if(transparent)
-		{
-		Parent->Invalidate(rearrange);
-		return;
-		}
 	}
-auto frame=this->GetFrame();
-frame->Invalidate(rearrange);
+if(transparent)
+	{
+	Parent->Invalidate(rearrange);
+	}
+else
+	{
+	auto frame=this->GetFrame();
+	frame->Invalidate(rearrange);
+	}
 }
 
 BOOL Window::IsParentOf(Window* window)
@@ -198,23 +202,23 @@ return Parent->IsVisible();
 
 VOID Window::Move(RECT const& rc)
 {
-if(rcRect!=rc)
+if(m_Rect!=rc)
 	{
-	rcRect=rc;
+	m_Rect=rc;
 	Invalidate(true);
 	}
 }
 
 VOID Window::Move(RenderTarget* target, RECT const& rc)
 {
-if(rcRect!=rc)
+if(m_Rect!=rc)
 	{
-	rcRect=rc;
-	Invalidate(true);
+	SetFlag(m_Flags, WindowFlags::Update);
+	m_Rect=rc;
 	}
-if(GetFlag(uFlags, WindowFlags::Rearrange))
+if(GetFlag(m_Flags, WindowFlags::Rearrange))
 	{
-	ClearFlag(uFlags, WindowFlags::Rearrange);
+	ClearFlag(m_Flags, WindowFlags::Rearrange);
 	RECT rc_client=GetClientRect();
 	this->Rearrange(target, rc_client);
 	return;
@@ -243,9 +247,9 @@ if(background)
 
 VOID Window::SetPosition(POINT const& pt)
 {
-UINT width=rcRect.GetWidth();
-UINT height=rcRect.GetHeight();
-rcRect.Set(pt.Left, pt.Top, pt.Left+width, pt.Top+height);
+UINT width=m_Rect.GetWidth();
+UINT height=m_Rect.GetHeight();
+m_Rect.Set(pt.Left, pt.Top, pt.Left+width, pt.Top+height);
 Invalidate(true);
 }
 
@@ -260,10 +264,10 @@ Parent(this, parent),
 Scale(1.f),
 Visible(this, true),
 // Protected
-rcRect(0, 0, 0, 0),
+m_Flags(WindowFlags::None),
+m_Rect(0, 0, 0, 0),
 // Private
-pOldParent(parent),
-uFlags(WindowFlags::None)
+m_OldParent(parent)
 {
 Children=new ChildList();
 Parent.Changed.Add(this, &Window::OnParentChanged);
@@ -282,12 +286,12 @@ if(Parent)
 
 VOID Window::OnParentChanged(Window* parent)
 {
-if(pOldParent)
+if(m_OldParent)
 	{
-	pOldParent->Children->Remove(this);
-	pOldParent->Invalidate(true);
+	m_OldParent->Children->Remove(this);
+	m_OldParent->Invalidate(true);
 	}
-pOldParent=parent;
+m_OldParent=parent;
 if(!parent)
 	return;
 parent->Children->Append(this);
@@ -296,7 +300,7 @@ Invalidate(true);
 
 VOID Window::OnVisibleChanged(BOOL visible)
 {
-ClearFlag(uFlags, WindowFlags::Rearrange);
+ClearFlag(m_Flags, WindowFlags::Rearrange);
 if(visible)
 	{
 	Invalidate(true);

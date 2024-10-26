@@ -24,16 +24,16 @@ public:
 	String(): pBuffer(nullptr) {}
 	String(LPCSTR Value): pBuffer(nullptr) { Create(0, Value); }
 	String(LPCWSTR Value): pBuffer(nullptr) { Create(0, Value); }
-	String(UINT Length, std::nullptr_t): pBuffer(new TCHAR[Length+1]) {}
+	String(UINT Length, nullptr_t): pBuffer(new TCHAR[Length+1]) {}
 	String(UINT Length, LPCSTR Value): pBuffer(nullptr) { Create(Length, Value); }
 	String(UINT Length, LPCWSTR Value): pBuffer(nullptr) { Create(Length, Value); }
 	template <class... _args_t> String(LPCSTR Format, _args_t... Arguments): pBuffer(nullptr)
 		{
 		UnknownClass args[]={ Arguments... };
-		VariableArguments vargs(args, ARRAYSIZE(args));
-		UINT len=StringVPrint((LPSTR)nullptr, 0, Format, vargs);
+		VariableArguments vargs(args, ArraySize(args));
+		UINT len=StringPrintArgs((LPSTR)nullptr, 0, Format, vargs);
 		pBuffer=new TCHAR[len+1];
-		StringVPrint(pBuffer, len+1, Format, vargs);
+		StringPrintArgs(pBuffer, len+1, Format, vargs);
 		}
 	~String()
 		{
@@ -56,8 +56,8 @@ public:
 	template <class... _args_t> inline UINT Scan(LPCSTR Format, _args_t... Arguments)
 		{
 		UnknownClass args[]={ Arguments... };
-		VariableArguments vargs(args, ARRAYSIZE(args));
-		return StringVScan(pBuffer, Format, vargs);
+		VariableArguments vargs(args, ArraySize(args));
+		return StringScanArgs(pBuffer, Format, vargs);
 		}
 	Handle<String> ToString()override;
 
@@ -97,12 +97,12 @@ public:
 
 	// Con-/Destructors
 	Handle(): pObject(nullptr) {}
-	Handle(std::nullptr_t): pObject(nullptr) {}
+	Handle(nullptr_t): pObject(nullptr) {}
 	Handle(LPCSTR Value) { HandleCreate<String, String>(&pObject, new String(Value)); }
 	Handle(LPCWSTR Value) { HandleCreate<String, String>(&pObject, new String(Value)); }
 	Handle(String* Value) { HandleCreate<String, String>(&pObject, Value); }
 	Handle(Handle<String> const& Handle) { HandleCreate<String, String>(&pObject, Handle.pObject); }
-	Handle(Handle<String>&& Handle)noexcept: pObject(Handle.pObject) { Handle.pObject=nullptr; }
+	Handle(Handle<String>&& Handle): pObject(Handle.pObject) { Handle.pObject=nullptr; }
 	~Handle() { HandleClear(&pObject); }
 
 	// Access
@@ -110,7 +110,7 @@ public:
 	inline String* operator->()const { return pObject; }
 
 	// Comparison
-	inline bool operator==(std::nullptr_t)const { return !(pObject&&pObject->GetLength()); }
+	inline bool operator==(nullptr_t)const { return !(pObject&&pObject->GetLength()); }
 	inline bool operator==(LPCSTR Value)const
 		{
 		auto str=pObject? pObject->Begin(): nullptr;
@@ -127,11 +127,11 @@ public:
 		auto str2=Handle? Handle->Begin(): nullptr;
 		return StringCompare(str1, str2)==0;
 		}
-	inline bool operator!=(std::nullptr_t)const { return (pObject&&pObject->GetLength()); }
+	inline bool operator!=(nullptr_t)const { return (pObject&&pObject->GetLength()); }
 	inline bool operator!=(LPCSTR Value)const { return !operator==(Value); }
 	inline bool operator!=(LPCWSTR Value)const { return !operator==(Value); }
 	inline bool operator!=(Handle<String> const& Handle)const { return !operator==(Handle); }
-	inline bool operator>(std::nullptr_t)const { return (pObject&&pObject->GetLength()); }
+	inline bool operator>(nullptr_t)const { return (pObject&&pObject->GetLength()); }
 	inline bool operator>(LPCSTR Value)const
 		{
 		auto str=pObject? pObject->Begin(): nullptr;
@@ -148,7 +148,7 @@ public:
 		auto str2=Object? Object->Begin(): nullptr;
 		return StringCompare(str1, str2)>0;
 		}
-	inline bool operator>=(std::nullptr_t)const { return true; }
+	inline bool operator>=(nullptr_t)const { return true; }
 	inline bool operator>=(LPCSTR Value)const
 		{
 		auto str=pObject? pObject->Begin(): nullptr;
@@ -165,7 +165,7 @@ public:
 		auto str2=Object? Object->Begin(): nullptr;
 		return StringCompare(str1, str2)>=0;
 		}
-	inline bool operator<(std::nullptr_t)const { return false; }
+	inline bool operator<(nullptr_t)const { return false; }
 	inline bool operator<(LPCSTR Value)const
 		{
 		auto str=pObject? pObject->Begin(): nullptr;
@@ -182,7 +182,7 @@ public:
 		auto str2=Object? Object->Begin(): nullptr;
 		return StringCompare(str1, str2)<0;
 		}
-	inline bool operator<=(std::nullptr_t)const { return !(pObject&&pObject->GetLength()); }
+	inline bool operator<=(nullptr_t)const { return !(pObject&&pObject->GetLength()); }
 	inline bool operator<=(LPCSTR Value)const
 		{
 		auto str=pObject? pObject->Begin(): nullptr;
@@ -201,7 +201,7 @@ public:
 		}
 
 	// Assignment
-	inline Handle& operator=(std::nullptr_t) { HandleClear(&pObject); return *this; }
+	inline Handle& operator=(nullptr_t) { HandleClear(&pObject); return *this; }
 	Handle& operator=(LPCSTR Value)
 		{
 		if(pObject)

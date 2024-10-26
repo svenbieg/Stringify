@@ -37,7 +37,7 @@ Step(10),
 Visibility(ScrollBarVisibility::Auto),
 Width(12),
 iStep(0),
-ptStart(-1, -1),
+m_StartPoint(-1, -1),
 uHighlight(ScrollBarButton::None),
 uOrientation(orientation),
 uStart(0)
@@ -116,7 +116,7 @@ switch(uOrientation)
 			color=(uHighlight==ScrollBarButton::Bar)? br_highlight: br_control;
 			UINT size=rc.Right-2*width;
 			UINT bar=size*Fraction;
-			bar=MAX(bar, width);
+			bar=Max(bar, width);
 			UINT scroll=size-bar;
 			RECT rc_bar(rc);
 			rc_bar.Top+=padding;
@@ -146,7 +146,7 @@ switch(uOrientation)
 			color=(uHighlight==ScrollBarButton::Bar)? br_highlight: br_control;
 			UINT size=rc.Bottom-2*width;
 			UINT bar=size*Fraction;
-			bar=MAX(bar, width);
+			bar=Max(bar, width);
 			UINT scroll=size-bar;
 			RECT rc_bar(rc);
 			rc_bar.Left+=padding;
@@ -181,7 +181,7 @@ switch(uOrientation)
 		{
 		if(pt.Left<width)
 			return ScrollBarButton::First;
-		if(pt.Left>rcRect.GetWidth()-width)
+		if(pt.Left>m_Rect.GetWidth()-width)
 			return ScrollBarButton::Second;
 		return ScrollBarButton::Bar;
 		}
@@ -189,7 +189,7 @@ switch(uOrientation)
 		{
 		if(pt.Top<width)
 			return ScrollBarButton::First;
-		if(pt.Top>rcRect.GetHeight()-width)
+		if(pt.Top>m_Rect.GetHeight()-width)
 			return ScrollBarButton::Second;
 		return ScrollBarButton::Bar;
 		}
@@ -218,7 +218,7 @@ switch(button)
 	case ScrollBarButton::Bar:
 		{
 		uStart=Position;
-		ptStart=pt;
+		m_StartPoint=pt;
 		CapturePointer();
 		args->Handled=true;
 		break;
@@ -241,7 +241,7 @@ Invalidate();
 VOID ScrollBar::OnPointerMoved(Handle<PointerEventArgs> args)
 {
 POINT const& pt=args->Point;
-if(ptStart.Left==-1)
+if(m_StartPoint.Left==-1)
 	{
 	auto highlight=GetButton(args->Point);
 	if(uHighlight!=highlight)
@@ -258,13 +258,13 @@ switch(uOrientation)
 	{
 	case Orientation::Horizontal:
 		{
-		start=ptStart.Left;
+		start=m_StartPoint.Left;
 		pos=pt.Left;
 		break;
 		}
 	case Orientation::Vertical:
 		{
-		start=ptStart.Top;
+		start=m_StartPoint.Top;
 		pos=pt.Top;
 		break;
 		}
@@ -273,8 +273,8 @@ INT move=pos-start;
 move/=Fraction;
 pos=(INT)uStart+move;
 if(pos<0)
-	pos=MAX(pos, 0);
-pos=MIN(pos, Range);
+	pos=Max(pos, 0);
+pos=Min(pos, (INT)Range);
 Position=pos;
 Application::Current->Dispatch(this, &ScrollBar::DoScroll);
 args->Handled=true;
@@ -283,10 +283,10 @@ args->Handled=true;
 VOID ScrollBar::OnPointerUp(Handle<PointerEventArgs> args)
 {
 StopScrolling();
-if(ptStart.Left!=-1)
+if(m_StartPoint.Left!=-1)
 	{
 	ReleasePointer();
-	ptStart.Set(-1, -1);
+	m_StartPoint.Set(-1, -1);
 	args->Handled=true;
 	}
 }
@@ -294,8 +294,8 @@ if(ptStart.Left!=-1)
 VOID ScrollBar::OnScrollTimer()
 {
 INT pos=Position+iStep;
-pos=MAX(pos, 0);
-pos=MIN(pos, (INT)Range);
+pos=Max(pos, 0);
+pos=Min(pos, (INT)Range);
 if(Position==pos)
 	{
 	StopScrolling();

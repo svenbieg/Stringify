@@ -12,6 +12,7 @@
 #include "Physics/TimePoint.h"
 #include "Storage/Streams/InputStream.h"
 #include "Storage/Streams/OutputStream.h"
+#include "Sentence.h"
 
 
 //===========

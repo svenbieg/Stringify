@@ -9,10 +9,10 @@
 // Using
 //=======
 
-#include "Desktop/AppWindow.h"
+#include "UI/AppWindow.h"
 #include "Clipboard.h"
 
-using namespace Desktop;
+using namespace UI;
 
 
 //===========

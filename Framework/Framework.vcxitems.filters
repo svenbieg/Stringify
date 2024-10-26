@@ -25,8 +25,8 @@
     <Filter Include="Resources\Bitmaps">
       <UniqueIdentifier>{8281babd-030d-4a71-a6f3-caf7d0fc3f6d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Framework">
-      <UniqueIdentifier>{7f3f7724-1c77-4c03-ac48-e0133e1c70ff}</UniqueIdentifier>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{bf690d2f-8595-4e88-a347-6f67fc51ea7c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -38,9 +38,6 @@
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Input\VirtualKey.cpp">
       <Filter>UI\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Frame.cpp">
-      <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Window.cpp">
       <Filter>UI</Filter>
@@ -147,14 +144,35 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\TextBox.cpp">
       <Filter>UI\Controls</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Resources\Bitmaps\Edit.cpp">
-      <Filter>Resources\Bitmaps</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\EditMenu.cpp">
       <Filter>UI\Controls\Menus</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Framework\Application.cpp">
-      <Filter>Framework</Filter>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Bitmap.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Color.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Icon.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Point.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Rect.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Size.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Frame.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Timer.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Application.cpp">
+      <Filter>UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -166,9 +184,6 @@
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Input\VirtualKey.h">
       <Filter>UI\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Frame.h">
-      <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Window.h">
       <Filter>UI</Filter>
@@ -293,8 +308,53 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\EditMenu.h">
       <Filter>UI\Controls\Menus</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Framework\Application.h">
-      <Filter>Framework</Filter>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Theme.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Bitmap.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Brush.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Color.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Cursor.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Font.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Icon.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Point.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Rect.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\RenderTarget.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Size.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Frame.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Icons\File.h">
+      <Filter>Resources\Icons</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Bitmaps\File.h">
+      <Filter>Resources\Bitmaps</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Timer.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Application.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -31,18 +31,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Application.cpp">
       <Filter>Desktop</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\AppWindow.cpp">
-      <Filter>Desktop</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Overlapped.cpp">
-      <Filter>Desktop</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Window.cpp">
-      <Filter>Desktop</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Frame.cpp">
-      <Filter>Desktop</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\OpenFileDialog.cpp">
       <Filter>Desktop\Dialogs</Filter>
     </ClCompile>
@@ -53,9 +41,6 @@
       <Filter>Graphics\Direct2D</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\MessageBox.cpp">
-      <Filter>Desktop\Dialogs</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\Dialog.cpp">
       <Filter>Desktop\Dialogs</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\PathEdit.cpp">
@@ -72,6 +57,15 @@
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Devices\ClockHelper.cpp">
       <Filter>Devices</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Overlapped.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\AppWindow.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Popup.cpp">
+      <Filter>UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -105,18 +99,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Application.h">
       <Filter>Desktop</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\AppWindow.h">
-      <Filter>Desktop</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Overlapped.h">
-      <Filter>Desktop</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Window.h">
-      <Filter>Desktop</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Frame.h">
-      <Filter>Desktop</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\OpenFileDialog.h">
       <Filter>Desktop\Dialogs</Filter>
     </ClInclude>
@@ -130,9 +112,6 @@
       <Filter>Resources\Strings</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\MessageBox.h">
-      <Filter>Desktop\Dialogs</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\Dialog.h">
       <Filter>Desktop\Dialogs</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\PathEdit.h">
@@ -152,6 +131,16 @@
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Devices\ClockHelper.h">
       <Filter>Devices</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Platform.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Overlapped.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\AppWindow.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Popup.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

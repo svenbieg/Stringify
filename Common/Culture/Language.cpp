@@ -11,6 +11,7 @@
 
 #include "Resources/Strings/Language.h"
 #include "Language.h"
+#include "Sentence.h"
 
 using namespace Resources::Strings;
 

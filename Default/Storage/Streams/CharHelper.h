@@ -9,6 +9,7 @@
 // Using
 //=======
 
+#include "Default/CharHelper.h"
 #include "Storage/Streams/InputStream.h"
 #include "Storage/Streams/OutputStream.h"
 
@@ -32,6 +33,7 @@ UINT size=Stream->Read(&c, sizeof(CHAR));
 *Char=CharToChar<_char_t, CHAR>(c);
 return size;
 }
+
 template <class _char_t> UINT AnsiWrite(OutputStream* Stream, _char_t Char)
 {
 if(!Stream)

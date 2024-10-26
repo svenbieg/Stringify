@@ -5,6 +5,15 @@
 #pragma once
 
 
+//=======
+// Using
+//=======
+
+#include <assert.h>
+#include "MemoryHelper.h"
+#include "StringClass.h"
+
+
 //========
 // Common
 //========
@@ -19,12 +28,9 @@ Handle<String> text=new String(Format, Arguments...);
 OutputDebugString(text->Begin());
 }
 
-#define ASSERT(Condition) if(!(Condition)){ DebugPrint("%s:%u ASSERT\n", (LPCSTR)__FILE__, (UINT)__LINE__); throw E_FAIL; }
-
 #else
 
 #define DebugPrint(...)
-#define ASSERT(Condition)
 
 #endif
 

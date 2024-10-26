@@ -28,10 +28,10 @@ namespace UI {
 
 BOOL Menu::Accelerate(VirtualKey key)
 {
-if(!GetFlag(uMenuFlags, MenuFlags::KeyboardAccess))
+if(!GetFlag(m_MenuFlags, MenuFlags::KeyboardAccess))
 	return false;
 CHAR acc=(CHAR)key;
-for(auto it=Window->Children->First(); it->HasCurrent(); it->MoveNext())
+for(auto it=Panel->Children->First(); it->HasCurrent(); it->MoveNext())
 	{
 	auto item=Convert<MenuItem>(it->GetCurrent());
 	if(!item)
@@ -50,32 +50,31 @@ return false;
 
 VOID Menu::Close()
 {
-if(pOpenItem)
+if(m_OpenItem)
 	{
-	pOpenItem->Close();
-	pOpenItem=nullptr;
+	m_OpenItem->Close();
+	m_OpenItem=nullptr;
 	}
-if(pSelectedItem)
+if(m_SelectedItem)
 	{
-	pSelectedItem->KillFocus();
-	pSelectedItem=nullptr;
+	m_SelectedItem->KillFocus();
+	m_SelectedItem=nullptr;
 	}
-ClearFlag(uMenuFlags, MenuFlags::KeyboardAccess);
-auto frame=Window->GetFrame();
-frame->SetCurrentMenu(pParentMenu);
-if(pParentMenu)
+ClearFlag(m_MenuFlags, MenuFlags::KeyboardAccess);
+Application::Current->SetCurrentMenu(m_ParentMenu);
+if(m_ParentMenu)
 	{
-	auto owner=Convert<MenuItem>(pOwner);
-	pParentMenu->Close(owner);
-	if(pParentMenu->HasKeyboardAccess())
-		pParentMenu->Select();
+	auto owner=Convert<MenuItem>(m_Owner);
+	m_ParentMenu->Close(owner);
+	if(m_ParentMenu->HasKeyboardAccess())
+		m_ParentMenu->Select();
 	}
 }
 
 VOID Menu::Close(MenuItem* item)
 {
-if(pOpenItem==item)
-	pOpenItem=nullptr;
+if(m_OpenItem==item)
+	m_OpenItem=nullptr;
 }
 
 VOID Menu::DoKey(KeyEventType type, Handle<KeyEventArgs> args)
@@ -96,65 +95,63 @@ args->Handled=true;
 VOID Menu::Exit()
 {
 this->Close();
-if(pParentMenu)
-	pParentMenu->Exit();
+if(m_ParentMenu)
+	m_ParentMenu->Exit();
 }
 
 BOOL Menu::HasAcceleration()
 {
-if(!GetFlag(uMenuFlags, MenuFlags::KeyboardAccess))
+if(!GetFlag(m_MenuFlags, MenuFlags::KeyboardAccess))
 	return false;
-auto frame=Window->GetFrame();
-return frame->GetCurrentMenu()==this;
+return Application::Current->GetCurrentMenu()==this;
 }
 
 BOOL Menu::IsOpen()
 {
-return pOpenItem!=nullptr;
+return m_OpenItem!=nullptr;
 }
 
 BOOL Menu::IsParentMenu(Menu* menu)
 {
-if(pParentMenu==menu)
+if(!m_ParentMenu)
+	return false;
+if(m_ParentMenu==menu)
 	return true;
-auto parent=Convert<Menu>(Window->Parent);
-if(parent)
-	return parent->IsParentMenu(menu);
-return false;
+return m_ParentMenu->IsParentMenu(menu);
 }
 
 VOID Menu::KillKeyboardAccess()
 {
-ClearFlag(uMenuFlags, MenuFlags::KeyboardAccess);
-if(pSelectedItem)
+ClearFlag(m_MenuFlags, MenuFlags::KeyboardAccess);
+if(m_SelectedItem)
 	{
-	pSelectedItem->KillFocus();
-	pSelectedItem=nullptr;
+	m_SelectedItem->KillFocus();
+	m_SelectedItem=nullptr;
 	}
-if(pParentMenu)
-	pParentMenu->KillKeyboardAccess();
+if(m_ParentMenu)
+	m_ParentMenu->KillKeyboardAccess();
 }
 
 VOID Menu::Open(MenuItem* item)
 {
-if(pOpenItem==item)
+if(m_OpenItem==item)
 	return;
-if(pOpenItem)
+if(m_OpenItem)
 	{
-	pOpenItem->Close();
-	pOpenItem=nullptr;
+	m_OpenItem->Close();
+	m_OpenItem=nullptr;
 	}
-pOpenItem=item;
-if(pOpenItem)
-	pOpenItem->Open();
+m_OpenItem=item;
+if(m_OpenItem)
+	m_OpenItem->Open();
 }
 
 VOID Menu::Select()
 {
-auto item=pSelectedItem;
+auto item=m_SelectedItem;
 if(!item)
 	{
-	auto control=Interactive::GetNextControl(Window, nullptr, 0);
+	auto control=Interactive::GetNextControl(Panel, nullptr, 0);
 	item=Convert<MenuItem>(control);
 	}
 Select(item);
@@ -162,21 +159,21 @@ Select(item);
 
 VOID Menu::Select(MenuItem* item)
 {
-if(pSelectedItem!=item)
+if(m_SelectedItem!=item)
 	{
-	if(pSelectedItem)
+	if(m_SelectedItem)
 		{
-		pSelectedItem->KillFocus();
-		pSelectedItem=nullptr;
+		m_SelectedItem->KillFocus();
+		m_SelectedItem=nullptr;
 		}
-	pSelectedItem=item;
+	m_SelectedItem=item;
 	}
-if(pSelectedItem)
+if(m_SelectedItem)
 	{
-	if(GetFlag(uMenuFlags, MenuFlags::KeyboardAccess))
-		pSelectedItem->SetFocus();
+	if(GetFlag(m_MenuFlags, MenuFlags::KeyboardAccess))
+		m_SelectedItem->SetFocus();
 	if(IsOpen())
-		Open(pSelectedItem);
+		Open(m_SelectedItem);
 	}
 }
 
@@ -184,7 +181,7 @@ VOID Menu::Switch(MenuItem* item)
 {
 if(!item)
 	return;
-if(pOpenItem==item)
+if(m_OpenItem==item)
 	{
 	this->Close();
 	return;
@@ -197,13 +194,12 @@ this->Open(item);
 // Con-/Destructors Protected
 //============================
 
-Menu::Menu(UI::Window* window, Menu* parent):
-Window(window),
-pOpenItem(nullptr),
-pOwner(nullptr),
-pParentMenu(parent),
-pSelectedItem(nullptr),
-uMenuFlags(MenuFlags::None)
+Menu::Menu(Window* owner, Menu* parent):
+m_MenuFlags(MenuFlags::None),
+m_OpenItem(nullptr),
+m_Owner(owner),
+m_ParentMenu(parent),
+m_SelectedItem(nullptr)
 {}
 
 }}}

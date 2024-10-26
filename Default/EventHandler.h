@@ -9,7 +9,7 @@
 // Using
 //=======
 
-#include "Handle.h"
+#include "Function.h"
 
 
 //===========
@@ -19,167 +19,215 @@
 namespace Details {
 
 
+//======================
+// Forward-Declarations
+//======================
+
+template <class _sender_t, class... _args_t> class EventBase;
+
+
 //===============
 // Event-Handler
 //===============
 
 template <class _sender_t, class... _args_t>
-class EventHandler
+class EventHandler: public Object
 {
 public:
+	// Friends
+	friend class EventBase<_sender_t, _args_t...>;
+
 	// Con-/Destructors
 	virtual ~EventHandler() {}
 
 	// Common
-	inline EventHandler* GetNext()const { return pNext; }
-	inline EventHandler* GetPrevious()const { return pPrevious; }
-	virtual VOID* GetReceiver()const=0;
-	inline VOID Invalidate() { uRunning|=0x80000000; }
-	inline BOOL IsRunning()const { return (uRunning&0x7FFFFFFF)>0; }
-	inline BOOL IsValid()const { return (uRunning!=0x80000000); }
+	virtual VOID* GetOwner()const=0;
+	virtual VOID Invalidate()=0;
 	virtual VOID Run(_sender_t* Sender, _args_t... Arguments)=0;
-	inline VOID SetNext(EventHandler* Next) { pNext=Next; }
-	inline VOID SetPrevious(EventHandler* Previous) { pPrevious=Previous; }
 
 protected:
 	// Con-/Destructors
-	EventHandler():
-		pNext(nullptr),
-		pPrevious(nullptr),
-		uRunning(0)
-		{}
+	EventHandler() {}
 
 	// Common
-	EventHandler* pNext;
-	EventHandler* pPrevious;
-	UINT uRunning;
+	Handle<EventHandler> hNext;
 };
 
 
-//=========================
-// Event-Handler Procedure
-//=========================
+//===========
+// Procedure
+//===========
 
 template <class _sender_t, class... _args_t>
-class EventHandlerProcedure: public EventHandler<_sender_t, _args_t...>
+class EventProcedure: public EventHandler<_sender_t, _args_t...>
 {
 public:
 	// Definitions
-	typedef VOID (*_proc_t)();
+	typedef VOID (*_func_t)();
 
 	// Con-/Destructors
-	EventHandlerProcedure(_proc_t Procedure): pProcedure(Procedure) {}
+	EventProcedure(_func_t Procedure): pProcedure(Procedure) {}
 
 	// Common
-	inline VOID* GetReceiver()const override { return pProcedure; }
-	VOID Run(_sender_t* Sender, _args_t... Arguments)override
+	inline VOID* GetOwner()const override { return (VOID*)pProcedure; }
+	inline VOID Invalidate()override { pProcedure=nullptr; }
+	inline VOID Run(_sender_t* Sender, _args_t... Arguments)override
 		{
-		if(this->uRunning&0x80000000)
-			return;
-		this->uRunning++;
-		(*pProcedure)();
-		this->uRunning--;
+		if(pProcedure)
+			(*pProcedure)();
 		}
 
 private:
 	// Common
-	_proc_t pProcedure;
+	_func_t pProcedure;
+};
+
+
+//==========================
+// Procedure with Arguments
+//==========================
+
+template <class _sender_t, class... _args_t>
+class EventProcedureWithArgs: public EventHandler<_sender_t, _args_t...>
+{
+public:
+	// Definitions
+	typedef VOID (*_func_t)(_args_t...);
+
+	// Con-/Destructors
+	EventProcedureWithArgs(_func_t Procedure): pProcedure(Procedure) {}
+
+	// Common
+	inline VOID* GetOwner()const override { return pProcedure; }
+	inline VOID Invalidate()override { pProcedure=nullptr; }
+	inline VOID Run(_sender_t* Sender, _args_t... Arguments)override
+		{
+		if(pProcedure)
+			(*pProcedure)(Arguments...);
+		}
+
+private:
+	// Common
+	_func_t pProcedure;
+};
+
+
+//=======================
+// Procedure with Sender
+//=======================
+
+template <class _sender_t, class... _args_t>
+class EventProcedureWithSender: public EventHandler<_sender_t, _args_t...>
+{
+public:
+	// Definitions
+	typedef VOID (*_func_t)(_sender_t*, _args_t...);
+
+	// Con-/Destructors
+	EventProcedureWithSender(_func_t Procedure): pProcedure(Procedure) {}
+
+	// Common
+	inline VOID* GetOwner()const override { return pProcedure; }
+	inline VOID Invalidate()override { pProcedure=nullptr; }
+	inline VOID Run(_sender_t* Sender, _args_t... Arguments)override
+		{
+		if(pProcedure)
+			(*pProcedure)(Sender, Arguments...);
+		}
+
+private:
+	// Common
+	_func_t pProcedure;
+};
+
+
+//=================
+// Member-Function
+//=================
+
+template <class _sender_t, class _owner_t, class... _args_t>
+class EventMemberFunction: public EventHandler<_sender_t, _args_t...>
+{
+public:
+	// Definitions
+	typedef VOID (_owner_t::*_func_t)();
+
+	// Con-/Destructors
+	EventMemberFunction(_owner_t* Owner, _func_t Procedure): m_Owner(Owner), pProcedure(Procedure) {}
+
+	// Common
+	inline VOID* GetOwner()const override { return m_Owner; }
+	inline VOID Invalidate()override { m_Owner=nullptr; }
+	inline VOID Run(_sender_t* Sender, _args_t... Arguments)override
+		{
+		if(m_Owner)
+			(m_Owner->*pProcedure)();
+		}
+
+private:
+	// Common
+	_owner_t* m_Owner;
+	_func_t pProcedure;
+};
+
+
+//================================
+// Member-Function with Arguments
+//================================
+
+template <class _sender_t, class _owner_t, class... _args_t>
+class EventMemberFunctionWithArgs: public EventHandler<_sender_t, _args_t...>
+{
+public:
+	// Definitions
+	typedef VOID (_owner_t::*_func_t)(_args_t...);
+
+	// Con-/Destructors
+	EventMemberFunctionWithArgs(_owner_t* Owner, _func_t Procedure): m_Owner(Owner), pProcedure(Procedure) {}
+
+	// Common
+	inline VOID* GetOwner()const override { return m_Owner; }
+	inline VOID Invalidate()override { m_Owner=nullptr; }
+	inline VOID Run(_sender_t* Sender, _args_t... Arguments)override
+		{
+		if(m_Owner)
+			(m_Owner->*pProcedure)(Arguments...);
+		}
+
+private:
+	// Common
+	_owner_t* m_Owner;
+	_func_t pProcedure;
 };
 
 
 //=============================
-// Event-Handler with Receiver
+// Member-Function with Sender
 //=============================
 
-template <class _sender_t, class _receiver_t, class... _args_t>
-class EventHandlerWithReceiver: public EventHandler<_sender_t, _args_t...>
+template <class _sender_t, class _owner_t, class... _args_t>
+class EventMemberFunctionWithSender: public EventHandler<_sender_t, _args_t...>
 {
 public:
 	// Definitions
-	typedef VOID (_receiver_t::*_proc_t)();
+	typedef VOID (_owner_t::*_func_t)(_sender_t*, _args_t...);
 
 	// Con-/Destructors
-	EventHandlerWithReceiver(_receiver_t* Receiver, _proc_t Procedure): pProcedure(Procedure), pReceiver(Receiver) {}
+	EventMemberFunctionWithSender(_owner_t* Owner, _func_t Procedure): m_Owner(Owner), pProcedure(Procedure) {}
 
 	// Common
-	inline VOID* GetReceiver()const override { return pReceiver; }
-	VOID Run(_sender_t* Sender, _args_t... Arguments)override
+	inline VOID* GetOwner()const override { return m_Owner; }
+	inline VOID Invalidate()override { m_Owner=nullptr; }
+	inline VOID Run(_sender_t* Sender, _args_t... Arguments)override
 		{
-		if(this->uRunning&0x80000000)
-			return;
-		this->uRunning++;
-		(pReceiver->*pProcedure)();
-		this->uRunning--;
+		if(m_Owner)
+			(m_Owner->*pProcedure)(Sender, Arguments...);
 		}
 
 private:
 	// Common
-	_proc_t pProcedure;
-	_receiver_t* pReceiver;
-};
-
-
-//==============================
-// Event-Handler with Arguments
-//==============================
-
-template <class _sender_t, class _receiver_t, class... _args_t>
-class EventHandlerWithArgs: public EventHandler<_sender_t, _args_t...>
-{
-public:
-	// Definitions
-	typedef VOID (_receiver_t::*_proc_t)(_args_t...);
-
-	// Con-/Destructors
-	EventHandlerWithArgs(_receiver_t* Receiver, _proc_t Procedure): pProcedure(Procedure), pReceiver(Receiver) {}
-
-	// Common
-	inline VOID* GetReceiver()const override { return pReceiver; }
-	VOID Run(_sender_t* Sender, _args_t... Arguments)override
-		{
-		if(this->uRunning&0x80000000)
-			return;
-		this->uRunning++;
-		(pReceiver->*pProcedure)(Arguments...);
-		this->uRunning--;
-		}
-
-private:
-	// Common
-	_proc_t pProcedure;
-	_receiver_t* pReceiver;
-};
-
-
-//===========================
-// Event-Handler with Sender
-//===========================
-
-template <class _sender_t, class _receiver_t, class... _args_t>
-class EventHandlerWithSender: public EventHandler<_sender_t, _args_t...>
-{
-public:
-	// Definitions
-	typedef VOID (_receiver_t::*_proc_t)(_sender_t*, _args_t...);
-
-	// Con-/Destructors
-	EventHandlerWithSender(_receiver_t* Receiver, _proc_t Procedure): pProcedure(Procedure), pReceiver(Receiver) {}
-
-	// Common
-	inline VOID* GetReceiver()const override { return pReceiver; }
-	VOID Run(_sender_t* Sender, _args_t... Arguments)override
-		{
-		if(this->uRunning&0x80000000)
-			return;
-		this->uRunning++;
-		(pReceiver->*pProcedure)(Sender, Arguments...);
-		this->uRunning--;
-		}
-
-private:
-	// Common
-	_proc_t pProcedure;
-	_receiver_t* pReceiver;
+	_owner_t* m_Owner;
+	_func_t pProcedure;
 };
 
 }

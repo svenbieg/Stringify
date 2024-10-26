@@ -40,6 +40,7 @@ public:
 	Handle<Interactive> Body;
 	Property<ScrollBox, BOOL> Enabled;
 	SIZE GetMinSize(RenderTarget* Target)override;
+	POINT GetPosition();
 	Handle<ScrollBar> HorizontalBar;
 	virtual VOID Rearrange(RenderTarget* Target, RECT& Rect)override;
 	VOID Render(RenderTarget* Target, RECT& Rect)override;
@@ -50,6 +51,10 @@ public:
 	VOID Zoom(FLOAT Factor);
 	FLOAT ZoomMax;
 	FLOAT ZoomMin;
+
+protected:
+	// Common
+	RECT m_Hotspot;
 
 private:
 	// Common
@@ -62,10 +67,9 @@ private:
 	VOID UpdateBodyRect(RECT& BodyRect, SIZE const& ContentSize, BOOL* ScrollHorizontal, BOOL* ScrollVertical);
 	VOID UpdateContentRect(RECT& ContentRect, SIZE const& BodySize);
 	VOID ZoomStep(INT Step);
-	FLOAT fZoom;
-	POINT ptStart;
-	POINT ptStartPosition;
-	RECT rcHotspot;
+	POINT m_StartPoint;
+	POINT m_StartPosition;
+	FLOAT m_Zoom;
 };
 
 }}

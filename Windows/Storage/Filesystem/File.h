@@ -32,6 +32,12 @@ public:
 	// Con-/Destructors
 	File(Handle<String> Path);
 
+	// Common
+	VOID Close()override;
+	static Handle<File> Create(Handle<String> Path, FileCreateMode Create=FileCreateMode::OpenExisting, FileAccessMode Access=FileAccessMode::ReadOnly, FileShareMode Share=FileShareMode::ShareRead);
+	Status Create(FileCreateMode Create=FileCreateMode::OpenExisting, FileAccessMode Access=FileAccessMode::ReadOnly, FileShareMode Share=FileShareMode::ShareRead)override;
+	BOOL SetSize(FILE_SIZE Size)override;
+
 	// Input-Stream
 	SIZE_T Available()override;
 	SIZE_T Read(VOID* Buffer, SIZE_T Size)override;
@@ -45,11 +51,6 @@ public:
 	// Container
 	FILE_SIZE GetSize()override;
 	BOOL Seek(UINT64 Position)override;
-
-	// File
-	VOID Close()override;
-	Status Create(FileCreateMode Create=FileCreateMode::OpenExisting, FileAccessMode Access=FileAccessMode::ReadOnly, FileShareMode Share=FileShareMode::ShareRead)override;
-	BOOL SetSize(FILE_SIZE Size)override;
 
 private:
 	// Using

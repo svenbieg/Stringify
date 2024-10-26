@@ -40,7 +40,6 @@ Text.Changed.Add(this, &EditBox::OnTextChanged);
 VerticalBar->Visibility=ScrollBarVisibility::Hidden;
 hInput=new Input(Body);
 hInput->Focused.Add(this, &EditBox::OnInputFocused);
-hInput->FocusLost.Add(this, &EditBox::OnInputFocusLost);
 hInput->Padding.Set(2, 2, 2, 2);
 hInput->SelectionChanged.Add(this, &EditBox::OnInputSelectionChanged);
 hInput->TabStop=true;
@@ -76,12 +75,6 @@ VOID EditBox::OnInputFocused(FocusReason reason)
 {
 if(reason==FocusReason::Keyboard)
 	hInput->SelectAll();
-}
-
-VOID EditBox::OnInputFocusLost()
-{
-POINT pt_sel;
-hInput->SetSelection(pt_sel, pt_sel);
 }
 
 VOID EditBox::OnInputSelectionChanged()

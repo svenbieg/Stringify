@@ -23,7 +23,7 @@ public:
 	VariableArguments(UnknownClass* Arguments, UINT Count): pArguments(Arguments), uCount(Count) {}
 
 	// Access
-	template <class _item_t> BOOL GetAt(UINT Position, _item_t& Item)
+	template <class _item_t> BOOL GetAt(UINT Position, _item_t& Item)const
 		{
 		if(Position>=uCount)
 			return false;

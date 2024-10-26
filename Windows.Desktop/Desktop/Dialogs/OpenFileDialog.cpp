@@ -10,13 +10,14 @@
 //=======
 
 #include <commdlg.h>
-#include "Desktop/AppWindow.h"
 #include "Resources/Strings/Files.h"
+#include "UI/AppWindow.h"
 #include "DialogHelper.h"
 #include "OpenFileDialog.h"
 #include "PathHelper.h"
 
 using namespace Resources::Strings;
+using namespace UI;
 
 
 //===========

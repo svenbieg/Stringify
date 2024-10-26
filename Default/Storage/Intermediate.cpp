@@ -11,6 +11,8 @@
 
 #include "Intermediate.h"
 
+using namespace Concurrency;
+
 
 //===========
 // Namespace
@@ -60,11 +62,11 @@ while(pos<size)
 	SIZE_T available=uWritePos-uReadPos;
 	if(!available)
 		break;
-	SIZE_T copy=MIN(size-pos, available);
+	SIZE_T copy=Min(size-pos, available);
 	BYTE* src=nullptr;
 	UINT src_pos=0;
 	UINT block=GetBuffer(uReadPos, &src, &src_pos);
-	copy=MIN(copy, block);
+	copy=Min(copy, (SIZE_T)block);
 	if(dst)
 		CopyMemory(&dst[pos], &src[src_pos], copy);
 	uReadPos+=copy;
@@ -91,7 +93,7 @@ while(pos<size)
 	UINT block=GetBuffer(uWritePos, &dst, &dst_pos);
 	if(!block)
 		block=AllocBuffer(&dst, &dst_pos);
-	SIZE_T copy=MIN(size-pos, block);
+	SIZE_T copy=Min(size-pos, (SIZE_T)block);
 	CopyMemory(&dst[dst_pos], &src[pos], copy);
 	uWritePos+=copy;
 	pos+=copy;

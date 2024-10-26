@@ -9,8 +9,8 @@
 // Using
 //=======
 
-#include "Core/Timer.h"
 #include "UI/Orientation.h"
+#include "UI/Timer.h"
 #include "Interactive.h"
 
 
@@ -54,9 +54,6 @@ Visible
 class ScrollBar: public Interactive
 {
 public:
-	// Using
-	using Timer=Core::Timer;
-
 	// Con-/Destructors
 	ScrollBar(Window* Parent, Orientation Orientation=Orientation::Horizontal);
 
@@ -86,7 +83,7 @@ private:
 	VOID StopScrolling();
 	Handle<Timer> hScrollTimer;
 	INT iStep;
-	POINT ptStart;
+	POINT m_StartPoint;
 	ScrollBarButton uHighlight;
 	Orientation uOrientation;
 	UINT uStart;

@@ -245,7 +245,7 @@ while(1)
 	{
 	if(uInputSize>0)
 		{
-		read=MIN(size, uInputSize);
+		read=Min(size, (SIZE_T)uInputSize);
 		CopyMemory(dst, pInput, read);
 		if(read<uInputSize)
 			MoveMemory(pInput, &pInput[read], uInputSize-read);
@@ -349,7 +349,7 @@ while(pos<size)
 	UINT msg_max=cStreamSizes.cbMaximumMessage;
 	if(uOutputSize==msg_max)
 		Flush();
-	UINT copy=(UINT)MIN(size-pos, msg_max-uBufferSize);
+	UINT copy=Min((UINT)(size-pos), msg_max-uBufferSize);
 	CopyMemory(&pOutput[cStreamSizes.cbHeader+uOutputSize], &src[pos], copy);
 	uOutputSize+=copy;
 	pos+=copy;

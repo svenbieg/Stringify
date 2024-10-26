@@ -20,9 +20,22 @@ namespace UI {
 	namespace Input {
 
 
-//================
-// Key-Event-Type
-//================
+//=======
+// Flags
+//=======
+
+enum class KeyEventFlags
+{
+None=0,
+Alt=1,
+Ctrl=2,
+Shift=4
+};
+
+
+//======
+// Type
+//======
 
 enum class KeyEventType
 {
@@ -43,6 +56,7 @@ public:
 
 	// Common
 	TCHAR Char;
+	KeyEventFlags Flags;
 	BOOL Handled;
 	VirtualKey Key;
 };

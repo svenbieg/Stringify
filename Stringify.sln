@@ -13,7 +13,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Windows", "Windows\Windows.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Windows.Desktop", "Windows.Desktop\Windows.Desktop.vcxitems", "{0360ACE2-9F06-419D-AC64-A9E24FAB3F24}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Stringify", "Stringify\Stringify.vcxproj", "{3A0E30D6-4D73-4EEE-94E2-6E0FE7507EFB}"
+Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "Stringify", "Stringify\Stringify.wapproj", "{BC25E830-8E96-48DD-92C4-066CC06662CD}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Stringify.Desktop", "Stringify.Desktop\Stringify.Desktop.vcxproj", "{3A0E30D6-4D73-4EEE-94E2-6E0FE7507EFB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +25,18 @@ Global
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BC25E830-8E96-48DD-92C4-066CC06662CD}.Debug|Win32.ActiveCfg = Debug|x86
+		{BC25E830-8E96-48DD-92C4-066CC06662CD}.Debug|Win32.Build.0 = Debug|x86
+		{BC25E830-8E96-48DD-92C4-066CC06662CD}.Debug|Win32.Deploy.0 = Debug|x86
+		{BC25E830-8E96-48DD-92C4-066CC06662CD}.Debug|x64.ActiveCfg = Debug|x64
+		{BC25E830-8E96-48DD-92C4-066CC06662CD}.Debug|x64.Build.0 = Debug|x64
+		{BC25E830-8E96-48DD-92C4-066CC06662CD}.Debug|x64.Deploy.0 = Debug|x64
+		{BC25E830-8E96-48DD-92C4-066CC06662CD}.Release|Win32.ActiveCfg = Release|x86
+		{BC25E830-8E96-48DD-92C4-066CC06662CD}.Release|Win32.Build.0 = Release|x86
+		{BC25E830-8E96-48DD-92C4-066CC06662CD}.Release|Win32.Deploy.0 = Release|x86
+		{BC25E830-8E96-48DD-92C4-066CC06662CD}.Release|x64.ActiveCfg = Release|x64
+		{BC25E830-8E96-48DD-92C4-066CC06662CD}.Release|x64.Build.0 = Release|x64
+		{BC25E830-8E96-48DD-92C4-066CC06662CD}.Release|x64.Deploy.0 = Release|x64
 		{3A0E30D6-4D73-4EEE-94E2-6E0FE7507EFB}.Debug|Win32.ActiveCfg = Debug|Win32
 		{3A0E30D6-4D73-4EEE-94E2-6E0FE7507EFB}.Debug|Win32.Build.0 = Debug|Win32
 		{3A0E30D6-4D73-4EEE-94E2-6E0FE7507EFB}.Debug|x64.ActiveCfg = Debug|x64
@@ -49,5 +63,32 @@ Global
 		Framework\Framework.vcxitems*{d136cb92-4c67-4b20-9c09-594d324e3f51}*SharedItemsImports = 9
 		Windows\Windows.vcxitems*{d3561ca0-0f75-4b37-b166-d8bea51d7a9e}*SharedItemsImports = 9
 		Default\Default.vcxitems*{e356bd3b-d09b-4fda-acd2-403372fceac1}*SharedItemsImports = 9
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 8
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://svenbieg.visualstudio.com/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Default\\Default.vcxitems
+		SccProjectName1 = ../../Shared/Default
+		SccLocalPath1 = Default
+		SccProjectUniqueName2 = Common\\Common.vcxitems
+		SccProjectName2 = ../../Shared/Common
+		SccLocalPath2 = Common
+		SccProjectUniqueName3 = Framework\\Framework.vcxitems
+		SccProjectName3 = ../../Shared/Framework
+		SccLocalPath3 = Framework
+		SccProjectUniqueName4 = Windows\\Windows.vcxitems
+		SccProjectName4 = ../../Shared/Windows
+		SccLocalPath4 = Windows
+		SccProjectUniqueName5 = Windows.Desktop\\Windows.Desktop.vcxitems
+		SccProjectName5 = ../../Shared/Windows.Desktop
+		SccLocalPath5 = Windows.Desktop
+		SccProjectUniqueName6 = Stringify\\Stringify.wapproj
+		SccProjectName6 = Stringify
+		SccLocalPath6 = Stringify
+		SccProjectUniqueName7 = Stringify.Desktop\\Stringify.Desktop.vcxproj
+		SccProjectName7 = Stringify.Desktop
+		SccLocalPath7 = Stringify.Desktop
 	EndGlobalSection
 EndGlobal

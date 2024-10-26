@@ -41,7 +41,6 @@ public:
 private:
 	// Common
 	VOID OnInputFocused(FocusReason Reason);
-	VOID OnInputFocusLost();
 	VOID OnInputSelectionChanged();
 	VOID OnMaskChanged(TCHAR Mask);
 	VOID OnTextChanged(Handle<String> Text);

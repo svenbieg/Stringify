@@ -11,7 +11,7 @@
 
 #include "Collections/List.h"
 #include "Collections/Map.h"
-#include "Storage/Streams/StringReader.h"
+#include "Storage/Streams/StreamReader.h"
 #include "XmlElement.h"
 
 
@@ -34,7 +34,7 @@ private:
 	using AttributeMap=Collections::Map<Handle<String>, Handle<String>>;
 	using ElementList=Collections::List<Handle<XmlElement>>;
 	using InputStream=Storage::Streams::InputStream;
-	using StringReader=Storage::Streams::StringReader;
+	using StreamReader=Storage::Streams::StreamReader;
 
 public:
 	// Con-/Destructors
@@ -52,8 +52,8 @@ public:
 private:
 	// Common
 	VOID OnValueChanged(Handle<String> Value);
-	SIZE_T ReadContent(StringReader& Reader);
-	SIZE_T ReadTag(StringReader& Reader);
+	SIZE_T ReadContent(StreamReader& Reader);
+	SIZE_T ReadTag(StreamReader& Reader);
 };
 
 }}

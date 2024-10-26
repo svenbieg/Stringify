@@ -28,7 +28,7 @@ namespace Storage {
 VolumeFile::VolumeFile():
 cOverlapped({ 0 }),
 hFile(NULL),
-uFlags(VolumeFileFlags::None)
+m_Flags(VolumeFileFlags::None)
 {}
 
 VolumeFile::~VolumeFile()
@@ -46,12 +46,12 @@ VOID VolumeFile::Close()
 if(hFile)
 	{
 	CloseHandle(hFile);
-	if(GetFlag(uFlags, VolumeFileFlags::Temporary))
+	if(GetFlag(m_Flags, VolumeFileFlags::Temporary))
 		DeleteFile(Path->Begin());
 	}
 Path=nullptr;
 ZeroMemory(&cOverlapped, sizeof(OVERLAPPED));
-uFlags=VolumeFileFlags::None;
+m_Flags=VolumeFileFlags::None;
 }
 
 Status VolumeFile::Create(Handle<String> path, FileCreateMode create_mode)
@@ -63,7 +63,7 @@ if(!path)
 	path=FileGetTemporaryPath(TEXT("vol"));
 	att=FILE_ATTRIBUTE_TEMPORARY;
 	create=OPEN_EXISTING;
-	SetFlag(uFlags, VolumeFileFlags::Temporary);
+	SetFlag(m_Flags, VolumeFileFlags::Temporary);
 	}
 SetLastError(0);
 hFile=CreateFile(path->Begin(), GENERIC_READ|GENERIC_WRITE, FILE_SHARE_READ, nullptr, create, 0, NULL);
@@ -80,7 +80,7 @@ return Status::Success;
 
 BOOL VolumeFile::IsTemporary()
 {
-return GetFlag(uFlags, VolumeFileFlags::Temporary);
+return GetFlag(m_Flags, VolumeFileFlags::Temporary);
 }
 
 
@@ -102,8 +102,8 @@ SIZE_T VolumeFile::Read(FILE_SIZE offset, VOID* buf, SIZE_T size)
 {
 if(!hFile)
 	return 0;
-cOverlapped.Offset=LOLONG(offset);
-cOverlapped.OffsetHigh=HILONG(offset);
+cOverlapped.Offset=LowLong(offset);
+cOverlapped.OffsetHigh=HighLong(offset);
 DWORD read=0;
 if(!ReadFile(hFile, buf, (DWORD)size, &read, &cOverlapped))
 	return 0;
@@ -114,8 +114,8 @@ BOOL VolumeFile::SetSize(FILE_SIZE size)
 {
 if(!hFile)
 	return false;
-LONG size_lo=LOLONG(size);
-LONG size_hi=HILONG(size);
+LONG size_lo=LowLong(size);
+LONG size_hi=HighLong(size);
 DWORD status=SetFilePointer(hFile, size_lo, &size_hi, FILE_BEGIN);
 if(status==INVALID_SET_FILE_POINTER)
 	return false;
@@ -135,7 +135,7 @@ while(pos<size)
 	SIZE_T copy=size-pos;
 	SIZE_T write=copy;
 	FILE_SIZE end=offset+copy;
-	FILE_SIZE block_end=BlockAlign(end, PAGE_SIZE);
+	FILE_SIZE block_end=AlignUp(end, PAGE_SIZE);
 	if(end<block_end)
 		{
 		FILE_SIZE block_start=block_end-PAGE_SIZE;
@@ -152,8 +152,8 @@ while(pos<size)
 			write=copy;
 			}
 		}
-	cOverlapped.Offset=LOLONG(offset);
-	cOverlapped.OffsetHigh=HILONG(offset);
+	cOverlapped.Offset=LowLong(offset);
+	cOverlapped.OffsetHigh=HighLong(offset);
 	DWORD written=0;
 	if(!WriteFile(hFile, src, (DWORD)write, &written, &cOverlapped))
 		break;

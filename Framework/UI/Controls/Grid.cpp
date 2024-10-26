@@ -52,6 +52,13 @@ Rows->Append(row);
 return row;
 }
 
+Grid* Grid::At(UINT col, UINT row)
+{
+cPosition.Column=col;
+cPosition.Row=row;
+return this;
+}
+
 Graphics::SIZE Grid::GetMinSize(RenderTarget* target)
 {
 InitRaster(target);
@@ -83,12 +90,6 @@ for(auto it=Children->First(); it->HasCurrent(); it->MoveNext())
 	rc_child.Move(rc.Left, rc.Top);
 	child->Move(target, rc_child);
 	}
-}
-
-VOID Grid::SetPosition(UINT col, UINT row)
-{
-cPosition.Column=col;
-cPosition.Row=row;
 }
 
 
@@ -190,11 +191,11 @@ for(auto it=cPositions.cbegin(); it.has_current(); it.move_next())
 	if(!child)
 		continue;
 	auto pos=it->get_value();
-	col_count=MAX(col_count, pos.Column+1);
-	row_count=MAX(row_count, pos.Row+1);
+	col_count=Max(col_count, pos.Column+1);
+	row_count=Max(row_count, pos.Row+1);
 	}
-col_count=MAX(col_count, 1);
-row_count=MAX(row_count, 1);
+col_count=Max(col_count, 1U);
+row_count=Max(row_count, 1U);
 FLOAT scale=GetScaleFactor();
 InitColumns(col_count, scale);
 InitRows(row_count, scale);
@@ -216,8 +217,8 @@ for(auto it=Children->First(); it->HasCurrent(); it->MoveNext())
 		}
 	GridSize& col=cColumns.get_at(pos.Column);
 	GridSize& row=cRows.get_at(pos.Row);
-	col.MinSize=MAX(col.MinSize, min_size.Width);
-	row.MinSize=MAX(row.MinSize, min_size.Height);
+	col.MinSize=Max(col.MinSize, min_size.Width);
+	row.MinSize=Max(row.MinSize, min_size.Height);
 	}
 }
 
@@ -252,8 +253,6 @@ UINT min_size=0;
 for(auto it=sizes.cbegin(); it.has_current(); it.move_next())
 	{
 	GridSize const& size=it.get_current();
-	if(size.Unit==GridUnit::Star)
-		continue;
 	min_size+=size.MinSize;
 	}
 return min_size;
@@ -351,7 +350,7 @@ for(UINT u=0; u<count; u++)
 	GridSize& size=sizes.get_at(u);
 	if(size.Unit!=GridUnit::Star)
 		continue;
-	UINT set=MAX(size.MinSize, size.Size*star);
+	UINT set=Max(size.MinSize, size.Size*star);
 	if(set>space)
 		{
 		size.SetSize=space;

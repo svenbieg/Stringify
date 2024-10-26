@@ -48,7 +48,7 @@ public:
 
 private:
 	// Common
-	Mutex cMutex;
+	Concurrency::Mutex cMutex;
 };
 
 

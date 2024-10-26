@@ -47,7 +47,7 @@ for(UINT y=0; y<size.Height; y++)
 			{
 			b=(BYTE)(128.f-(128.f-b)*0.5f);
 			}
-		b=MIN(b+0x30, 0xFF);
+		b=Min(b+0x30, 0xFF);
 		pc[0]=pc[1]=pc[2]=b;
 		bmp->SetPixel(x, y, c);
 		}

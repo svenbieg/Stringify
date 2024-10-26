@@ -9,8 +9,8 @@
 // Using
 //=======
 
-#include "Storage/Streams/StringReader.h"
-#include "Storage/Streams/StringWriter.h"
+#include "Storage/Streams/StreamReader.h"
+#include "Storage/Streams/StreamWriter.h"
 
 
 //===========
@@ -38,8 +38,8 @@ public:
 	// Using
 	using InputStream=Storage::Streams::InputStream;
 	using OutputStream=Storage::Streams::OutputStream;
-	using StringReader=Storage::Streams::StringReader;
-	using StringWriter=Storage::Streams::StringWriter;
+	using StreamReader=Storage::Streams::StreamReader;
+	using StreamWriter=Storage::Streams::StreamWriter;
 
 	// Iterator
 	using Iterator=VectorIterator<_item_t, _size_t>;
@@ -73,7 +73,7 @@ public:
 	SIZE_T PrintToStream(Handle<OutputStream> Stream, LPCSTR Format="%i")
 		{
 		SIZE_T size=0;
-		StringWriter writer(Stream);
+		StreamWriter writer(Stream);
 		size+=writer.Print("[ ");
 		for(_size_t u=0; u<uCount; u++)
 			{

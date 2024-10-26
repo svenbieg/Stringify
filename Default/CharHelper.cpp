@@ -54,12 +54,12 @@ template <class _char_t> _char_t CharToCapital(_char_t tc)
 CHAR c=CharToChar<CHAR, _char_t>(tc);
 if(c>='a'&&c<='z')
 	return CharToChar<_char_t, CHAR>((CHAR)(c-0x20));
-if(c=='ä')
-	return CharToChar<_char_t, CHAR>('Ä');
-if(c=='ö')
-	return CharToChar<_char_t, CHAR>('Ö');
-if(c=='ü')
-	return CharToChar<_char_t, CHAR>('Ü');
+if(c==Chars::ae)
+	return CharToChar<_char_t, TCHAR>(Chars::AE);
+if(c==Chars::oe)
+	return CharToChar<_char_t, TCHAR>(Chars::OE);
+if(c==Chars::ue)
+	return CharToChar<_char_t, TCHAR>(Chars::UE);
 return tc;
 }
 
@@ -71,6 +71,40 @@ return CharToCapital<CHAR>(c);
 WCHAR CharToCapital(WCHAR c)
 {
 return CharToCapital<WCHAR>(c);
+}
+
+template <class _char_t> inline BOOL CharToDigit(_char_t tc, UINT* digit_ptr, UINT base)
+{
+CHAR c=CharToChar<CHAR, _char_t>(tc);
+if(c<'0')
+	return false;
+if(c>='a')
+	{
+	c-='a';
+	}
+else if(c>='A')
+	{
+	c-='A';
+	}
+c-='0';
+UINT digit=(UINT)c;
+if(digit<base)
+	{
+	if(digit_ptr)
+		*digit_ptr=digit;
+	return true;
+	}
+return false;
+}
+
+BOOL CharToDigit(CHAR c, UINT* digit_ptr, UINT base)
+{
+return CharToDigit<CHAR>(c, digit_ptr, base);
+}
+
+BOOL CharToDigit(WCHAR c, UINT* digit_ptr, UINT base)
+{
+return CharToDigit<WCHAR>(c, digit_ptr, base);
 }
 
 template <class _char_t> BYTE CharToHex(_char_t tc)
@@ -109,12 +143,12 @@ template <class _char_t> _char_t CharToSmall(_char_t tc)
 CHAR c=CharToChar<CHAR, _char_t>(tc);
 if(c>='A'&&c<='Z')
 	return CharToChar<_char_t, CHAR>((CHAR)(c+0x20));
-if(c=='Ä')
-	return CharToChar<_char_t, CHAR>('ä');
-if(c=='Ö')
-	return CharToChar<_char_t, CHAR>('ö');
-if(c=='Ü')
-	return CharToChar<_char_t, CHAR>('ü');
+if(c==Chars::AE)
+	return CharToChar<_char_t, TCHAR>(Chars::ae);
+if(c==Chars::OE)
+	return CharToChar<_char_t, TCHAR>(Chars::oe);
+if(c==Chars::UE)
+	return CharToChar<_char_t, TCHAR>(Chars::ue);
 return tc;
 }
 
@@ -162,31 +196,13 @@ BOOL CharIsAlpha(WCHAR c)
 return CharIsAlpha<WCHAR>(c);
 }
 
-template <class _char_t> inline BOOL CharIsBinary(_char_t tc)
-{
-CHAR c=CharToChar<CHAR, _char_t>(tc);
-if(c=='0'||c=='1')
-	return true;
-return false;
-}
-
-BOOL CharIsBinary(CHAR c)
-{
-return CharIsBinary<CHAR>(c);
-}
-
-BOOL CharIsBinary(WCHAR c)
-{
-return CharIsBinary<WCHAR>(c);
-}
-
 template <class _char_t> inline BOOL CharIsBreak(_char_t tc)
 {
 if(tc==0)
 	return true;
 CHAR c=CharToChar<CHAR, _char_t>(tc);
 CHAR str[]="\n\r\t;:&|+*/\\?!";
-for(UINT u=0; u<ARRAYSIZE(str); u++)
+for(UINT u=0; u<ArraySize(str); u++)
 	{
 	if(c==str[u])
 		return true;
@@ -222,44 +238,14 @@ BOOL CharIsCapital(WCHAR c)
 return CharIsCapital<WCHAR>(c);
 }
 
-template <class _char_t> inline BOOL CharIsHex(_char_t tc)
+BOOL CharIsDigit(CHAR c, UINT base)
 {
-CHAR c=CharToChar<CHAR, _char_t>(tc);
-if(c>='0'&&c<='9')
-	return true;
-if(c>='A'&&c<='F')
-	return true;
-if(c>='a'&&c<='f')
-	return true;
-return false;
+return CharToDigit<CHAR>(c, nullptr, base);
 }
 
-BOOL CharIsHex(CHAR c)
+BOOL CharIsDigit(WCHAR c, UINT base)
 {
-return CharIsHex<CHAR>(c);
-}
-
-BOOL CharIsHex(WCHAR c)
-{
-return CharIsHex<WCHAR>(c);
-}
-
-template <class _char_t> inline BOOL CharIsNumber(_char_t tc)
-{
-CHAR c=CharToChar<CHAR, _char_t>(tc);
-if(c>='0'&&c<='9')
-	return true;
-return false;
-}
-
-BOOL CharIsNumber(CHAR c)
-{
-return CharIsNumber<CHAR>(c);
-}
-
-BOOL CharIsNumber(WCHAR c)
-{
-return CharIsNumber<WCHAR>(c);
+return CharToDigit<WCHAR>(c, nullptr, base);
 }
 
 template <class _char_t> inline BOOL CharIsPrintable(_char_t tc)
@@ -302,7 +288,7 @@ template <class _char_t> inline BOOL CharIsSpecial(_char_t tc)
 {
 CHAR c=CharToChar<CHAR, _char_t>(tc);
 CHAR str[]="\"*/:<>?\\|";
-for(UINT u=0; u<ARRAYSIZE(str); u++)
+for(UINT u=0; u<ArraySize(str); u++)
 	{
 	if(c==str[u])
 		return true;

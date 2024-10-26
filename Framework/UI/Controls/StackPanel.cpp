@@ -58,15 +58,15 @@ for(auto it=Children->First(); it->HasCurrent(); it->MoveNext())
 	if(uOrientation==Orientation::Horizontal)
 		{
 		size.Width+=child_size.Width;
-		size.Height=MAX(size.Height, child_size.Height);
+		size.Height=Max(size.Height, child_size.Height);
 		}
 	else
 		{
-		size.Width=MAX(size.Width, child_size.Width);
+		size.Width=Max(size.Width, child_size.Width);
 		size.Height+=child_size.Height;
 		}
 	}
-auto border=this->GetBorderBrush();
+auto border=GetBorderBrush();
 if(border)
 	size.Add(2, 2);
 size.AddPadding(Padding*scale);
@@ -75,7 +75,7 @@ return size.Max(MinSize*scale);
 
 VOID StackPanel::Rearrange(RenderTarget* target, RECT& rc)
 {
-auto border=this->GetBorderBrush();
+auto border=GetBorderBrush();
 if(border)
 	rc.SetPadding(1, 1, 1, 1);
 FLOAT scale=GetScaleFactor();

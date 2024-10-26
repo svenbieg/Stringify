@@ -54,7 +54,7 @@ for(auto it=Children->First(); it->HasCurrent(); it->MoveNext())
 		RECT const& margin=control->Margin;
 		child_size.AddPadding(margin*scale);
 		}
-	line_height=MAX(line_height, child_size.Height);
+	line_height=Max(line_height, child_size.Height);
 	rc_move.Right=rc_move.Left+child_size.Width;
 	if(rc_move.Right>rc.Right)
 		{

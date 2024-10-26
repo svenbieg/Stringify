@@ -67,7 +67,7 @@ public:
 	BOOL IsEnabled();
 	Event<Interactive, Handle<KeyEventArgs>> KeyDown;
 	Event<Interactive, Handle<KeyEventArgs>> KeyUp;
-	BOOL KillFocus();
+	virtual BOOL KillFocus();
 	Event<Interactive, Handle<PointerEventArgs>> PointerDown;
 	Event<Window> PointerEntered;
 	Event<Window> PointerLeft;
@@ -75,7 +75,7 @@ public:
 	Event<Interactive, Handle<PointerEventArgs>> PointerUp;
 	Event<Interactive, Handle<PointerEventArgs>> PointerWheel;
 	VOID ReleasePointer();
-	VOID SetFocus(FocusReason Reason=FocusReason::None);
+	virtual VOID SetFocus(FocusReason Reason=FocusReason::None);
 	BOOL TabStop;
 
 private:

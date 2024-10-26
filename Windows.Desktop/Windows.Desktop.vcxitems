@@ -3,7 +3,12 @@
   <PropertyGroup Label="Globals">
     <HasSharedItems>true</HasSharedItems>
     <ItemsProjectGuid>{0360ACE2-9F06-419D-AC64-A9E24FAB3F24}</ItemsProjectGuid>
+    <ItemsSccProjectName>$/Shared/Windows.Desktop</ItemsSccProjectName>
+    <ItemsSccAuxPath>https://svenbieg.visualstudio.com</ItemsSccAuxPath>
+    <ItemsSccLocalPath>.</ItemsSccLocalPath>
+    <ItemsSccProvider>{4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}</ItemsSccProvider>
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <NMakeIncludeSearchPath>$(NMakeIncludeSearchPath);$(MSBuildThisFileDirectory)</NMakeIncludeSearchPath>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
@@ -16,15 +21,10 @@
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Culture\LanguageHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Application.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\AppWindow.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\Dialog.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\DialogHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\MessageBox.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\OpenFileDialog.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\SaveFileDialog.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Frame.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Overlapped.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Window.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Devices\ClockHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\Bitmap.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\Brush.h" />
@@ -36,23 +36,22 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\ImagingFactory.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\RenderTarget.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\Theme.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Platform.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Strings\Exception.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Strings\Files.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Clipboard.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\AppWindow.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\PathEdit.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Overlapped.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Popup.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Culture\LanguageHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Application.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\AppWindow.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\Dialog.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\DialogHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\MessageBox.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\OpenFileDialog.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\SaveFileDialog.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Frame.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Overlapped.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Window.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Devices\ClockHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\Bitmap.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\Brush.cpp" />
@@ -65,6 +64,9 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\RenderTarget.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\Theme.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Storage\Clipboard.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\AppWindow.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\PathEdit.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Overlapped.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Popup.cpp" />
   </ItemGroup>
 </Project>

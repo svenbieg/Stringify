@@ -48,7 +48,7 @@ if(uSize>uPosition)
 	available=uSize-uPosition;
 SIZE_T copy=size;
 if(available)
-	copy=MIN(size, available);
+	copy=Min(size, available);
 if(buf)
 	CopyMemory(buf, &pBuffer[uPosition], copy);
 uPosition+=copy;
@@ -71,7 +71,7 @@ if(uSize>uPosition)
 	available=uSize-uPosition;
 SIZE_T copy=size;
 if(available)
-	copy=MIN(size, available);
+	copy=Min(size, available);
 CopyMemory(&pBuffer[uPosition], buf, copy);
 uPosition+=copy;
 return copy;
@@ -107,7 +107,7 @@ if(size==0)
 	size=available;
 SIZE_T copy=size;
 if(available)
-	copy=MIN(size, available);
+	copy=Min(size, available);
 if(!copy)
 	return 0;
 FillMemory(&pBuffer[uPosition], copy, value);
@@ -124,7 +124,7 @@ if(size==0)
 	size=available;
 SIZE_T copy=size;
 if(available)
-	copy=MIN(size, available);
+	copy=Min(size, available);
 if(!copy)
 	return 0;
 ZeroMemory(&pBuffer[uPosition], copy);

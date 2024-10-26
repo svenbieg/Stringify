@@ -59,7 +59,7 @@ return uSize-uPosition;
 SIZE_T Buffer::Read(VOID* buf, SIZE_T size)
 {
 SIZE_T available=uSize-uPosition;
-SIZE_T copy=MIN(size, available);
+SIZE_T copy=Min(size, available);
 if(buf)
 	CopyMemory(buf, &pBuffer[uPosition], copy);
 uPosition+=copy;
@@ -78,7 +78,7 @@ VOID Buffer::Flush()
 SIZE_T Buffer::Write(VOID const* buf, SIZE_T size)
 {
 SIZE_T available=uSize-uPosition;
-SIZE_T copy=MIN(size, available);
+SIZE_T copy=Min(size, available);
 CopyMemory(&pBuffer[uPosition], buf, copy);
 uPosition+=copy;
 return copy;
@@ -107,7 +107,7 @@ SIZE_T Buffer::Fill(UINT value, SIZE_T size)
 SIZE_T available=uSize-uPosition;
 if(size==0)
 	size=available;
-SIZE_T copy=MIN(size, available);
+SIZE_T copy=Min(size, available);
 FillMemory(&pBuffer[uPosition], copy, value);
 uPosition+=copy;
 return copy;
@@ -118,7 +118,7 @@ SIZE_T Buffer::Zero(SIZE_T size)
 SIZE_T available=uSize-uPosition;
 if(size==0)
 	size=available;
-SIZE_T copy=MIN(size, available);
+SIZE_T copy=Min(size, available);
 ZeroMemory(&pBuffer[uPosition], copy);
 uPosition+=copy;
 return copy;

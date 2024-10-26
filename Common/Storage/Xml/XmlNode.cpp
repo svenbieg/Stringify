@@ -9,7 +9,7 @@
 // Using
 //=======
 
-#include "Storage/Streams/StringWriter.h"
+#include "Storage/Streams/StreamWriter.h"
 #include "XmlContent.h"
 #include "XmlNode.h"
 
@@ -54,7 +54,7 @@ SIZE_T XmlNode::ReadFromStream(InputStream* stream)
 {
 if(!stream)
 	return 0;
-StringReader reader(stream);
+StreamReader reader(stream);
 SIZE_T size=0;
 size+=reader.FindChar("<");
 size+=ReadTag(reader);
@@ -69,7 +69,7 @@ return size;
 
 SIZE_T XmlNode::WriteToStream(OutputStream* stream, UINT level)
 {
-StringWriter writer(stream);
+StreamWriter writer(stream);
 SIZE_T size=0;
 size+=writer.PrintChar('\t', level);
 size+=writer.PrintChar('<');
@@ -127,7 +127,7 @@ Handle<XmlContent> content=new XmlContent(this, value);
 Elements->Append(content);
 }
 
-SIZE_T XmlNode::ReadContent(StringReader& reader)
+SIZE_T XmlNode::ReadContent(StreamReader& reader)
 {
 SIZE_T size=0;
 while(1)
@@ -158,7 +158,7 @@ if(Elements->GetCount()==1)
 return size;
 }
 
-SIZE_T XmlNode::ReadTag(StringReader& reader)
+SIZE_T XmlNode::ReadTag(StreamReader& reader)
 {
 SIZE_T size=0;
 Tag=reader.ReadString(&size, " />");

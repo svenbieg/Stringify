@@ -11,6 +11,7 @@
 
 #include "UI/Controls/StackPanel.h"
 #include "UI/Input/KeyEvent.h"
+#include "UI/Popup.h"
 #include "Menu.h"
 #include "PopupMenuItem.h"
 
@@ -35,24 +36,23 @@ class MenuBarItem;
 // Popup-Menu
 //============
 
-class PopupMenu: public StackPanel, public Menu
+class PopupMenu: public Popup, public Menu
 {
 public:
 	// Using
 	using KeyEventArgs=UI::Input::KeyEventArgs;
 	using KeyEventType=UI::Input::KeyEventType;
+	using Menu=UI::Controls::Menus::Menu;
 
 	// Con-/Destructors
-	PopupMenu(UI::Frame* Frame, Menu* Parent);
+	PopupMenu(Window* Parent, Menu* ParentMenu=nullptr);
 
 	// Common
 	Handle<PopupMenuItem> Add(Handle<Sentence> Label);
 	VOID Close()override;
 	Handle<Brush> GetBackgroundBrush()override;
-	Handle<Brush> GetBorderBrush()override;
 	SIZE GetMinSize(RenderTarget* Target)override;
-	Event<PopupMenu> Popup;
-	VOID Show(UI::Window* Owner, POINT const& Point);
+	VOID Show(POINT const& Point);
 };
 
 }}}

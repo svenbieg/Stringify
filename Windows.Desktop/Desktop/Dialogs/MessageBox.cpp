@@ -9,8 +9,10 @@
 // Using
 //=======
 
-#include "Desktop/AppWindow.h"
+#include "UI/AppWindow.h"
 #include "MessageBox.h"
+
+using namespace UI;
 
 
 //===========

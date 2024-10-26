@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <IntDir>$(SolutionDir)$(Configuration)\$(Platform)\$(ProjectName)\obj\</IntDir>
-    <OutDir>$(SolutionDir)$(Configuration)\$(Platform)\$(ProjectName)\bin\</OutDir>
+
+  <PropertyGroup Label="Configuration">
+    <CharacterSet>Unicode</CharacterSet>
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Release'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IntDir>$(SolutionDir)$(Configuration)\$(ProjectName)\$(Platform)\obj\</IntDir>
+    <OutDir>$(SolutionDir)$(Configuration)\$(ProjectName)\$(Platform)\bin\</OutDir>
+  </PropertyGroup>
+
 </Project>

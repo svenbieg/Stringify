@@ -9,7 +9,7 @@
 // Using
 //=======
 
-#include "Storage/Streams/StringWriter.h"
+#include "Storage/Streams/StreamWriter.h"
 #include "XmlContent.h"
 #include "XmlNode.h"
 
@@ -42,7 +42,7 @@ Value.Changed.Add(this, &XmlContent::OnValueChanged);
 
 SIZE_T XmlContent::WriteToStream(OutputStream* stream, UINT level)
 {
-StringWriter writer(stream);
+StreamWriter writer(stream);
 return writer.Print(Value);
 }
 

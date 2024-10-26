@@ -62,6 +62,7 @@ public:
 	Handle(std::nullptr_t): pIcon(nullptr) {}
 	Handle(INT Id) { HandleCreate(&pIcon, new Icon(Id)); }
 	Handle(ICON const* Resource) { HandleCreate(&pIcon, new Icon(Resource)); }
+	Handle(Icon* Icon) { HandleCreate(&pIcon, Icon); }
 
 	// Access
 	inline operator bool()const { return pIcon!=nullptr; }

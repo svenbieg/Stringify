@@ -50,7 +50,7 @@ public:
 
 	// Con-/Destructors
 	Map() {}
-	Map(std::nullptr_t) {}
+	Map(nullptr_t) {}
 	Map(_map_t* Map): cMap(Map->cMap) {}
 
 	// Access

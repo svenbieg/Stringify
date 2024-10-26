@@ -9,8 +9,8 @@
 // Using
 //=======
 
-#include "Storage/Streams/StringReader.h"
-#include "Storage/Streams/StringWriter.h"
+#include "Storage/Streams/StreamReader.h"
+#include "Storage/Streams/StreamWriter.h"
 #include "Sentence.h"
 
 using namespace Culture;
@@ -145,7 +145,7 @@ return Compare(string);
 SIZE_T Sentence::ReadFromStream(InputStream* stream)
 {
 SIZE_T size=0;
-StringReader reader(stream);
+StreamReader reader(stream);
 auto str=reader.ReadString(&size);
 if(!str)
 	return size;
@@ -185,7 +185,7 @@ return size;
 SIZE_T Sentence::WriteToStream(OutputStream* stream)
 {
 SIZE_T size=0;
-StringWriter writer(stream);
+StreamWriter writer(stream);
 if(pString)
 	{
 	SIZE_T size=0;

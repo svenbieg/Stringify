@@ -9,8 +9,7 @@
 // Forward-Declarations
 //======================
 
-#include "Handle.h"
-#include "StringClass.h"
+#include "TypeHelper.h"
 
 
 //========
@@ -22,10 +21,9 @@
 #include "DynamicPointer.h"
 #include "Event.h"
 #include "FlagHelper.h"
-#include "MutexClass.h"
+#include "Function.h"
 #include "PathHelper.h"
 #include "Property.h"
-#include "SharedMutex.h"
-#include "SignalClass.h"
 #include "StatusClass.h"
-#include "StringHelper.h"
+#include "StringClass.h"
+#include "VariableArguments.h"

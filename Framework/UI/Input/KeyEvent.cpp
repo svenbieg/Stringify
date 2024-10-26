@@ -26,6 +26,7 @@ namespace UI {
 
 KeyEventArgs::KeyEventArgs(VirtualKey key, TCHAR c):
 Char(c),
+Flags(KeyEventFlags::None),
 Handled(false),
 Key(key)
 {}

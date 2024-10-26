@@ -30,7 +30,7 @@ if(size==0)
 	size=UINT_MAX;
 UINT end=size-1;
 if(copy)
-	end=MIN(end, copy);
+	end=Min(end, copy);
 UINT pos=0;
 for(; pos<end; pos++)
 	{
@@ -64,7 +64,7 @@ UINT StringCopy(LPWSTR dst, UINT size, LPCWSTR src, UINT copy)
 return StringCopy<WCHAR, WCHAR>(dst, size, src, copy);
 }
 
-template <class _str_t, class _find_t> BOOL StringFind(_str_t const* str, _find_t const* find, UINT* pos_ptr, BOOL cs)
+template <class _char_t, class _find_t> inline BOOL StringFind(_char_t const* str, _find_t const* find, UINT* pos_ptr, BOOL cs)
 {
 if(!str||!find)
 	return false;
@@ -103,7 +103,7 @@ BOOL StringFind(LPCWSTR str, LPCWSTR find, UINT* pos_ptr, BOOL cs)
 return StringFind<WCHAR, WCHAR>(str, find, pos_ptr, cs);
 }
 
-template <class _str_t, class _char_t> BOOL StringFindChar(_str_t const* str, _char_t c, UINT* pos_ptr, BOOL cs)
+template <class _str_t, class _char_t> inline BOOL StringFindChar(_str_t const* str, _char_t c, UINT* pos_ptr, BOOL cs)
 {
 if(!str||!c)
 	return false;
@@ -129,7 +129,7 @@ BOOL StringFindChar(LPCWSTR str, CHAR c, UINT* pos_ptr, BOOL cs)
 return StringFindChar<WCHAR, CHAR>(str, c, pos_ptr, cs);
 }
 
-template <class _str_t, class _find_t> BOOL StringFindChars(_str_t const* str, _find_t const* find, UINT* pos_ptr, BOOL cs)
+template <class _char_t, class _find_t> inline BOOL StringFindChars(_char_t const* str, _find_t const* find, UINT* pos_ptr, BOOL cs)
 {
 if(!str||!find)
 	return false;
@@ -200,6 +200,37 @@ return StringLength<CHAR>(str, max);
 UINT StringLength(LPCWSTR str, UINT max)
 {
 return StringLength<WCHAR>(str, max);
+}
+
+template <class _char_t> inline _char_t const* StringTruncate(_char_t const* str, LPCSTR chars)
+{
+UINT char_count=StringLength(chars);
+while(*str)
+	{
+	bool trunc=false;
+	for(UINT u=0; u<char_count; u++)
+		{
+		if(CharCompare(*str, chars[u])==0)
+			{
+			trunc=true;
+			break;
+			}
+		}
+	if(!trunc)
+		break;
+	str++;
+	}
+return str;
+}
+
+LPCSTR StringTruncate(LPCSTR str, LPCSTR chars)
+{
+return StringTruncate<CHAR>(str, chars);
+}
+
+LPCWSTR StringTruncate(LPCWSTR str, LPCSTR chars)
+{
+return StringTruncate<WCHAR>(str, chars);
 }
 
 
@@ -278,7 +309,7 @@ if(dst)
 return pos;
 }
 
-template <class _dst_t, class _str_t, class _find_t, class _insert_t> UINT StringReplace(_dst_t* dst, UINT size, _str_t const* str, _find_t const* find, _insert_t const* insert, BOOL cs, BOOL repeat)
+template <class _dst_t, class _char_t, class _find_t, class _insert_t> inline UINT StringReplace(_dst_t* dst, UINT size, _char_t const* str, _find_t const* find, _insert_t const* insert, BOOL cs, BOOL repeat)
 {
 if(!str)
 	return 0;
@@ -339,8 +370,10 @@ return StringReplace<WCHAR, WCHAR, CHAR, CHAR>(dst, size, str, find, insert, cs,
 // Scanning
 //==========
 
-template <class _str_t, class _int_t> UINT StringScanInt(_str_t const* str, _int_t* pint)
+template <class _char_t, class _int_t> UINT StringScanInt(_char_t const* str, _int_t* value_ptr)
 {
+if(value_ptr)
+	*value_ptr=0;
 if(!str)
 	return 0;
 UINT pos=0;
@@ -349,96 +382,89 @@ for(; CharEqual(str[pos], '-'); pos++)
 	{
 	negative=!negative;
 	}
-if(!CharIsNumber(str[pos]))
+UINT digit=0;
+if(!CharToDigit(str[pos], &digit))
 	return 0;
-_int_t i=(_int_t)str[pos]-'0';
+_int_t i=digit;
 for(pos++; str[pos]; pos++)
 	{
-	if(!CharIsNumber(str[pos]))
+	if(!CharToDigit(str[pos], &digit))
 		break;
 	i*=10;
-	i+=(_int_t)str[pos]-'0';
+	i+=digit;
 	}
 if(negative)
 	i*=-1;
-if(pint)
-	*pint=i;
+if(value_ptr)
+	*value_ptr=i;
 return pos;
 }
 
-template <class _str_t, class _uint_t> UINT StringScanUInt(_str_t const* str, _uint_t* pint, bool hex=false)
+template <class _char_t, class _uint_t> UINT StringScanUInt(_char_t const* str, _uint_t* value_ptr, UINT base, UINT len)
 {
 if(!str)
 	return 0;
+if(value_ptr)
+	*value_ptr=0;
 UINT pos=0;
-if(!CharIsNumber(str[pos]))
-	return 0;
-BOOL binary=false;
+while(CharEqual(str[pos], ' '))
+	{
+	if(++pos==len)
+		return pos;
+	}
 if(CharEqual(str[pos], '0'))
 	{
-	if(CharEqual(str[pos+1], 'b'))
+	pos++;
+	if(pos==len)
+		return pos;
+	if(CharEqual(str[pos], 'b'))
 		{
-		binary=true;
-		pos+=2;
+		pos++;
+		if(base!=2)
+			return pos;
 		}
-	if(CharEqual(str[pos+1], 'x'))
+	else if(CharEqual(str[pos], 'x'))
 		{
-		hex=true;
-		pos+=2;
+		pos++;
+		if(base!=16)
+			return pos;
 		}
 	}
-if(binary)
+UINT value=0;
+for(; str[pos]; pos++)
 	{
-	_uint_t u=0;
-	UINT start=pos;
-	for(; str[pos]; pos++)
-		{
-		if(!CharIsBinary(str[pos]))
-			break;
-		u*=2;
-		u+=(_uint_t)str[pos]-'0';
-		}
-	if(pos==start)
-		return 0;
-	if(pint)
-		*pint=u;
-	return pos;
-	}
-if(hex)
-	{
-	_uint_t u=0;
-	UINT start=pos;
-	for(; str[pos]; pos++)
-		{
-		if(!CharIsHex(str[pos]))
-			break;
-		_str_t c=(_str_t)(str[pos]-'0');
-		if(c>9)
-			c=(_str_t)(c-7);
-		u*=16;
-		u+=c;
-		}
-	if(pos==start)
-		return 0;
-	if(pint)
-		*pint=u;
-	return pos;
-	}
-_uint_t u=(_uint_t)str[pos]-'0';
-for(pos++; str[pos]; pos++)
-	{
-	if(!CharIsNumber(str[pos]))
+	UINT digit=0;
+	if(!CharToDigit(str[pos], &digit, base))
 		break;
-	u*=10;
-	u+=(_uint_t)str[pos]-'0';
+	value*=base;
+	value+=digit;
 	}
-if(pint)
-	*pint=u;
+if(value_ptr)
+	*value_ptr=value;
 return pos;
 }
 
-#ifndef _DRIVER
-template <class _str_t, class _float_t> UINT StringScanFloat(_str_t const* str, _float_t* pf)
+UINT StringScanUInt(LPCSTR str, UINT* value_ptr, UINT base, UINT len)
+{
+return StringScanUInt<CHAR, UINT>(str, value_ptr, base, len);
+}
+
+UINT StringScanUInt(LPCWSTR str, UINT* value_ptr, UINT base, UINT len)
+{
+return StringScanUInt<WCHAR, UINT>(str, value_ptr, base, len);
+}
+
+UINT StringScanUInt64(LPCSTR str, UINT64* value_ptr, UINT base, UINT len)
+{
+return StringScanUInt<CHAR, UINT64>(str, value_ptr, base, len);
+}
+
+UINT StringScanUInt64(LPCWSTR str, UINT64* value_ptr, UINT base, UINT len)
+{
+return StringScanUInt<WCHAR, UINT64>(str, value_ptr, base, len);
+}
+
+template <class _char_t, class _float_t> UINT StringScanFloat(_char_t const* str, _float_t* value_ptr)
 {
 if(!str)
 	return 0;
@@ -448,12 +474,12 @@ for(; CharEqual(str[pos], '-'); pos++)
 	{
 	negative=!negative;
 	}
-if(!CharIsNumber(str[pos]))
+if(!CharIsDigit(str[pos]))
 	return 0;
 _float_t f=(_float_t)str[pos]-'0';
 for(pos++; str[pos]; pos++)
 	{
-	if(!CharIsNumber(str[pos]))
+	if(!CharIsDigit(str[pos]))
 		break;
 	f*=10;
 	f+=(_float_t)str[pos]-'0';
@@ -465,7 +491,7 @@ if(str[pos])
 		_float_t div=10;
 		for(pos++; str[pos]; pos++)
 			{
-			if(!CharIsNumber(str[pos]))
+			if(!CharIsDigit(str[pos]))
 				break;
 			f+=((_float_t)str[pos]-'0')/div;
 			div*=10;
@@ -495,13 +521,12 @@ if(str[pos])
 	}
 if(negative)
 	f*=-1;
-if(pf)
-	*pf=f;
+if(value_ptr)
+	*value_ptr=f;
 return pos;
 }
-#endif
 
-template <class _str_t, class _buf_t, class _stop_t> UINT StringScanString(_str_t const* str, _buf_t* buf, UINT size, _stop_t stop)
+template <class _char_t, class _buf_t, class _stop_t> UINT StringScanString(_char_t const* str, _buf_t* buf, UINT size, _stop_t stop)
 {
 if(!str)
 	return 0;
@@ -511,7 +536,7 @@ for(; str[pos]; pos++)
 	if(CharEqual(str[pos], stop))
 		break;
 	if(pos<size)
-		buf[pos]=CharToChar<_buf_t, _str_t>(str[pos]);
+		buf[pos]=CharToChar<_buf_t, _char_t>(str[pos]);
 	}
 if(pos<size)
 	buf[pos]=0;
@@ -523,32 +548,7 @@ return pos;
 // Format
 //========
 
-enum class StringFlags: UINT
-{
-Left=1,
-None=0,
-Numeric=2,
-Precision=4,
-Signed=8,
-Space=16,
-Width=32,
-Zero=64
-};
-
-enum class StringFormat
-{
-Char,
-Double,
-Float,
-Hex,
-Int,
-None,
-Percent,
-String,
-UInt
-};
-
-template <class _str_t> UINT StringGetFormat(_str_t const* str, StringFormat& format, StringFlags& flags, UINT& width, UINT& precision)
+UINT StringGetFormat(LPCSTR str, StringFormat& format, StringFormatFlags& flags, UINT& width, UINT& precision)
 {
 if(!str)
 	return 0;
@@ -570,25 +570,25 @@ for(; str[pos]; pos++)
 	{
 	if(CharCompare(str[pos], ' ')==0)
 		{
-		SetFlag(flags, StringFlags::Space);
+		SetFlag(flags, StringFormatFlags::Space);
 		}
 	else if(CharCompare(str[pos], '+')==0)
 		{
-		SetFlag(flags, StringFlags::Signed);
+		SetFlag(flags, StringFormatFlags::Signed);
 		}
 	else if(CharCompare(str[pos], '-')==0)
 		{
-		SetFlag(flags, StringFlags::Left);
+		SetFlag(flags, StringFormatFlags::Left);
 		}
 	else if(CharCompare(str[pos], '#')==0)
 		{
-		SetFlag(flags, StringFlags::Numeric);
+		SetFlag(flags, StringFormatFlags::Numeric);
 		}
 	else if(CharCompare(str[pos], '0')==0)
 		{
-		if(GetFlag(flags, StringFlags::Zero))
+		if(GetFlag(flags, StringFormatFlags::Zero))
 			break;
-		SetFlag(flags, StringFlags::Zero);
+		SetFlag(flags, StringFormatFlags::Zero);
 		}
 	else
 		{
@@ -598,7 +598,7 @@ for(; str[pos]; pos++)
 // Width
 if(CharEqual(str[pos], '*'))
 	{
-	SetFlag(flags, StringFlags::Width);
+	SetFlag(flags, StringFormatFlags::Width);
 	pos++;
 	}
 else
@@ -611,7 +611,7 @@ if(CharEqual(str[pos], '.'))
 	pos++;
 	if(CharEqual(str[pos], '*'))
 		{
-		SetFlag(flags, StringFlags::Precision);
+		SetFlag(flags, StringFormatFlags::Precision);
 		pos++;
 		}
 	else
@@ -632,7 +632,7 @@ for(; str[pos]; pos++)
 	break;
 	}
 // Type
-CHAR type=CharToChar<CHAR, _str_t>(str[pos]);
+CHAR type=str[pos];
 if(type==0)
 	{
 	format=StringFormat::None;
@@ -689,66 +689,65 @@ return pos+1;
 // Printing Characters
 //=====================
 
-template <class _str_t, class _char_t> UINT StringPrintChar(_str_t* str, UINT size, _char_t c)
+template <class _buf_t, class _char_t> UINT StringPrintChar(_buf_t* buf, UINT size, _char_t c, UINT pos=0)
 {
-if(!str)
+if(!buf)
 	return 1;
-if(!size)
+if(pos>=size)
 	return 0;
-str[0]=CharToChar<_str_t, _char_t>(c);
+buf[pos]=CharToChar<_buf_t, _char_t>(c);
 return 1;
 }
 
-template <class _str_t, class _char_t> UINT StringPrintChars(_str_t* str, UINT size, _char_t c, UINT count)
+template <class _buf_t, class _char_t> UINT StringPrintChars(_buf_t* buf, UINT size, _char_t c, UINT count, UINT pos=0)
 {
-if(!str)
+if(!buf)
 	return count;
-UINT print=MIN(size, count);
+if(pos>=size)
+	return 0;
+UINT print=Min(size-pos, count);
 for(UINT u=0; u<print; u++)
-	str[u]=CharToChar<_str_t, _char_t>(c);
+	buf[pos++]=CharToChar<_buf_t, _char_t>(c);
 return print;
 }
 
-template <class _str_t, class _print_t> UINT StringPrintString(_str_t* str, UINT size, _print_t const* print)
+template <class _buf_t, class _char_t> UINT StringPrintString(_buf_t* buf, UINT size, _char_t const* value, UINT pos=0)
 {
-if(!print)
+if(!value)
 	return 0;
-UINT pos=0;
-for(; print[pos]; pos++)
+UINT value_pos=0;
+for(; value[value_pos]; value_pos++)
 	{
-	if(size)
-		{
-		if(pos==size)
-			return pos;
-		}
-	if(str)
-		str[pos]=CharToChar<_str_t, _print_t>(print[pos]);
+	if(pos+1==size)
+		break;
+	if(buf)
+		buf[pos++]=CharToChar<_buf_t, _char_t>(value[value_pos]);
 	}
-return pos;
+return value_pos;
 }
 
-template <class _str_t, class _print_t> UINT StringPrintString(_str_t* str, UINT size, _print_t const* print, StringFlags flags, UINT width)
+template <class _buf_t, class _char_t> UINT StringPrintString(_buf_t* buf, UINT size, _char_t const* value, StringFormatFlags flags, UINT width, UINT pos=0)
 {
-if(!print)
+if(!value)
 	return 0;
+UINT start=pos;
 UINT len=0;
 if(width>0)
-	len=StringLength(print);
-UINT pos=0;
+	len=StringLength(value);
 if(len<width)
 	{
-	if(!GetFlag(flags, StringFlags::Left))
-		pos+=StringPrintChars(str, size, ' ', width-len);
+	if(!GetFlag(flags, StringFormatFlags::Left))
+		pos+=StringPrintChars(buf, size, ' ', width-len, pos);
 	}
-pos+=StringPrintString(str? &str[pos]: nullptr, size>pos? size-pos: 0, print);
+pos+=StringPrintString(buf, size, value, pos);
 if(len<width)
 	{
-	if(GetFlag(flags, StringFlags::Left))
-		pos+=StringPrintChars(str? &str[pos]: nullptr, size>pos? size-pos: 0, ' ', width-len);
+	if(GetFlag(flags, StringFormatFlags::Left))
+		pos+=StringPrintChars(buf, size, ' ', width-len, pos);
 	}
 if(pos<size)
-	str[pos]=0;
-return pos;
+	buf[pos]=0;
+return pos-start;
 }
 
 
@@ -756,129 +755,169 @@ return pos;
 // Printing Integers
 //===================
 
-template <class _str_t, class _uint_t> UINT StringPrintUInt(_str_t* str, UINT size, _uint_t i)
+template <class _char_t, class _uint_t> UINT StringPrintUInt(_char_t* str, UINT size, _uint_t value, UINT pos=0)
 {
 CHAR chars[22];
 LPSTR buf=&chars[21];
 *buf=0;
 do
 	{
-	*--buf=(CHAR)((i%10)+'0');
-	i/=10;
+	*--buf=(CHAR)((value%10)+'0');
+	value/=10;
 	}
-while(i);
-return StringPrintString(str, size, buf);
+while(value);
+return StringPrintString(str, size, buf, pos);
 }
 
-template <class _str_t, class _uint_t> UINT StringPrintUInt(_str_t* str, UINT size, _uint_t u, StringFlags flags, UINT width)
+template <class _char_t, class _uint_t> UINT StringPrintUInt(_char_t* str, UINT size, _uint_t value, StringFormatFlags flags, UINT width, UINT pos=0)
 {
 UINT len=0;
 if(width>0)
-	len=StringPrintUInt<_str_t, _uint_t>(nullptr, 0, u, flags, 0);
-UINT pos=0;
+	len=StringPrintUInt<_char_t, _uint_t>(nullptr, 0, value, flags, 0);
+UINT start=pos;
 if(len<width)
 	{
-	if(!GetFlag(flags, StringFlags::Left)&&!GetFlag(flags, StringFlags::Zero))
-		pos+=StringPrintChars(str, size, ' ', width-len);
+	if(!GetFlag(flags, StringFormatFlags::Left)&&!GetFlag(flags, StringFormatFlags::Zero))
+		pos+=StringPrintChars(str, size, ' ', width-len, pos);
 	}
-if(GetFlag(flags, StringFlags::Signed))
-	pos+=StringPrintChar(str? &str[pos]: nullptr, size>pos? size-pos: 0, '+');
+if(GetFlag(flags, StringFormatFlags::Signed))
+	pos+=StringPrintChar(str, size, '+', pos);
 if(len<width)
 	{
-	if(!GetFlag(flags, StringFlags::Left)&&GetFlag(flags, StringFlags::Zero))
-		pos+=StringPrintChars(str? &str[pos]: nullptr, size>pos? size-pos: 0, '0', width-len);
+	if(!GetFlag(flags, StringFormatFlags::Left)&&GetFlag(flags, StringFormatFlags::Zero))
+		pos+=StringPrintChars(str, size, '0', width-len, pos);
 	}
-pos+=StringPrintUInt(str? &str[pos]: nullptr, size>pos? size-pos: 0, u);
+pos+=StringPrintUInt(str, size, value, pos);
 if(len<width)
 	{
-	if(GetFlag(flags, StringFlags::Left))
-		pos+=StringPrintChars(str? &str[pos]: nullptr, size>pos? size-pos: 0, ' ', width-len);
+	if(GetFlag(flags, StringFormatFlags::Left))
+		pos+=StringPrintChars(str, size, ' ', width-len, pos);
 	}
 if(pos<size)
 	str[pos]=0;
-return pos;
+return pos-start;
 }
 
-template <class _str_t, class _int_t> UINT StringPrintInt(_str_t* str, UINT size, _int_t i, StringFlags flags, UINT width)
+template <class _char_t, class _int_t> UINT StringPrintInt(_char_t* str, UINT size, _int_t value, StringFormatFlags flags, UINT width, UINT pos=0)
 {
 UINT len=0;
 if(width>0)
-	len=StringPrintInt<_str_t, _int_t>(nullptr, 0, i, flags, 0);
-UINT pos=0;
+	len=StringPrintInt<_char_t, _int_t>(nullptr, 0, value, flags, 0);
+UINT start=pos;
 if(len<width)
 	{
-	if(!GetFlag(flags, StringFlags::Left)&&!GetFlag(flags, StringFlags::Zero))
-		pos+=StringPrintChars(str, size, ' ', width-len);
+	if(!GetFlag(flags, StringFormatFlags::Left)&&!GetFlag(flags, StringFormatFlags::Zero))
+		pos+=StringPrintChars(str, size, ' ', width-len, pos);
 	}
-if(i<0)
+if(value<0)
 	{
-	pos+=StringPrintChar(str? &str[pos]: nullptr, size>pos? size-pos: 0, '-');
-	i*=-1;
+	pos+=StringPrintChar(str, size, '-', pos);
+	value*=-1;
 	}
-else if(GetFlag(flags, StringFlags::Signed))
+else if(GetFlag(flags, StringFormatFlags::Signed))
 	{
-	pos+=StringPrintChar(str? &str[pos]: nullptr, size>pos? size-pos: 0, '+');
+	pos+=StringPrintChar(str, size, '+', pos);
 	}
 if(len<width)
 	{
-	if(!GetFlag(flags, StringFlags::Left)&&GetFlag(flags, StringFlags::Zero))
-		pos+=StringPrintChars(str? &str[pos]: nullptr, size>pos? size-pos: 0, '0', width-len);
+	if(!GetFlag(flags, StringFormatFlags::Left)&&GetFlag(flags, StringFormatFlags::Zero))
+		pos+=StringPrintChars(str, size, '0', width-len, pos);
 	}
-pos+=StringPrintUInt(str? &str[pos]: nullptr, size>pos? size-pos: 0, i);
+pos+=StringPrintUInt(str, size, value, pos);
 if(len<width)
 	{
-	if(GetFlag(flags, StringFlags::Left))
-		pos+=StringPrintChars(str? &str[pos]: nullptr, size>pos? size-pos: 0, ' ', width-len);
+	if(GetFlag(flags, StringFormatFlags::Left))
+		pos+=StringPrintChars(str, size, ' ', width-len, pos);
 	}
 if(pos<size)
 	str[pos]=0;
-return pos;
+return pos-start;
 }
 
-template <class _str_t, class _uint_t> UINT StringPrintHex(_str_t* str, UINT size, _uint_t Integer)
+template <class _char_t, class _uint_t> UINT StringPrintHex(_char_t* str, UINT size, _uint_t value, UINT pos=0)
 {
 CHAR chars[20];
 LPSTR buf=&chars[19];
 *buf=0;
 do
 	{
-	CHAR c=(CHAR)((Integer%16)+'0');
+	CHAR c=(CHAR)((value%16)+'0');
 	if(c>'9')
 		c=(CHAR)(c+7);
 	*--buf=c;
-	Integer/=16;
+	value/=16;
 	}
-while(Integer);
-return StringPrintString(str, size, buf);
+while(value);
+return StringPrintString(str, size, buf, pos);
 }
 
-template <class _str_t, class _uint_t> UINT StringPrintHex(_str_t* str, UINT size, _uint_t u, StringFlags flags, UINT width)
+template <class _char_t, class _uint_t> UINT StringPrintHex(_char_t* str, UINT size, _uint_t value, StringFormatFlags flags, UINT width, UINT pos=0)
 {
 UINT len=0;
 if(width>0)
-	len=StringPrintHex<_str_t, _uint_t>(nullptr, 0, u, flags, 0);
-UINT pos=0;
+	len=StringPrintHex<_char_t, _uint_t>(nullptr, 0, value, flags, 0);
+UINT start=pos;
 if(len<width)
 	{
-	if(!GetFlag(flags, StringFlags::Left)&&!GetFlag(flags, StringFlags::Zero))
-		pos+=StringPrintChars(str, size, ' ', width-len);
+	if(!GetFlag(flags, StringFormatFlags::Left)&&!GetFlag(flags, StringFormatFlags::Zero))
+		pos+=StringPrintChars(str, size, ' ', width-len, pos);
 	}
-if(GetFlag(flags, StringFlags::Numeric))
-	pos+=StringPrintString(str? &str[pos]: nullptr, size>pos? size-pos: 0, "0x");
+if(GetFlag(flags, StringFormatFlags::Numeric))
+	pos+=StringPrintString(str, size, "0x", pos);
 if(len<width)
 	{
-	if(!GetFlag(flags, StringFlags::Left)&&GetFlag(flags, StringFlags::Zero))
-		pos+=StringPrintChars(str? &str[pos]: nullptr, size>pos? size-pos: 0, '0', width-len);
+	if(!GetFlag(flags, StringFormatFlags::Left)&&GetFlag(flags, StringFormatFlags::Zero))
+		pos+=StringPrintChars(str, size, '0', width-len, pos);
 	}
-pos+=StringPrintHex(str? &str[pos]: nullptr, size>pos? size-pos: 0, u);
+pos+=StringPrintHex(str, size, value, pos);
 if(len<width)
 	{
-	if(GetFlag(flags, StringFlags::Left))
-		StringPrintChars(str? &str[pos]: nullptr, size>pos? size-pos: 0, ' ', width-len);
+	if(GetFlag(flags, StringFormatFlags::Left))
+		StringPrintChars(str, size, ' ', width-len, pos);
 	}
 if(pos<size)
 	str[pos]=0;
-return pos;
+return pos-start;
+}
+
+UINT StringPrintHex(LPSTR str, UINT size, UINT value, StringFormatFlags flags, UINT width)
+{
+return StringPrintHex<CHAR, UINT>(str, size, value, flags, width);
+}
+
+UINT StringPrintHex64(LPSTR str, UINT size, UINT64 value, StringFormatFlags flags, UINT width)
+{
+return StringPrintHex<CHAR, UINT64>(str, size, value, flags, width);
+}
+
+UINT StringPrintInt(LPSTR str, UINT size, INT value, StringFormatFlags flags, UINT width)
+{
+return StringPrintInt<CHAR, INT>(str, size, value, flags, width);
+}
+
+UINT StringPrintInt64(LPSTR str, UINT size, INT64 value, StringFormatFlags flags, UINT width)
+{
+return StringPrintInt<CHAR, INT64>(str, size, value, flags, width);
+}
+
+UINT StringPrintUInt(LPSTR str, UINT size, UINT value)
+{
+return StringPrintUInt<CHAR, UINT>(str, size, value);
+}
+
+UINT StringPrintUInt(LPSTR str, UINT size, UINT value, StringFormatFlags flags, UINT width)
+{
+return StringPrintUInt<CHAR, UINT>(str, size, value, flags, width);
+}
+
+UINT StringPrintUInt64(LPSTR str, UINT size, UINT64 value)
+{
+return StringPrintUInt<CHAR, UINT64>(str, size, value);
+}
+
+UINT StringPrintUInt64(LPSTR str, UINT size, UINT64 value, StringFormatFlags flags, UINT width)
+{
+return StringPrintUInt<CHAR, UINT64>(str, size, value, flags, width);
 }
 
 
@@ -886,77 +925,37 @@ return pos;
 // Printing Floats
 //=================
 
-#ifndef _DRIVER
 template <class _float_t> INT FloatNormalize(_float_t& f, _float_t max, _float_t min)
 {
 if(f==0)
 	return 0;
+constexpr _float_t exps[]={  1e32f,  1e16f,  1e8f,  1e4f,  1e2f, 1e1f };
+constexpr _float_t negs[]={ 1e-31f, 1e-15f, 1e-7f, 1e-3f, 1e-1f, 1e0f };
 INT ex=0;
+INT num=32;
 if(f>=max)
 	{
-	if(f>=1e32f)
+	for(UINT u=0; u<ArraySize(exps); u++)
 		{
-		f/=1e32f;
-		ex+=32;
-		}
-	if(f>=1e16f)
-		{
-		f/=1e16f;
-		ex+=16;
-		}
-	if(f>=1e8f)
-		{
-		f/=1e8f;
-		ex+=8;
-		}
-	if(f>=1e4f)
-		{
-		f/=1e4f;
-		ex+=4;
-		}
-	if(f>=1e2f)
-		{
-		f/=1e2f;
-		ex+=2;
-		}
-	if(f>=1e1f)
-		{
-		f/=1e1f;
-		ex+=1;
+		if(f>=exps[u])
+			{
+			f/=exps[u];
+			ex+=num;
+			}
+		num/=2;
 		}
 	return ex;
 	}
 if(f<min)
 	{
-	if(f<1e-31f)
+	for(UINT u=0; u<ArraySize(exps); u++)
 		{
-		f*=1e32f;
-		ex-=32;
-		}
-	if(f<1e-15f)
-		{
-		f*=1e16f;
-		ex-=16;
-		}
-	if(f<1e-7f)
-		{
-		f*=1e8f;
-		ex-=8;
-		}
-	if(f<1e-3f)
-		{
-		f*=1e4f;
-		ex-=4;
-		}
-	if(f<1e-1f)
-		{
-		f*=1e2f;
-		ex-=2;
-		}
-	if(f<1e0f)
-		{
-		f*=1e1f;
-		ex-=1;
+		if(f<negs[u])
+			{
+			f*=exps[u];
+			ex-=num;
+			}
+		num/=2;
 		}
 	}
 return ex;
@@ -966,102 +965,33 @@ template <> INT FloatNormalize<DOUBLE>(DOUBLE& f, DOUBLE max, DOUBLE min)
 {
 if(f==0)
 	return 0;
+constexpr DOUBLE exps[]={  1e256,  1e128,  1e64,  1e32,  1e16,  1e8,  1e4,  1e2, 1e1 };
+constexpr DOUBLE negs[]={ 1e-255, 1e-127, 1e-63, 1e-31, 1e-15, 1e-7, 1e-3, 1e-1, 1e0 };
 INT ex=0;
+INT num=256;
 if(f>=max)
 	{
-	if(f>=1e256)
+	for(UINT u=0; u<ArraySize(exps); u++)
 		{
-		f/=1e256;
-		ex+=256;
-		}
-	if(f>=1e128)
-		{
-		f/=1e128;
-		ex+=128;
-		}
-	if(f>=1e64)
-		{
-		f/=1e64;
-		ex+=64;
-		}
-	if(f>=1e32)
-		{
-		f/=1e32;
-		ex+=32;
-		}
-	if(f>=1e16)
-		{
-		f/=1e16;
-		ex+=16;
-		}
-	if(f>=1e8)
-		{
-		f/=1e8;
-		ex+=8;
-		}
-	if(f>=1e4)
-		{
-		f/=1e4;
-		ex+=4;
-		}
-	if(f>=1e2)
-		{
-		f/=1e2;
-		ex+=2;
-		}
-	if(f>=1e1)
-		{
-		f/=1e1;
-		ex+=1;
+		if(f>=exps[u])
+			{
+			f/=exps[u];
+			ex+=num;
+			}
+		num/=2;
 		}
 	return ex;
 	}
 if(f<min)
 	{
-	if(f<1e-255)
+	for(UINT u=0; u<ArraySize(exps); u++)
 		{
-		f*=1e256;
-		ex-=256;
-		}
-	if(f<1e-127)
-		{
-		f*=1e128;
-		ex-=128;
-		}
-	if(f<1e-63)
-		{
-		f*=1e64;
-		ex-=64;
-		}
-	if(f<1e-31)
-		{
-		f*=1e32;
-		ex-=32;
-		}
-	if(f<1e-15)
-		{
-		f*=1e16;
-		ex-=16;
-		}
-	if(f<1e-7)
-		{
-		f*=1e8;
-		ex-=8;
-		}
-	if(f<1e-3)
-		{
-		f*=1e4;
-		ex-=4;
-		}
-	if(f<1e-1)
-		{
-		f*=1e2;
-		ex-=2;
-		}
-	if(f<1e0)
-		{
-		f*=1e1;
-		ex-=1;
+		if(f<negs[u])
+			{
+			f*=exps[u];
+			ex-=num;
+			}
+		num/=2;
 		}
 	}
 return ex;
@@ -1071,8 +1001,8 @@ template <class _float_t> VOID FloatSplit(_float_t f, UINT& integral, UINT& deci
 {
 _float_t mul[]={ 1e0f, 1e1f, 1e2f, 1e3f, 1e4f, 1e5f, 1e6f, 1e7f, 1e8f, 1e9f };
 _float_t div[]={ 1e0f, 1e-1f, 1e-2f, 1e-3f, 1e-4f, 1e-5f };
-UINT sel=MIN(width, ARRAYSIZE(mul)-1);
-UINT prec=MIN(precision, ARRAYSIZE(div)-1);
+UINT sel=Min(width, ArraySize(mul)-1);
+UINT prec=Min(precision, ArraySize(div)-1);
 exponent=FloatNormalize<_float_t>(f, mul[sel], div[prec]);
 integral=(UINT)f;
 _float_t remainder=f-(_float_t)integral;
@@ -1095,40 +1025,40 @@ if(remainder>=0.5)
 	}
 }
 
-template <class _str_t, class _float_t> UINT StringPrintFloat(_str_t* str, UINT size, _float_t f, StringFlags flags, UINT width, UINT precision)
+template <class _char_t, class _float_t> UINT StringPrintFloat(_char_t* str, UINT size, _float_t f, StringFormatFlags flags, UINT width, UINT precision, UINT pos=0)
 {
-UINT pos=0;
+UINT start=pos;
 if(std::isnan(f))
 	{
-	pos+=StringPrintString(str, size, "nan");
-	return pos;
+	pos+=StringPrintString(str, size, "nan", pos);
+	return pos-start;
 	}
 if(f<0)
 	{
-	pos+=StringPrintChar(str, size, '-');
+	pos+=StringPrintChar(str, size, '-', pos);
 	f*=-1;
 	}
-else if(GetFlag(flags, StringFlags::Signed))
+else if(GetFlag(flags, StringFormatFlags::Signed))
 	{
-	pos+=StringPrintChar(str, size, '+');
+	pos+=StringPrintChar(str, size, '+', pos);
 	}
 if(std::isinf(f))
 	{
-	pos+=StringPrintString(str? &str[pos]: nullptr, size>pos? size-pos: 0, "inf");
-	return pos;
+	pos+=StringPrintString(str, size, "inf", pos);
+	return pos-start;
 	}
 UINT integral=0;
 UINT decimal=0;
 INT exponent=0;
 FloatSplit(f, integral, decimal, exponent, width, precision);
-pos+=StringPrintUInt(str? &str[pos]: nullptr, size>pos? size-pos: 0, integral);
+pos+=StringPrintUInt(str, size, integral, pos);
 CHAR chars[16];
 LPSTR buf=&chars[15];
 *buf=0;
 INT idec=precision;
 for(; idec>1&&decimal%10==0; idec--)
 	{
-	if(GetFlag(flags, StringFlags::Zero))
+	if(GetFlag(flags, StringFormatFlags::Zero))
 		*--buf='0';
 	decimal/=10;
 	}
@@ -1139,29 +1069,48 @@ for(; idec>0; idec--)
 	}
 if(precision)
 	*--buf='.';
-pos+=StringPrintString(str? &str[pos]: nullptr, size>pos? size-pos: 0, buf);
-if(exponent!=0||GetFlag(flags, StringFlags::Numeric))
+pos+=StringPrintString(str, size, buf, pos);
+if(exponent!=0||GetFlag(flags, StringFormatFlags::Numeric))
 	{
-	pos+=StringPrintChar(str? &str[pos]: nullptr, size>pos? size-pos: 0, 'e');
+	pos+=StringPrintChar(str, size, 'e', pos);
 	if(exponent<0)
 		{
-		pos+=StringPrintChar(str? &str[pos]: nullptr, size>pos? size-pos: 0, '-');
+		pos+=StringPrintChar(str, size, '-', pos);
 		exponent*=-1;
 		}
-	pos+=StringPrintUInt(str? &str[pos]: nullptr, size>pos? size-pos: 0, exponent);
+	pos+=StringPrintUInt(str, size, exponent, pos);
 	}
 if(pos<size)
 	str[pos]=0;
-return pos;
+return pos-start;
 }
-#endif
+
+UINT StringPrintDouble(LPSTR str, UINT size, DOUBLE value, StringFormatFlags flags, UINT width, UINT prec)
+{
+return StringPrintFloat<CHAR, DOUBLE>(str, size, value, flags, width, prec);
+}
+
+UINT StringPrintFloat(LPSTR str, UINT size, FLOAT value, StringFormatFlags flags, UINT width, UINT prec)
+{
+return StringPrintFloat<CHAR, FLOAT>(str, size, value, flags, width, prec);
+}
 
 
 //============
 // Formatting
 //============
 
-template <class _str_t> inline UINT StringVPrint(_str_t* str, UINT size, LPCSTR format, VariableArguments& args)
+UINT StringPrint(LPSTR buf, UINT size, LPCSTR str)
+{
+return StringCopy(buf, size, str);
+}
+
+UINT StringPrint(LPWSTR buf, UINT size, LPCSTR str)
+{
+return StringCopy(buf, size, str);
+}
+
+template <class _char_t> inline UINT StringPrintArgs(_char_t* str, UINT size, LPCSTR format, VariableArguments const& args)
 {
 if(!format)
 	return 0;
@@ -1172,31 +1121,30 @@ for(UINT fmt=0; format[fmt]; )
 	if(pos+1==size)
 		break;
 	StringFormat str_format=StringFormat::None;
-	StringFlags flags=StringFlags::None;
-	UINT width=UINT_MAX;
+	StringFormatFlags flags=StringFormatFlags::None;
+	UINT width=0;
 	UINT prec=UINT_MAX;
 	fmt+=StringGetFormat(&format[fmt], str_format, flags, width, prec);
 	if(str_format==StringFormat::None)
 		{
-		pos+=StringPrintChar(str? &str[pos]: nullptr, size? size-pos: 0, format[fmt++]);
+		pos+=StringPrintChar(str, size, format[fmt++], pos);
 		continue;
 		}
 	if(str_format==StringFormat::Percent)
 		{
-		pos+=StringPrintChar(str? &str[pos]: nullptr, size? size-pos: 0, '%');
+		pos+=StringPrintChar(str, size, '%', pos);
 		continue;
 		}
-	if(GetFlag(flags, StringFlags::Width))
+	if(GetFlag(flags, StringFormatFlags::Width))
 		{
 		if(!args.GetAt(arg++, width))
 			return 0;
 		}
-	if(GetFlag(flags, StringFlags::Precision))
+	if(GetFlag(flags, StringFormatFlags::Precision))
 		{
 		if(!args.GetAt(arg++, prec))
 			return 0;
 		}
-	UINT copy=size>pos? size-pos: 0;
 	switch(str_format)
 		{
 		case StringFormat::Int:
@@ -1204,7 +1152,7 @@ for(UINT fmt=0; format[fmt]; )
 			INT64 i=0;
 			if(!args.GetAt(arg++, i))
 				return 0;
-			pos+=StringPrintInt(str? &str[pos]: nullptr, copy, i, flags, width==(UINT)-1? 0: width);
+			pos+=StringPrintInt(str, size, i, flags, width, pos);
 			continue;
 			}
 		case StringFormat::UInt:
@@ -1212,7 +1160,7 @@ for(UINT fmt=0; format[fmt]; )
 			UINT64 u=0;
 			if(!args.GetAt(arg++, u))
 				return 0;
-			pos+=StringPrintUInt(str? &str[pos]: nullptr, copy, u, flags, width==(UINT)-1? 0: width);
+			pos+=StringPrintUInt(str, size, u, flags, width, pos);
 			continue;
 			}
 		case StringFormat::Hex:
@@ -1220,16 +1168,15 @@ for(UINT fmt=0; format[fmt]; )
 			UINT64 u=0;
 			if(!args.GetAt(arg++, u))
 				return 0;
-			pos+=StringPrintHex(str? &str[pos]: nullptr, copy, u, flags, width==(UINT)-1? 0: width);
+			pos+=StringPrintHex(str, size, u, flags, width, pos);
 			continue;
 			}
-		#ifndef _DRIVER
 		case StringFormat::Float:
 			{
 			FLOAT f=0;
 			if(!args.GetAt(arg++, f))
 				return 0;
-			pos+=StringPrintFloat(str? &str[pos]: nullptr, copy, f, flags, width, prec);
+			pos+=StringPrintFloat(str, size, f, flags, width, prec, pos);
 			continue;
 			}
 		case StringFormat::Double:
@@ -1237,16 +1184,15 @@ for(UINT fmt=0; format[fmt]; )
 			DOUBLE d=0;
 			if(!args.GetAt(arg++, d))
 				return 0;
-			pos+=StringPrintFloat(str? &str[pos]: nullptr, copy, d, flags, width, prec);
+			pos+=StringPrintFloat(str, size, d, flags, width, prec, pos);
 			continue;
 			}
-		#endif
 		case StringFormat::Char:
 			{
 			WCHAR c=' ';
 			if(!args.GetAt(arg++, c))
 				return 0;
-			pos+=StringPrintChar(str? &str[pos]: nullptr, copy, c);
+			pos+=StringPrintChar(str, size, c, pos);
 			continue;
 			}
 		case StringFormat::String:
@@ -1255,14 +1201,14 @@ for(UINT fmt=0; format[fmt]; )
 			if(args.GetAt(arg, p))
 				{
 				arg++;
-				pos+=StringPrintString(str? &str[pos]: nullptr, copy, p, flags, width==(UINT)-1? 0: width);
+				pos+=StringPrintString(str, size, p, flags, width, pos);
 				continue;
 				}
 			LPCWSTR pw=nullptr;
 			if(args.GetAt(arg, pw))
 				{
 				arg++;
-				pos+=StringPrintString(str? &str[pos]: nullptr, copy, pw, flags, width==(UINT)-1? 0: width);
+				pos+=StringPrintString(str, size, pw, flags, width, pos);
 				continue;
 				}
 			return 0;
@@ -1276,14 +1222,14 @@ if(pos<size)
 return pos;
 }
 
-UINT StringVPrint(LPSTR str, UINT size, LPCSTR format, VariableArguments& args)
+UINT StringPrintArgs(LPSTR str, UINT size, LPCSTR format, VariableArguments const& args)
 {
-return StringVPrint<CHAR>(str, size, format, args);
+return StringPrintArgs<CHAR>(str, size, format, args);
 }
 
-UINT StringVPrint(LPWSTR str, UINT size, LPCSTR format, VariableArguments& args)
+UINT StringPrintArgs(LPWSTR str, UINT size, LPCSTR format, VariableArguments const& args)
 {
-return StringVPrint<WCHAR>(str, size, format, args);
+return StringPrintArgs<WCHAR>(str, size, format, args);
 }
 
 
@@ -1291,7 +1237,7 @@ return StringVPrint<WCHAR>(str, size, format, args);
 // Scanning
 //==========
 
-template <class _str_t> inline UINT StringVScan(_str_t const* str, LPCSTR format, VariableArguments& args)
+template <class _char_t> inline UINT StringScanArgs(_char_t const* str, LPCSTR format, VariableArguments& args)
 {
 if(!str||!format)
 	return 0;
@@ -1303,7 +1249,7 @@ for(UINT fmt=0; format[fmt]; )
 	if(str[pos]==0)
 		return read;
 	StringFormat str_format=StringFormat::None;
-	StringFlags flags=StringFlags::None;
+	StringFormatFlags flags=StringFormatFlags::None;
 	UINT width=UINT_MAX;
 	UINT prec=UINT_MAX;
 	fmt+=StringGetFormat(&format[fmt], str_format, flags, width, prec);
@@ -1319,16 +1265,16 @@ for(UINT fmt=0; format[fmt]; )
 			return read;
 		continue;
 		}
-	bool hex=false;
+	UINT base=10;
 	switch(str_format)
 		{
 		case StringFormat::Char:
 			{
-			_str_t tc=str[pos];
+			_char_t tc=str[pos];
 			CHAR* pc=nullptr;
 			if(args.GetAt(arg, pc))
 				{
-				*pc=CharToChar<CHAR, _str_t>(tc);
+				*pc=CharToChar<CHAR, _char_t>(tc);
 				arg++;
 				read++;
 				pos++;
@@ -1337,7 +1283,7 @@ for(UINT fmt=0; format[fmt]; )
 			WCHAR* pwc=nullptr;
 			if(args.GetAt(arg, pwc))
 				{
-				*pwc=CharToChar<WCHAR, _str_t>(tc);
+				*pwc=CharToChar<WCHAR, _char_t>(tc);
 				arg++;
 				read++;
 				pos++;
@@ -1354,7 +1300,7 @@ for(UINT fmt=0; format[fmt]; )
 			INT* p32=nullptr;
 			if(args.GetAt(arg, p32))
 				{
-				if(i<-2147483647||i>2147483647)
+				if(i<INT_MIN||i>INT_MAX)
 					return read;
 				*p32=(INT)i;
 				arg++;
@@ -1374,19 +1320,18 @@ for(UINT fmt=0; format[fmt]; )
 			return read;
 			}
 		case StringFormat::Hex:
-			{
-			hex=true;
-			}
+			base=16;
+			[[fallthrough]];
 		case StringFormat::UInt:
 			{
 			UINT64 u=0;
-			UINT len=StringScanUInt(&str[pos], &u, hex);
+			UINT len=StringScanUInt64(&str[pos], &u, base);
 			if(!len)
 				return read;
 			UINT* p32=nullptr;
 			if(args.GetAt(arg, p32))
 				{
-				if(u>0xFFFFFFFF)
+				if(u>UINT_MAX)
 					return read;
 				*p32=(UINT)u;
 				arg++;
@@ -1405,7 +1350,6 @@ for(UINT fmt=0; format[fmt]; )
 				}
 			return read;
 			}
-		#ifndef _DRIVER
 		case StringFormat::Float:
 			{
 			FLOAT f=0;
@@ -1440,7 +1384,6 @@ for(UINT fmt=0; format[fmt]; )
 				}
 			return read;
 			}
-		#endif
 		case StringFormat::String:
 			{
 			LPSTR p=nullptr;
@@ -1476,14 +1419,14 @@ for(UINT fmt=0; format[fmt]; )
 return read;
 }
 
-UINT StringVScan(LPCSTR str, LPCSTR format, VariableArguments& args)
+UINT StringScanArgs(LPCSTR str, LPCSTR format, VariableArguments& args)
 {
-return StringVScan<CHAR>(str, format, args);
+return StringScanArgs<CHAR>(str, format, args);
 }
 
-UINT StringVScan(LPCWSTR str, LPCSTR format, VariableArguments& args)
+UINT StringScanArgs(LPCWSTR str, LPCSTR format, VariableArguments& args)
 {
-return StringVScan<WCHAR>(str, format, args);
+return StringScanArgs<WCHAR>(str, format, args);
 }
 
 

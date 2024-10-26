@@ -10,8 +10,8 @@
 //=======
 
 #include "Core/Application.h"
-#include "Storage/Streams/StringReader.h"
-#include "Storage/Streams/StringWriter.h"
+#include "Storage/Streams/StreamReader.h"
+#include "Storage/Streams/StreamWriter.h"
 #include "ProcessServer.h"
 
 using namespace Core;
@@ -54,7 +54,7 @@ hNamedPipe->Listen();
 
 VOID ProcessServer::OnNamedPipeConnectionReceived()
 {
-StringReader reader(hNamedPipe);
+StreamReader reader(hNamedPipe);
 while(1)
 	{
 	auto msg=reader.ReadString(nullptr, "\n");
@@ -65,12 +65,12 @@ while(1)
 		UINT id=GetCurrentProcessId();
 		CHAR id_str[32];
 		StringPrint(id_str, 32, "0x%x\n", id);
-		StringWriter writer(hNamedPipe);
+		StreamWriter writer(hNamedPipe);
 		writer.Print(id_str);
 		hNamedPipe->Flush();
 		continue;
 		}
-	Application::Current->Dispatch(this, &ProcessServer::OnMessageReceived, msg);
+	Application::Current->Dispatch(this, [this, msg]() { OnMessageReceived(msg); });
 	}
 }
 

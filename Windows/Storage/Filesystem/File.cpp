@@ -31,6 +31,67 @@ uPosition(0)
 {}
 
 
+//========
+// Common
+//========
+
+VOID File::Close()
+{
+unique_lock lock(cMutex);
+CloseInternal();
+}
+
+Handle<File> File::Create(Handle<String> path, FileCreateMode create, FileAccessMode access, FileShareMode share)
+{
+Handle<File> file=new File(path);
+if(Failed(file->Create(create, access, share)))
+	return nullptr;
+return file;
+}
+
+Status File::Create(FileCreateMode create, FileAccessMode access, FileShareMode share)
+{
+unique_lock lock(cMutex);
+CloseInternal();
+UINT ucreate=FileGetCreateMode(create);
+UINT uacc=FileGetAccessMode(access);
+UINT ushare=FileGetShareMode(share);
+LPCTSTR path=hPath->Begin();
+SetLastError(0);
+HANDLE file=CreateFile(path, uacc, ushare, nullptr, ucreate, 0, NULL);
+if(file==INVALID_HANDLE_VALUE)
+	file=NULL;
+if(file==NULL)
+	{
+	DWORD err=GetLastError();
+	switch(err)
+		{
+		case ERROR_ACCESS_DENIED:
+			return Status::AccessDenied;
+		case ERROR_FILE_NOT_FOUND:
+			return Status::FileNotFound;
+		default:
+			break;
+		}
+	return Status::Error;
+	}
+hFile=file;
+return Status::Success;
+}
+
+BOOL File::SetSize(FILE_SIZE size)
+{
+unique_lock lock(cMutex);
+if(!hFile)
+	return false;
+if(!Seek(size))
+	return false;
+if(!SetEndOfFile(hFile))
+	return false;
+return true;
+}
+
+
 //==============
 // Input-Stream
 //==============
@@ -54,7 +115,7 @@ if(!hFile)
 if(!buf)
 	{
 	SIZE_T available=AvailableInternal();
-	SIZE_T copy=MIN(size, available);
+	SIZE_T copy=Min(size, available);
 	uPosition+=copy;
 	return copy;
 	}
@@ -64,7 +125,7 @@ ZeroMemory(&ov, sizeof(OVERLAPPED));
 SIZE_T pos=0;
 while(pos<size)
 	{
-	UINT copy=(UINT)MIN(size-pos, 0x1000000);
+	UINT copy=Min((UINT)(size-pos), 0x1000000U);
 	DWORD read=0;
 	ov.Offset=(UINT)uPosition;
 	ov.OffsetHigh=(UINT)(uPosition>>32);
@@ -111,7 +172,7 @@ OVERLAPPED ov={ 0 };
 SIZE_T pos=0;
 while(pos<size)
 	{
-	UINT copy=(UINT)MIN(size-pos, 0x1000000);
+	UINT copy=Min((UINT)(size-pos), 0x1000000U);
 	DWORD written=0;
 	ov.Offset=(UINT)uPosition;
 	ov.OffsetHigh=(UINT)(uPosition>>32);
@@ -153,59 +214,6 @@ LONG hi=(LONG)(pos>>32);
 if(SetFilePointer(hFile, lo, &hi, FILE_BEGIN)==INVALID_SET_FILE_POINTER)
 	return false;
 uPosition=pos;
-return true;
-}
-
-
-//======
-// File
-//======
-
-VOID File::Close()
-{
-unique_lock lock(cMutex);
-CloseInternal();
-}
-
-Status File::Create(FileCreateMode create, FileAccessMode access, FileShareMode share)
-{
-unique_lock lock(cMutex);
-CloseInternal();
-UINT ucreate=FileGetCreateMode(create);
-UINT uacc=FileGetAccessMode(access);
-UINT ushare=FileGetShareMode(share);
-LPCTSTR path=hPath->Begin();
-SetLastError(0);
-HANDLE file=CreateFile(path, uacc, ushare, nullptr, ucreate, 0, NULL);
-if(file==INVALID_HANDLE_VALUE)
-	file=NULL;
-if(file==NULL)
-	{
-	DWORD err=GetLastError();
-	switch(err)
-		{
-		case ERROR_ACCESS_DENIED:
-			return Status::AccessDenied;
-		case ERROR_FILE_NOT_FOUND:
-			return Status::FileNotFound;
-		default:
-			break;
-		}
-	return Status::Error;
-	}
-hFile=file;
-return Status::Success;
-}
-
-BOOL File::SetSize(FILE_SIZE size)
-{
-unique_lock lock(cMutex);
-if(!hFile)
-	return false;
-if(!Seek(size))
-	return false;
-if(!SetEndOfFile(hFile))
-	return false;
 return true;
 }
 

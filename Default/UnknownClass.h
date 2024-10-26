@@ -28,12 +28,10 @@ UInt32,
 UInt32Ptr,
 UInt64,
 UInt64Ptr,
-#ifndef _DRIVER
 Float,
 FloatPtr,
 Double,
 DoublePtr,
-#endif
 Char,
 WChar,
 String,
@@ -58,12 +56,10 @@ public:
 	UnknownClass(UINT* Value);
 	UnknownClass(UINT64 Value);
 	UnknownClass(UINT64* Value);
-	#ifndef _DRIVER
 	UnknownClass(FLOAT Value);
 	UnknownClass(FLOAT* Value);
 	UnknownClass(DOUBLE Value);
 	UnknownClass(DOUBLE* Value);
-	#endif
 	UnknownClass(CHAR Value);
 	UnknownClass(WCHAR Value);
 	UnknownClass(LPSTR Value);
@@ -73,26 +69,24 @@ public:
 	UnknownClass(Handle<String> Value);
 
 	// Access
-	BOOL Get(INT& Value);
-	BOOL Get(INT*& Value);
-	BOOL Get(INT64& Value);
-	BOOL Get(INT64*& Value);
-	BOOL Get(UINT& Value);
-	BOOL Get(UINT*& Value);
-	BOOL Get(UINT64& Value);
-	BOOL Get(UINT64*& Value);
-	#ifndef _DRIVER
-	BOOL Get(FLOAT& Value);
-	BOOL Get(FLOAT*& Value);
-	BOOL Get(DOUBLE& Value);
-	BOOL Get(DOUBLE*& Value);
-	#endif
-	BOOL Get(CHAR& Value);
-	BOOL Get(WCHAR& Value);
-	BOOL Get(LPSTR& Value);
-	BOOL Get(LPCSTR& Value);
-	BOOL Get(LPWSTR& Value);
-	BOOL Get(LPCWSTR& Value);
+	BOOL Get(INT& Value)const;
+	BOOL Get(INT*& Value)const;
+	BOOL Get(INT64& Value)const;
+	BOOL Get(INT64*& Value)const;
+	BOOL Get(UINT& Value)const;
+	BOOL Get(UINT*& Value)const;
+	BOOL Get(UINT64& Value)const;
+	BOOL Get(UINT64*& Value)const;
+	BOOL Get(FLOAT& Value)const;
+	BOOL Get(FLOAT*& Value)const;
+	BOOL Get(DOUBLE& Value)const;
+	BOOL Get(DOUBLE*& Value)const;
+	BOOL Get(CHAR& Value)const;
+	BOOL Get(WCHAR& Value)const;
+	BOOL Get(LPSTR& Value)const;
+	BOOL Get(LPCSTR& Value)const;
+	BOOL Get(LPWSTR& Value)const;
+	BOOL Get(LPCWSTR& Value)const;
 
 private:
 	// Common

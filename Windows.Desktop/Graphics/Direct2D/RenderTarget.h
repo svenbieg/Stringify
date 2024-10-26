@@ -13,7 +13,6 @@
 #include "Bitmap.h"
 #include "Brush.h"
 #include "Font.h"
-#include "RenderTarget.h"
 
 
 //===========

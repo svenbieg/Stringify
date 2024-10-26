@@ -1,0 +1,10 @@
+C:\Users\svenb\Projekte\Stringify\Stringify\Assets\SmallTile.scale-100.png
+C:\Users\svenb\Projekte\Stringify\Stringify\Assets\Square150x150Logo.png
+C:\Users\svenb\Projekte\Stringify\Stringify\Assets\Square44x44Logo.altform-unplated_targetsize-48.png
+C:\Users\svenb\Projekte\Stringify\Stringify\Assets\Square44x44Logo.scale-100.png
+C:\Users\svenb\Projekte\Stringify\Stringify\Assets\Square44x44Logo.targetsize-48.png
+C:\Users\svenb\Projekte\Stringify\Stringify\Assets\StoreLogo.png
+C:\Users\svenb\Projekte\Stringify\Stringify\Assets\Wide310x150Logo.png
+C:\Users\svenb\Projekte\Stringify\Stringify\bin\x86\Debug\resources.pri
+C:\Users\svenb\Projekte\Stringify\Debug\Stringify.Desktop\Win32\bin\Stringify.exe
+C:\Users\svenb\Projekte\Stringify\Debug\Stringify.Desktop\Win32\bin\Stringify.pdb

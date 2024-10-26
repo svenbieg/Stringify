@@ -12,14 +12,29 @@
 #ifdef _UNICODE
 namespace Chars
 {
+constexpr WCHAR AE=L'\x00C4';
+constexpr WCHAR ae=L'\x00E4';
 constexpr WCHAR Average=L'\x00D8';
 constexpr WCHAR Degree=L'\x00B0';
 constexpr WCHAR Enumeration=L'\x2022';
+constexpr WCHAR OE=L'\x00D6';
+constexpr WCHAR oe=L'\x00F6';
+constexpr WCHAR UE=L'\x00DC';
+constexpr WCHAR ue=L'\x00FC';
 }
 #else
+namespace Chars
+{
+constexpr CHAR AE='\xC4';
+constexpr CHAR ae='\xE4';
 constexpr CHAR Average='\xD8';
 constexpr CHAR Degree='\xB0';
 constexpr CHAR Enumeration='\x95';
+constexpr CHAR OE='\xD6';
+constexpr CHAR oe='\xF6';
+constexpr CHAR UE='\xDC';
+constexpr CHAR ue='\xFC';
+}
 #endif
 
 
@@ -30,6 +45,8 @@ constexpr CHAR Enumeration='\x95';
 CHAR CharToAnsi(WCHAR Char);
 CHAR CharToCapital(CHAR Char);
 WCHAR CharToCapital(WCHAR Char);
+BOOL CharToDigit(CHAR Char, UINT* Digit, UINT Base=10);
+BOOL CharToDigit(WCHAR Char, UINT* Digit, UINT Base=10);
 BYTE CharToHex(CHAR Char);
 BYTE CharToHex(WCHAR Char);
 CHAR CharToSmall(CHAR Char);
@@ -58,16 +75,12 @@ return CharToUnicode(Char);
 
 BOOL CharIsAlpha(CHAR Char);
 BOOL CharIsAlpha(WCHAR Char);
-BOOL CharIsBinary(CHAR Char);
-BOOL CharIsBinary(WCHAR Char);
 BOOL CharIsBreak(CHAR Char);
 BOOL CharIsBreak(WCHAR Char);
 BOOL CharIsCapital(CHAR Char);
 BOOL CharIsCapital(WCHAR Char);
-BOOL CharIsHex(CHAR Char);
-BOOL CharIsHex(WCHAR Char);
-BOOL CharIsNumber(CHAR Char);
-BOOL CharIsNumber(WCHAR Char);
+BOOL CharIsDigit(CHAR Char, UINT Base=10);
+BOOL CharIsDigit(WCHAR Char, UINT Base=10);
 BOOL CharIsPrintable(CHAR Char);
 BOOL CharIsPrintable(WCHAR Char);
 BOOL CharIsSmall(CHAR Char);

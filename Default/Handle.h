@@ -35,13 +35,14 @@ public:
 	// Access
 	inline operator _obj_t*()const { return pObject; }
 	inline _obj_t* operator->()const { return pObject; }
+	template<class _convert_t> inline Handle<_convert_t> As()const { return dynamic_cast<_convert_t*>(pObject); }
 
 	// Comparison
 	inline BOOL operator==(_obj_t* Object)const { return pObject==Object; }
-	inline BOOL operator==(std::nullptr_t)const { return pObject==nullptr; }
+	inline BOOL operator==(nullptr_t)const { return pObject==nullptr; }
 	template <class _convert_t> inline BOOL operator==(Handle<_convert_t> Object)const { return pObject==(_convert_t*)Object; }
 	inline BOOL operator!=(_obj_t* Object)const { return pObject!=Object; }
-	inline BOOL operator!=(std::nullptr_t)const { return pObject!=nullptr; }
+	inline BOOL operator!=(nullptr_t)const { return pObject!=nullptr; }
 	template <class _convert_t> inline BOOL operator!=(Handle<_convert_t> Object)const { return pObject!=(_convert_t*)Object; }
 
 	// Assignment

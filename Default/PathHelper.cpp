@@ -42,20 +42,16 @@ return PathGetComponentLength<LPCWSTR>(path);
 
 template <class _str_t> inline UINT PathGetDirectoryLength(_str_t path)
 {
-if(!path)
+UINT len=StringLength(path);
+if(len==0)
 	return 0;
-UINT len=0;
-for(UINT pos=0; path[pos]; pos++)
+UINT pos=len-1;
+for(; pos>0; pos--)
 	{
 	if(PathIsSeparator(path[pos]))
-		{
-		len=pos+1;
-		continue;
-		}
-	if(path[pos]=='.')
-		break;
+		return pos+1;
 	}
-return len;
+return 0;
 }
 
 template <class _str_t> inline Handle<String> PathGetDirectory(_str_t path)

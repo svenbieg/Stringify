@@ -9,9 +9,10 @@
 // Using
 //=======
 
-#include "Core/Timer.h"
 #include "UI/Controls/Interactive.h"
 #include "UI/Controls/Panel.h"
+#include "UI/Timer.h"
+#include "Sentence.h"
 
 
 //===========
@@ -39,9 +40,6 @@ public:
 	DynamicHandle<ToolTip, Sentence> Text;
 
 private:
-	// Using
-	using Timer=Core::Timer;
-
 	// Common
 	VOID DoClose();
 	VOID OnControlClicked();

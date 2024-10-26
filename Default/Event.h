@@ -10,7 +10,6 @@
 //=======
 
 #include "EventHandler.h"
-#include "ListHelper.h"
 
 
 //============
@@ -19,37 +18,35 @@
 
 namespace Details {
 
-class EventBase
-{
-public:
-	// Common
-	virtual VOID Remove(VOID* Receiver)=0;
-};
-
 template <class _sender_t, class... _args_t>
-class EventBaseTyped: public EventBase
+class EventBase
 {
 public:
 	// Using
 	using _handler_t=EventHandler<_sender_t, _args_t...>;
 
 	// Common
-	VOID Remove(VOID* Receiver)override
+	VOID Remove(VOID* Owner)
 		{
-		_handler_t* handler=pFirst;
+		_handler_t* prev=nullptr;
+		auto handler=m_Handler;
 		while(handler)
 			{
-			_handler_t* next=handler->GetNext();
-			if(handler->GetReceiver()==Receiver)
+			auto next=handler->hNext;
+			if(handler->GetOwner()!=Owner)
 				{
-				if(handler->IsRunning())
-					{
-					handler->Invalidate();
-					}
-				else
-					{
-					ListRemove<_handler_t>(&pFirst, nullptr, handler);
-					}
+				prev=handler;
+				handler=next;
+				continue;
+				}
+			handler->Invalidate();
+			if(prev)
+				{
+				prev->hNext=next;
+				}
+			else
+				{
+				m_Handler=next;
 				}
 			handler=next;
 			}
@@ -57,22 +54,31 @@ public:
 
 protected:
 	// Con-/Destructors
-	EventBaseTyped(): pFirst(nullptr) {}
+	EventBase() {}
 
 	// Common
-	VOID RunInternal(_sender_t* Sender, _args_t... Arguments)
+	VOID AddHandler(_handler_t* Handler)
 		{
-		_handler_t* handler=pFirst;
+		if(!m_Handler)
+			{
+			m_Handler=Handler;
+			return;
+			}
+		auto handler=m_Handler;
+		while(handler->hNext)
+			handler=handler->hNext;
+		handler->hNext=Handler;
+		}
+	VOID Run(_sender_t* Sender, _args_t... Arguments)
+		{
+		auto handler=m_Handler;
 		while(handler)
 			{
 			handler->Run(Sender, Arguments...);
-			_handler_t* next=handler->GetNext();
-			if(!handler->IsValid())
-				ListRemove<_handler_t>(&pFirst, nullptr, handler);
-			handler=next;
+			handler=handler->hNext;
 			}
 		}
-	_handler_t* pFirst;
+	Handle<_handler_t> m_Handler;
 };
 
 }
@@ -83,56 +89,66 @@ protected:
 //=======
 
 template <class _sender_t, class... _args_t>
-class Event: public Details::EventBaseTyped<_sender_t, _args_t...>
+class Event: public ::Details::EventBase<_sender_t, _args_t...>
 {
 public:
 	// Using
-	using _handler_t=Details::EventHandler<_sender_t, _args_t...>;
+	using _handler_t=::Details::EventHandler<_sender_t, _args_t...>;
 
 	// Con-/Destructors
 	Event() {}
-	Event(Event const&)=delete;
 	Event(Event&&)=delete;
+	Event(Event const&)=delete;
 
 	// Access
 	inline operator BOOL() { return this->pFirst!=nullptr; }
-	VOID operator()(_sender_t* Sender, _args_t... Arguments) { this->RunInternal(Sender, Arguments...); }
+	VOID operator()(_sender_t* Sender, _args_t... Arguments) { this->Run(Sender, Arguments...); }
 
 	// Modification
 	inline VOID Add(VOID (*Procedure)())
 		{
-		_handler_t* handler=new Details::EventHandlerProcedure<_sender_t, _args_t...>(Procedure);
-		ListAppend(&this->pFirst, handler);
+		_handler_t* handler=new ::Details::EventProcedure<_sender_t, _args_t...>(Procedure);
+		this->AddHandler(handler);
 		}
-	template <class _receiver_t> VOID Add(_receiver_t* Receiver, VOID (_receiver_t::*Procedure)())
+	inline VOID Add(VOID (*Procedure)(_args_t...))
 		{
-		_handler_t* handler=new Details::EventHandlerWithReceiver<_sender_t, _receiver_t, _args_t...>(Receiver, Procedure);
-		ListAppend(&this->pFirst, handler);
+		_handler_t* handler=new ::Details::EventProcedureWithArgs<_sender_t, _args_t...>(Procedure);
+		this->AddHandler(handler);
 		}
-	template <class _receiver_t> VOID Add(Handle<_receiver_t> Receiver, VOID (_receiver_t::*Procedure)())
+	inline VOID Add(VOID (*Procedure)(_sender_t*, _args_t...))
 		{
-		_handler_t* handler=new Details::EventHandlerWithReceiver<_sender_t, _receiver_t, _args_t...>(Receiver, Procedure);
-		ListAppend(&this->pFirst, handler);
+		_handler_t* handler=new ::Details::EventProcedureWithSender<_sender_t, _args_t...>(Procedure);
+		this->AddHandler(handler);
 		}
-	template <class _receiver_t> VOID Add(_receiver_t* Receiver, VOID (_receiver_t::*Procedure)(_args_t...))
+	template <class _owner_t> VOID Add(_owner_t* Owner, VOID (_owner_t::*Procedure)())
 		{
-		_handler_t* handler=new Details::EventHandlerWithArgs<_sender_t, _receiver_t, _args_t...>(Receiver, Procedure);
-		ListAppend(&this->pFirst, handler);
+		_handler_t* handler=new ::Details::EventMemberFunction<_sender_t, _owner_t, _args_t...>(Owner, Procedure);
+		this->AddHandler(handler);
 		}
-	template <class _receiver_t> VOID Add(Handle<_receiver_t> Receiver, VOID (_receiver_t::*Procedure)(_args_t...))
+	template <class _owner_t> VOID Add(Handle<_owner_t> Owner, VOID (_owner_t::*Procedure)())
 		{
-		_handler_t* handler=new Details::EventHandlerWithArgs<_sender_t, _receiver_t, _args_t...>(Receiver, Procedure);
-		ListAppend(&this->pFirst, handler);
+		_handler_t* handler=new ::Details::EventMemberFunction<_sender_t, _owner_t, _args_t...>(Owner, Procedure);
+		this->AddHandler(handler);
 		}
-	template <class _receiver_t> VOID Add(_receiver_t* Receiver, VOID (_receiver_t::*Procedure)(_sender_t*, _args_t...))
+	template <class _owner_t> VOID Add(_owner_t* Owner, VOID (_owner_t::*Procedure)(_args_t...))
 		{
-		_handler_t* handler=new Details::EventHandlerWithSender<_sender_t, _receiver_t, _args_t...>(Receiver, Procedure);
-		ListAppend(&this->pFirst, handler);
+		_handler_t* handler=new ::Details::EventMemberFunctionWithArgs<_sender_t, _owner_t, _args_t...>(Owner, Procedure);
+		this->AddHandler(handler);
 		}
-	template <class _receiver_t> VOID Add(Handle<_receiver_t> Receiver, VOID (_receiver_t::*Procedure)(_sender_t*, _args_t...))
+	template <class _owner_t> VOID Add(Handle<_owner_t> Owner, VOID (_owner_t::*Procedure)(_args_t...))
 		{
-		_handler_t* handler=new Details::EventHandlerWithSender<_sender_t, _receiver_t, _args_t...>(Receiver, Procedure);
-		ListAppend(&this->pFirst, handler);
+		_handler_t* handler=new ::Details::EventMemberFunctionWithArgs<_sender_t, _owner_t, _args_t...>(Owner, Procedure);
+		this->AddHandler(handler);
+		}
+	template <class _owner_t> VOID Add(_owner_t* Owner, VOID (_owner_t::*Procedure)(_sender_t*, _args_t...))
+		{
+		_handler_t* handler=new ::Details::EventMemberFunctionWithSender<_sender_t, _owner_t, _args_t...>(Owner, Procedure);
+		this->AddHandler(handler);
+		}
+	template <class _owner_t> VOID Add(Handle<_owner_t> Owner, VOID (_owner_t::*Procedure)(_sender_t*, _args_t...))
+		{
+		_handler_t* handler=new ::Details::EventMemberFunctionWithSender<_sender_t, _owner_t, _args_t...>(Owner, Procedure);
+		this->AddHandler(handler);
 		}
 };
 
@@ -142,11 +158,11 @@ public:
 //=========================
 
 template <class _sender_t>
-class Event<_sender_t>: public Details::EventBaseTyped<_sender_t>
+class Event<_sender_t>: public ::Details::EventBase<_sender_t>
 {
 public:
 	// Using
-	using _handler_t=Details::EventHandler<_sender_t>;
+	using _handler_t=::Details::EventHandler<_sender_t>;
 
 	// Con-/Destructors
 	Event() {}
@@ -154,33 +170,33 @@ public:
 	Event(Event&&)=delete;
 
 	// Access
-	inline operator BOOL() { return this->pFirst!=nullptr; }
-	VOID operator()(_sender_t* Sender) { this->RunInternal(Sender); }
+	inline operator BOOL() { return this->m_Handler!=nullptr; }
+	VOID operator()(_sender_t* Sender) { this->Run(Sender); }
 
 	// Modification
 	inline VOID Add(VOID (*Procedure)())
 		{
-		_handler_t* handler=new Details::EventHandlerProcedure<_sender_t>(Procedure);
-		ListAppend(&this->pFirst, handler);
+		_handler_t* handler=new ::Details::EventProcedure<_sender_t>(Procedure);
+		this->AddHandler(handler);
 		}
-	template <class _receiver_t> VOID Add(_receiver_t* Receiver, VOID (_receiver_t::*Procedure)())
+	template <class _owner_t> VOID Add(_owner_t* Owner, VOID (_owner_t::*Procedure)())
 		{
-		_handler_t* handler=new Details::EventHandlerWithReceiver<_sender_t, _receiver_t>(Receiver, Procedure);
-		ListAppend(&this->pFirst, handler);
+		_handler_t* handler=new ::Details::EventMemberFunction<_sender_t, _owner_t>(Owner, Procedure);
+		this->AddHandler(handler);
 		}
-	template <class _receiver_t> VOID Add(Handle<_receiver_t> Receiver, VOID (_receiver_t::*Procedure)())
+	template <class _owner_t> VOID Add(Handle<_owner_t> Owner, VOID (_owner_t::*Procedure)())
 		{
-		_handler_t* handler=new Details::EventHandlerWithReceiver<_sender_t, _receiver_t>(Receiver, Procedure);
-		ListAppend(&this->pFirst, handler);
+		_handler_t* handler=new ::Details::EventMemberFunction<_sender_t, _owner_t>(Owner, Procedure);
+		this->AddHandler(handler);
 		}
-	template <class _receiver_t> VOID Add(_receiver_t* Receiver, VOID (_receiver_t::*Procedure)(_sender_t*))
+	template <class _owner_t> VOID Add(_owner_t* Owner, VOID (_owner_t::*Procedure)(_sender_t*))
 		{
-		_handler_t* handler=new Details::EventHandlerWithSender<_sender_t, _receiver_t>(Receiver, Procedure);
-		ListAppend(&this->pFirst, handler);
+		_handler_t* handler=new ::Details::EventMemberFunctionWithSender<_sender_t, _owner_t>(Owner, Procedure);
+		this->AddHandler(handler);
 		}
-	template <class _receiver_t> VOID Add(Handle<_receiver_t> Receiver, VOID (_receiver_t::*Procedure)(_sender_t*))
+	template <class _owner_t> VOID Add(Handle<_owner_t> Owner, VOID (_owner_t::*Procedure)(_sender_t*))
 		{
-		_handler_t* handler=new Details::EventHandlerWithSender<_sender_t, _receiver_t>(Receiver, Procedure);
-		ListAppend(&this->pFirst, handler);
+		_handler_t* handler=new ::Details::EventMemberFunctionWithSender<_sender_t, _owner_t>(Owner, Procedure);
+		this->AddHandler(handler);
 		}
 };

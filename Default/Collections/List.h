@@ -49,7 +49,7 @@ public:
 
 	// Con-/Destructors
 	List() {}
-	List(std::nullptr_t) {}
+	List(nullptr_t) {}
 	List(_list_t* List): cList(List->cList) {}
 
 	// Access

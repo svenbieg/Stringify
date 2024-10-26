@@ -9,8 +9,8 @@
 // Using
 //=======
 
-#include "Storage/Streams/StringReader.h"
-#include "Storage/Streams/StringWriter.h"
+#include "Storage/Streams/StreamReader.h"
+#include "Storage/Streams/StreamWriter.h"
 #include "Log.h"
 
 using namespace Storage::Streams;
@@ -48,7 +48,7 @@ SIZE_T Log::ReadFromStream(InputStream* stream)
 if(!stream)
 	return 0;
 SIZE_T size=0;
-StringReader reader(stream);
+StreamReader reader(stream);
 while(1)
 	{
 	Handle<LogEntry> entry=new LogEntry();

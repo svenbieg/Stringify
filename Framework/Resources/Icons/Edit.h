@@ -25,35 +25,35 @@ namespace Resources {
 // Common
 //========
 
-ICON ICO_EDIT_COPY[]=
+constexpr ICON ICO_EDIT_COPY[]=
 	{
 	{ 16, Bitmaps::BMP_EDIT_COPY_16 },
 	{ 24, Bitmaps::BMP_EDIT_COPY_24 },
 	{ 0, nullptr }
 	};
 
-ICON ICO_EDIT_CUT[]=
+constexpr ICON ICO_EDIT_CUT[]=
 	{
 	{ 16, Bitmaps::BMP_EDIT_CUT_16 },
 	{ 24, Bitmaps::BMP_EDIT_CUT_24 },
 	{ 0, nullptr }
 	};
 
-ICON ICO_EDIT_DELETE[]=
+constexpr ICON ICO_EDIT_DELETE[]=
 	{
 	{ 16, Bitmaps::BMP_EDIT_DELETE_16 },
 	{ 24, Bitmaps::BMP_EDIT_DELETE_24 },
 	{ 0, nullptr }
 	};
 
-ICON ICO_EDIT_PASTE[]=
+constexpr ICON ICO_EDIT_PASTE[]=
 	{
 	{ 16, Bitmaps::BMP_EDIT_PASTE_16 },
 	{ 24, Bitmaps::BMP_EDIT_PASTE_24 },
 	{ 0, nullptr }
 	};
 
-ICON ICO_EDIT_SELECT_ALL[]=
+constexpr ICON ICO_EDIT_SELECT_ALL[]=
 	{
 	{ 16, Bitmaps::BMP_EDIT_SELECT_ALL_16 },
 	{ 24, Bitmaps::BMP_EDIT_SELECT_ALL_24 },

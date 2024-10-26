@@ -56,7 +56,7 @@ private:
 	// Common
 	OVERLAPPED cOverlapped;
 	HANDLE hFile;
-	VolumeFileFlags uFlags;
+	VolumeFileFlags m_Flags;
 };
 
 }}

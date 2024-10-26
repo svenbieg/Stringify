@@ -51,10 +51,7 @@ PointerLeft.Add(this, &MenuBarItem::OnPointerLeft);
 Handle<PopupMenuItem> MenuBarItem::Add(Handle<Sentence> label)
 {
 if(!SubMenu)
-	{
-	auto frame=GetFrame();
-	SubMenu=new PopupMenu(frame, pMenu);
-	}
+	SubMenu=new PopupMenu(this, pMenu);
 return SubMenu->Add(label);
 }
 

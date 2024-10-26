@@ -31,8 +31,7 @@ public:
 	inline BOOL IsAlpha() { return CharIsAlpha(tValue); }
 	inline BOOL IsBreak() { return CharIsBreak(tValue); }
 	inline BOOL IsCapital() { return CharIsCapital(tValue); }
-	inline BOOL IsHex() { return CharIsHex(tValue); }
-	inline BOOL IsNumber() { return CharIsNumber(tValue); }
+	inline BOOL IsDigit(UINT Base=10) { return CharIsDigit(tValue, Base); }
 	inline BOOL IsSmall() { return CharIsSmall(tValue); }
 	inline BOOL IsSpecial() { return CharIsSpecial(tValue); }
 	Handle<String> ToString(LanguageCode Language=Culture::CurrentLanguage)override { return new String("%c", Get()); }

@@ -9,8 +9,7 @@
 // Using
 //=======
 
-#include "Framework/Application.h"
-#include "Storage/NamedPipe.h"
+#include "UI/Application.h"
 
 
 //===========
@@ -24,23 +23,24 @@ namespace Desktop {
 // Application
 //=============
 
-class Application: public Framework::Application
+class Application: public UI::Application
 {
 public:
 	// Common
 	static Application* Current;
-	VOID Exit();
-	INT Run();
+	VOID DispatchHandler(DispatchedHandler* Handler)override;
+	VOID Quit()override;
+	INT Run()override;
 	Event<Application> UnhandledException;
 
 protected:
 	// Con-/Destructors
-	Application(LPCSTR Name);
+	Application(LPCSTR Name, LPCSTR Version="1.0");
 
 private:
 	// Common
-	VOID OnDispatched();
 	static LONG WINAPI UnhandledExceptionHandler(EXCEPTION_POINTERS* Info);
+	DWORD uThreadId;
 };
 
 }

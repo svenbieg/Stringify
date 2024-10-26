@@ -78,7 +78,7 @@ return (IMAGE_RESOURCE_DATA_ENTRY*)&root[entry->OffsetToData];
 IMAGE_RESOURCE_DATA_ENTRY* GetResourceData(IMAGE_RESOURCE_DIRECTORY* parent, LPCSTR name)
 {
 UINT name_len=StringLength(name);
-ASSERT(name_len>0);
+assert(name_len>0);
 BYTE* dir=(BYTE*)parent;
 UINT pos=sizeof(IMAGE_RESOURCE_DIRECTORY);
 for(UINT u=0; u<parent->NumberOfNamedEntries; u++)
@@ -122,7 +122,7 @@ return 0;
 IMAGE_RESOURCE_DIRECTORY* GetResourceDirectory(IMAGE_RESOURCE_DIRECTORY* parent, LPCSTR name)
 {
 UINT name_len=StringLength(name);
-ASSERT(name_len>0);
+assert(name_len>0);
 BYTE* dir=(BYTE*)parent;
 UINT pos=sizeof(IMAGE_RESOURCE_DIRECTORY);
 for(UINT u=0; u<parent->NumberOfNamedEntries; u++)
@@ -208,7 +208,7 @@ ICONGROUPENTRY Entries[1];
 
 BITMAPINFO* GetResourceIcon(UINT id, UINT size)
 {
-ASSERT(id);
+assert(id);
 IMAGE_RESOURCE_DIRECTORY* root=GetResourceRoot();
 IMAGE_RESOURCE_DIRECTORY* name_dir=GetResourceDirectory(root, RC_TYPE_ICONGROUP);
 IMAGE_RESOURCE_DIRECTORY* lng_dir=GetResourceDirectory(name_dir, id);
@@ -251,7 +251,7 @@ return GetResourceIconSize(id, nullptr, 0);
 
 UINT GetResourceIconSize(UINT id, UINT* size_ptr, UINT count)
 {
-ASSERT(id);
+assert(id);
 IMAGE_RESOURCE_DIRECTORY* root=GetResourceRoot();
 IMAGE_RESOURCE_DIRECTORY* name_dir=GetResourceDirectory(root, RC_TYPE_ICONGROUP);
 IMAGE_RESOURCE_DIRECTORY* lng_dir=GetResourceDirectory(name_dir, id);

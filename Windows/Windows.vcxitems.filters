@@ -43,20 +43,19 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Storage\Filesystem\VolumeFile.cpp">
       <Filter>Storage\Filesystem</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Devices\Serial\SerialPort.cpp">
       <Filter>Devices\Serial</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)System\ThreadPoolTimer.cpp">
       <Filter>System</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)TaskClass.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)TaskHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)CommandLine.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Concurrency\Task.cpp">
+      <Filter>Concurrency</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="$(MSBuildThisFileDirectory)MemoryHelper.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)TypeHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ComPointer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Filesystem\File.h">
       <Filter>Storage\Filesystem</Filter>
@@ -102,19 +101,30 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Filesystem\VolumeFile.h">
       <Filter>Storage\Filesystem</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Devices\Serial\SerialPort.h">
       <Filter>Devices\Serial</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)System\ThreadPoolTimer.h">
       <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Icons\Icon.h">
-      <Filter>Resources\Icons</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)TaskClass.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)TaskHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)CommandLine.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Platform.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\Mutex.h">
+      <Filter>Concurrency</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\ScopedLock.h">
+      <Filter>Concurrency</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\SharedLock.h">
+      <Filter>Concurrency</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\Task.h">
+      <Filter>Concurrency</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\Signal.h">
+      <Filter>Concurrency</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Configuration">
@@ -153,27 +163,18 @@
     <Filter Include="Devices\Serial">
       <UniqueIdentifier>{5dd8d286-e064-4cd0-99ba-7f07a4f64883}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resources">
-      <UniqueIdentifier>{351993b9-6546-42b7-8026-efc2b5162ee3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resources\Icons">
-      <UniqueIdentifier>{e9a9e26a-b0b2-40a0-ac3e-ee403b7396e6}</UniqueIdentifier>
+    <Filter Include="Concurrency">
+      <UniqueIdentifier>{00013306-fb61-4ee1-ab79-0f665f41eb3c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)Configuration\Configuration.props">
-      <Filter>Configuration</Filter>
-    </None>
     <None Include="$(MSBuildThisFileDirectory)Configuration\Compiler.props">
-      <Filter>Configuration</Filter>
-    </None>
-    <None Include="$(MSBuildThisFileDirectory)Configuration\Globals.props">
       <Filter>Configuration</Filter>
     </None>
     <None Include="$(MSBuildThisFileDirectory)Configuration\Default.props">
       <Filter>Configuration</Filter>
     </None>
-    <None Include="$(MSBuildThisFileDirectory)Configuration\ProjectConfigurations.props">
+    <None Include="$(MSBuildThisFileDirectory)Configuration\Platform.props">
       <Filter>Configuration</Filter>
     </None>
   </ItemGroup>

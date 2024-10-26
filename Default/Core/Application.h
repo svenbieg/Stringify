@@ -9,7 +9,6 @@
 // Using
 //=======
 
-#include "Clusters/shared_list.hpp"
 #include "DispatchedHandler.h"
 
 
@@ -27,37 +26,46 @@ namespace Core {
 class Application: public Object
 {
 public:
-	// Using
-	using DispatchedHandler=Core::DispatchedHandler;
-
 	// Common
 	static Handle<Application> Current;
-	template <class _receiver_t, class... _args_t> Handle<DispatchedHandler> Dispatch(_receiver_t* Receiver, VOID (_receiver_t::*Procedure)(_args_t...), _args_t... Arguments)
+	inline VOID Dispatch(VOID (*Procedure)())
 		{
-		if(!Running)
-			return nullptr;
-		Handle<DispatchedHandler> handler=new DispatchedHandlerTyped<_receiver_t, _args_t...>(Receiver, Procedure, Arguments...);
-		cDispatchedHandlers.append(handler);
-		Dispatched(this);
-		return handler;
+		DispatchedHandler* handler=new Details::DispatchedProcedure(Procedure);
+		DispatchHandler(handler);
 		}
-	template <class _receiver_t, class... _args_t> inline Handle<DispatchedHandler> Dispatch(Handle<_receiver_t> Receiver, VOID (_receiver_t::*Procedure)(_args_t...), _args_t... Arguments)
+	template <class _owner_t, class... _args_t> inline VOID Dispatch(_owner_t* Owner, VOID (_owner_t::*Procedure)())
 		{
-		return Dispatch((_receiver_t*)Receiver, Procedure, Arguments...);
+		DispatchedHandler* handler=new Details::DispatchedMemberProcedure<_owner_t>(Owner, Procedure);
+		DispatchHandler(handler);
 		}
-	Event<Application> Dispatched;
-	VOID HandleDispatched();
+	template <class _owner_t, class _lambda_t> inline VOID Dispatch(_owner_t* Owner, _lambda_t&& Lambda)
+		{
+		DispatchedHandler* handler=new Details::DispatchedLambda<_owner_t, _lambda_t>(Owner, std::forward<_lambda_t>(Lambda));
+		DispatchHandler(handler);
+		}
+	template <class _owner_t, class _lambda_t> inline VOID Dispatch(Handle<_owner_t> Owner, _lambda_t&& Lambda)
+		{
+		DispatchedHandler* handler=new Details::DispatchedLambda<_owner_t, _lambda_t>(Owner, std::forward<_lambda_t>(Lambda));
+		DispatchHandler(handler);
+		}
+	virtual VOID DispatchHandler(DispatchedHandler* Handler);
 	LPCSTR Name;
+	virtual INT Run();
 	volatile BOOL Running;
-	VOID Quit();
+	virtual VOID Quit();
 	LPCSTR Version;
 
 protected:
+	// Using
+	using DispatchedHandler=Core::DispatchedHandler;
+
 	// Con-/Destructors
 	Application(LPCSTR Name, LPCSTR Version="1.0");
 
 	// Common
-	Clusters::shared_list<Handle<DispatchedHandler>> cDispatchedHandlers;
+	Concurrency::Signal m_Dispatched;
+	Handle<DispatchedHandler> m_DispatchedHandler;
+	Concurrency::Mutex m_Mutex;
 };
 
 }

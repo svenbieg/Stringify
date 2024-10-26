@@ -11,14 +11,13 @@
 
 #include "Core/Application.h"
 #include "Storage/Clipboard.h"
-#include "Storage/Streams/StringReader.h"
+#include "Storage/Streams/StreamReader.h"
 #include "Storage/StaticBuffer.h"
 #include "UI/Controls/Menus/EditMenu.h"
 #include "UI/Frame.h"
 #include "Input.h"
 
 using namespace Clusters;
-using namespace Core;
 using namespace Graphics;
 using namespace Storage;
 using namespace Storage::Streams;
@@ -53,7 +52,7 @@ uInputFlags(InputFlags::None),
 uLineHeight(0)
 {
 auto frame=GetFrame();
-ContextMenu=new EditMenu(frame);
+ContextMenu=new EditMenu();
 Focused.Add(this, &Input::OnFocused);
 FocusLost.Add(this, &Input::OnFocusLost);
 KeyDown.Add(this, &Input::OnKeyDown);
@@ -135,7 +134,7 @@ if(width_count>0)
 	size.Width*=scale;
 	}
 uLineHeight=GetLineHeight(target, 1.f);
-UINT line_count=MAX(cLines.get_count(), 1);
+UINT line_count=Max(cLines.get_count(), 1U);
 UINT line_height=uLineHeight*scale;
 size.Height=line_count*line_height;
 size.AddPadding(Padding*scale);
@@ -166,10 +165,18 @@ GetText(pt_start, pt_end, buf, len+1);
 return text;
 }
 
+BOOL Input::KillFocus()
+{
+auto app=Application::Current;
+if(app->GetCurrentInput()==this)
+	app->SetCurrentInput(nullptr);
+return Interactive::KillFocus();
+}
+
 VOID Input::ReadFromStream(InputStream* stream)
 {
 Clear();
-StringReader reader(stream);
+StreamReader reader(stream);
 while(1)
 	{
 	Handle<String> line=reader.ReadString(nullptr, "\r\n", "\n");
@@ -197,7 +204,12 @@ UINT line_height=uLineHeight*scale;
 UINT first_line=offset.Top/line_height;
 UINT line_count=client_height/line_height+2;
 UINT last_line=first_line+line_count-1;
-if(ptSelectionFirst!=ptSelectionLast)
+BOOL show_sel=true;
+if(ptSelectionFirst==ptSelectionLast)
+	show_sel=false;
+if(Application::Current->GetCurrentInput()!=this)
+	show_sel=false;
+if(show_sel)
 	{
 	auto highlight=theme->GetHighlightBrush();
 	if(!HasFocus())
@@ -375,7 +387,18 @@ VOID Input::SelectAll()
 {
 POINT pt_start(0, 0);
 POINT pt_end=GetEndPoint();
-SetSelection(pt_end, pt_start);
+SetSelection(pt_start, pt_end);
+}
+
+VOID Input::SelectNone()
+{
+SetSelection(ptSelectionEnd, ptSelectionEnd);
+}
+
+VOID Input::SetFocus(FocusReason reason)
+{
+Interactive::SetFocus(reason);
+Application::Current->SetCurrentInput(this);
 }
 
 VOID Input::SetSelection(POINT const& pt_start, POINT const& pt_end)
@@ -538,8 +561,8 @@ UINT line_count=cLines.get_count();
 if(line_count==0)
 	return;
 INT line_id=ptCursor.Top+y;
-line_id=MAX(line_id, 0);
-line_id=MIN(line_id, line_count-1);
+line_id=Max(line_id, 0);
+line_id=Min(line_id, (INT)line_count-1);
 auto it=cLines.cbegin(line_id);
 INPUT_LINE const& line=it.get_current();
 UINT line_len=line.Offsets.get_count();
@@ -840,9 +863,8 @@ if(edit_menu)
 	edit_menu->Delete->Visible=(!ReadOnly&&selection);
 	edit_menu->Paste->Visible=(!ReadOnly&&paste);
 	}
-POINT pt_frame=GetFrameOffset();
-pt+=pt_frame;
-ContextMenu->Show(this, pt);
+pt+=GetScreenOffset();
+ContextMenu->Show(pt);
 return true;
 }
 
@@ -925,16 +947,16 @@ UpdateSelection();
 
 VOID Input::UpdateSelection()
 {
-UINT start_line=MIN(ptSelectionStart.Top, ptSelectionEnd.Top);
-UINT end_line=MAX(ptSelectionStart.Top, ptSelectionEnd.Top);
+UINT start_line=Min(ptSelectionStart.Top, ptSelectionEnd.Top);
+UINT end_line=Max(ptSelectionStart.Top, ptSelectionEnd.Top);
 UINT start_char=0;
 UINT end_char=0;
 BOOL reverse=false;
 if(start_line==end_line)
 	{
 	reverse=ptSelectionStart.Left>ptSelectionEnd.Left;
-	start_char=MIN(ptSelectionStart.Left, ptSelectionEnd.Left);
-	end_char=MAX(ptSelectionStart.Left, ptSelectionEnd.Left);
+	start_char=Min(ptSelectionStart.Left, ptSelectionEnd.Left);
+	end_char=Max(ptSelectionStart.Left, ptSelectionEnd.Left);
 	}
 else if(start_line==ptSelectionStart.Top)
 	{
@@ -958,7 +980,7 @@ else
 	ptCursor.Set(end_char, end_line);
 	}
 Invalidate(true);
-auto app=Application::Current;
+auto app=Core::Application::Current;
 app->Dispatch(this, &Input::NotifySelectionChanged);
 }
 

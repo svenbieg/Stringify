@@ -80,15 +80,14 @@ if(args->Key!=VirtualKey::Alt)
 	return;
 if(bEntering)
 	return;
-if(GetFlag(uMenuFlags, MenuFlags::KeyboardAccess))
+if(GetFlag(m_MenuFlags, MenuFlags::KeyboardAccess))
 	{
 	Exit();
 	return;
 	}
 Exit();
-SetFlag(uMenuFlags, MenuFlags::KeyboardAccess);
-auto frame=GetFrame();
-frame->SetCurrentMenu(this);
+SetFlag(m_MenuFlags, MenuFlags::KeyboardAccess);
+Application::Current->SetCurrentMenu(this);
 bEntering=true;
 Invalidate();
 args->Handled=true;

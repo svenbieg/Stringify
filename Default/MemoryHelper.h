@@ -9,43 +9,60 @@
 // Macros
 //========
 
-#ifndef ARRAYSIZE
-#define ARRAYSIZE(a) (sizeof(a)/sizeof((a)[0]))
-#endif
+#define ALIGN(x) __attribute__((aligned(x)))
+#define PACKED __attribute__((packed))
 
-#define MIN(a, b) ((a)<(b)? a: b)
-#define MAX(a, b) ((a)>(b)? a: b)
+#define _STR(s) #s
+#define STR(s) _STR(s)
 
-#define OFFSETOF(type, element) ((SIZE_T)&(((type*)nullptr)->element))
+template <class _item_t, UINT _Count> constexpr UINT ArraySize(_item_t (&)[_Count])
+{
+return _Count;
+}
 
-#ifndef HIWORD
-#define HIWORD(a) ((WORD)((a)>>16))
-#endif
+template <class _size1_t, class _size2_t> inline _size1_t Max(_size1_t Value1, _size2_t Value2)
+{
+if(Value1>Value2)
+	return Value1;
+return Value2;
+}
 
-#ifndef LOWORD
-#define LOWORD(a) ((WORD)((a)&0xFFFF))
-#endif
+template <class _size1_t, class _size2_t> inline _size1_t Min(_size1_t Value1, _size2_t Value2)
+{
+if(Value1<Value2)
+	return Value1;
+return Value2;
+}
 
-#define HILONG(a) ((DWORD)((a)>>32))
-#define LOLONG(a) ((DWORD)((a)&0xFFFFFFFF))
+inline UINT HighLong(UINT64 Value) { return (UINT)(Value>>32); }
+inline UINT LowLong(UINT64 Value) { return (UINT)Value; }
 
-#ifndef MAKELONG
-#define MAKELONG(lo, hi) ((((UINT)(hi))<<16)|(lo))
-#endif
 
-#define MAKELONGLONG(lo, hi) ((((UINT64)(hi))<<32)|(lo))
+//========
+// Common
+//========
+
+INT CompareMemory(VOID const* Buffer1, VOID const* Buffer2, SIZE_T Size);
+VOID CopyMemory(VOID* Destination, VOID const* Source, SIZE_T Size);
+VOID FillMemory(VOID* Destination, SIZE_T Size, UINT Value);
+VOID MoveMemory(VOID* Destination, VOID const* Source, SIZE_T Size);
+VOID ZeroMemory(VOID* Destination, SIZE_T Size);
 
 
 //===========
 // Alignment
 //===========
 
-#define ALIGN(a) __declspec(align(a))
+template <class _size_t>
+inline _size_t AlignDown(_size_t Value, UINT Align)
+{
+return Value&~(Align-1);
+}
 
 template <class _size_t>
-inline _size_t BlockAlign(_size_t Size, UINT BlockSize)
+inline _size_t AlignUp(_size_t Value, UINT Align)
 {
-return ((Size+BlockSize-1)/BlockSize)*BlockSize;
+return Value+(Align-Value%Align)%Align;
 }
 
 
@@ -53,13 +70,13 @@ return ((Size+BlockSize-1)/BlockSize)*BlockSize;
 // Little Endian
 //===============
 
-template <class _value_t> _value_t Reverse(_value_t Value)
+template <class _value_t> inline _value_t Reverse(_value_t Value)
 {
-auto pvalue=(BYTE*)&Value;
+auto value_ptr=(BYTE*)&Value;
 _value_t retval=0;
-auto pretval=(BYTE*)&retval;
+auto retval_ptr=(BYTE*)&retval;
 for(UINT u=0; u<sizeof(_value_t); u++)
-	pretval[u]=pvalue[sizeof(_value_t)-u-1];
+	retval_ptr[u]=value_ptr[sizeof(_value_t)-u-1];
 return retval;
 }
 

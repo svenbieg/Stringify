@@ -11,6 +11,8 @@
 
 #include "TaskHelper.h"
 
+using namespace Concurrency;
+
 
 //========
 // Common

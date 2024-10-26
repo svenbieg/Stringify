@@ -27,11 +27,15 @@ namespace Storage {
 class NamedPipe: public Storage::Streams::RandomAccessStream
 {
 public:
+	// Using
+	using Task=Concurrency::Task;
+
 	// Con-/Destructors
 	NamedPipe(Handle<String> Name);
 	~NamedPipe();
 
 	// Common
+	VOID Close();
 	BOOL Connect();
 	VOID Listen();
 	Event<NamedPipe> ConnectionReceived;
@@ -46,10 +50,8 @@ public:
 
 private:
 	// Common
-	VOID Destroy();
 	VOID ListenProc();
 	VOID OnConnectionClosed();
-	OVERLAPPED cOverlapped;
 	Handle<Task> hListenTask;
 	HANDLE hNamedPipe;
 	Handle<String> hPath;

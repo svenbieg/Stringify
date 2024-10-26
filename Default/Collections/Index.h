@@ -50,7 +50,7 @@ public:
 
 	// Con-/Destructors
 	Index() {}
-	Index(std::nullptr_t) {}
+	Index(nullptr_t) {}
 	Index(_index_t* Index): cIndex(Index->cIndex) {}
 
 	// Access

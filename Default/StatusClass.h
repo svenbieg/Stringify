@@ -9,14 +9,22 @@
 // Status
 //========
 
-enum class Status: UINT
+enum class Status: INT
 {
-AccessDenied,
-Error,
-FileExists,
-FileNotFound,
-InvalidArgument,
-Success
+Success				=0,
+Error				=-1,
+// Succeeded
+Pending				=Success+1,
+// Failed
+Aborted				=Error-1,
+AccessDenied		=Aborted-1,
+DeviceNotReady		=AccessDenied-1,
+FileExists			=DeviceNotReady-1,
+FileNotFound		=FileExists-1,
+InvalidArgument		=FileNotFound-1,
+NotImplemented		=InvalidArgument-1,
+OutOfRange			=NotImplemented-1,
+Timeout				=OutOfRange-1
 };
 
 
@@ -26,14 +34,10 @@ Success
 
 inline bool Succeeded(Status Status)
 {
-if(Status==Status::Success)
-	return true;
-return false;
+return ((INT)Status)>=0;
 }
 
 inline bool Failed(Status Status)
 {
-if(Status==Status::Success)
-	return false;
-return true;
+return ((INT)Status)<0;
 }

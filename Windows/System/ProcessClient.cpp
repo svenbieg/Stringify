@@ -9,8 +9,8 @@
 // Using
 //=======
 
-#include "Storage/Streams/StringReader.h"
-#include "Storage/Streams/StringWriter.h"
+#include "Storage/Streams/StreamReader.h"
+#include "Storage/Streams/StreamWriter.h"
 #include "CommandLine.h"
 #include "ProcessClient.h"
 
@@ -42,7 +42,7 @@ VOID ProcessClient::ActivateServerApplication()
 if(!hNamedPipe)
 	return;
 AllowSetForegroundWindow(uServerProcessId);
-StringWriter writer(hNamedPipe);
+StreamWriter writer(hNamedPipe);
 writer.Print("ActivateApp\n");
 hNamedPipe->Flush();
 }
@@ -67,12 +67,12 @@ VOID ProcessClient::SendCommandLine()
 {
 if(!hNamedPipe)
 	return;
-StringWriter writer(hNamedPipe);
-auto cmd_line=CommandLine::Current;
-UINT count=cmd_line->GetArgumentCount();
-for(UINT u=0; u<count; u++)
+StreamWriter writer(hNamedPipe);
+auto cmd_line=CommandLine::Get();
+auto args=cmd_line->Arguments;
+for(auto it=args->First(); it->HasCurrent(); it->MoveNext())
 	{
-	auto arg=cmd_line->GetArgument(u);
+	auto arg=it->GetCurrent();
 	writer.Print(arg);
 	writer.PrintChar('\n');
 	}
@@ -86,10 +86,10 @@ hNamedPipe->Flush();
 
 DWORD ProcessClient::GetServerProcessId()
 {
-StringWriter writer(hNamedPipe);
+StreamWriter writer(hNamedPipe);
 writer.Print("GetProcessId\n");
 hNamedPipe->Flush();
-StringReader reader(hNamedPipe);
+StreamReader reader(hNamedPipe);
 TCHAR id_str[32];
 reader.ReadString(id_str, 32, '\n');
 UINT id=0;

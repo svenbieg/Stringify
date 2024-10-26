@@ -9,8 +9,8 @@
 // Using
 //=======
 
-#include "Storage/Streams/StringReader.h"
-#include "Storage/Streams/StringWriter.h"
+#include "Storage/Streams/StreamReader.h"
+#include "Storage/Streams/StreamWriter.h"
 #include "StringVariable.h"
 
 using namespace Storage::Streams;
@@ -46,7 +46,7 @@ Handle<String> value=hValue;
 lock.Unlock();
 Reading(this, value);
 SIZE_T size=0;
-StringWriter writer(stream);
+StreamWriter writer(stream);
 size+=writer.Print(value);
 size+=writer.PrintChar('\0');
 return size;
@@ -67,7 +67,7 @@ SIZE_T StringVariable::ReadFromStream(InputStream* stream, BOOL notify)
 if(!stream)
 	return 0;
 SIZE_T size=0;
-StringReader reader(stream);
+StreamReader reader(stream);
 auto str=reader.ReadString();
 Set(str, notify);
 return size;
@@ -75,7 +75,7 @@ return size;
 
 BOOL StringVariable::Set(Handle<String> value, BOOL notify)
 {
-UniqueLock lock(cMutex);
+ScopedLock lock(cMutex);
 if(hValue==value)
 	return true;
 hValue=value;

@@ -29,7 +29,7 @@ class EditMenu: public PopupMenu
 {
 public:
 	// Con-/Destructors
-	EditMenu(Frame* Frame);
+	EditMenu();
 
 	// Common
 	Handle<PopupMenuItem> Copy;

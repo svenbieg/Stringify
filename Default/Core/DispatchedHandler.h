@@ -9,7 +9,8 @@
 // Using
 //=======
 
-#include <functional>
+#include <utility>
+#include "Function.h"
 
 
 //===========
@@ -30,56 +31,101 @@ public:
 	virtual ~DispatchedHandler() {}
 
 	// Common
-	VOID Abort()
+	static VOID Append(Handle<DispatchedHandler>& Dispatched, DispatchedHandler* Handler);
+	inline static Handle<DispatchedHandler> Remove(Handle<DispatchedHandler>& Dispatched)
 		{
-		ScopedLock lock(cMutex);
-		cDispatched.Broadcast();
+		Handle<DispatchedHandler> dispatched=Dispatched;
+		if(dispatched)
+			Dispatched=dispatched->hNext;
+		return dispatched;
 		}
+	static VOID Remove(Handle<DispatchedHandler>& Dispatched, DispatchedHandler* Handler);
 	virtual VOID Run()=0;
-	VOID Wait()
-		{
-		ScopedLock lock(cMutex);
-		cDispatched.Wait(lock);
-		}
 
 protected:
 	// Con-/Destructors
 	DispatchedHandler() {}
 
 	// Common
-	Signal cDispatched;
-	Mutex cMutex;
+	Handle<DispatchedHandler> hNext;
 };
 
 
-//==========================
-// Dispatched-Handler-Typed
-//==========================
+//===========
+// Procedure
+//===========
 
-template <class _receiver_t, class... _args_t>
-class DispatchedHandlerTyped: public DispatchedHandler
+namespace Details {
+
+class DispatchedProcedure: public DispatchedHandler
 {
 public:
-	// Procedure
-	typedef VOID (_receiver_t::*DispatchedProc)(_args_t...);
+	// Using
+	typedef VOID (*_proc_t)();
 
 	// Con-/Destructors
-	DispatchedHandlerTyped(_receiver_t* Receiver, DispatchedProc Procedure, _args_t... Arguments):
-		cProcedure([Receiver, Procedure, Arguments...]() { (Receiver->*Procedure)(Arguments...); }),
-		hReceiver(Receiver) {}
+	DispatchedProcedure(_proc_t Procedure): m_Procedure(Procedure) {}
 
 	// Common
-	VOID Run()override
-		{
-		cProcedure();
-		ScopedLock lock(cMutex);
-		cDispatched.Broadcast();
-		}
+	inline VOID Run()override { (*m_Procedure)(); }
 
 private:
 	// Common
-	std::function<VOID()> cProcedure;
-	Handle<_receiver_t> hReceiver;
-};
+	_proc_t m_Procedure;
+};}
+
+
+//==================
+// Member-Procedure
+//==================
+
+namespace Details {
+
+template <class _owner_t>
+class DispatchedMemberProcedure: public DispatchedHandler
+{
+public:
+	// Procedure
+	typedef VOID (_owner_t::*_proc_t)();
+
+	// Con-/Destructors
+	DispatchedMemberProcedure(_owner_t* Owner, _proc_t Procedure):
+		m_Owner(Owner),
+		m_Procedure(Procedure)
+		{}
+
+	// Common
+	inline VOID Run()override { (m_Owner->*m_Procedure)(); }
+
+private:
+	// Common
+	_proc_t m_Procedure;
+	Handle<_owner_t> m_Owner;
+};}
+
+
+//========
+// Lambda
+//========
+
+namespace Details {
+
+template <class _owner_t, class _lambda_t>
+class DispatchedLambda: public DispatchedHandler
+{
+public:
+	// Con-/Destructors
+	DispatchedLambda(_owner_t* Owner, _lambda_t&& Lambda):
+		m_Lambda(std::move(Lambda)),
+		m_Owner(Owner) {}
+
+	// Common
+	inline VOID Run()override { m_Lambda(); }
+
+private:
+	// Common
+	_lambda_t m_Lambda;
+	Handle<_owner_t> m_Owner;
+};}
 
 }

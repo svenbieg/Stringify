@@ -86,12 +86,12 @@ public:
 	// Common
 	Handle<GridColumn> AddColumn(UINT Width=0, GridUnit Unit=GridUnit::Pixel, HorizontalAlignment Alignment=HorizontalAlignment::Stretch);
 	Handle<GridRow> AddRow(UINT Height=0, GridUnit Unit=GridUnit::Pixel, VerticalAlignment Alignment=VerticalAlignment::Stretch);
+	Grid* At(UINT Column, UINT Row);
 	Handle<ColumnList> Columns;
 	SIZE GetMinSize(RenderTarget* Target)override;
 	RECT Padding;
 	VOID Rearrange(RenderTarget* Target, RECT& Rect)override;
 	Handle<RowList> Rows;
-	VOID SetPosition(UINT Column, UINT Row);
 
 private:
 	// Grid-Position

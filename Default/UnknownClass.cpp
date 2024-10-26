@@ -144,23 +144,15 @@ auto p=(LPCWSTR*)pBuffer;
 }
 
 UnknownClass::UnknownClass(Handle<String> value):
-#ifdef _UNICODE
-uType(UnknownType::WString)
-#else
-uType(UnknownType::String)
-#endif
-{
-LPCTSTR str=value? value->Begin(): nullptr;
-auto p=(LPCTSTR*)pBuffer;
-*p=str;
-}
+UnknownClass(value? value->Begin(): nullptr)
+{}
 
 
 //========
 // Access
 //========
 
-BOOL UnknownClass::Get(INT& value)
+BOOL UnknownClass::Get(INT& value)const
 {
 if(uType==UnknownType::Int32)
 	{
@@ -197,7 +189,7 @@ if(uType==UnknownType::UInt64)
 return false;
 }
 
-BOOL UnknownClass::Get(INT*& value)
+BOOL UnknownClass::Get(INT*& value)const
 {
 if(uType!=UnknownType::Int32Ptr)
 	return false;
@@ -206,7 +198,7 @@ value=*p;
 return true;
 }
 
-BOOL UnknownClass::Get(INT64& value)
+BOOL UnknownClass::Get(INT64& value)const
 {
 if(uType==UnknownType::Int32)
 	{
@@ -237,7 +229,7 @@ if(uType==UnknownType::UInt64)
 return false;
 }
 
-BOOL UnknownClass::Get(INT64*& value)
+BOOL UnknownClass::Get(INT64*& value)const
 {
 if(uType!=UnknownType::Int64Ptr)
 	return false;
@@ -246,7 +238,7 @@ value=*p;
 return true;
 }
 
-BOOL UnknownClass::Get(UINT& value)
+BOOL UnknownClass::Get(UINT& value)const
 {
 if(uType==UnknownType::Int32)
 	{
@@ -283,7 +275,7 @@ if(uType==UnknownType::UInt64)
 return false;
 }
 
-BOOL UnknownClass::Get(UINT*& value)
+BOOL UnknownClass::Get(UINT*& value)const
 {
 if(uType!=UnknownType::UInt32Ptr)
 	return false;
@@ -292,7 +284,7 @@ value=*p;
 return true;
 }
 
-BOOL UnknownClass::Get(UINT64& value)
+BOOL UnknownClass::Get(UINT64& value)const
 {
 if(uType==UnknownType::Int32)
 	{
@@ -325,7 +317,7 @@ if(uType==UnknownType::UInt64)
 return false;
 }
 
-BOOL UnknownClass::Get(UINT64*& value)
+BOOL UnknownClass::Get(UINT64*& value)const
 {
 if(uType!=UnknownType::UInt64Ptr)
 	return false;
@@ -334,8 +326,7 @@ value=*p;
 return true;
 }
 
-#ifndef _DRIVER
-BOOL UnknownClass::Get(FLOAT& value)
+BOOL UnknownClass::Get(FLOAT& value)const
 {
 if(uType!=UnknownType::Float)
 	return false;
@@ -344,7 +335,7 @@ value=*p;
 return true;
 }
 
-BOOL UnknownClass::Get(FLOAT*& value)
+BOOL UnknownClass::Get(FLOAT*& value)const
 {
 if(uType!=UnknownType::FloatPtr)
 	return false;
@@ -353,7 +344,7 @@ value=*p;
 return true;
 }
 
-BOOL UnknownClass::Get(DOUBLE& value)
+BOOL UnknownClass::Get(DOUBLE& value)const
 {
 if(uType==UnknownType::Float)
 	{
@@ -370,7 +361,7 @@ if(uType==UnknownType::Double)
 return false;
 }
 
-BOOL UnknownClass::Get(DOUBLE*& value)
+BOOL UnknownClass::Get(DOUBLE*& value)const
 {
 if(uType!=UnknownType::DoublePtr)
 	return false;
@@ -378,9 +369,8 @@ auto p=(DOUBLE**)pBuffer;
 value=*p;
 return true;
 }
-#endif
 
-BOOL UnknownClass::Get(CHAR& value)
+BOOL UnknownClass::Get(CHAR& value)const
 {
 if(uType==UnknownType::Char)
 	{
@@ -397,7 +387,7 @@ if(uType==UnknownType::WChar)
 return false;
 }
 
-BOOL UnknownClass::Get(WCHAR& value)
+BOOL UnknownClass::Get(WCHAR& value)const
 {
 if(uType==UnknownType::Char)
 	{
@@ -414,7 +404,7 @@ if(uType==UnknownType::WChar)
 return false;
 }
 
-BOOL UnknownClass::Get(LPSTR& value)
+BOOL UnknownClass::Get(LPSTR& value)const
 {
 if(uType!=UnknownType::String)
 	return false;
@@ -423,7 +413,7 @@ value=*p;
 return true;
 }
 
-BOOL UnknownClass::Get(LPCSTR& value)
+BOOL UnknownClass::Get(LPCSTR& value)const
 {
 if(uType==UnknownType::String)
 	{
@@ -434,7 +424,7 @@ if(uType==UnknownType::String)
 return false;
 }
 
-BOOL UnknownClass::Get(LPWSTR& value)
+BOOL UnknownClass::Get(LPWSTR& value)const
 {
 if(uType!=UnknownType::WString)
 	return false;
@@ -443,7 +433,7 @@ value=*p;
 return true;
 }
 
-BOOL UnknownClass::Get(LPCWSTR& value)
+BOOL UnknownClass::Get(LPCWSTR& value)const
 {
 if(uType!=UnknownType::WString)
 	return false;

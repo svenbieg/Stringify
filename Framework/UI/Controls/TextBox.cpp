@@ -70,6 +70,8 @@ hInput->Move(target, rc_input);
 UINT line_height=hInput->GetLineHeight();
 HorizontalBar->Step=line_height;
 VerticalBar->Step=line_height;
+if(m_Hotspot)
+	m_Hotspot=hInput->GetCursorRect();
 ScrollBox::Rearrange(target, rc);
 }
 

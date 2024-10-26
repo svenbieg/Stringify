@@ -9,12 +9,12 @@
 // Using
 //=======
 
-#include "Framework/Application.h"
 #include "Resources/Icons/Edit.h"
 #include "Resources/Strings/Edit.h"
+#include "UI/Application.h"
+#include "UI/AppWindow.h"
 #include "EditMenu.h"
 
-using namespace Framework;
 using namespace Graphics;
 using namespace Resources::Icons;
 using namespace Resources::Strings;
@@ -33,8 +33,8 @@ namespace UI {
 // Con-/Destructors
 //==================
 
-EditMenu::EditMenu(Frame* frame):
-PopupMenu(frame, nullptr)
+EditMenu::EditMenu():
+PopupMenu(AppWindow::Current)
 {
 auto app=Application::Current;
 SelectAll=Add(STR_MM_EDIT_SELECT_ALL);

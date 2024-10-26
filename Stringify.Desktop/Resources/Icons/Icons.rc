@@ -1,0 +1,12 @@
+//=========
+// Icon.rc
+//=========
+
+#pragma once
+
+
+//=======
+// Icons
+//=======
+
+1 ICON "Stringify.ico"

@@ -11,7 +11,6 @@
 
 #include "UI/Input/KeyEvent.h"
 #include "UI/Input/VirtualKey.h"
-#include "UI/Window.h"
 #include "MenuItem.h"
 
 
@@ -42,18 +41,18 @@ public:
 	VOID Close(MenuItem* Item);
 	VOID DoKey(KeyEventType Type, Handle<KeyEventArgs> Args);
 	VOID Exit();
-	UI::Window* GetOwner()const { return pOwner; }
-	Menu* GetParentMenu()const { return pParentMenu; }
+	Window* GetOwner()const { return m_Owner; }
+	Menu* GetParentMenu()const { return m_ParentMenu; }
 	BOOL HasAcceleration();
-	BOOL HasKeyboardAccess() { return GetFlag(uMenuFlags, MenuFlags::KeyboardAccess); }
+	BOOL HasKeyboardAccess() { return GetFlag(m_MenuFlags, MenuFlags::KeyboardAccess); }
 	BOOL IsOpen();
 	BOOL IsParentMenu(Menu* Menu);
 	VOID KillKeyboardAccess();
 	VOID Open(MenuItem* Item);
+	Handle<Window> Panel;
 	VOID Select();
 	VOID Select(MenuItem* Item);
 	VOID Switch(MenuItem* Item);
-	UI::Window* Window;
 
 protected:
 	// Flags
@@ -64,14 +63,14 @@ protected:
 		};
 
 	// Con-/Destructors
-	Menu(UI::Window* Window, Menu* Parent);
+	Menu(Window* Owner, Menu* Parent);
 
 	// Common
-	MenuItem* pOpenItem;
-	UI::Window* pOwner;
-	Menu* pParentMenu;
-	MenuItem* pSelectedItem;
-	MenuFlags uMenuFlags;
+	MenuFlags m_MenuFlags;
+	MenuItem* m_OpenItem;
+	Window* m_Owner;
+	Menu* m_ParentMenu;
+	MenuItem* m_SelectedItem;
 };
 
 }}}

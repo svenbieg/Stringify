@@ -13,6 +13,8 @@
 #include "File.h"
 #include "PathHelper.h"
 
+using namespace Concurrency;
+
 
 //===========
 // Namespace

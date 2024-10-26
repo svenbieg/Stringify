@@ -9,10 +9,11 @@
 // Using
 //=======
 
-#include "Storage/Streams/StringReader.h"
-#include "Storage/Streams/StringWriter.h"
+#include "Storage/Streams/StreamReader.h"
+#include "Storage/Streams/StreamWriter.h"
 #include "Enum.h"
 
+using namespace Concurrency;
 using namespace Storage::Streams;
 
 
@@ -52,7 +53,7 @@ SIZE_T Enum::WriteToStream(OutputStream* stream)
 {
 SharedLock lock(cMutex);
 SIZE_T size=0;
-StringWriter writer(stream);
+StreamWriter writer(stream);
 size+=writer.Print(hValue->Begin(LanguageCode::None));
 size+=writer.PrintChar('\0');
 return size;
@@ -65,7 +66,7 @@ return size;
 
 VOID Enum::Add(Handle<Sentence> value)
 {
-UniqueLock lock(cMutex);
+ScopedLock lock(cMutex);
 cEnum.set(value);
 if(!hValue)
 	hValue=value;
@@ -87,7 +88,7 @@ return false;
 SIZE_T Enum::ReadFromStream(InputStream* stream, BOOL notify)
 {
 SIZE_T size=0;
-StringReader reader(stream);
+StreamReader reader(stream);
 auto str=reader.ReadString(&size);
 FromString(str, notify);
 return size;
@@ -95,7 +96,7 @@ return size;
 
 BOOL Enum::Set(Handle<Sentence> value, BOOL notify)
 {
-UniqueLock lock(cMutex);
+ScopedLock lock(cMutex);
 if(!cEnum.contains(value))
 	return false;
 if(hValue==value)

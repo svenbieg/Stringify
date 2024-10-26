@@ -5,7 +5,7 @@
 // Implementation of a pyramidal directory
 // Shared classes for list and index
 
-// Copyright 2022, Sven Bieg (svenbieg@web.de)
+// Copyright 2024, Sven Bieg (svenbieg@web.de)
 // http://github.com/svenbieg/clusters
 
 
@@ -21,6 +21,7 @@
 #include <stdexcept>
 #include <stdint.h>
 #include <type_traits>
+#include <utility>
 
 
 //===========
@@ -500,6 +501,7 @@ public:
 	friend cluster_iterator_base<_traits_t, true>;
 
 	// Access
+	inline operator bool()const noexcept { return m_root!=nullptr; }
 	inline iterator begin()noexcept { return iterator(this, 0); }
 	inline iterator begin(_size_t position)noexcept { return iterator(this, position); }
 	inline const_iterator begin()const noexcept { return const_iterator(this, 0); }
@@ -699,7 +701,7 @@ public:
 	inline bool begin()noexcept { return set_position(0); }
 	inline void end()noexcept { reset(-2); }
 	inline _size_t get_position()const noexcept { return m_position; }
-	bool move_next()noexcept
+	virtual bool move_next()noexcept
 		{
 		if(m_position==-2)
 			return false;
@@ -740,7 +742,7 @@ public:
 		reset(-2);
 		return false;
 		}
-	bool move_previous()noexcept
+	virtual bool move_previous()noexcept
 		{
 		if(m_position==-1)
 			return false;
@@ -790,7 +792,7 @@ public:
 		return true;
 		}
 	inline void rend() { reset(-1); }
-	bool set_position(_size_t position)noexcept
+	virtual bool set_position(_size_t position)noexcept
 		{
 		if(is_outside(position))
 			{

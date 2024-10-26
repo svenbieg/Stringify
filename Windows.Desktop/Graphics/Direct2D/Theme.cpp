@@ -29,10 +29,7 @@ namespace Graphics {
 Handle<Theme> Theme::Get()
 {
 if(!hCurrent)
-	{
 	hCurrent=new Theme();
-	Default=hCurrent;
-	}
 return hCurrent;
 }
 

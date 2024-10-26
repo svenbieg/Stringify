@@ -10,8 +10,8 @@
 //=======
 
 #include "Collections/StringList.h"
-#include "Storage/Streams/StringReader.h"
-#include "Storage/Streams/StringWriter.h"
+#include "Storage/Streams/StreamReader.h"
+#include "Storage/Streams/StreamWriter.h"
 #include "Flags.h"
 
 using namespace Collections;
@@ -57,7 +57,7 @@ SIZE_T Flags::WriteToStream(OutputStream* stream)
 {
 auto flags=ToString();
 SIZE_T size=0;
-StringWriter writer(stream);
+StreamWriter writer(stream);
 size+=writer.Print(flags);
 size+=writer.PrintChar('\0');
 return size;
@@ -70,7 +70,7 @@ return size;
 
 VOID Flags::Clear(BOOL notify)
 {
-UniqueLock lock(cMutex);
+ScopedLock lock(cMutex);
 if(cFlags.get_count()==0)
 	return;
 cFlags.clear();
@@ -80,7 +80,7 @@ if(notify)
 
 VOID Flags::Clear(Handle<String> flag, BOOL notify)
 {
-UniqueLock lock(cMutex);
+ScopedLock lock(cMutex);
 if(!cFlags.contains(flag))
 	return;
 cFlags.remove(flag);
@@ -97,7 +97,7 @@ if(str=="0")
 	Clear(notify);
 	return true;
 	}
-UniqueLock lock(cMutex);
+ScopedLock lock(cMutex);
 Handle<StringList> list=new StringList(str);
 BOOL changed=false;
 for(auto it=list->First(); it->HasCurrent(); it->MoveNext())
@@ -131,7 +131,7 @@ return true;
 SIZE_T Flags::ReadFromStream(InputStream* stream, BOOL notify)
 {
 SIZE_T size=0;
-StringReader reader(stream);
+StreamReader reader(stream);
 auto str=reader.ReadString(&size);
 FromString(str, notify);
 return size;
@@ -139,7 +139,7 @@ return size;
 
 VOID Flags::Set(Handle<String> flag, BOOL notify)
 {
-UniqueLock lock(cMutex);
+ScopedLock lock(cMutex);
 if(cFlags.contains(flag))
 	return;
 cFlags.set(flag);

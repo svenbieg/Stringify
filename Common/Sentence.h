@@ -43,10 +43,10 @@ public:
 	template <class... _args_t> Sentence(LPCSTR Format, _args_t... Arguments)
 		{
 		UnknownClass args[]={ Arguments... };
-		VariableArguments vargs(args, ARRAYSIZE(args));
-		UINT len=StringVPrint((LPSTR)nullptr, 0, Format, vargs);
+		VariableArguments vargs(args, ArraySize(args));
+		UINT len=StringPrintArgs((LPSTR)nullptr, 0, Format, vargs);
 		LPSTR value=new CHAR[len+1];
-		StringVPrint(value, len+1, Format, vargs);
+		StringPrintArgs(value, len+1, Format, vargs);
 		STRING* string=new STRING[1];
 		string->Language=LanguageCode::None;
 		string->Value=value;

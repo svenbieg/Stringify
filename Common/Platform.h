@@ -12,13 +12,6 @@
 #include "Default/Platform.h"
 
 
-//======================
-// Forward-Declarations
-//======================
-
-#include "Sentence.h"
-
-
 //========
 // Common
 //========
@@ -28,6 +21,8 @@
 #include "Enum.h"
 #include "Flags.h"
 #include "FloatClass.h"
+#include "Function.h"
 #include "Guid.h"
 #include "IntegerClasses.h"
+#include "Sentence.h"
 #include "StringVariable.h"

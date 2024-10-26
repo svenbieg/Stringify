@@ -38,8 +38,8 @@ AlignVertical(VerticalAlignment::Top),
 Enabled(this, true),
 ZoomMax(1.f),
 ZoomMin(1.f),
-fZoom(1.f),
-ptStart(-1, -1)
+m_StartPoint(-1, -1),
+m_Zoom(1.f)
 {
 Body=new Interactive(this);
 Body->PointerDown.Add(this, &ScrollBox::OnBodyPointerDown);
@@ -66,40 +66,49 @@ FLOAT scale=GetScaleFactor();
 return size.Max(MinSize*scale);
 }
 
+Graphics::POINT ScrollBox::GetPosition()
+{
+auto content=Body->GetVisibleChild(0);
+if(!content)
+	return POINT(0, 0);
+RECT content_rect=content->GetRect();
+return POINT(-content_rect.Left, -content_rect.Top);
+}
+
 VOID ScrollBox::Rearrange(RenderTarget* target, RECT& rc)
 {
 rc.SetPadding(1, 1, 1, 1);
 auto content=Body->GetVisibleChild(0);
 if(!content)
 	return;
-RECT rc_content=content->GetRect();
+RECT content_rect=content->GetRect();
 SIZE min_size=content->GetMinSize(target);
-rc_content.SetMinSize(min_size);
-SIZE content_size=rc_content.GetSize();
-RECT rc_body=rc;
+content_rect.SetMinSize(min_size);
+SIZE content_size=content_rect.GetSize();
+RECT body_rect=rc;
 BOOL scroll_h=false;
 BOOL scroll_v=false;
-UpdateBodyRect(rc_body, content_size, &scroll_h, &scroll_v);
-UpdateBodyRect(rc_body, content_size, &scroll_h, &scroll_v);
-Body->Move(target, rc_body);
-SIZE body_size=rc_body.GetSize();
-UpdateContentRect(rc_content, body_size);
-SetHotspot(rc_content, rc_body);
-content->Move(target, rc_content);
+UpdateBodyRect(body_rect, content_size, &scroll_h, &scroll_v);
+UpdateBodyRect(body_rect, content_size, &scroll_h, &scroll_v);
+Body->Move(target, body_rect);
+SIZE body_size=body_rect.GetSize();
+SetHotspot(content_rect, body_rect);
+UpdateContentRect(content_rect, body_size);
+content->Move(target, content_rect);
 if(scroll_h)
 	{
-	RECT rc_bar(rc_body.Left, rc.Bottom-HorizontalBar->GetWidth(), rc_body.Right, rc.Bottom);
+	RECT rc_bar(body_rect.Left, rc.Bottom-HorizontalBar->GetWidth(), body_rect.Right, rc.Bottom);
 	HorizontalBar->Move(target, rc_bar);
 	HorizontalBar->Fraction=(FLOAT)body_size.Width/content_size.Width;
-	HorizontalBar->Position=-rc_content.Left;
+	HorizontalBar->Position=-content_rect.Left;
 	HorizontalBar->Range=content_size.Width-body_size.Width;
 	}
 if(scroll_v)
 	{
-	RECT rc_bar(rc.Right-VerticalBar->GetWidth(), rc_body.Top, rc.Right, rc_body.Bottom);
+	RECT rc_bar(rc.Right-VerticalBar->GetWidth(), body_rect.Top, rc.Right, body_rect.Bottom);
 	VerticalBar->Move(target, rc_bar);
 	VerticalBar->Fraction=(FLOAT)body_size.Height/content_size.Height;
-	VerticalBar->Position=-rc_content.Top;
+	VerticalBar->Position=-content_rect.Top;
 	VerticalBar->Range=content_size.Height-body_size.Height;
 	}
 HorizontalBar->Visible=scroll_h;
@@ -117,17 +126,16 @@ rc.SetPadding(1, 1, 1, 1);
 
 VOID ScrollBox::Scroll(INT x, INT y)
 {
-auto content=Body->GetVisibleChild(0);
-if(!content)
-	return;
-RECT rc_content=content->GetRect();
-rc_content.Move(-x, -y);
-content->Move(rc_content);
+m_Hotspot.Clear();
+POINT pos=GetPosition();
+pos.Left+=x;
+pos.Top+=y;
+SetPosition(pos.Left, pos.Top);
 }
 
 VOID ScrollBox::SetHotspot(RECT rc_hot)
 {
-rcHotspot=rc_hot;
+m_Hotspot=rc_hot;
 Invalidate(true);
 }
 
@@ -136,27 +144,40 @@ VOID ScrollBox::SetPosition(INT left, INT top)
 auto content=Body->GetVisibleChild(0);
 if(!content)
 	return;
-left=MAX(left, 0);
-top=MAX(top, 0);
-RECT rc_content=content->GetRect();
-BOOL move=false;
-if(rc_content.Left!=-left)
-	move=true;
-if(rc_content.Top!=-top)
-	move=true;
-if(move)
+left=Max(left, 0);
+top=Max(top, 0);
+RECT body_rect=Body->GetClientRect();
+SIZE body_size=body_rect.GetSize();
+RECT content_rect=content->GetRect();
+SIZE content_size=content_rect.GetSize();
+if(content_size.Width>body_size.Width)
 	{
-	rc_content.SetPosition(-left, -top);
-	content->Move(rc_content);
+	left=Min(left, content_size.Width-body_size.Width);
 	}
+else
+	{
+	left=0;
+	}
+if(content_size.Height>body_size.Height)
+	{
+	top=Min(top, content_size.Height-body_size.Height);
+	}
+else
+	{
+	top=0;
+	}
+if(content_rect.Left==-left&&content_rect.Top==-top)
+	return;
+content_rect.SetPosition(-left, -top);
+content->Move(content_rect);
 }
 
 VOID ScrollBox::Zoom(FLOAT zoom)
 {
-zoom=MAX(ZoomMin, zoom);
-zoom=MIN(ZoomMax, zoom);
-fZoom=zoom;
-Scale=fZoom;
+zoom=Max(ZoomMin, zoom);
+zoom=Min(ZoomMax, zoom);
+m_Zoom=zoom;
+Scale=m_Zoom;
 Invalidate(true);
 }
 
@@ -177,25 +198,21 @@ if(ctrl)
 	args->Handled=true;
 	return;
 	}
-auto content=Body->GetVisibleChild(0);
-if(!content)
-	return;
-ptStart=args->Point;
-RECT const& rc=content->GetRect();
-ptStartPosition.Set(-rc.Left, -rc.Top);
+m_StartPoint=args->Point;
+m_StartPosition=GetPosition();
 Body->CapturePointer();
 args->Handled=true;
 }
 
 VOID ScrollBox::OnBodyPointerMoved(Handle<PointerEventArgs> args)
 {
-if(ptStart.Left==-1)
+if(m_StartPoint.Left==-1)
 	return;
 POINT const& pt=args->Point;
-INT delta_x=pt.Left-ptStart.Left;
-INT delta_y=pt.Top-ptStart.Top;
-INT left=ptStartPosition.Left-delta_x;
-INT top=ptStartPosition.Top-delta_y;
+INT delta_x=pt.Left-m_StartPoint.Left;
+INT delta_y=pt.Top-m_StartPoint.Top;
+INT left=m_StartPosition.Left-delta_x;
+INT top=m_StartPosition.Top-delta_y;
 SetPosition(left, top);
 args->Handled=true;
 }
@@ -205,8 +222,8 @@ VOID ScrollBox::OnBodyPointerUp(Handle<PointerEventArgs> args)
 if(args->Button!=PointerButton::Wheel)
 	return;
 Body->ReleasePointer();
-ptStart.Set(-1, -1);
-ptStartPosition.Set(0, 0);
+m_StartPoint.Set(-1, -1);
+m_StartPosition.Set(0, 0);
 args->Handled=true;
 }
 
@@ -244,14 +261,15 @@ args->Handled=true;
 
 VOID ScrollBox::OnScrollBarScrolled()
 {
+m_Hotspot.Clear();
 SetPosition(HorizontalBar->Position, VerticalBar->Position);
 }
 
 VOID ScrollBox::SetHotspot(RECT& rc_content, RECT const& rc_body)
 {
-if(!rcHotspot)
+if(!m_Hotspot)
 	return;
-RECT rc_hotspot(rcHotspot);
+RECT rc_hotspot(m_Hotspot);
 rc_hotspot.Move(rc_content.Left, rc_content.Top);
 rc_hotspot.SetBounds(rc_content);
 INT move_x=0;
@@ -273,7 +291,6 @@ else if(rc_hotspot.Bottom>rc_body.Bottom)
 	move_y=-(rc_hotspot.Bottom-rc_body.Bottom);
 	}
 rc_content.Move(move_x, move_y);
-rcHotspot.Clear();
 }
 
 VOID ScrollBox::UpdateBodyRect(RECT& rc_body, SIZE const& content_size, BOOL* scroll_h_ptr, BOOL* scroll_v_ptr)
@@ -415,7 +432,7 @@ rc_content.Move(move_x, move_y);
 
 VOID ScrollBox::ZoomStep(INT step)
 {
-FLOAT zoom=fZoom;
+FLOAT zoom=m_Zoom;
 if(step>0)
 	{
 	zoom*=1.1f;

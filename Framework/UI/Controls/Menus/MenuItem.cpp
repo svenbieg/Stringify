@@ -51,7 +51,7 @@ Graphics::POINT pt(rc.Left, rc.Bottom);
 auto popup=Convert<PopupMenu>(Window->Parent);
 if(popup)
 	pt.Set(rc.Right, rc.Top);
-SubMenu->Show(Window, pt);
+SubMenu->Show(pt);
 if(pMenu->HasKeyboardAccess())
 	SubMenu->Select();
 }

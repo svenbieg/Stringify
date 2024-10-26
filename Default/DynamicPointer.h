@@ -22,18 +22,18 @@ class DynamicPointer
 {
 public:
 	// Con-/Destructors
-	DynamicPointer(_owner_t* Owner, _obj_t* Object=nullptr): pObject(Object), pOwner(Owner) {}
+	DynamicPointer(_owner_t* Owner, _obj_t* Object=nullptr): pObject(Object), m_Owner(Owner) {}
 	DynamicPointer(DynamicPointer const&)=delete;
 	DynamicPointer(DynamicPointer&&)=delete;
 
 	// Access
 	operator bool()const { return pObject!=nullptr; }
-	operator _obj_t*() { return pObject; }
+	operator _obj_t*()const { return pObject; }
 	_obj_t* operator->()const { return pObject; }
 	_obj_t* Get()const { return pObject; }
 
 	// Modification
-	inline DynamicPointer& operator=(std::nullptr_t) { return operator=((_obj_t*)nullptr); }
+	inline DynamicPointer& operator=(nullptr_t) { return operator=((_obj_t*)nullptr); }
 	inline DynamicPointer& operator=(_obj_t* Object)
 		{
 		Set(Object);
@@ -47,11 +47,11 @@ public:
 			return;
 		pObject=Object;
 		if(Notify)
-			Changed(pOwner, pObject);
+			Changed(m_Owner, pObject);
 		}
 
 private:
 	// Common
 	_obj_t* pObject;
-	_owner_t* pOwner;
+	_owner_t* m_Owner;
 };

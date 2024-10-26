@@ -16,38 +16,21 @@
 // Con-/Destructors
 //==================
 
-CommandLine::CommandLine(LPSTR cmd_line):
-ppArgs(nullptr),
-uCount(0)
+CommandLine::CommandLine(LPTSTR cmd_line)
 {
-Current=this;
+Arguments=new StringList();
 if(!cmd_line||!cmd_line[0])
 	return;
-LPSTR next=cmd_line;
+LPCTSTR next=cmd_line;
 UINT count=0;
 while(next)
 	{
-	next=ScanArgument(next, nullptr, nullptr);
-	count++;
-	}
-ppArgs=new LPSTR[count];
-next=cmd_line;
-count=0;
-while(next)
-	{
-	LPSTR cmd=nullptr;
+	LPCTSTR str=nullptr;
 	UINT len=0;
-	next=ScanArgument(next, &cmd, &len);
-	cmd[len]=0;
-	ppArgs[count++]=cmd;
+	next=ScanArgument(next, &str, &len);
+	Handle<String> cmd=new String(len, str);
+	Arguments->Append(cmd, false);
 	}
-uCount=count;
-}
-
-CommandLine::~CommandLine()
-{
-if(ppArgs)
-	delete ppArgs;
 }
 
 
@@ -55,28 +38,22 @@ if(ppArgs)
 // Common
 //========
 
-Handle<CommandLine> CommandLine::Current;
-
-LPCSTR CommandLine::GetArgument(UINT id)const
+LPCTSTR CommandLine::Begin()
 {
-if(id>=uCount)
-	return nullptr;
-return ppArgs[id];
+return GetCommandLine();
 }
 
-BOOL CommandLine::HasArgument(LPCTSTR arg)
+Handle<CommandLine> CommandLine::Get()
 {
-if(!arg)
-	return false;
-for(UINT u=0; u<uCount; u++)
+if(!hCurrent)
 	{
-	if(StringCompare(arg, ppArgs[u], 0, false)==0)
-		return true;
+	LPTSTR cmd_line=GetCommandLine();
+	hCurrent=new CommandLine(cmd_line);
 	}
-return false;
+return hCurrent;
 }
 
-LPSTR CommandLine::ScanArgument(LPSTR cmd_line, LPSTR* arg_ptr, UINT* len_ptr)
+LPCTSTR CommandLine::ScanArgument(LPCTSTR cmd_line, LPCTSTR* arg_ptr, UINT* len_ptr)
 {
 if(!cmd_line||!cmd_line[0])
 	return nullptr;
@@ -103,10 +80,17 @@ if(arg_ptr)
 	*arg_ptr=&cmd_line[pos];
 if(len_ptr)
 	*len_ptr=len;
-LPSTR next=&cmd_line[pos+len+1];
+LPCTSTR next=&cmd_line[pos+len+1];
 while(CharEqual(next[0], ' '))
 	next++;
 if(next[0])
 	return next;
 return nullptr;
 }
+
+
+//================
+// Common Private
+//================
+
+Handle<CommandLine> CommandLine::hCurrent;

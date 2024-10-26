@@ -110,7 +110,7 @@ VOID SplitView::OnPointerDown(Handle<PointerEventArgs> args)
 if(args->Button!=PointerButton::Left)
 	return;
 uStartSize=Size;
-ptStart=args->Point;
+m_StartPoint=args->Point;
 CapturePointer();
 args->Handled=true;
 }
@@ -124,18 +124,18 @@ switch(uOrientation)
 	{
 	case Orientation::Horizontal:
 		{
-		UINT height=rcRect.GetHeight();
-		Size+=ptStart.Top-pt.Top;
-		Size=MAX(Size, 20);
-		Size=MIN(Size, height-20);
+		UINT height=m_Rect.GetHeight();
+		Size+=m_StartPoint.Top-pt.Top;
+		Size=Max(Size, 20U);
+		Size=Min(Size, height-20);
 		break;
 		}
 	case Orientation::Vertical:
 		{
-		UINT width=rcRect.GetWidth();
-		Size+=ptStart.Left-pt.Left;
-		Size=MAX(Size, 20);
-		Size=MIN(Size, width-20);
+		UINT width=m_Rect.GetWidth();
+		Size+=m_StartPoint.Left-pt.Left;
+		Size=Max(Size, 20U);
+		Size=Min(Size, width-20);
 		break;
 		}
 	}

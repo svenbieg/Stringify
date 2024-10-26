@@ -5,7 +5,7 @@
 // Implementation of a sorted list
 // Items can be inserted, removed and looked-up in constant low time
 
-// Copyright 2022, Sven Bieg (svenbieg@web.de)
+// Copyright 2024, Sven Bieg (svenbieg@web.de)
 // http://github.com/svenbieg/clusters
 
 
@@ -541,7 +541,7 @@ public:
 		{
 		_item_t create(std::forward<_item_param_t>(item));
 		bool created=false;
-		get_internal(create, &created);
+		get_internal(std::forward<_item_t>(create), &created);
 		return created;
 		}
 	bool remove(_item_t const& item, _item_t* item_ptr=nullptr)
