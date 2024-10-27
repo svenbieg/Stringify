@@ -28,9 +28,9 @@ namespace Graphics {
 
 Handle<Theme> Theme::Get()
 {
-if(!hCurrent)
-	hCurrent=new Theme();
-return hCurrent;
+if(!m_Current)
+	m_Current=new Theme();
+return m_Current;
 }
 
 
@@ -41,19 +41,19 @@ return hCurrent;
 Theme::Theme()
 {
 // Brushes
-BorderBrush=new D2DBrush(COLOR(0xA0, 0xA0, 0xA0));
-ControlBrush=new D2DBrush(SystemColor(COLOR_BTNFACE));
-FocusBrush=new D2DBrush(SystemColor(COLOR_3DHIGHLIGHT));
-FocusBorderBrush=new D2DBrush(SystemColor(COLOR_3DLIGHT));
-GrayTextBrush=new D2DBrush(SystemColor(COLOR_GRAYTEXT));
-HighlightBrush=new D2DBrush(Colors::Highlight);
-HighlightBorderBrush=new D2DBrush(Colors::HighlightBorder);
-InactiveHighlightBrush=new D2DBrush(Colors::Silver);
-LightBorderBrush=new D2DBrush(COLOR(0xE0, 0xE0, 0xE0));
-LightControlBrush=new D2DBrush(Colors::WhiteGray);
-LightTextBrush=new D2DBrush(COLOR(0xA0, 0xA0, 0xA0));
-TextBrush=new D2DBrush(SystemColor(COLOR_MENUTEXT));
-WindowBrush=new D2DBrush(SystemColor(COLOR_WINDOW));
+BorderBrush=new Brush(COLOR(0xA0, 0xA0, 0xA0));
+ControlBrush=new Brush(SystemColor(COLOR_BTNFACE));
+FocusBrush=new Brush(SystemColor(COLOR_3DHIGHLIGHT));
+FocusBorderBrush=new Brush(SystemColor(COLOR_3DLIGHT));
+GrayTextBrush=new Brush(SystemColor(COLOR_GRAYTEXT));
+HighlightBrush=new Brush(Colors::Highlight);
+HighlightBorderBrush=new Brush(Colors::HighlightBorder);
+InactiveHighlightBrush=new Brush(Colors::Silver);
+LightBorderBrush=new Brush(COLOR(0xE0, 0xE0, 0xE0));
+LightControlBrush=new Brush(Colors::WhiteGray);
+LightTextBrush=new Brush(COLOR(0xA0, 0xA0, 0xA0));
+TextBrush=new Brush(SystemColor(COLOR_MENUTEXT));
+WindowBrush=new Brush(SystemColor(COLOR_WINDOW));
 // Fonts
 DefaultFont=new D2DFont();
 // Cursors
@@ -69,6 +69,6 @@ TextCursor=new D2DCursor(IDC_IBEAM);
 // Common Private
 //================
 
-Handle<Theme> Theme::hCurrent;
+Handle<Theme> Theme::m_Current;
 
 }}

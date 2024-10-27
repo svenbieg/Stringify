@@ -44,15 +44,15 @@ public:
 	VOID EndDraw();
 	VOID FillPolygon(POINT const* Points, UINT Count, Handle<Graphics::Brush> Brush)override;
 	VOID FillRect(RECT const& Rect, Handle<Graphics::Brush> Brush)override;
-	POINT GetOffset()override { return ptOffset; }
+	POINT GetOffset()override { return m_Offset; }
 	SIZE MeasureText(Handle<Graphics::Font> Font, FLOAT Scale, LPCTSTR Text, UINT Length=0)override;
 	VOID Unclip()override;
 
 protected:
 	// Common
 	D2D_POINT_2F D2DPoint(POINT const& Point);
-	ComPointer<ID2D1DCRenderTarget> pTarget;
-	POINT ptOffset;
+	POINT m_Offset;
+	ComPointer<ID2D1DCRenderTarget> m_Target;
 };
 
 }}

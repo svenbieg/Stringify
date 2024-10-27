@@ -51,6 +51,8 @@ public:
 	POINT GetFrameOffset()const override { return POINT(0, 0); }
 	SIZE GetMinSize(RenderTarget* Target)override;
 	Interactive* GetPointerCapture()const { return m_PointerCapture; }
+	VOID Invalidate(BOOL Rearrange)override;
+	Event<Frame> Invalidated;
 	BOOL IsKeyDown(VirtualKey Key);
 	Event<Frame, KeyEventType, Handle<KeyEventArgs>> KeyEvent;
 	virtual VOID KillFocus();

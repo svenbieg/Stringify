@@ -110,7 +110,7 @@ hTimer=nullptr;
 auto frame=pControl->GetFrame();
 auto theme=frame->GetTheme();
 hPanel=new Panel(frame);
-hPanel->Background=theme->GetWindowBrush();
+hPanel->Background=theme->WindowBrush;
 hPanel->Border=true;
 auto text_block=new TextBlock(hPanel);
 text_block->Margin.Set(4, 2, 4, 2);

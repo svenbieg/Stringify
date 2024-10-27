@@ -28,7 +28,9 @@ namespace UI {
 
 HyperLink::HyperLink(Window* parent):
 Interactive(parent)
-{}
+{
+TextColor=new Brush(Colors::Blue);
+}
 
 
 //========
@@ -57,12 +59,11 @@ Interactive::Render(target, rc);
 if(!Text)
 	return;
 auto theme=GetTheme();
-auto color=theme->GetBrush(Colors::Blue);
 FLOAT scale=GetScaleFactor();
-target->TextColor=color;
+target->TextColor=TextColor;
 target->Font=GetFont();
 target->DrawText(rc, scale, Text->Begin());
-target->DrawLine(POINT(rc.Left, rc.Bottom), POINT(rc.Right, rc.Bottom), color);
+target->DrawLine(POINT(rc.Left, rc.Bottom), POINT(rc.Right, rc.Bottom), TextColor);
 }
 
 }}

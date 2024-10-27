@@ -58,7 +58,6 @@ Handle<AppWindow> AppWindow::Current;
 //============================
 
 AppWindow::AppWindow():
-Overlapped(nullptr),
 Icon(this),
 Title(this)
 {

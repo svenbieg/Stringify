@@ -37,25 +37,24 @@ public:
 	BYTE const* Begin()const;
 	VOID Clear(COLOR Color);
 	Handle<Bitmap> Copy()const;
-	Event<Bitmap> Destroyed;
 	VOID FillRect(RECT const& Rect, COLOR Color);
-	WORD GetBitsPerPixel()const { return uBitsPerPixel; }
-	inline SIZE GetDimensions()const { return SIZE(uWidth, uHeight); }
-	inline UINT GetHeight()const { return uHeight; }
+	WORD GetBitsPerPixel()const { return m_BitsPerPixel; }
+	inline SIZE GetDimensions()const { return SIZE(m_Width, m_Height); }
+	inline UINT GetHeight()const { return m_Height; }
 	COLOR GetPixel(UINT Left, UINT Top)const;
-	inline UINT GetSize()const { return uSize; }
-	inline UINT GetWidth()const { return uWidth; }
+	inline UINT GetSize()const { return m_Size; }
+	inline UINT GetWidth()const { return m_Width; }
 	VOID SetPixel(UINT Left, UINT Top, COLOR Color);
 
 protected:
 	// Common
-	BYTE* pBuffer;
-	LPCSTR pResource;
-	WORD uBitsPerPixel;
-	UINT uHeight;
-	UINT uPitch;
-	UINT uSize;
-	UINT uWidth;
+	WORD m_BitsPerPixel;
+	BYTE* m_Buffer;
+	UINT m_Height;
+	UINT m_Pitch;
+	LPCSTR m_Resource;
+	UINT m_Size;
+	UINT m_Width;
 };
 
 }

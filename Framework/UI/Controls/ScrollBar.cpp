@@ -56,7 +56,7 @@ PointerUp.Add(this, &ScrollBar::OnPointerUp);
 Handle<Brush> ScrollBar::GetBackgroundBrush()
 {
 auto theme=GetTheme();
-return theme->GetLightControlBrush();
+return theme->LightControlBrush;
 }
 
 Graphics::SIZE ScrollBar::GetMinSize(RenderTarget* target)
@@ -90,8 +90,8 @@ VOID ScrollBar::Render(RenderTarget* target, RECT& rc)
 {
 Interactive::Render(target, rc);
 auto theme=GetTheme();
-auto br_control=theme->GetControlBrush();
-auto br_highlight=theme->GetBorderBrush();
+auto br_control=theme->ControlBrush;
+auto br_highlight=theme->BorderBrush;
 FLOAT scale=GetScaleFactor();
 UINT width=Width*scale;
 UINT padding=width*0.2f;

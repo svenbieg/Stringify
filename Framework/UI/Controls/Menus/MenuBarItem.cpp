@@ -58,13 +58,13 @@ return SubMenu->Add(label);
 Handle<Brush> MenuBarItem::GetBackgroundBrush()
 {
 auto theme=GetTheme();
-auto background=theme->GetControlBrush();
+auto background=theme->ControlBrush;
 BOOL focus=HasFocus();
 focus|=HasPointerFocus();
 if(!Enabled)
 	focus=false;
 if(focus)
-	background=theme->GetHighlightBrush();
+	background=theme->HighlightBrush;
 return background;
 }
 
@@ -82,9 +82,9 @@ VOID MenuBarItem::Render(RenderTarget* target, RECT& rc)
 Interactive::Render(target, rc);
 auto font=GetFont();
 auto theme=GetTheme();
-auto text_color=theme->GetTextBrush();
+auto text_color=theme->TextBrush;
 if(!Enabled)
-	text_color=theme->GetLightTextBrush();
+	text_color=theme->LightTextBrush;
 FLOAT scale=GetScaleFactor();
 RECT rc_text=rc;
 rc_text.SetPadding(Padding*scale);

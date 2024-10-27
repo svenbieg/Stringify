@@ -93,7 +93,7 @@ VOID Group::Render(RenderTarget* target, RECT& rc)
 {
 Control::Render(target, rc);
 auto theme=GetTheme();
-auto border=theme->GetBorderBrush();
+auto border=theme->BorderBrush;
 RECT rc_client=GetClientRect();
 if(Title)
 	{
@@ -112,7 +112,7 @@ if(Title)
 	target->DrawLine(POINT(rc_client.Left, top), POINT(rc_client.Left, rc_client.Bottom), border);
 	target->DrawLine(POINT(rc_client.Right, top), POINT(rc_client.Right, rc_client.Bottom), border);
 	target->DrawLine(POINT(rc_client.Left, rc_client.Bottom), POINT(rc_client.Right, rc_client.Bottom), border);
-	target->TextColor=theme->GetTextBrush();
+	target->TextColor=theme->TextBrush;
 	target->Font=font;
 	target->DrawText(rc_title, scale, Title->Begin());
 	rc.SetPadding(1, title_size.Height, 1, 1);

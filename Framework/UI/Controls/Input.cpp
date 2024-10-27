@@ -14,7 +14,7 @@
 #include "Storage/Streams/StreamReader.h"
 #include "Storage/StaticBuffer.h"
 #include "UI/Controls/Menus/EditMenu.h"
-#include "UI/Frame.h"
+#include "UI/Application.h"
 #include "Input.h"
 
 using namespace Clusters;
@@ -95,8 +95,8 @@ Handle<Brush> Input::GetBackgroundBrush()
 {
 auto theme=GetTheme();
 if(!IsEnabled())
-	return theme->GetControlBrush();
-return theme->GetWindowBrush();
+	return theme->ControlBrush;
+return theme->WindowBrush;
 }
 
 Handle<Cursor> Input::GetCursor()
@@ -195,7 +195,7 @@ VOID Input::Render(RenderTarget* target, RECT& rc)
 Interactive::Render(target, rc);
 auto theme=GetTheme();
 target->Font=GetFont();
-target->TextColor=theme->GetTextBrush();
+target->TextColor=theme->TextBrush;
 FLOAT scale=GetScaleFactor();
 rc.SetPadding(Padding*scale);
 UINT client_height=rc.GetHeight();
@@ -211,9 +211,9 @@ if(Application::Current->GetCurrentInput()!=this)
 	show_sel=false;
 if(show_sel)
 	{
-	auto highlight=theme->GetHighlightBrush();
+	auto highlight=theme->HighlightBrush;
 	if(!HasFocus())
-		highlight=theme->GetInactiveHighlightBrush();
+		highlight=theme->InactiveHighlightBrush;
 	POINT pt_first=PointFromChar(ptSelectionFirst, scale);
 	POINT pt_last=PointFromChar(ptSelectionLast, scale);
 	if(ptSelectionFirst.Top==ptSelectionLast.Top)
@@ -269,7 +269,7 @@ if(show_cursor)
 	{
 	POINT pt_cursor=PointFromChar(ptCursor, scale);
 	POINT pt_to(pt_cursor.Left, pt_cursor.Top+line_height);
-	auto brush=theme->GetTextBrush();
+	auto brush=theme->TextBrush;
 	target->DrawLine(pt_cursor, pt_to, brush);
 	}
 }

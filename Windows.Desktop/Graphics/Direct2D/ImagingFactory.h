@@ -28,12 +28,12 @@ class ImagingFactory: public Object
 {
 public:
 	// Common
-	HRESULT CreateBitmap(WORD Resource, IWICBitmap** Bitmap);
-	HRESULT CreateBitmap(HICON Icon, IWICBitmap** Bitmap);
-	HRESULT CreateBitmap(IWICBitmap* Source, IWICBitmap** Bitmap);
-	HRESULT CreateBitmap(IWICStream* Stream, IWICBitmap** Bitmap);
-	HRESULT CreateBitmap(Handle<String> Path, IWICBitmap** Bitmap);
-	HRESULT CreateBitmap(UINT Width, UINT Height, IWICBitmap** Bitmap);
+	ComPointer<IWICBitmap> CreateBitmap(WORD Resource);
+	ComPointer<IWICBitmap> CreateBitmap(HICON Icon);
+	ComPointer<IWICBitmap> CreateBitmap(IWICBitmap* Source);
+	ComPointer<IWICBitmap> CreateBitmap(IWICStream* Stream);
+	ComPointer<IWICBitmap> CreateBitmap(Handle<String> Path);
+	ComPointer<IWICBitmap> CreateBitmap(UINT Width, UINT Height);
 	static ImagingFactory* Open();
 
 private:
@@ -41,8 +41,8 @@ private:
 	ImagingFactory();
 
 	// Common
-	static Handle<ImagingFactory> hCurrent;
-	ComPointer<IWICImagingFactory2> pFactory;
+	static Handle<ImagingFactory> m_Current;
+	ComPointer<IWICImagingFactory2> m_Factory;
 };
 
 }}

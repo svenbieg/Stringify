@@ -29,16 +29,16 @@ class Font: public Graphics::Font
 {
 public:
 	// Con-/Destructors
-	Font(Handle<String> Family="Segoe UI", UINT Size=14, UINT Weight=400);
+	Font(LPCSTR Family="Segoe UI", UINT Size=14, UINT Weight=400);
 
 	// Common
-	IDWriteTextFormat* Get();
+	IDWriteTextFormat* GetFormat();
 	UINT GetSize()const override;
 
 private:
 	// Common
-	LOGFONT cInfo;
-	ComPointer<IDWriteTextFormat> pFormat;
+	ComPointer<IDWriteTextFormat> m_Format;
+	LOGFONT m_Info;
 };
 
 }}

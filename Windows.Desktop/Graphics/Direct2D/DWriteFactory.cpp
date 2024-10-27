@@ -26,10 +26,8 @@ namespace Graphics {
 // Common
 //========
 
-VOID DWriteFactory::CreateTextFormat(LOGFONT const& info, IDWriteTextFormat** format)
+ComPointer<IDWriteTextFormat> DWriteFactory::CreateTextFormat(LOGFONT const& info)
 {
-if(!pFactory)
-	return;
 DWRITE_FONT_WEIGHT weight=(DWRITE_FONT_WEIGHT)info.lfWeight;
 DWRITE_FONT_STYLE style=DWRITE_FONT_STYLE_NORMAL;
 if(info.lfItalic)
@@ -40,21 +38,23 @@ if(height<0)
 WCHAR face_name[32];
 StringCopy(face_name, 32, info.lfFaceName);
 DWRITE_FONT_STRETCH stretch=DWRITE_FONT_STRETCH_NORMAL;
-pFactory->CreateTextFormat(face_name, nullptr, weight, style, DWRITE_FONT_STRETCH_NORMAL, height, L"", format);
+IDWriteTextFormat* format=nullptr;
+m_Factory->CreateTextFormat(face_name, nullptr, weight, style, DWRITE_FONT_STRETCH_NORMAL, height, L"", &format);
+return format;
 }
 
-VOID DWriteFactory::CreateTextLayout(LPCWSTR str, UINT len, IDWriteTextFormat* format, IDWriteTextLayout** layout)
+ComPointer<IDWriteTextLayout> DWriteFactory::CreateTextLayout(LPCWSTR str, UINT len, IDWriteTextFormat* format)
 {
-if(!pFactory)
-	return;
-pFactory->CreateTextLayout(str, len, format, 0.f, 0.f, layout);
+IDWriteTextLayout* layout=nullptr;
+m_Factory->CreateTextLayout(str, len, format, 0.f, 0.f, &layout);
+return layout;
 }
 
-DWriteFactory* DWriteFactory::Open()
+Handle<DWriteFactory> DWriteFactory::Open()
 {
-if(!hCurrent)
-	hCurrent=new DWriteFactory();
-return hCurrent;
+if(!m_Current)
+	m_Current=new DWriteFactory();
+return m_Current;
 }
 
 
@@ -64,7 +64,9 @@ return hCurrent;
 
 DWriteFactory::DWriteFactory()
 {
-DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), pFactory.GetUnknownPointer());
+IDWriteFactory* factory=nullptr;
+DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), (IUnknown**)&factory);
+m_Factory.Initialize(factory);
 }
 
 
@@ -72,6 +74,6 @@ DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), pFacto
 // Common Private
 //================
 
-Handle<DWriteFactory> DWriteFactory::hCurrent;
+Handle<DWriteFactory> DWriteFactory::m_Current;
 
 }}

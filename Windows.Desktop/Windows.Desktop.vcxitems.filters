@@ -67,6 +67,9 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Popup.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\ToolWindow.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\Bitmap.h">
@@ -140,6 +143,9 @@
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Popup.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\ToolWindow.h">
       <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>

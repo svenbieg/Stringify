@@ -20,37 +20,17 @@ namespace Graphics {
 	namespace Direct2D {
 
 
-//==================
-// Con-/Destructors
-//==================
-
-Brush::Brush(COLOR c):
-cColor({ (FLOAT)c.GetRed()/255, (FLOAT)c.GetGreen()/255, (FLOAT)c.GetBlue()/255, (FLOAT)c.GetAlpha()/255 }),
-uColor(c)
-{}
-
-
 //========
 // Common
 //========
 
-ComPointer<ID2D1SolidColorBrush> Brush::Get(ID2D1RenderTarget* target)
+ComPointer<ID2D1SolidColorBrush> Brush::Get(ID2D1RenderTarget* target, Graphics::Brush* brush)
 {
-ComPointer<ID2D1SolidColorBrush> brush;
-target->CreateSolidColorBrush(cColor, brush.GetObjectPointer());
-return brush;
-}
-
-BOOL Brush::SetColor(COLOR c)
-{
-if(uColor==c)
-	return false;
-uColor=c;
-cColor.a=(FLOAT)c.GetAlpha()/255;
-cColor.b=(FLOAT)c.GetBlue()/255;
-cColor.g=(FLOAT)c.GetGreen()/255;
-cColor.r=(FLOAT)c.GetRed()/255;
-return true;
+COLOR c=brush->GetColor();
+D2D1_COLOR_F color({ (FLOAT)c.GetRed()/255, (FLOAT)c.GetGreen()/255, (FLOAT)c.GetBlue()/255, (FLOAT)c.GetAlpha()/255 });
+ID2D1SolidColorBrush* d2d_brush=nullptr;
+target->CreateSolidColorBrush(color, &d2d_brush);
+return d2d_brush;
 }
 
 }}

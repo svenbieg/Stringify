@@ -78,17 +78,6 @@ Handle<Graphics::Theme> Overlapped::GetTheme()
 return D2DTheme::Get();
 }
 
-VOID Overlapped::Invalidate(BOOL rearrange)
-{
-if(rearrange)
-	SetFlag(m_Flags, WindowFlags::Rearrange);
-if(!GetFlag(m_Flags, WindowFlags::Repaint))
-	{
-	SetFlag(m_Flags, WindowFlags::Repaint);
-	Application::Current->Dispatch(this, &Overlapped::Repaint);
-	}
-}
-
 VOID Overlapped::Move(RECT const& rc)
 {
 if(!m_Handle)
@@ -143,12 +132,16 @@ Move(rc);
 // Con-/Destructors Protected
 //============================
 
-Overlapped::Overlapped(Overlapped* owner):
-m_Handle(NULL),
-m_Owner(owner)
+Overlapped::Overlapped():
+Overlapped(HWND_DESKTOP)
+{}
+
+Overlapped::Overlapped(HWND parent):
+m_Handle(NULL)
 {
 auto theme=GetTheme();
-Background=theme->GetControlBrush();
+Background=theme->ControlBrush;
+Invalidated.Add(this, &Overlapped::OnInvalidated);
 Visible.Changed.Add(this, &Overlapped::OnVisibleChanged);
 Visible.Set(false, false);
 m_RenderTarget=new D2DRenderTarget();
@@ -165,13 +158,22 @@ wc.style=CS_HREDRAW|CS_VREDRAW;
 SetLastError(0);
 RegisterClassEx(&wc);
 UINT style=WS_OVERLAPPED;
-HWND parent=HWND_DESKTOP;
-if(owner)
-	parent=owner->m_Handle;
 m_Handle=CreateWindowEx(0, class_name, nullptr, style, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, parent, NULL, inst, this);
 if(m_Handle==INVALID_HANDLE_VALUE)
 	m_Handle=NULL;
 }
+
+Overlapped::Overlapped(Window* parent):
+Overlapped(parent? parent->GetFrame(): nullptr)
+{}
+
+Overlapped::Overlapped(Frame* parent):
+Overlapped(Convert<Overlapped>(parent))
+{}
+
+Overlapped::Overlapped(Overlapped* parent):
+Overlapped(parent? parent->GetHandle(): HWND_DESKTOP)
+{}
 
 
 //================
@@ -328,11 +330,12 @@ switch(msg)
 		:: RECT rc_client;
 		::GetClientRect(m_Handle, &rc_client);
 		rc.Set(0, 0, rc_client.right, rc_client.bottom);
+		auto target=m_RenderTarget.As<D2DRenderTarget>();
 		PAINTSTRUCT ps;
 		BeginPaint(m_Handle, &ps);
-		m_RenderTarget->BeginDraw(ps.hdc, rc);
-		RenderWindow(this, m_RenderTarget, rc, true);
-		m_RenderTarget->EndDraw();
+		target->BeginDraw(ps.hdc, rc);
+		RenderWindow(this, target, rc, false);
+		target->EndDraw();
 		EndPaint(m_Handle, &ps);
 		break;
 		}
@@ -395,6 +398,11 @@ switch(msg)
 		}
 	}
 return 0;
+}
+
+VOID Overlapped::OnInvalidated()
+{
+Application::Current->Dispatch(this, &Overlapped::Repaint);
 }
 
 VOID Overlapped::OnVisibleChanged(BOOL visible)

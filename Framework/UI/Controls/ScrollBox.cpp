@@ -119,7 +119,7 @@ VOID ScrollBox::Render(RenderTarget* target, RECT& rc)
 {
 Control::Render(target, rc);
 auto theme=GetTheme();
-auto border=theme->GetBorderBrush();
+auto border=theme->BorderBrush;
 target->DrawRect(rc, border);
 rc.SetPadding(1, 1, 1, 1);
 }
@@ -174,10 +174,13 @@ content->Move(content_rect);
 
 VOID ScrollBox::Zoom(FLOAT zoom)
 {
+auto content=Body->GetVisibleChild(0);
+if(!content)
+	return;
 zoom=Max(ZoomMin, zoom);
 zoom=Min(ZoomMax, zoom);
 m_Zoom=zoom;
-Scale=m_Zoom;
+content->Scale=m_Zoom;
 Invalidate(true);
 }
 
@@ -194,6 +197,7 @@ auto frame=GetFrame();
 BOOL ctrl=frame->IsKeyDown(VirtualKey::Control);
 if(ctrl)
 	{
+	SetPosition(0, 0);
 	Zoom(1.f);
 	args->Handled=true;
 	return;

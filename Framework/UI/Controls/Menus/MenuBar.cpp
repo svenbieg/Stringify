@@ -9,7 +9,7 @@
 // Using
 //=======
 
-#include "UI/Frame.h"
+#include "UI/Application.h"
 #include "MenuBar.h"
 #include "PopupMenu.h"
 
@@ -61,7 +61,7 @@ return new MenuBarItem(this, label);
 Handle<Brush> MenuBar::GetBackgroundBrush()
 {
 auto theme=GetTheme();
-return theme->GetControlBrush();
+return theme->ControlBrush;
 }
 
 

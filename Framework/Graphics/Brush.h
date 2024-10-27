@@ -26,12 +26,15 @@ namespace Graphics {
 class Brush: public Object
 {
 public:
-	// Common
-	virtual COLOR GetColor()const=0;
-
-protected:
 	// Con-/Destructors
-	Brush() {}
+	Brush(COLOR Color): m_Color(Color) {}
+
+	// Common
+	inline COLOR GetColor()const { return m_Color; }
+
+private:
+	// Common
+	COLOR m_Color;
 };
 
 }

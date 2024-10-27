@@ -26,7 +26,7 @@ namespace Graphics {
 //==================
 
 Icon::Icon(ICON const* icons):
-pIcons(icons)
+m_Icons(icons)
 {}
 
 
@@ -50,10 +50,10 @@ return new Bitmap(size, size, size*size*4, icon->Buffer);
 
 ICON const* Icon::GetIcon(UINT size)
 {
-if(!pIcons)
+if(!m_Icons)
 	return nullptr;
 ICON const* prev=nullptr;
-for(ICON const* icon=pIcons; icon->Size>0; icon++)
+for(ICON const* icon=m_Icons; icon->Size>0; icon++)
 	{
 	if(icon->Size==size)
 		return icon;

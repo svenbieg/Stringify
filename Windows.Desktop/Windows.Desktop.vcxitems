@@ -13,6 +13,7 @@
   <ItemDefinitionGroup>
     <ClCompile>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WINDOWS_DESKTOP;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -44,6 +45,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\PathEdit.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Overlapped.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Popup.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\ToolWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Culture\LanguageHelper.cpp" />
@@ -68,5 +70,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\PathEdit.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Overlapped.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Popup.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\ToolWindow.cpp" />
   </ItemGroup>
 </Project>

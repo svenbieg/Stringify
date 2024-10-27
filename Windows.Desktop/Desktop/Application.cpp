@@ -13,7 +13,6 @@
 #include "Resources/Strings/Exception.h"
 #include "UI/AppWindow.h"
 #include "Application.h"
-#include "AppWindow.h"
 #include "ExceptionHelper.h"
 
 using namespace Concurrency;
@@ -28,7 +27,7 @@ extern VOID Initialize();
 // Entry-Point
 //=============
 
-#ifndef _CONSOLE
+#ifndef _WINDOWS_CONSOLE
 
 INT WINAPI WinMain(HINSTANCE inst, HINSTANCE prev_inst, LPSTR cmd_line, INT show_cmd)
 {

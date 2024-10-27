@@ -48,7 +48,7 @@ StackPanel::Render(target, rc);
 POINT from(rc.Left-4, rc.Top+4);
 POINT to(rc.Left-4, rc.Bottom-4);
 auto theme=GetTheme();
-target->DrawLine(from, to, theme->GetBorderBrush());
+target->DrawLine(from, to, theme->BorderBrush);
 }
 
 }}}

@@ -24,37 +24,36 @@ namespace Graphics {
 //==================
 
 Bitmap::Bitmap(UINT width, UINT height, WORD bpp):
-pBuffer(nullptr),
-pResource(nullptr),
-uBitsPerPixel(bpp),
-uHeight(height),
-uPitch(0),
-uSize(0),
-uWidth(width)
+m_BitsPerPixel(bpp),
+m_Buffer(nullptr),
+m_Height(height),
+m_Pitch(0),
+m_Resource(nullptr),
+m_Size(0),
+m_Width(width)
 {
-uPitch=width*bpp/8;
-uSize=uHeight*uPitch;
-pBuffer=new BYTE[uSize];
+m_Pitch=width*bpp/8;
+m_Size=m_Height*m_Pitch;
+m_Buffer=new BYTE[m_Size];
 }
 
 Bitmap::Bitmap(UINT width, UINT height, UINT size, LPCSTR resource):
-pBuffer(nullptr),
-pResource(resource),
-uBitsPerPixel(0),
-uHeight(height),
-uPitch(size/height),
-uSize(size),
-uWidth(width)
+m_Buffer(nullptr),
+m_Resource(resource),
+m_BitsPerPixel(0),
+m_Height(height),
+m_Pitch(size/height),
+m_Size(size),
+m_Width(width)
 {
-UINT pixel_size=uPitch/width;
-uBitsPerPixel=pixel_size*8;
+UINT pixel_size=m_Pitch/width;
+m_BitsPerPixel=pixel_size*8;
 }
 
 Bitmap::~Bitmap()
 {
-Destroyed(this);
-if(pBuffer)
-	delete pBuffer;
+if(m_Buffer)
+	delete m_Buffer;
 }
 
 
@@ -64,18 +63,18 @@ if(pBuffer)
 
 BYTE const* Bitmap::Begin()const
 {
-if(pResource)
-	return (BYTE const*)pResource;
-return pBuffer;
+if(m_Resource)
+	return (BYTE const*)m_Resource;
+return m_Buffer;
 }
 
 VOID Bitmap::Clear(COLOR color)
 {
-if(!pBuffer)
+if(!m_Buffer)
 	return;
-UINT* buf=(UINT*)pBuffer;
-UINT size=uSize/sizeof(UINT);
-switch(uBitsPerPixel)
+UINT* buf=(UINT*)m_Buffer;
+UINT size=m_Size/sizeof(UINT);
+switch(m_BitsPerPixel)
 	{
 	case 1:
 		{
@@ -116,10 +115,10 @@ switch(uBitsPerPixel)
 
 Handle<Bitmap> Bitmap::Copy()const
 {
-Handle<Bitmap> bmp=new Bitmap(uWidth, uHeight, uBitsPerPixel);
+Handle<Bitmap> bmp=new Bitmap(m_Width, m_Height, m_BitsPerPixel);
 auto src=Begin();
 auto dst=const_cast<BYTE*>(bmp->Begin());
-CopyMemory(dst, src, uSize);
+CopyMemory(dst, src, m_Size);
 return bmp;
 }
 
@@ -130,8 +129,8 @@ if(c.GetAlpha()==0)
 RECT rc_fill(rc);
 rc_fill.Left=Max(rc_fill.Left, 0);
 rc_fill.Top=Max(rc_fill.Top, 0);
-rc_fill.Right=Min(rc_fill.Right, (INT)uWidth);
-rc_fill.Bottom=Min(rc_fill.Bottom, (INT)uHeight);
+rc_fill.Right=Min(rc_fill.Right, (INT)m_Width);
+rc_fill.Bottom=Min(rc_fill.Bottom, (INT)m_Height);
 for(INT y=(INT)rc_fill.Top; y<rc_fill.Bottom; y++)
 	{
 	for(INT x=(INT)rc_fill.Left; x<rc_fill.Right; x++)
@@ -143,25 +142,25 @@ COLOR Bitmap::GetPixel(UINT left, UINT top)const
 {
 auto buf=Begin();
 COLOR c=Colors::Black;
-switch(uBitsPerPixel)
+switch(m_BitsPerPixel)
 	{
 	case 1:
 		{
-		UINT pos=top*uPitch+left;
+		UINT pos=top*m_Pitch+left;
 		BYTE mod=(BYTE)(1<<(top&7));
 		c.SetMonochrome(buf[pos]&mod);
 		break;
 		}
 	case 24:
 		{
-		UINT pos=top*uPitch+left*3;
+		UINT pos=top*m_Pitch+left*3;
 		CopyMemory(&c, &buf[pos], 3);
 		break;
 		}
 	case 32:
 		{
 		auto ptr=(UINT const*)buf;
-		UINT pos=top*uWidth+left;
+		UINT pos=top*m_Width+left;
 		c=ptr[pos];
 		break;
 		}
@@ -173,36 +172,36 @@ return c;
 
 VOID Bitmap::SetPixel(UINT left, UINT top, COLOR c)
 {
-if(!pBuffer)
+if(!m_Buffer)
 	return;
-switch(uBitsPerPixel)
+switch(m_BitsPerPixel)
 	{
 	case 1:
 		{
-		UINT pos=top*uPitch+left;
+		UINT pos=top*m_Pitch+left;
 		BYTE mod=(BYTE)(1<<(top&7));
 		if(c.GetMonochrome())
 			{
-			pBuffer[pos]|=mod;
+			m_Buffer[pos]|=mod;
 			}
 		else
 			{
-			pBuffer[pos]&=(BYTE)(~mod);
+			m_Buffer[pos]&=(BYTE)(~mod);
 			}
 		break;
 		}
 	case 24:
 		{
-		UINT pos=top*uPitch+left*3;
-		pBuffer[pos++]=c.GetBlue();
-		pBuffer[pos++]=c.GetGreen();
-		pBuffer[pos++]=c.GetRed();
+		UINT pos=top*m_Pitch+left*3;
+		m_Buffer[pos++]=c.GetBlue();
+		m_Buffer[pos++]=c.GetGreen();
+		m_Buffer[pos++]=c.GetRed();
 		break;
 		}
 	case 32:
 		{
-		UINT* ptr=(UINT*)pBuffer;
-		UINT pos=top*uWidth+left;
+		UINT* ptr=(UINT*)m_Buffer;
+		UINT pos=top*m_Width+left;
 		ptr[pos]=c;
 		break;
 		}

@@ -26,20 +26,29 @@ namespace Graphics {
 // Common
 //========
 
-VOID D2DFactory::CreateRenderTarget(ID2D1DCRenderTarget** pptarget)
+ComPointer<ID2D1PathGeometry> D2DFactory::CreatePathGeometry()
+{
+ID2D1PathGeometry* geometry=nullptr;
+m_Factory->CreatePathGeometry(&geometry);
+return geometry;
+}
+
+ComPointer<ID2D1DCRenderTarget> D2DFactory::CreateRenderTarget()
 {
 auto props=D2D1::RenderTargetProperties(
 	D2D1_RENDER_TARGET_TYPE_DEFAULT,
 	D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_IGNORE),
 	0, 0, D2D1_RENDER_TARGET_USAGE_NONE, D2D1_FEATURE_LEVEL_DEFAULT);
-pFactory->CreateDCRenderTarget(&props, pptarget);
+ID2D1DCRenderTarget* target=nullptr;
+m_Factory->CreateDCRenderTarget(&props, &target);
+return target;
 }
 
-D2DFactory* D2DFactory::Open()
+Handle<D2DFactory> D2DFactory::Open()
 {
-if(!hCurrent)
-	hCurrent=new D2DFactory();
-return hCurrent;
+if(!m_Current)
+	m_Current=new D2DFactory();
+return m_Current;
 }
 
 
@@ -54,7 +63,9 @@ ZeroMemory(&d2dfo, sizeof(D2D1_FACTORY_OPTIONS));
 #ifdef _DEBUG
 d2dfo.debugLevel=D2D1_DEBUG_LEVEL_INFORMATION;
 #endif
-D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, __uuidof(ID2D1Factory), &d2dfo, pFactory.GetAddressOf());
+ID2D1Factory* factory=nullptr;
+D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, __uuidof(ID2D1Factory), &d2dfo, (VOID**)&factory);
+m_Factory.Initialize(factory);
 }
 
 
@@ -62,6 +73,6 @@ D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, __uuidof(ID2D1Factory), &d2
 // Common Private
 //================
 
-Handle<D2DFactory> D2DFactory::hCurrent;
+Handle<D2DFactory> D2DFactory::m_Current;
 
 }}

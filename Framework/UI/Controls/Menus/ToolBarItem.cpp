@@ -52,13 +52,13 @@ if(tool_tip)
 Handle<Brush> ToolBarItem::GetBackgroundBrush()
 {
 auto theme=GetTheme();
-auto background=theme->GetControlBrush();
+auto background=theme->ControlBrush;
 BOOL focus=HasFocus();
 focus|=HasPointerFocus();
 if(!Enabled)
 	focus=false;
 if(focus)
-	background=theme->GetHighlightBrush();
+	background=theme->HighlightBrush;
 return background;
 }
 

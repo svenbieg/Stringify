@@ -33,7 +33,7 @@ Socket(sock),
 cStreamSizes({ 0 }),
 hCredential({ 0, 0 }),
 hSecurityContext({ 0, 0 }),
-pBuffer(),
+m_Buffer(),
 pContext(nullptr),
 pInput(),
 pOutput(),
@@ -76,12 +76,12 @@ while(1)
 	{
 	if(uMissingSize>0)
 		{
-		UINT read=(UINT)Socket->Read(&pBuffer[uBufferSize], uMissingSize);
+		UINT read=(UINT)Socket->Read(&m_Buffer[uBufferSize], uMissingSize);
 		uBufferSize+=read;
 		uMissingSize=0;
 		}
 	SecBuffer in_buf[2];
-	in_buf[0].pvBuffer=pBuffer;
+	in_buf[0].pvBuffer=m_Buffer;
 	in_buf[0].cbBuffer=uBufferSize;
 	in_buf[0].BufferType=SECBUFFER_TOKEN;
 	in_buf[1].pvBuffer=nullptr;
@@ -173,7 +173,7 @@ if(FAILED(status))
 CtxtHandle* context_in=nullptr;
 CtxtHandle* context_out=&hSecurityContext;
 SecBuffer in_buf;
-in_buf.pvBuffer=pBuffer;
+in_buf.pvBuffer=m_Buffer;
 in_buf.BufferType=SECBUFFER_TOKEN;
 SecBufferDesc in_buf_desc;
 in_buf_desc.pBuffers=&in_buf;
@@ -192,7 +192,7 @@ while(1)
 	if(uMissingSize>0)
 		{
 		Sleep(10);
-		UINT read=(UINT)Socket->Read(&pBuffer[uBufferSize], uMissingSize);
+		UINT read=(UINT)Socket->Read(&m_Buffer[uBufferSize], uMissingSize);
 		uBufferSize+=read;
 		uMissingSize=0;
 		}
@@ -256,12 +256,12 @@ while(1)
 		{
 		if(uMissingSize>0)
 			{
-			UINT read=(UINT)Socket->Read(&pBuffer[uBufferSize], uMissingSize);
+			UINT read=(UINT)Socket->Read(&m_Buffer[uBufferSize], uMissingSize);
 			uBufferSize+=read;
 			uMissingSize=0;
 			}
 		SecBuffer msg[4];
-		msg[0].pvBuffer=pBuffer;
+		msg[0].pvBuffer=m_Buffer;
 		msg[0].cbBuffer=uBufferSize;
 		msg[0].BufferType=SECBUFFER_DATA;
 		msg[1].BufferType=SECBUFFER_EMPTY;
@@ -284,7 +284,7 @@ while(1)
 		if(extra_buf!=nullptr)
 			{
 			UINT buf_pos=uBufferSize-extra_buf->cbBuffer;
-			MoveMemory(pBuffer, &pBuffer[buf_pos], uBufferSize-buf_pos);
+			MoveMemory(m_Buffer, &m_Buffer[buf_pos], uBufferSize-buf_pos);
 			uBufferSize-=buf_pos;
 			}
 		else

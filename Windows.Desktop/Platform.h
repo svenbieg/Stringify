@@ -17,4 +17,3 @@
 //========
 
 #include "Common/Platform.h"
-#include "Desktop/Application.h"

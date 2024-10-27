@@ -25,12 +25,13 @@ namespace Graphics {
 // Con-/Destructors
 //==================
 
-Font::Font(Handle<String> family, UINT size, UINT weight)
+Font::Font(LPCSTR family, UINT size, UINT weight):
+m_Format(nullptr),
+m_Info({ 0 })
 {
-ZeroMemory(&cInfo, sizeof(LOGFONT));
-StringCopy(cInfo.lfFaceName, 32, family->Begin());
-cInfo.lfHeight=size;
-cInfo.lfWeight=weight;
+StringCopy(m_Info.lfFaceName, 32, family);
+m_Info.lfHeight=size;
+m_Info.lfWeight=weight;
 }
 
 
@@ -38,19 +39,19 @@ cInfo.lfWeight=weight;
 // Common
 //========
 
-IDWriteTextFormat* Font::Get()
+IDWriteTextFormat* Font::GetFormat()
 {
-if(pFormat)
-	return pFormat.Get();
+if(m_Format)
+	return m_Format;
 auto factory=DWriteFactory::Open();
-factory->CreateTextFormat(cInfo, pFormat.GetObjectPointer());
-pFormat->SetWordWrapping(DWRITE_WORD_WRAPPING_NO_WRAP);
-return pFormat.Get();
+m_Format=factory->CreateTextFormat(m_Info);
+m_Format->SetWordWrapping(DWRITE_WORD_WRAPPING_NO_WRAP);
+return m_Format;
 }
 
 UINT Font::GetSize()const
 {
-INT height=cInfo.lfHeight;
+INT height=m_Info.lfHeight;
 if(height<0)
 	height*=-1;
 return height;

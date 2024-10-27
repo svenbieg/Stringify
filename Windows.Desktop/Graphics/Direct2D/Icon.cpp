@@ -32,7 +32,7 @@ namespace Graphics {
 
 Icon::Icon(WORD id):
 Graphics::Icon(nullptr),
-uId(id)
+m_Id(id)
 {
 UINT count=GetResourceIconCount(id);
 UINT* sizes=new UINT[count];
@@ -42,7 +42,7 @@ for(UINT u=0; u<count; u++)
 	{
 	UINT size=sizes[u];
 	HINSTANCE instance=GetModuleHandle(nullptr);
-	HICON hicon=(HICON)LoadImage(instance, MAKEINTRESOURCE(uId), IMAGE_ICON, size, size, 0);
+	HICON hicon=(HICON)LoadImage(instance, MAKEINTRESOURCE(m_Id), IMAGE_ICON, size, size, 0);
 	ICONINFO info;
 	GetIconInfo(hicon, &info);
 	UINT buf_size=GetBitmapBits(info.hbmColor, 0, nullptr);
@@ -50,18 +50,18 @@ for(UINT u=0; u<count; u++)
 	GetBitmapBits(info.hbmColor, buf_size, buf);
 	icons[u].Size=size;
 	icons[u].Buffer=buf;
-	cIcons.add(size, hicon);
+	m_Handles.add(size, hicon);
 	}
 icons[count].Size=0;
 icons[count].Buffer=nullptr;
-pIcons=icons;
+m_Icons=icons;
 }
 
 Icon::Icon(ICON const* icons):
 Graphics::Icon(icons),
-uId(0)
+m_Id(0)
 {
-auto icon=pIcons;
+auto icon=m_Icons;
 while(icon->Size)
 	{
 	UINT size=icon->Size;
@@ -75,24 +75,24 @@ while(icon->Size)
 	info.hbmColor=bitmap;
 	info.hbmMask=mask;
 	HICON hicon=CreateIconIndirect(&info);
-	cIcons.add(size, hicon);
+	m_Handles.add(size, hicon);
 	icon++;
 	}
 }
 
 Icon::~Icon()
 {
-if(uId)
+if(m_Id)
 	{
-	auto icon=pIcons;
+	auto icon=m_Icons;
 	while(icon->Size)
 		{
 		delete icon->Buffer;
 		icon++;
 		}
-	delete pIcons;
+	delete m_Icons;
 	}
-for(auto it=cIcons.cbegin(); it.has_current(); it.move_next())
+for(auto it=m_Handles.cbegin(); it.has_current(); it.move_next())
 	{
 	HICON icon=it->get_value();
 	DestroyIcon(icon);
@@ -106,7 +106,7 @@ for(auto it=cIcons.cbegin(); it.has_current(); it.move_next())
 
 HICON Icon::GetHandle(UINT size)
 {
-auto it=cIcons.find(size, find_func::below_or_equal);
+auto it=m_Handles.find(size, find_func::below_or_equal);
 if(!it.has_current())
 	return NULL;
 return it->get_value();

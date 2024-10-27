@@ -34,20 +34,19 @@ public:
 	using Cursor=Graphics::Cursor;
 
 	// Brushes
-	virtual Handle<Brush> GetBorderBrush()=0;
-	virtual Handle<Brush> GetBrush(COLOR Color)=0;
-	virtual Handle<Brush> GetControlBrush()=0;
-	virtual Handle<Brush> GetFocusBorderBrush()=0;
-	virtual Handle<Brush> GetFocusBrush()=0;
-	virtual Handle<Brush> GetGrayTextBrush()=0;
-	virtual Handle<Brush> GetHighlightBrush()=0;
-	virtual Handle<Brush> GetHighlightBorderBrush()=0;
-	virtual Handle<Brush> GetInactiveHighlightBrush()=0;
-	virtual Handle<Brush> GetLightBorderBrush()=0;
-	virtual Handle<Brush> GetLightControlBrush()=0;
-	virtual Handle<Brush> GetLightTextBrush()=0;
-	virtual Handle<Brush> GetTextBrush()=0;
-	virtual Handle<Brush> GetWindowBrush()=0;
+	Handle<Brush> BorderBrush;
+	Handle<Brush> ControlBrush;
+	Handle<Brush> FocusBrush;
+	Handle<Brush> FocusBorderBrush;
+	Handle<Brush> GrayTextBrush;
+	Handle<Brush> InactiveHighlightBrush;
+	Handle<Brush> HighlightBrush;
+	Handle<Brush> HighlightBorderBrush;
+	Handle<Brush> LightBorderBrush;
+	Handle<Brush> LightControlBrush;
+	Handle<Brush> LightTextBrush;
+	Handle<Brush> TextBrush;
+	Handle<Brush> WindowBrush;
 
 	// Fonts
 	virtual Handle<Font> GetDefaultFont()=0;

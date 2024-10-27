@@ -41,7 +41,7 @@ Handle<Brush> Panel::GetBorderBrush()
 if(!Border)
 	return nullptr;
 auto theme=GetTheme();
-return theme->GetBorderBrush();
+return theme->BorderBrush;
 }
 
 Graphics::SIZE Panel::GetMinSize(RenderTarget* target)

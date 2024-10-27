@@ -39,7 +39,6 @@ public:
 	POINT GetScreenOffset()const override;
 	inline Handle<RenderTarget> GetTarget()override { return m_RenderTarget; }
 	Handle<Theme> GetTheme()override;
-	VOID Invalidate(BOOL Rearrange)override;
 	VOID Move(RECT const& Rect)override;
 	VOID Repaint();
 	VOID SetPointerCapture(Interactive* Capture)override;
@@ -48,16 +47,20 @@ public:
 
 protected:
 	// Con-/Destructors
-	Overlapped(Overlapped* Owner=nullptr);
+	Overlapped();
+	Overlapped(HWND Parent);
+	Overlapped(Window* Parent);
+	Overlapped(Frame* Parent);
+	Overlapped(Overlapped* Parent);
 
 	// Common
 	virtual LRESULT HandleMessage(UINT Message, WPARAM WParam, LPARAM LParam, BOOL& Handled);
 	HWND m_Handle;
-	Overlapped* m_Owner;
-	Handle<D2DRenderTarget> m_RenderTarget;
+	Handle<RenderTarget> m_RenderTarget;
 
 private:
 	// Common
+	VOID OnInvalidated();
 	VOID OnVisibleChanged(BOOL Visible);
 	static LRESULT CALLBACK WndProc(HWND Window, UINT Message, WPARAM WParam, LPARAM LParam);
 };

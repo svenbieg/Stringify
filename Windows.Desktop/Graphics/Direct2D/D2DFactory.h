@@ -28,17 +28,18 @@ class D2DFactory: public Object
 {
 public:
 	// Common
-	VOID CreateRenderTarget(ID2D1DCRenderTarget** Target);
-	ID2D1Factory* Get()const { return pFactory.Get(); }
-	static D2DFactory* Open();
+	ComPointer<ID2D1PathGeometry> CreatePathGeometry();
+	ComPointer<ID2D1DCRenderTarget> CreateRenderTarget();
+	ID2D1Factory* Get()const { return m_Factory; }
+	static Handle<D2DFactory> Open();
 
 private:
 	// Con-/Destructors
 	D2DFactory();
 
 	// Common
-	static Handle<D2DFactory> hCurrent;
-	ComPointer<ID2D1Factory> pFactory;
+	static Handle<D2DFactory> m_Current;
+	ComPointer<ID2D1Factory> m_Factory;
 };
 
 }}

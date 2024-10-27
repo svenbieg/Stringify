@@ -58,7 +58,7 @@ private:
 	SecPkgContext_StreamSizes cStreamSizes;
 	CredHandle hCredential;
 	CtxtHandle hSecurityContext;
-	CHAR pBuffer[TLS_BUF_SIZE];
+	CHAR m_Buffer[TLS_BUF_SIZE];
 	PCCERT_CONTEXT pContext;
 	CHAR pInput[TLS_BUF_SIZE];
 	CHAR pOutput[TLS_BUF_SIZE];

@@ -25,21 +25,11 @@ namespace Graphics {
 // Brush
 //=======
 
-class Brush: public Graphics::Brush
+class Brush
 {
 public:
-	// Con-/Destructors
-	Brush(COLOR Color=Colors::Black);
-
 	// Common
-	ComPointer<ID2D1SolidColorBrush> Get(ID2D1RenderTarget* Target);
-	COLOR GetColor()const override { return uColor; }
-	BOOL SetColor(COLOR Color);
-
-private:
-	// Common
-	D2D1_COLOR_F cColor;
-	COLOR uColor;
+	static ComPointer<ID2D1SolidColorBrush> Get(ID2D1RenderTarget* Target, Graphics::Brush* Brush);
 };
 
 }}

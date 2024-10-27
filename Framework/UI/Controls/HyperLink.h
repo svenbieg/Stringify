@@ -36,6 +36,7 @@ public:
 	Handle<String> Link;
 	VOID Render(RenderTarget* Target, RECT& Rect)override;
 	Handle<String> Text;
+	Handle<Brush> TextColor;
 };
 
 }}

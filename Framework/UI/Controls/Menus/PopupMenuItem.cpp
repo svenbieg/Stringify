@@ -9,14 +9,12 @@
 // Using
 //=======
 
-#include "Core/Application.h"
 #include "UI/Input/Shortcut.h"
-#include "UI/Frame.h"
+#include "UI/Application.h"
 #include "MenuBar.h"
 #include "MenuHelper.h"
 #include "PopupMenu.h"
 
-using namespace Core;
 using namespace Graphics;
 using namespace UI::Input;
 
@@ -62,13 +60,13 @@ PointerLeft.Add(this, &PopupMenuItem::OnPointerLeft);
 Handle<Brush> PopupMenuItem::GetBackgroundBrush()
 {
 auto theme=GetTheme();
-auto background=theme->GetControlBrush();
+auto background=theme->ControlBrush;
 BOOL focus=HasFocus();
 focus|=HasPointerFocus();
 if(!Enabled)
 	focus=false;
 if(focus)
-	background=theme->GetHighlightBrush();
+	background=theme->HighlightBrush;
 return background;
 }
 
@@ -109,7 +107,7 @@ if(!Text)
 	{
 	POINT from(0, Padding.Top*scale);
 	POINT to(rc.Right, Padding.Top*scale);
-	target->DrawLine(from, to, theme->GetLightBorderBrush());
+	target->DrawLine(from, to, theme->LightBorderBrush);
 	return;
 	}
 rc.SetPadding(Padding*scale);
@@ -140,9 +138,9 @@ if(Icon)
 	}
 left+=uIconWidth;
 auto font=GetFont();
-auto text_color=theme->GetTextBrush();
+auto text_color=theme->TextBrush;
 if(!Enabled)
-	text_color=theme->GetBorderBrush();
+	text_color=theme->BorderBrush;
 auto label=Text->Begin();
 SIZE label_size=target->MeasureText(font, scale, label);
 UINT top=rc.Top+(height-label_size.Height)/2;
@@ -176,9 +174,9 @@ if(Shortcut)
 	SIZE shortcut_size=target->MeasureText(font, scale, shortcut);
 	UINT top=rc.Top+(height-shortcut_size.Height)/2;
 	RECT shortcut_rc(left, top, left+shortcut_size.Width, top+shortcut_size.Height);
-	auto shortcut_color=theme->GetGrayTextBrush();
+	auto shortcut_color=theme->GrayTextBrush;
 	if(!Enabled)
-		shortcut_color=theme->GetLightTextBrush();
+		shortcut_color=theme->LightTextBrush;
 	target->TextColor=shortcut_color;
 	target->DrawText(shortcut_rc, scale, shortcut);
 	}
@@ -187,9 +185,9 @@ if(SubMenu)
 	SIZE arrow_size=target->MeasureText(font, scale, TEXT(">"));
 	UINT top=rc.Top+(height-arrow_size.Height)/2;
 	RECT arrow_rc(rc.Right-arrow_size.Width, top, rc.Right, top+arrow_size.Height);
-	auto arrow_color=theme->GetGrayTextBrush();
+	auto arrow_color=theme->GrayTextBrush;
 	if(!Enabled)
-		arrow_color=theme->GetLightTextBrush();
+		arrow_color=theme->LightTextBrush;
 	target->TextColor=arrow_color;
 	target->DrawText(arrow_rc, scale, TEXT(">"));
 	}

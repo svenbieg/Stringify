@@ -51,11 +51,11 @@ PointerLeft.Add(this, &Button::OnPointerLeft);
 Handle<Brush> Button::GetBackgroundBrush()
 {
 auto theme=GetTheme();
-auto background=theme->GetControlBrush();
+auto background=theme->ControlBrush;
 BOOL focus=HasFocus();
 focus|=HasPointerFocus();
 if(focus)
-	background=theme->GetHighlightBrush();
+	background=theme->HighlightBrush;
 return background;
 }
 
@@ -82,7 +82,7 @@ Interactive::Render(target, rc);
 auto theme=GetTheme();
 if(Border)
 	{
-	auto brush=theme->GetBorderBrush();
+	auto brush=theme->BorderBrush;
 	target->DrawRect(rc, brush);
 	rc.SetPadding(1, 1, 1, 1);
 	}
@@ -90,7 +90,7 @@ FLOAT scale=GetScaleFactor();
 rc.SetPadding(Padding*scale);
 if(Text)
 	{
-	target->TextColor=theme->GetTextBrush();
+	target->TextColor=theme->TextBrush;
 	target->Font=GetFont();
 	target->DrawText(rc, scale, Text->Begin());
 	}

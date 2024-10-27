@@ -39,7 +39,7 @@ public:
 protected:
 	// Common
 	ICON const* GetIcon(UINT Size);
-	ICON const* pIcons;
+	ICON const* m_Icons;
 };
 
 }

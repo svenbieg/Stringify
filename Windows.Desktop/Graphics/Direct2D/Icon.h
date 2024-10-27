@@ -37,12 +37,9 @@ public:
 	HICON GetHandle(UINT Size=16);
 
 private:
-	// Using
-	using IconMap=Clusters::map<UINT, HICON>;
-
 	// Common
-	IconMap cIcons;
-	WORD uId;
+	Clusters::map<UINT, HICON> m_Handles;
+	WORD m_Id;
 };
 
 
@@ -58,19 +55,18 @@ public:
 	using ICON=Resources::Icons::ICON;
 
 	// Con-/Destructors
-	Handle(): pIcon(nullptr) {}
-	Handle(std::nullptr_t): pIcon(nullptr) {}
-	Handle(INT Id) { HandleCreate(&pIcon, new Icon(Id)); }
-	Handle(ICON const* Resource) { HandleCreate(&pIcon, new Icon(Resource)); }
-	Handle(Icon* Icon) { HandleCreate(&pIcon, Icon); }
+	Handle(): m_Icon(nullptr) {}
+	Handle(INT Id) { HandleCreate(&m_Icon, new Icon(Id)); }
+	Handle(ICON const* Resource) { HandleCreate(&m_Icon, new Icon(Resource)); }
+	Handle(Icon* Icon) { HandleCreate(&m_Icon, Icon); }
 
 	// Access
-	inline operator bool()const { return pIcon!=nullptr; }
-	inline Icon* operator->()const { return pIcon; }
+	inline operator bool()const { return m_Icon!=nullptr; }
+	inline Icon* operator->()const { return m_Icon; }
 
 private:
 	// Common
-	Icon* pIcon;
+	Icon* m_Icon;
 };
 
 }}

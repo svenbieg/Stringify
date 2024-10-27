@@ -66,7 +66,7 @@ auto text_color=TextColor;
 if(!text_color)
 	{
 	auto theme=GetTheme();
-	text_color=theme->GetTextBrush();
+	text_color=theme->TextBrush;
 	}
 target->Font=GetFont();
 target->TextColor=text_color;

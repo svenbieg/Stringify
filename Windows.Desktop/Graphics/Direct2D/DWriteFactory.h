@@ -28,17 +28,17 @@ class DWriteFactory: public Object
 {
 public:
 	// Common
-	VOID CreateTextFormat(LOGFONT const& Info, IDWriteTextFormat** Format);
-	VOID CreateTextLayout(LPCWSTR Text, UINT Length, IDWriteTextFormat* Format, IDWriteTextLayout** Layout);
-	static DWriteFactory* Open();
+	ComPointer<IDWriteTextFormat> CreateTextFormat(LOGFONT const& Info);
+	ComPointer<IDWriteTextLayout> CreateTextLayout(LPCWSTR Text, UINT Length, IDWriteTextFormat* Format);
+	static Handle<DWriteFactory> Open();
 
 private:
 	// Con-/Destructors
 	DWriteFactory();
 
 	// Common
-	static Handle<DWriteFactory> hCurrent;
-	ComPointer<IDWriteFactory> pFactory;
+	static Handle<DWriteFactory> m_Current;
+	ComPointer<IDWriteFactory> m_Factory;
 };
 
 }}

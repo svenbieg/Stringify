@@ -14,6 +14,7 @@
 #define SECURITY_WIN32
 
 #include <Windows.h>
+#include <assert.h>
 
 #undef CopyMemory
 #undef FillMemory

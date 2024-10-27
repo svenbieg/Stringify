@@ -40,7 +40,7 @@ MinSize.Set(0, 14);
 Handle<Brush> ProgressBar::GetBorderBrush()
 {
 auto theme=GetTheme();
-return theme->GetBorderBrush();
+return theme->BorderBrush;
 }
 
 }}

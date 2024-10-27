@@ -9,7 +9,7 @@
 // Using
 //=======
 
-#include "UI/Frame.h"
+#include "UI/Application.h"
 #include "MenuBar.h"
 #include "PopupMenu.h"
 
@@ -58,7 +58,7 @@ Visible=false;
 Handle<Brush> PopupMenu::GetBackgroundBrush()
 {
 auto theme=GetTheme();
-return theme->GetControlBrush();
+return theme->ControlBrush;
 }
 
 Graphics::SIZE PopupMenu::GetMinSize(RenderTarget* target)

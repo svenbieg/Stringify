@@ -12,6 +12,7 @@
 #include "UI/Controls/Input.h"
 #include "UI/Controls/Menus/MenuBar.h"
 #include "UI/Controls/Menus/PopupMenu.h"
+#include "UI/Application.h"
 #include "Frame.h"
 
 using namespace UI::Controls;
@@ -53,6 +54,16 @@ if(content)
 	size=content->GetMinSize(target);
 FLOAT scale=GetScaleFactor();
 return size.Max(MinSize*scale);
+}
+
+VOID Frame::Invalidate(BOOL rearrange)
+{
+if(rearrange)
+	SetFlag(m_Flags, WindowFlags::Rearrange);
+if(GetFlag(m_Flags, WindowFlags::Repaint))
+	return;
+SetFlag(m_Flags, WindowFlags::Repaint);
+Invalidated(this);
 }
 
 BOOL Frame::IsKeyDown(VirtualKey key)
