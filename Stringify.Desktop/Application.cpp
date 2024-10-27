@@ -141,6 +141,7 @@ while(!task->Cancelled)
 		if(line_len>=LINE_LEN)
 			{
 			writer.Print("\"\r\n\"");
+			dst->Flush();
 			line_len=0;
 			}
 		SIZE_T written=writer.Print(StringTable[buf[u]]);
@@ -148,11 +149,10 @@ while(!task->Cancelled)
 			break;
 		line_len+=written;
 		}
-	if(read<PAGE_SIZE)
-		break;
 	}
 writer.PrintChar('\"');
 writer.PrintChar('\0');
+dst->Flush();
 }
 
 VOID Application::DoParse(Handle<Intermediate> stream)
@@ -164,12 +164,10 @@ CHAR buf[LINE_LEN+8];
 while(!task->Cancelled)
 	{
 	UINT len=reader.ReadString(buf, LINE_LEN+8, '\r');
-	if(!len)
+	if(!len||task->Cancelled)
 		break;
 	if(reader.LastChar=='\r')
 		reader.Skip();
-	if(task->Cancelled)
-		break;
 	Handle<String> line=new String(buf);
 	Dispatch(result_box, [result_box, line]() { result_box->AppendLine(line); });
 	if(reader.LastChar==0)

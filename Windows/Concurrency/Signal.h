@@ -31,7 +31,7 @@ public:
 	inline Signal() {}
 
 	// Common
-	inline VOID Broadcast() { notify_all(); }
+	inline VOID Trigger() { notify_all(); }
 	inline VOID Wait(ScopedLock& Lock) { wait(Lock); }
 	inline BOOL Wait(ScopedLock& Lock, UINT Timeout)
 		{

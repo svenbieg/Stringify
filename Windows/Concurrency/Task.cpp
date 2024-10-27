@@ -97,7 +97,7 @@ cProcedure=nullptr;
 CloseHandle(hThread);
 hThread=NULL;
 uId=0;
-cFinished.Broadcast();
+cFinished.Trigger();
 }
 
 DWORD WINAPI Task::TaskProc(VOID* param)
