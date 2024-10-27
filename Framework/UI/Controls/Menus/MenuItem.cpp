@@ -46,7 +46,7 @@ if(!SubMenu)
 	Window->Clicked(Window, nullptr);
 	return;
 	}
-Graphics::RECT rc=Window->GetFrameRect();
+Graphics::RECT rc=Window->GetScreenRect();
 Graphics::POINT pt(rc.Left, rc.Bottom);
 auto popup=Convert<PopupMenu>(Window->Parent);
 if(popup)

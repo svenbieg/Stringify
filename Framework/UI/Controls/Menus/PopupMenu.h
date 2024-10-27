@@ -52,6 +52,8 @@ public:
 	VOID Close()override;
 	Handle<Brush> GetBackgroundBrush()override;
 	SIZE GetMinSize(RenderTarget* Target)override;
+	VOID KillFocus()override;
+	Event<PopupMenu> Opened;
 	VOID Show(POINT const& Point);
 };
 

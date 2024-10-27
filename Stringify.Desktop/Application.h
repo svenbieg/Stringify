@@ -40,7 +40,6 @@ public:
 	// Common
 	static Application* Current;
 	VOID Open(Handle<String> Path);
-	Handle<AppWindow> Window;
 
 private:
 	// Common
@@ -51,8 +50,9 @@ private:
 	VOID OpenBinary(Handle<String> Path);
 	VOID OpenBitmap(HBITMAP Bitmap);
 	VOID OpenIcon(Handle<String> Path);
-	Handle<Task> hConvertTask;
-	Handle<Task> hParseTask;
+	Handle<Task> m_ConvertTask;
+	Handle<Task> m_ParseTask;
+	Handle<AppWindow> m_Window;
 };
 
 }

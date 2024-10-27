@@ -35,7 +35,7 @@ namespace UI {
 //==================
 
 PopupMenuItem::PopupMenuItem(PopupMenu* menu, Handle<Sentence> label):
-Interactive(menu->Panel),
+Interactive(menu->GetPanel()),
 MenuItem(this, menu),
 Label(this),
 Padding(12, 3, 12, 3),
@@ -267,7 +267,7 @@ switch(args->Key)
 	case VirtualKey::Up:
 		{
 		auto parent_menu=pMenu->GetParentMenu();
-		auto menubar=Convert<MenuBar>(parent_menu->Panel);
+		auto menubar=Convert<MenuBar>(parent_menu->GetPanel());
 		if(menubar)
 			{
 			auto control=Interactive::GetNextControl(Parent, nullptr, 0);

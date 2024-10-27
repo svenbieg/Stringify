@@ -80,7 +80,7 @@ Application::Application():
 Desktop::Application(STR_APP_TITLE)
 {
 Current=this;
-Window=new AppWindow();
+m_Window=new AppWindow();
 }
 
 
@@ -112,16 +112,16 @@ OpenBinary(path);
 
 VOID Application::Convert(Handle<InputStream> stream)
 {
-hConvertTask=nullptr;
-hParseTask=nullptr;
-auto result_box=Window->ResultBox;
+m_ConvertTask=nullptr;
+m_ParseTask=nullptr;
+auto result_box=m_Window->ResultBox;
 result_box->Clear();
 result_box->Enabled=true;
 result_box->ReadOnly=true;
 Handle<Intermediate> buf=new Intermediate();
 buf->SetFormat(StreamFormat::Ansi);
-hConvertTask=CreateTask(this, &Application::DoConvert, buf, stream);
-hParseTask=CreateTask(this, &Application::DoParse, buf);
+m_ConvertTask=CreateTask(this, &Application::DoConvert, buf, stream);
+m_ParseTask=CreateTask(this, &Application::DoParse, buf);
 }
 
 VOID Application::DoConvert(Handle<Intermediate> dst, Handle<InputStream> src)
@@ -158,7 +158,7 @@ writer.PrintChar('\0');
 VOID Application::DoParse(Handle<Intermediate> stream)
 {
 auto task=GetCurrentTask();
-auto result_box=Window->ResultBox;
+auto result_box=m_Window->ResultBox;
 StreamReader reader(stream);
 CHAR buf[LINE_LEN+8];
 while(!task->Cancelled)
@@ -181,9 +181,9 @@ if(!task->Cancelled)
 
 VOID Application::OnComplete()
 {
-hConvertTask=nullptr;
-hParseTask=nullptr;
-auto result_box=Window->ResultBox;
+m_ConvertTask=nullptr;
+m_ParseTask=nullptr;
+auto result_box=m_Window->ResultBox;
 result_box->ReadOnly=false;
 result_box->SetFocus();
 result_box->SelectAll();

@@ -35,8 +35,7 @@ Window(nullptr),
 // Protected
 m_PointerCapture(nullptr),
 // Private
-m_Focus(nullptr),
-m_PointerFocus(nullptr)
+m_Focus(nullptr)
 {
 ZeroMemory(m_Keys, 256);
 }
@@ -97,17 +96,6 @@ if(m_Focus)
 m_Focus=focus;
 if(m_Focus)
 	m_Focus->Focused(m_Focus, reason);
-}
-
-VOID Frame::SetPointerFocus(Interactive* focus)
-{
-if(m_PointerFocus==focus)
-	return;
-if(m_PointerFocus)
-	m_PointerFocus->PointerLeft(m_PointerFocus);
-m_PointerFocus=focus;
-if(m_PointerFocus)
-	m_PointerFocus->PointerEntered(m_PointerFocus);
 }
 
 
@@ -178,7 +166,7 @@ for(auto it=Children->Last(); it->HasCurrent(); it->MovePrevious())
 	if(args->Handled)
 		break;
 	}
-SetPointerFocus(focus);
+Application::Current->SetPointerFocus(focus);
 }
 
 VOID Frame::RenderWindow(Window* window, RenderTarget* target, RECT const& rc, BOOL override)

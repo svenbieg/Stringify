@@ -246,7 +246,7 @@ switch(msg)
 		}
 	case WM_KILLFOCUS:
 		{
-		KillFocus();
+		this->KillFocus();
 		break;
 		}
 	case WM_LBUTTONDOWN:

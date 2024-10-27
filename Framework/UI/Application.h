@@ -41,8 +41,10 @@ public:
 	VOID ExitMenu();
 	Input* GetCurrentInput()const { return m_CurrentInput; }
 	Menu* GetCurrentMenu()const { return m_CurrentMenu; }
+	Interactive* GetPointerFocus()const { return m_PointerFocus; }
 	VOID SetCurrentInput(Input* Input);
 	VOID SetCurrentMenu(Menu* Menu) { m_CurrentMenu=Menu; }
+	VOID SetPointerFocus(Interactive* Focus);
 	BOOL Shortcut(Handle<KeyEventArgs> Args);
 	Handle<ShortcutMap> Shortcuts;
 
@@ -61,6 +63,7 @@ private:
 	// Common
 	Input* m_CurrentInput;
 	Menu* m_CurrentMenu;
+	Interactive* m_PointerFocus;
 };
 
 }

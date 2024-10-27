@@ -30,7 +30,7 @@ namespace UI {
 //==================
 
 MenuBarItem::MenuBarItem(MenuBar* menu, Handle<Sentence> label):
-Interactive(menu),
+Interactive(menu->GetPanel()),
 MenuItem(this, menu),
 Label(this),
 Padding(6, 2, 6, 2)

@@ -31,12 +31,12 @@ namespace UI {
 
 PopupMenu::PopupMenu(Window* parent, Menu* parent_menu):
 Popup(parent),
-Menu(this, parent_menu)
+Menu(parent_menu)
 {
 auto panel=new StackPanel(this, Orientation::Vertical);
 panel->AlignChildren=Alignment::Stretch;
 panel->Padding.Set(4, 4, 4, 4);
-Panel=panel;
+m_Panel=panel;
 }
 
 
@@ -72,7 +72,7 @@ bool icon=false;
 bool arrow=false;
 bool separator=true;
 Handle<UI::Window> last_sep;
-for(auto it=Panel->Children->First(); it->HasCurrent(); it->MoveNext())
+for(auto it=m_Panel->Children->First(); it->HasCurrent(); it->MoveNext())
 	{
 	auto child=it->GetCurrent();
 	auto item=Convert<PopupMenuItem>(child);
@@ -122,7 +122,7 @@ if(arrow)
 	SIZE arrow_size=target->MeasureText(font, scale, TEXT(">"));
 	shortcut_width+=arrow_size+10*scale;
 	}
-for(auto it=Panel->Children->First(); it->HasCurrent(); it->MoveNext())
+for(auto it=m_Panel->Children->First(); it->HasCurrent(); it->MoveNext())
 	{
 	auto child=it->GetCurrent();
 	auto item=Convert<PopupMenuItem>(child);
@@ -133,8 +133,15 @@ for(auto it=Panel->Children->First(); it->HasCurrent(); it->MoveNext())
 return Overlapped::GetMinSize(target);
 }
 
+VOID PopupMenu::KillFocus()
+{
+Popup::KillFocus();
+Close();
+}
+
 VOID PopupMenu::Show(POINT const& pt)
 {
+Opened(this);
 auto current=Application::Current->GetCurrentMenu();
 if(current)
 	{

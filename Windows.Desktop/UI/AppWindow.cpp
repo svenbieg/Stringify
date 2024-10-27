@@ -47,7 +47,7 @@ SetForegroundWindow(m_Handle);
 VOID AppWindow::Close()
 {
 if(m_Handle)
-	CloseWindow(m_Handle);
+	SendMessage(m_Handle, WM_CLOSE, 0, 0);
 }
 
 Handle<AppWindow> AppWindow::Current;

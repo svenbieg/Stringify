@@ -31,7 +31,7 @@ BOOL Menu::Accelerate(VirtualKey key)
 if(!GetFlag(m_MenuFlags, MenuFlags::KeyboardAccess))
 	return false;
 CHAR acc=(CHAR)key;
-for(auto it=Panel->Children->First(); it->HasCurrent(); it->MoveNext())
+for(auto it=m_Panel->Children->First(); it->HasCurrent(); it->MoveNext())
 	{
 	auto item=Convert<MenuItem>(it->GetCurrent());
 	if(!item)
@@ -64,18 +64,17 @@ ClearFlag(m_MenuFlags, MenuFlags::KeyboardAccess);
 Application::Current->SetCurrentMenu(m_ParentMenu);
 if(m_ParentMenu)
 	{
-	auto owner=Convert<MenuItem>(m_Owner);
-	m_ParentMenu->Close(owner);
+	m_ParentMenu->m_OpenItem=nullptr;
 	if(m_ParentMenu->HasKeyboardAccess())
 		m_ParentMenu->Select();
 	}
 }
 
-VOID Menu::Close(MenuItem* item)
-{
-if(m_OpenItem==item)
-	m_OpenItem=nullptr;
-}
+//VOID Menu::Close(MenuItem* item)
+//{
+//if(m_OpenItem==item)
+//	m_OpenItem=nullptr;
+//}
 
 VOID Menu::DoKey(KeyEventType type, Handle<KeyEventArgs> args)
 {
@@ -151,7 +150,7 @@ VOID Menu::Select()
 auto item=m_SelectedItem;
 if(!item)
 	{
-	auto control=Interactive::GetNextControl(Panel, nullptr, 0);
+	auto control=Interactive::GetNextControl(m_Panel, nullptr, 0);
 	item=Convert<MenuItem>(control);
 	}
 Select(item);
@@ -194,11 +193,11 @@ this->Open(item);
 // Con-/Destructors Protected
 //============================
 
-Menu::Menu(Window* owner, Menu* parent):
+Menu::Menu(Menu* parent_menu):
 m_MenuFlags(MenuFlags::None),
 m_OpenItem(nullptr),
-m_Owner(owner),
-m_ParentMenu(parent),
+m_Panel(nullptr),
+m_ParentMenu(parent_menu),
 m_SelectedItem(nullptr)
 {}
 

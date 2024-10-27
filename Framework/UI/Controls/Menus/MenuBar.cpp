@@ -32,11 +32,12 @@ namespace UI {
 
 MenuBar::MenuBar(UI::Window* parent):
 WrapPanel(parent),
-Menu(this, nullptr),
+Menu(nullptr),
 bEntering(false),
 pOldFrame(nullptr)
 {
 Padding.Set(2, 0, 2, 0);
+m_Panel=this;
 Parent.Changed.Add(this, &MenuBar::OnParentChanged);
 OnParentChanged();
 }

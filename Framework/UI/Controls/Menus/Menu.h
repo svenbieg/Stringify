@@ -38,10 +38,10 @@ public:
 	// Common
 	BOOL Accelerate(VirtualKey Key);
 	virtual VOID Close();
-	VOID Close(MenuItem* Item);
+	//VOID Close(MenuItem* Item);
 	VOID DoKey(KeyEventType Type, Handle<KeyEventArgs> Args);
 	VOID Exit();
-	Window* GetOwner()const { return m_Owner; }
+	Window* GetPanel()const { return m_Panel; }
 	Menu* GetParentMenu()const { return m_ParentMenu; }
 	BOOL HasAcceleration();
 	BOOL HasKeyboardAccess() { return GetFlag(m_MenuFlags, MenuFlags::KeyboardAccess); }
@@ -49,7 +49,6 @@ public:
 	BOOL IsParentMenu(Menu* Menu);
 	VOID KillKeyboardAccess();
 	VOID Open(MenuItem* Item);
-	Handle<Window> Panel;
 	VOID Select();
 	VOID Select(MenuItem* Item);
 	VOID Switch(MenuItem* Item);
@@ -63,12 +62,12 @@ protected:
 		};
 
 	// Con-/Destructors
-	Menu(Window* Owner, Menu* Parent);
+	Menu(Menu* ParentMenu);
 
 	// Common
 	MenuFlags m_MenuFlags;
 	MenuItem* m_OpenItem;
-	Window* m_Owner;
+	Window* m_Panel;
 	Menu* m_ParentMenu;
 	MenuItem* m_SelectedItem;
 };

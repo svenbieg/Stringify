@@ -50,6 +50,17 @@ if(m_CurrentInput)
 m_CurrentInput=input;
 }
 
+VOID Application::SetPointerFocus(Interactive* focus)
+{
+if(m_PointerFocus==focus)
+	return;
+if(m_PointerFocus)
+	m_PointerFocus->PointerLeft(m_PointerFocus);
+m_PointerFocus=focus;
+if(m_PointerFocus)
+	m_PointerFocus->PointerEntered(m_PointerFocus);
+}
+
 BOOL Application::Shortcut(Handle<KeyEventArgs> args)
 {
 BOOL alt=GetFlag(args->Flags, KeyEventFlags::Alt);
@@ -130,7 +141,8 @@ m_CurrentInput->SelectAll();
 Application::Application(LPCSTR name, LPCSTR version):
 Core::Application(name, version),
 m_CurrentInput(nullptr),
-m_CurrentMenu(nullptr)
+m_CurrentMenu(nullptr),
+m_PointerFocus(nullptr)
 {
 Current=this;
 Shortcuts=new ShortcutMap();
