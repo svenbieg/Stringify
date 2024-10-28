@@ -29,7 +29,7 @@ namespace Storage {
 NamedPipe::NamedPipe(Handle<String> name):
 hNamedPipe(NULL)
 {
-hPath=new String("\\\\.\\pipe\\ipc_%s", name);
+m_Path=new String("\\\\.\\pipe\\ipc_%s", name);
 }
 
 NamedPipe::~NamedPipe()
@@ -59,7 +59,7 @@ if(hNamedPipe)
 BOOL NamedPipe::Connect()
 {
 assert(hNamedPipe==NULL);
-hNamedPipe=CreateFile(hPath->Begin(), GENERIC_READ|GENERIC_WRITE, 0, nullptr, OPEN_EXISTING, 0, NULL);
+hNamedPipe=CreateFile(m_Path->Begin(), GENERIC_READ|GENERIC_WRITE, 0, nullptr, OPEN_EXISTING, 0, NULL);
 if(hNamedPipe==INVALID_HANDLE_VALUE)
 	hNamedPipe=NULL;
 if(hNamedPipe==NULL)
@@ -71,7 +71,7 @@ VOID NamedPipe::Listen()
 {
 assert(hNamedPipe==NULL);
 DWORD open_mode=PIPE_ACCESS_DUPLEX|FILE_FLAG_FIRST_PIPE_INSTANCE|FILE_FLAG_WRITE_THROUGH;
-hNamedPipe=CreateNamedPipe(hPath->Begin(), open_mode, 0, 1, PAGE_SIZE, PAGE_SIZE, 0, nullptr);
+hNamedPipe=CreateNamedPipe(m_Path->Begin(), open_mode, 0, 1, PAGE_SIZE, PAGE_SIZE, 0, nullptr);
 if(hNamedPipe==INVALID_HANDLE_VALUE)
 	hNamedPipe=NULL;
 if(hNamedPipe==NULL)

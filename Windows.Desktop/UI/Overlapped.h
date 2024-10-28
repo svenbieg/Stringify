@@ -41,6 +41,7 @@ public:
 	Handle<Theme> GetTheme()override;
 	VOID Move(RECT const& Rect)override;
 	VOID Repaint();
+	VOID SetCursor(Handle<Cursor> Cursor)override;
 	VOID SetPointerCapture(Interactive* Capture)override;
 	VOID Show(INT Show);
 	VOID Shrink();
@@ -63,6 +64,7 @@ private:
 	VOID OnInvalidated();
 	VOID OnVisibleChanged(BOOL Visible);
 	static LRESULT CALLBACK WndProc(HWND Window, UINT Message, WPARAM WParam, LPARAM LParam);
+	HCURSOR m_Cursor;
 };
 
 }

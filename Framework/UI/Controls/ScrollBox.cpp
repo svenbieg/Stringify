@@ -166,8 +166,6 @@ else
 	{
 	top=0;
 	}
-if(content_rect.Left==-left&&content_rect.Top==-top)
-	return;
 content_rect.SetPosition(-left, -top);
 content->Move(content_rect);
 }

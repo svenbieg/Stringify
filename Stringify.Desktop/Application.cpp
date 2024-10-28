@@ -16,6 +16,7 @@
 #include "Storage/Buffer.h"
 #include "Application.h"
 
+using namespace Concurrency;
 using namespace Resources::Strings;
 using namespace Storage;
 using namespace Storage::Streams;
@@ -112,13 +113,11 @@ OpenBinary(path);
 
 VOID Application::Convert(Handle<InputStream> stream)
 {
-m_ConvertTask=nullptr;
-m_ParseTask=nullptr;
 auto result_box=m_Window->ResultBox;
 result_box->Clear();
 result_box->Enabled=true;
 result_box->ReadOnly=true;
-Handle<Intermediate> buf=new Intermediate();
+Handle<Intermediate> buf=new Intermediate(PAGE_SIZE);
 buf->SetFormat(StreamFormat::Ansi);
 m_ConvertTask=CreateTask(this, &Application::DoConvert, buf, stream);
 m_ParseTask=CreateTask(this, &Application::DoParse, buf);
@@ -134,7 +133,7 @@ BYTE buf[PAGE_SIZE];
 while(!task->Cancelled)
 	{
 	SIZE_T read=src->Read(buf, PAGE_SIZE);
-	if(!read)
+	if(!read||task->Cancelled)
 		break;
 	for(UINT u=0; u<read; u++)
 		{
@@ -157,13 +156,16 @@ dst->Flush();
 
 VOID Application::DoParse(Handle<Intermediate> stream)
 {
+ScopedLock lock(m_Mutex);
 auto task=GetCurrentTask();
 auto result_box=m_Window->ResultBox;
 StreamReader reader(stream);
 CHAR buf[LINE_LEN+8];
 while(!task->Cancelled)
 	{
+	lock.Unlock();
 	UINT len=reader.ReadString(buf, LINE_LEN+8, '\r');
+	lock.Lock();
 	if(!len||task->Cancelled)
 		break;
 	if(reader.LastChar=='\r')

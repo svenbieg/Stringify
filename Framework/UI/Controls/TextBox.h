@@ -30,12 +30,14 @@ class TextBox: public ScrollBox
 public:
 	// Using
 	using InputStream=Storage::Streams::InputStream;
+	using StringList=Collections::StringList;
 
 	// Con-/Destructors
 	TextBox(Window* Parent);
 
 	// Common
-	VOID AppendLine(Handle<String> Text);
+	VOID AppendLine(Handle<String> Line);
+	VOID AppendLines(Handle<StringList> Lines);
 	VOID Clear();
 	VOID ReadFromStream(Handle<InputStream> Stream);
 	Property<TextBox, BOOL> ReadOnly;

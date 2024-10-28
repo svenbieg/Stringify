@@ -33,20 +33,21 @@ public:
 	// Common
 	VOID Cancel();
 	volatile BOOL Cancelled;
-	inline HANDLE GetHandle() { return hThread; }
-	static Task* GetTask(DWORD Id);
+	inline HANDLE GetHandle() { return m_Thread; }
+	static Handle<Task> GetTask(DWORD Id);
 	VOID Wait();
 
 private:
 	// Common
 	VOID DoTask();
 	static DWORD WINAPI TaskProc(VOID* Param);
-	Signal cFinished;
-	Mutex cMutex;
-	std::function<VOID()> cProcedure;
-	static Clusters::shared_map<DWORD, Task*> cTasks;
-	HANDLE hThread;
-	DWORD uId;
+	Signal m_Done;
+	DWORD m_Id;
+	Mutex m_Mutex;
+	std::function<VOID()> m_Procedure;
+	static Clusters::shared_map<DWORD, Task*> m_Tasks;
+	Handle<Task> m_This;
+	HANDLE m_Thread;
 };
 
 }

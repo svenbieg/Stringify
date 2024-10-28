@@ -21,7 +21,7 @@ enum class LanguageCode: UINT
 None,
 DE,
 EN,
-Unknown=0xFFFFFFFF
+Unknown
 };
 
 LPCSTR LanguageCodeToString(LanguageCode Language);

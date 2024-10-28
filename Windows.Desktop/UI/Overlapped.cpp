@@ -16,6 +16,7 @@
 
 using namespace Core;
 
+using D2DCursor=Graphics::Direct2D::Cursor;
 using D2DTheme=Graphics::Direct2D::Theme;
 
 
@@ -96,6 +97,15 @@ if(m_Handle)
 	}
 }
 
+VOID Overlapped::SetCursor(Handle<Cursor> cursor)
+{
+HCURSOR hcursor=m_Cursor;
+auto d2d_cursor=cursor.As<D2DCursor>();
+if(d2d_cursor)
+	hcursor=d2d_cursor->GetHandle();
+SetClassLongPtr(m_Handle, GCLP_HCURSOR, (LONG_PTR)hcursor);
+}
+
 VOID Overlapped::SetPointerCapture(Interactive* capture)
 {
 if(capture)
@@ -137,8 +147,10 @@ Overlapped(HWND_DESKTOP)
 {}
 
 Overlapped::Overlapped(HWND parent):
+m_Cursor(NULL),
 m_Handle(NULL)
 {
+m_Cursor=LoadCursor(NULL, IDC_ARROW);
 auto theme=GetTheme();
 Background=theme->ControlBrush;
 Invalidated.Add(this, &Overlapped::OnInvalidated);
@@ -150,7 +162,7 @@ HINSTANCE inst=GetModuleHandle(nullptr);
 WNDCLASSEX wc;
 ZeroMemory(&wc, sizeof(WNDCLASSEX));
 wc.cbSize=sizeof(WNDCLASSEX);
-wc.hCursor=LoadCursor(NULL, IDC_ARROW);
+wc.hCursor=m_Cursor;
 wc.hInstance=inst;
 wc.lpfnWndProc=&WndProc;
 wc.lpszClassName=class_name;

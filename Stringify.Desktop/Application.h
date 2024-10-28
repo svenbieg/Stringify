@@ -32,6 +32,7 @@ public:
 	// Using
 	using InputStream=Storage::Streams::InputStream;
 	using Intermediate=Storage::Intermediate;
+	using StringList=Collections::StringList;
 	using Task=Concurrency::Task;
 
 	// Con-/Destructors
@@ -51,6 +52,7 @@ private:
 	VOID OpenBitmap(HBITMAP Bitmap);
 	VOID OpenIcon(Handle<String> Path);
 	Handle<Task> m_ConvertTask;
+	Concurrency::Mutex m_Mutex;
 	Handle<Task> m_ParseTask;
 	Handle<AppWindow> m_Window;
 };

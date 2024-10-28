@@ -33,5 +33,5 @@ public:
 private:
 	// Common
 	LPCTSTR ScanArgument(LPCTSTR CommandLine, LPCTSTR* Argument, UINT* Length);
-	static Handle<CommandLine> hCurrent;
+	static Handle<CommandLine> m_Current;
 };

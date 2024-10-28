@@ -39,8 +39,8 @@ Storage::Directory(path)
 
 Handle<Storage::File> Directory::CreateFile(Handle<String> path, FileCreateMode create, FileAccessMode access, FileShareMode share)
 {
-ScopedLock lock(cMutex);
-Handle<String> file_path=new String("%s\\%s", hPath, path);
+ScopedLock lock(m_Mutex);
+Handle<String> file_path=new String("%s\\%s", m_Path, path);
 Handle<File> file=new File(file_path);
 if(Failed(file->Create(create, access, share)))
 	return nullptr;
@@ -57,8 +57,8 @@ Handle<Object> Directory::Get(Handle<String> path)
 {
 if(!path)
 	return nullptr;
-ScopedLock lock(cMutex);
-Handle<String> item_path=new String("%s\\%s", hPath, path);
+ScopedLock lock(m_Mutex);
+Handle<String> item_path=new String("%s\\%s", m_Path, path);
 WIN32_FIND_DATA fd;
 ZeroMemory(&fd, sizeof(WIN32_FIND_DATA));
 HANDLE hfind=FindFirstFileEx(item_path->Begin(), FindExInfoBasic, &fd, FindExSearchNameMatch, nullptr, FIND_FIRST_EX_LARGE_FETCH);
@@ -87,10 +87,10 @@ return new Directory(path);
 //===========================
 
 DirectoryIterator::DirectoryIterator(Handle<Directory> dir):
-hDirectory(dir),
+m_Directory(dir),
 hFind(NULL)
 {
-hDirectory->cMutex.Lock();
+m_Directory->m_Mutex.Lock();
 First();
 }
 
@@ -98,7 +98,7 @@ DirectoryIterator::~DirectoryIterator()
 {
 if(hFind)
 	FindClose(hFind);
-hDirectory->cMutex.Unlock();
+m_Directory->m_Mutex.Unlock();
 }
 
 
@@ -108,13 +108,13 @@ hDirectory->cMutex.Unlock();
 
 BOOL DirectoryIterator::First()
 {
-hCurrent=nullptr;
+m_Current=nullptr;
 if(hFind)
 	{
 	FindClose(hFind);
 	hFind=NULL;
 	}
-auto path=hDirectory->GetPath();
+auto path=m_Directory->GetPath();
 WIN32_FIND_DATA fd;
 ZeroMemory(&fd, sizeof(WIN32_FIND_DATA));
 Handle<String> mask=new String("%s\\*.*", path->Begin());
@@ -135,11 +135,11 @@ while(fd.cFileName[0]=='.')
 Handle<String> item_path=new String("%s\\%s", path->Begin(), fd.cFileName);
 if(fd.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY)
 	{
-	hCurrent=new Directory(item_path);
+	m_Current=new Directory(item_path);
 	}
 else
 	{
-	hCurrent=new File(item_path);
+	m_Current=new File(item_path);
 	}
 return true;
 }
@@ -148,7 +148,7 @@ BOOL DirectoryIterator::MoveNext()
 {
 if(!hFind)
 	{
-	hCurrent=nullptr;
+	m_Current=nullptr;
 	return false;
 	}
 WIN32_FIND_DATA fd;
@@ -157,18 +157,18 @@ if(!FindNextFile(hFind, &fd))
 	{
 	FindClose(hFind);
 	hFind=NULL;
-	hCurrent=nullptr;
+	m_Current=nullptr;
 	return false;
 	}
-auto path=hDirectory->GetPath();
+auto path=m_Directory->GetPath();
 Handle<String> item_path=new String("%s\\%s", path->Begin(), fd.cFileName);
 if(fd.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY)
 	{
-	hCurrent=new Directory(item_path);
+	m_Current=new Directory(item_path);
 	}
 else
 	{
-	hCurrent=new File(item_path);
+	m_Current=new File(item_path);
 	}
 return true;
 }

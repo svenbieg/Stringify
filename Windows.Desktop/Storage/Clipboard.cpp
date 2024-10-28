@@ -75,9 +75,9 @@ return false;
 
 Handle<Clipboard> Clipboard::Open()
 {
-if(!hCurrent)
-	hCurrent=new Clipboard();
-return hCurrent;
+if(!m_Current)
+	m_Current=new Clipboard();
+return m_Current;
 }
 
 
@@ -93,6 +93,6 @@ Clipboard::Clipboard()
 // Common Private
 //================
 
-Handle<Clipboard> Clipboard::hCurrent;
+Handle<Clipboard> Clipboard::m_Current;
 
 }

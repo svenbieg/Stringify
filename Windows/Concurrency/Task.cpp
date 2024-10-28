@@ -28,23 +28,28 @@ namespace Concurrency {
 
 Task::Task(std::function<VOID()> proc):
 Cancelled(false),
-cProcedure(proc),
-hThread(NULL),
-uId(0)
+m_Id(0),
+m_Procedure(proc),
+m_Thread(NULL)
 {
-hThread=CreateThread(nullptr, 0, TaskProc, this, CREATE_SUSPENDED, nullptr);
-if(hThread==INVALID_HANDLE_VALUE)
-	hThread=NULL;
-if(!hThread)
+m_Thread=CreateThread(nullptr, 0, TaskProc, this, CREATE_SUSPENDED, nullptr);
+if(m_Thread==INVALID_HANDLE_VALUE)
+	m_Thread=NULL;
+if(!m_Thread)
 	throw E_INVALIDARG;
-uId=GetThreadId(hThread);
-cTasks.add(uId, this);
-ResumeThread(hThread);
+m_Id=GetThreadId(m_Thread);
+m_Tasks.add(m_Id, this);
+m_This=this;
+ResumeThread(m_Thread);
 }
 
 Task::~Task()
 {
-Cancel();
+if(m_Thread)
+	{
+	m_Tasks.remove(m_Id);
+	CloseHandle(m_Thread);
+	}
 }
 
 
@@ -54,27 +59,26 @@ Cancel();
 
 VOID Task::Cancel()
 {
-ScopedLock lock(cMutex);
-if(hThread==NULL)
+ScopedLock lock(m_Mutex);
+if(m_Thread==NULL)
 	return;
 Cancelled=true;
-lock.Unlock();
-Wait();
+m_Done.Wait(lock);
 }
 
-Task* Task::GetTask(DWORD id)
+Handle<Task> Task::GetTask(DWORD id)
 {
 Task* task=nullptr;
-cTasks.try_get(id, &task);
+m_Tasks.try_get(id, &task);
 return task;
 }
 
 VOID Task::Wait()
 {
-ScopedLock lock(cMutex);
-if(hThread==NULL)
+ScopedLock lock(m_Mutex);
+if(m_Thread==NULL)
 	return;
-cFinished.Wait(lock);
+m_Done.Wait(lock);
 }
 
 
@@ -84,29 +88,24 @@ cFinished.Wait(lock);
 
 VOID Task::DoTask()
 {
+m_This=nullptr;
 try
 	{
-	cProcedure();
+	m_Procedure();
 	}
 catch(std::exception&)
 	{
 	}
-cTasks.remove(uId);
-ScopedLock lock(cMutex);
-cProcedure=nullptr;
-CloseHandle(hThread);
-hThread=NULL;
-uId=0;
-cFinished.Trigger();
+m_Done.Trigger();
 }
 
 DWORD WINAPI Task::TaskProc(VOID* param)
 {
-auto task=(Task*)param;
+Handle<Task> task=(Task*)param;
 task->DoTask();
 return 0;
 }
 
-Clusters::shared_map<DWORD, Task*> Task::cTasks;
+Clusters::shared_map<DWORD, Task*> Task::m_Tasks;
 
 }

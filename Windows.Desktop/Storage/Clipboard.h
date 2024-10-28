@@ -30,7 +30,7 @@ private:
 	Clipboard();
 
 	// Common
-	static Handle<Clipboard> hCurrent;
+	static Handle<Clipboard> m_Current;
 };
 
 }

@@ -9,10 +9,8 @@
 // Using
 //=======
 
-#include "Core/Application.h"
 #include "ScrollBar.h"
 
-using namespace Core;
 using namespace Graphics;
 
 
@@ -166,11 +164,6 @@ switch(uOrientation)
 // Common Private
 //================
 
-VOID ScrollBar::DoScroll()
-{
-Scrolled(this);
-}
-
 ScrollBarButton ScrollBar::GetButton(POINT const& pt)
 {
 FLOAT scale=GetScaleFactor();
@@ -276,7 +269,7 @@ if(pos<0)
 	pos=Max(pos, 0);
 pos=Min(pos, (INT)Range);
 Position=pos;
-Application::Current->Dispatch(this, &ScrollBar::DoScroll);
+Scrolled(this);
 args->Handled=true;
 }
 
@@ -314,8 +307,7 @@ if(!hScrollTimer)
 VOID ScrollBar::StartScrolling(INT step)
 {
 iStep=step;
-auto app=Application::Current;
-app->Dispatch(this, &ScrollBar::OnScrollTimer);
+OnScrollTimer();
 }
 
 VOID ScrollBar::StopScrolling()

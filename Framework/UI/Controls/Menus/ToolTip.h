@@ -48,7 +48,7 @@ private:
 	VOID OnTextChanged();
 	VOID OnTimerTriggered();
 	Handle<Panel> hPanel;
-	Handle<Timer> hTimer;
+	Handle<Timer> m_Timer;
 	Interactive* pControl;
 };
 

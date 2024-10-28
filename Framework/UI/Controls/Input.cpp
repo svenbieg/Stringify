@@ -41,17 +41,16 @@ Interactive(parent),
 Mask(0),
 MultiLine(false),
 ReadOnly(false),
-ptCursor(-1, -1),
-ptPointer(-1, -1),
-ptSelectionEnd(-1, -1),
-ptSelectionFirst(-1, -1),
-ptSelectionLast(-1, -1),
-ptSelectionStart(-1, -1),
-uCursorTime(0),
-uInputFlags(InputFlags::None),
-uLineHeight(0)
+m_CursorPos(-1, -1),
+m_CursorTime(0),
+m_InputFlags(InputFlags::None),
+m_LineHeight(0),
+m_PointerPos(-1, -1),
+m_SelectionEnd(-1, -1),
+m_SelectionFirst(-1, -1),
+m_SelectionLast(-1, -1),
+m_SelectionStart(-1, -1)
 {
-auto frame=GetFrame();
 ContextMenu=new EditMenu();
 Focused.Add(this, &Input::OnFocused);
 FocusLost.Add(this, &Input::OnFocusLost);
@@ -67,26 +66,39 @@ PointerUp.Add(this, &Input::OnPointerUp);
 // Common
 //========
 
-VOID Input::AppendLine(Handle<String> text)
+VOID Input::AppendLine(Handle<String> str)
 {
-INPUT_LINE& line=cLines.append();
-line.Text=text;
+INPUT_LINE& line=m_Lines.append();
+line.Text=str;
 UpdateLine(line);
+Invalidate(true);
+}
+
+VOID Input::AppendLines(Handle<StringList> lines)
+{
+if(!lines)
+	return;
+for(auto it=lines->First(); it->HasCurrent(); it->MoveNext())
+	{
+	INPUT_LINE& line=m_Lines.append();
+	line.Text=it->GetCurrent();
+	UpdateLine(line);
+	}
 Invalidate(true);
 }
 
 VOID Input::Clear()
 {
 ClearSelection();
-cLines.clear();
-cLineWidths.clear();
+m_Lines.clear();
+m_LineWidths.clear();
 }
 
 VOID Input::ClearSelection()
 {
-BOOL changed=ptSelectionStart.Left>=0;
-ptSelectionStart.Set(-1, -1);
-ptSelectionEnd.Set(-1, -1);
+BOOL changed=m_SelectionStart.Left>=0;
+m_SelectionStart.Set(-1, -1);
+m_SelectionEnd.Set(-1, -1);
 if(changed)
 	UpdateSelection();
 }
@@ -108,10 +120,10 @@ return theme->GetTextCursor();
 Graphics::RECT Input::GetCursorRect()
 {
 FLOAT scale=GetScaleFactor();
-POINT pt_cursor=PointFromChar(ptCursor, scale);
-if(GetFlag(uInputFlags, InputFlags::Pointing))
-	pt_cursor=ptPointer;
-UINT line_height=uLineHeight*scale;
+POINT pt_cursor=PointFromChar(m_CursorPos, scale);
+if(GetFlag(m_InputFlags, InputFlags::Pointing))
+	pt_cursor=m_PointerPos;
+UINT line_height=m_LineHeight*scale;
 RECT rc_cursor(pt_cursor.Left, pt_cursor.Top, pt_cursor.Left, pt_cursor.Top+line_height);
 rc_cursor.SetMargin(Padding*scale);
 return rc_cursor;
@@ -120,22 +132,22 @@ return rc_cursor;
 UINT Input::GetLineHeight()const
 {
 FLOAT scale=GetScaleFactor();
-return uLineHeight*scale;
+return m_LineHeight*scale;
 }
 
 Graphics::SIZE Input::GetMinSize(RenderTarget* target)
 {
 FLOAT scale=GetScaleFactor();
 SIZE size(0, 0);
-UINT width_count=cLineWidths.get_count();
+UINT width_count=m_LineWidths.get_count();
 if(width_count>0)
 	{
-	size.Width=cLineWidths.get_at(width_count-1).get_key();
+	size.Width=m_LineWidths.get_at(width_count-1).get_key();
 	size.Width*=scale;
 	}
-uLineHeight=GetLineHeight(target, 1.f);
-UINT line_count=Max(cLines.get_count(), 1U);
-UINT line_height=uLineHeight*scale;
+m_LineHeight=GetLineHeight(target, 1.f);
+UINT line_count=Max(m_Lines.get_count(), 1U);
+UINT line_height=m_LineHeight*scale;
 size.Height=line_count*line_height;
 size.AddPadding(Padding*scale);
 return size.Max(MinSize*scale);
@@ -143,12 +155,12 @@ return size.Max(MinSize*scale);
 
 Handle<String> Input::GetSelection()
 {
-UINT len=GetTextLength(ptSelectionFirst, ptSelectionLast);
+UINT len=GetTextLength(m_SelectionFirst, m_SelectionLast);
 if(!len)
 	return nullptr;
 Handle<String> text=new String(len, nullptr);
 auto buf=const_cast<LPTSTR>(text->Begin());
-GetText(ptSelectionFirst, ptSelectionLast, buf, len+1);
+GetText(m_SelectionFirst, m_SelectionLast, buf, len+1);
 return text;
 }
 
@@ -200,12 +212,12 @@ FLOAT scale=GetScaleFactor();
 rc.SetPadding(Padding*scale);
 UINT client_height=rc.GetHeight();
 POINT offset=target->GetOffset();
-UINT line_height=uLineHeight*scale;
+UINT line_height=m_LineHeight*scale;
 UINT first_line=offset.Top/line_height;
 UINT line_count=client_height/line_height+2;
 UINT last_line=first_line+line_count-1;
 BOOL show_sel=true;
-if(ptSelectionFirst==ptSelectionLast)
+if(m_SelectionFirst==m_SelectionLast)
 	show_sel=false;
 if(Application::Current->GetCurrentInput()!=this)
 	show_sel=false;
@@ -214,20 +226,20 @@ if(show_sel)
 	auto highlight=theme->HighlightBrush;
 	if(!HasFocus())
 		highlight=theme->InactiveHighlightBrush;
-	POINT pt_first=PointFromChar(ptSelectionFirst, scale);
-	POINT pt_last=PointFromChar(ptSelectionLast, scale);
-	if(ptSelectionFirst.Top==ptSelectionLast.Top)
+	POINT pt_first=PointFromChar(m_SelectionFirst, scale);
+	POINT pt_last=PointFromChar(m_SelectionLast, scale);
+	if(m_SelectionFirst.Top==m_SelectionLast.Top)
 		{
 		RECT rc_fill(pt_first.Left, pt_first.Top, pt_last.Left, pt_last.Top+line_height);
 		target->FillRect(rc_fill, highlight);
 		}
 	else
 		{
-		auto it=cLines.cbegin(ptSelectionFirst.Top);
+		auto it=m_Lines.cbegin(m_SelectionFirst.Top);
 		UINT right=rc.Left+GetLineWidth(it.get_current(), scale);
 		RECT rc_first(pt_first.Left, pt_first.Top, right, pt_first.Top+line_height);
 		target->FillRect(rc_first, highlight);
-		for(UINT line=ptSelectionFirst.Top+1; line<ptSelectionLast.Top; line++)
+		for(UINT line=m_SelectionFirst.Top+1; line<m_SelectionLast.Top; line++)
 			{
 			if(line>last_line)
 				break;
@@ -245,7 +257,7 @@ if(show_sel)
 	}
 UINT top=rc.Top+first_line*line_height;
 UINT line=0;
-for(auto it=cLines.cbegin(first_line); it.has_current(); it.move_next(), line++)
+for(auto it=m_Lines.cbegin(first_line); it.has_current(); it.move_next(), line++)
 	{
 	if(line>last_line)
 		break;
@@ -258,16 +270,16 @@ for(auto it=cLines.cbegin(first_line); it.has_current(); it.move_next(), line++)
 	top+=line_height;
 	}
 BOOL show_cursor=false;
-if(uCursorTime!=0)
+if(m_CursorTime!=0)
 	{
-	UINT cursor_time=GetTickCount()-uCursorTime;
+	UINT cursor_time=GetTickCount()-m_CursorTime;
 	show_cursor=(cursor_time%1000)<500;
 	}
-if(ptCursor.Left<0)
+if(m_CursorPos.Left<0)
 	show_cursor=false;
 if(show_cursor)
 	{
-	POINT pt_cursor=PointFromChar(ptCursor, scale);
+	POINT pt_cursor=PointFromChar(m_CursorPos, scale);
 	POINT pt_to(pt_cursor.Left, pt_cursor.Top+line_height);
 	auto brush=theme->TextBrush;
 	target->DrawLine(pt_cursor, pt_to, brush);
@@ -280,49 +292,49 @@ if(ReadOnly)
 	return;
 if(!replace)
 	replace=TEXT("");
-UINT line_count=cLines.get_count();
+UINT line_count=m_Lines.get_count();
 Handle<String> str_before;
 Handle<String> str_after;
 LPCTSTR before=TEXT("");
 LPCTSTR after=TEXT("");
 UINT before_len=0;
 UINT after_len=0;
-if(ptSelectionFirst.Top<line_count)
+if(m_SelectionFirst.Top<line_count)
 	{
-	if(ptSelectionFirst.Left>0)
+	if(m_SelectionFirst.Left>0)
 		{
-		INPUT_LINE& first_line=cLines.get_at(ptSelectionFirst.Top);
+		INPUT_LINE& first_line=m_Lines.get_at(m_SelectionFirst.Top);
 		auto text=first_line.Text->Begin();
-		str_before=new String(ptSelectionFirst.Left, text);
+		str_before=new String(m_SelectionFirst.Left, text);
 		before=str_before->Begin();
-		before_len=ptSelectionFirst.Left;
+		before_len=m_SelectionFirst.Left;
 		}
 	}
-if(ptSelectionLast.Top<line_count)
+if(m_SelectionLast.Top<line_count)
 	{
-	INPUT_LINE& last_line=cLines.get_at(ptSelectionLast.Top);
+	INPUT_LINE& last_line=m_Lines.get_at(m_SelectionLast.Top);
 	UINT line_len=last_line.Offsets.get_count();
-	if(ptSelectionLast.Left<line_len)
+	if(m_SelectionLast.Left<line_len)
 		{
 		auto text=last_line.Text->Begin();
-		str_after=new String(&text[ptSelectionLast.Left]);
+		str_after=new String(&text[m_SelectionLast.Left]);
 		after=str_after->Begin();
 		after_len=StringLength(after);
 		}
 	}
-UINT line_id=ptSelectionFirst.Top;
-for(auto it=cLines.begin(ptSelectionFirst.Top); it.has_current(); line_id++)
+UINT line_id=m_SelectionFirst.Top;
+for(auto it=m_Lines.begin(m_SelectionFirst.Top); it.has_current(); line_id++)
 	{
 	INPUT_LINE& line=it.get_current();
 	UINT line_width=GetLineWidth(line, 1.f);
 	if(line_width>0)
 		{
-		UINT& width_count=cLineWidths.get(line_width);
+		UINT& width_count=m_LineWidths.get(line_width);
 		if(--width_count==0)
-			cLineWidths.remove(line_width);
+			m_LineWidths.remove(line_width);
 		}
 	it.remove_current();
-	if(line_id==ptSelectionLast.Top)
+	if(line_id==m_SelectionLast.Top)
 		break;
 	}
 UINT line_start=0;
@@ -349,17 +361,17 @@ while(replace[str_pos])
 		{
 		StringCopy(str, line_len+1, &replace[line_start], insert_len);
 		}
-	INPUT_LINE& line=cLines.insert_at(ptSelectionStart.Top);
+	INPUT_LINE& line=m_Lines.insert_at(m_SelectionStart.Top);
 	line.Text=text;
 	UpdateLine(line);
-	ptSelectionFirst.Top++;
-	ptSelectionFirst.Left=0;
+	m_SelectionFirst.Top++;
+	m_SelectionFirst.Left=0;
 	str_pos+=2;
 	line_start=str_pos;
 	}
 UINT insert_len=str_pos-line_start;
 UINT line_len=before_len+insert_len+after_len;
-INPUT_LINE& line=cLines.insert_at(ptSelectionFirst.Top);
+INPUT_LINE& line=m_Lines.insert_at(m_SelectionFirst.Top);
 if(line_len>0)
 	{
 	Handle<String> text=new String(line_len, nullptr);
@@ -374,11 +386,11 @@ if(line_len>0)
 	line.Text=text;
 	UpdateLine(line);
 	}
-ptSelectionFirst.Left=before_len+insert_len;
-ptSelectionLast=ptSelectionFirst;
-ptSelectionStart=ptSelectionFirst;
-ptSelectionEnd=ptSelectionFirst;
-ptCursor=ptSelectionFirst;
+m_SelectionFirst.Left=before_len+insert_len;
+m_SelectionLast=m_SelectionFirst;
+m_SelectionStart=m_SelectionFirst;
+m_SelectionEnd=m_SelectionFirst;
+m_CursorPos=m_SelectionFirst;
 Invalidate(true);
 SelectionChanged(this);
 }
@@ -392,7 +404,7 @@ SetSelection(pt_start, pt_end);
 
 VOID Input::SelectNone()
 {
-SetSelection(ptSelectionEnd, ptSelectionEnd);
+SetSelection(m_SelectionEnd, m_SelectionEnd);
 }
 
 VOID Input::SetFocus(FocusReason reason)
@@ -404,14 +416,14 @@ Application::Current->SetCurrentInput(this);
 VOID Input::SetSelection(POINT const& pt_start, POINT const& pt_end)
 {
 BOOL changed=false;
-if(ptSelectionStart!=pt_start)
+if(m_SelectionStart!=pt_start)
 	{
-	ptSelectionStart=pt_start;
+	m_SelectionStart=pt_start;
 	changed=true;
 	}
-if(ptSelectionEnd!=pt_end)
+if(m_SelectionEnd!=pt_end)
 	{
-	ptSelectionEnd=pt_end;
+	m_SelectionEnd=pt_end;
 	changed=true;
 	}
 if(changed)
@@ -436,7 +448,7 @@ ReadFromStream(buf);
 
 Graphics::POINT Input::CharFromPoint(POINT pt, UINT line_height)
 {
-UINT line_count=cLines.get_count();
+UINT line_count=m_Lines.get_count();
 if(!line_count)
 	return POINT(0, 0);
 if(pt.Left<0)
@@ -448,7 +460,7 @@ if(line_id>=line_count)
 	line_id=line_count-1;
 if(pt.Left<0)
 	return POINT(0, line_id);
-INPUT_LINE& line=cLines.get_at(line_id);
+INPUT_LINE& line=m_Lines.get_at(line_id);
 FLOAT scale=GetScaleFactor();
 UINT char_id=0;
 UINT left=0;
@@ -471,10 +483,10 @@ return POINT(char_id, line_id);
 Graphics::POINT Input::GetEndPoint()
 {
 POINT pt_end;
-UINT line_count=cLines.get_count();
+UINT line_count=m_Lines.get_count();
 if(line_count==0)
 	return pt_end;
-INPUT_LINE& line=cLines.get_at(line_count-1);
+INPUT_LINE& line=m_Lines.get_at(line_count-1);
 UINT char_count=line.Offsets.get_count();
 pt_end.Set(char_count, line_count-1);
 return pt_end;
@@ -499,18 +511,18 @@ return offset*scale;
 
 UINT Input::GetText(POINT const& pt_start, POINT const& pt_end, LPTSTR buf, UINT size)
 {
-UINT line_count=cLines.get_count();
+UINT line_count=m_Lines.get_count();
 if(!line_count)
 	return 0;
 if(pt_start.Top==pt_end.Top)
 	{
-	INPUT_LINE const& line=cLines.get_at(pt_start.Top);
+	INPUT_LINE const& line=m_Lines.get_at(pt_start.Top);
 	UINT copy=pt_end.Left-pt_start.Left;
 	auto text=line.Text->Begin();
 	return StringCopy(buf, size, &text[pt_start.Left], copy);
 	}
 UINT line_id=pt_start.Top;
-auto it=cLines.cbegin(line_id);
+auto it=m_Lines.cbegin(line_id);
 INPUT_LINE const& first_line=it.get_current();
 auto text=first_line.Text->Begin();
 UINT len=StringCopy(buf, size, &text[pt_start.Left]);
@@ -531,13 +543,13 @@ return len;
 
 UINT Input::GetTextLength(POINT const& pt_start, POINT const& pt_end)
 {
-UINT line_count=cLines.get_count();
+UINT line_count=m_Lines.get_count();
 if(!line_count)
 	return 0;
 if(pt_start.Top==pt_end.Top)
 	return pt_end.Left-pt_start.Left;
 UINT line_id=pt_start.Top;
-auto it=cLines.cbegin(line_id);
+auto it=m_Lines.cbegin(line_id);
 INPUT_LINE const& first_line=it.get_current();
 UINT line_len=first_line.Offsets.get_count();
 UINT len=line_len-pt_start.Left;
@@ -555,18 +567,18 @@ return len;
 
 VOID Input::MoveCursor(INT x, INT y, BOOL select, BOOL notify)
 {
-if(ptCursor.Left<0)
+if(m_CursorPos.Left<0)
 	return;
-UINT line_count=cLines.get_count();
+UINT line_count=m_Lines.get_count();
 if(line_count==0)
 	return;
-INT line_id=ptCursor.Top+y;
+INT line_id=m_CursorPos.Top+y;
 line_id=Max(line_id, 0);
 line_id=Min(line_id, (INT)line_count-1);
-auto it=cLines.cbegin(line_id);
+auto it=m_Lines.cbegin(line_id);
 INPUT_LINE const& line=it.get_current();
 UINT line_len=line.Offsets.get_count();
-UINT char_id=ptCursor.Left;
+UINT char_id=m_CursorPos.Left;
 if(char_id>line_len)
 	char_id=line_len;
 for(; x>0; x--)
@@ -602,12 +614,12 @@ for(; x<0; x++)
 POINT pt_cursor(char_id, line_id);
 if(select)
 	{
-	ptSelectionEnd=pt_cursor;
+	m_SelectionEnd=pt_cursor;
 	}
 else
 	{
-	ptSelectionStart=pt_cursor;
-	ptSelectionEnd=pt_cursor;
+	m_SelectionStart=pt_cursor;
+	m_SelectionEnd=pt_cursor;
 	}
 UpdateSelection();
 }
@@ -631,11 +643,11 @@ Invalidate();
 VOID Input::OnFocusLost()
 {
 ShowCursor(false);
-if(GetFlag(uInputFlags, InputFlags::Pointing))
+if(GetFlag(m_InputFlags, InputFlags::Pointing))
 	{
-	ClearFlag(uInputFlags, InputFlags::Pointing);
+	ClearFlag(m_InputFlags, InputFlags::Pointing);
 	ReleasePointer();
-	ptPointer.Set(0, 0);
+	m_PointerPos.Set(0, 0);
 	}
 }
 
@@ -658,14 +670,14 @@ if(args->Char)
 	return;
 	}
 VirtualKey key=args->Key;
-BOOL shift=GetFlag(uInputFlags, InputFlags::Shift);
+BOOL shift=GetFlag(m_InputFlags, InputFlags::Shift);
 switch(key)
 	{
 	case VirtualKey::Back:
 		{
 		if(!ReadOnly)
 			{
-			if(ptSelectionStart==ptSelectionEnd)
+			if(m_SelectionStart==m_SelectionEnd)
 				MoveCursor(-1, 0, true, false);
 			ReplaceSelection(nullptr);
 			}
@@ -676,7 +688,7 @@ switch(key)
 		{
 		if(!ReadOnly)
 			{
-			if(ptSelectionStart==ptSelectionEnd)
+			if(m_SelectionStart==m_SelectionEnd)
 				MoveCursor(1, 0, true, false);
 			ReplaceSelection(nullptr);
 			}
@@ -718,7 +730,7 @@ switch(key)
 		}
 	case VirtualKey::Shift:
 		{
-		SetFlag(uInputFlags, InputFlags::Shift);
+		SetFlag(m_InputFlags, InputFlags::Shift);
 		args->Handled=true;
 		break;
 		}
@@ -737,7 +749,7 @@ switch(args->Key)
 	{
 	case VirtualKey::Shift:
 		{
-		ClearFlag(uInputFlags, InputFlags::Shift);
+		ClearFlag(m_InputFlags, InputFlags::Shift);
 		args->Handled=true;
 		break;
 		}
@@ -750,12 +762,12 @@ SetFocus(FocusReason::Pointer);
 if(args->Button==PointerButton::Wheel)
 	return;
 if(args->Button==PointerButton::Left)
-	SetFlag(uInputFlags, InputFlags::Pointing);
-ptPointer=args->Point;
+	SetFlag(m_InputFlags, InputFlags::Pointing);
+m_PointerPos=args->Point;
 CapturePointer();
 BOOL selection=false;
 if(args->Button==PointerButton::Right)
-	selection=PointIsSelected(ptPointer);
+	selection=PointIsSelected(m_PointerPos);
 if(!selection)
 	{
 	ClearSelection();
@@ -766,9 +778,9 @@ args->Handled=true;
 
 VOID Input::OnPointerMoved(Handle<PointerEventArgs> args)
 {
-if(!GetFlag(uInputFlags, InputFlags::Pointing))
+if(!GetFlag(m_InputFlags, InputFlags::Pointing))
 	return;
-ptPointer=args->Point;
+m_PointerPos=args->Point;
 UpdatePointer();
 }
 
@@ -783,8 +795,8 @@ switch(args->Button)
 	{
 	case PointerButton::Left:
 		{
-		ClearFlag(uInputFlags, InputFlags::Pointing);
-		ptPointer=args->Point;
+		ClearFlag(m_InputFlags, InputFlags::Pointing);
+		m_PointerPos=args->Point;
 		UpdatePointer();
 		break;
 		}
@@ -800,43 +812,43 @@ args->Handled=true;
 Graphics::POINT Input::PointFromChar(POINT const& pt_char, FLOAT scale)
 {
 POINT pt(Padding.Left*scale, Padding.Top*scale);
-UINT line_count=cLines.get_count();
+UINT line_count=m_Lines.get_count();
 if(pt_char.Top>=line_count)
 	return pt;
-UINT line_height=uLineHeight*scale;
+UINT line_height=m_LineHeight*scale;
 pt.Top+=pt_char.Top*line_height;
 if(pt_char.Left==0)
 	return pt;
-INPUT_LINE& line=cLines.get_at(pt_char.Top);
+INPUT_LINE& line=m_Lines.get_at(pt_char.Top);
 pt.Left+=line.Offsets.get_at(pt_char.Left-1)*scale;
 return pt;
 }
 
 BOOL Input::PointIsSelected(POINT const& pt)
 {
-if(ptSelectionFirst==ptSelectionLast)
+if(m_SelectionFirst==m_SelectionLast)
 	return false;
 FLOAT scale=GetScaleFactor();
 RECT rc=GetClientRect();
 rc.Left+=Padding.Left*scale;
 rc.Top+=Padding.Top*scale;
-UINT line_height=uLineHeight*scale;
+UINT line_height=m_LineHeight*scale;
 UINT line_pt=(pt.Top-rc.Top)/line_height;
-if(line_pt<ptSelectionFirst.Top||line_pt>ptSelectionLast.Top)
+if(line_pt<m_SelectionFirst.Top||line_pt>m_SelectionLast.Top)
 	return false;
-POINT pt_first=PointFromChar(ptSelectionFirst, scale);
-POINT pt_last=PointFromChar(ptSelectionLast, scale);
-if(ptSelectionFirst.Top==ptSelectionLast.Top)
+POINT pt_first=PointFromChar(m_SelectionFirst, scale);
+POINT pt_last=PointFromChar(m_SelectionLast, scale);
+if(m_SelectionFirst.Top==m_SelectionLast.Top)
 	{
 	RECT rc_sel(pt_first.Left, pt_first.Top, pt_last.Left, pt_last.Top+line_height);
 	return pt.Inside(rc_sel);
 	}
-if(line_pt==ptSelectionFirst.Top)
+if(line_pt==m_SelectionFirst.Top)
 	{
 	RECT rc_first(pt_first.Left, pt_first.Top, rc.Right, pt_first.Top+line_height);
 	return pt.Inside(rc_first);
 	}
-if(line_pt==ptSelectionLast.Top)
+if(line_pt==m_SelectionLast.Top)
 	{
 	RECT rc_last(rc.Left, pt_last.Top, pt_last.Left, pt_last.Top+line_height);
 	return pt.Inside(rc_last);
@@ -852,9 +864,9 @@ auto edit_menu=Convert<EditMenu>(ContextMenu);
 if(edit_menu)
 	{
 	auto clipboard=Clipboard::Open();
-	BOOL content=cLines.get_count()>0;
+	BOOL content=m_Lines.get_count()>0;
 	BOOL paste=clipboard->HasText();
-	BOOL selection=ptSelectionFirst!=ptSelectionLast;
+	BOOL selection=m_SelectionFirst!=m_SelectionLast;
 	if(!content&&!paste)
 		return false;
 	edit_menu->SelectAll->Visible=(content&&!selection);
@@ -870,24 +882,24 @@ return true;
 
 VOID Input::ShowCursor(BOOL show)
 {
-uCursorTime=(show? GetTickCount(): 0);
+m_CursorTime=(show? GetTickCount(): 0);
 Invalidate();
 if(show)
 	{
-	if(hCursorTimer)
+	if(m_CursorTimer)
 		{
-		hCursorTimer->Reset();
+		m_CursorTimer->Reset();
 		}
 	else
 		{
-		hCursorTimer=new Timer();
-		hCursorTimer->Triggered.Add(this, &Input::OnCursorTimer);
-		hCursorTimer->StartPeriodic(500);
+		m_CursorTimer=new Timer();
+		m_CursorTimer->Triggered.Add(this, &Input::OnCursorTimer);
+		m_CursorTimer->StartPeriodic(500);
 		}
 	}
 else
 	{
-	hCursorTimer=nullptr;
+	m_CursorTimer=nullptr;
 	}
 }
 
@@ -899,9 +911,9 @@ UINT char_count=line.Offsets.get_count();
 if(char_count>0)
 	{
 	UINT line_width=line.Offsets.get_at(char_count-1);
-	UINT& width_count=cLineWidths.get(line_width);
+	UINT& width_count=m_LineWidths.get(line_width);
 	if(--width_count==0)
-		cLineWidths.remove(line_width);
+		m_LineWidths.remove(line_width);
 	line.Offsets.clear();
 	char_count=0;
 	}
@@ -915,7 +927,7 @@ for(UINT pos=0; str[pos]; pos++)
 	line.Offsets.append(size.Width);
 	}
 UINT line_width=size.Width;
-UINT& width_count=cLineWidths.get(line_width, 0);
+UINT& width_count=m_LineWidths.get(line_width, 0);
 width_count++;
 }
 
@@ -924,21 +936,21 @@ VOID Input::UpdatePointer()
 FLOAT scale=GetScaleFactor();
 UINT left=Padding.Left*scale;
 UINT top=Padding.Top*scale;
-POINT pt(ptPointer.Left-left, ptPointer.Top-top);
-UINT line_height=uLineHeight*scale;
+POINT pt(m_PointerPos.Left-left, m_PointerPos.Top-top);
+UINT line_height=m_LineHeight*scale;
 pt=CharFromPoint(pt, line_height);
 BOOL changed=false;
-if(ptSelectionStart.Left<0)
+if(m_SelectionStart.Left<0)
 	{
-	ptSelectionStart=pt;
-	ptSelectionEnd=pt;
+	m_SelectionStart=pt;
+	m_SelectionEnd=pt;
 	changed=true;
 	}
 else
 	{
-	if(ptSelectionEnd!=pt)
+	if(m_SelectionEnd!=pt)
 		{
-		ptSelectionEnd=pt;
+		m_SelectionEnd=pt;
 		changed=true;
 		}
 	}
@@ -947,37 +959,37 @@ UpdateSelection();
 
 VOID Input::UpdateSelection()
 {
-UINT start_line=Min(ptSelectionStart.Top, ptSelectionEnd.Top);
-UINT end_line=Max(ptSelectionStart.Top, ptSelectionEnd.Top);
+UINT start_line=Min(m_SelectionStart.Top, m_SelectionEnd.Top);
+UINT end_line=Max(m_SelectionStart.Top, m_SelectionEnd.Top);
 UINT start_char=0;
 UINT end_char=0;
 BOOL reverse=false;
 if(start_line==end_line)
 	{
-	reverse=ptSelectionStart.Left>ptSelectionEnd.Left;
-	start_char=Min(ptSelectionStart.Left, ptSelectionEnd.Left);
-	end_char=Max(ptSelectionStart.Left, ptSelectionEnd.Left);
+	reverse=m_SelectionStart.Left>m_SelectionEnd.Left;
+	start_char=Min(m_SelectionStart.Left, m_SelectionEnd.Left);
+	end_char=Max(m_SelectionStart.Left, m_SelectionEnd.Left);
 	}
-else if(start_line==ptSelectionStart.Top)
+else if(start_line==m_SelectionStart.Top)
 	{
-	start_char=ptSelectionStart.Left;
-	end_char=ptSelectionEnd.Left;
+	start_char=m_SelectionStart.Left;
+	end_char=m_SelectionEnd.Left;
 	}
 else
 	{
 	reverse=true;
-	start_char=ptSelectionEnd.Left;
-	end_char=ptSelectionStart.Left;
+	start_char=m_SelectionEnd.Left;
+	end_char=m_SelectionStart.Left;
 	}
-ptSelectionFirst.Set(start_char, start_line);
-ptSelectionLast.Set(end_char, end_line);
+m_SelectionFirst.Set(start_char, start_line);
+m_SelectionLast.Set(end_char, end_line);
 if(reverse)
 	{
-	ptCursor.Set(start_char, start_line);
+	m_CursorPos.Set(start_char, start_line);
 	}
 else
 	{
-	ptCursor.Set(end_char, end_line);
+	m_CursorPos.Set(end_char, end_line);
 	}
 Invalidate(true);
 auto app=Core::Application::Current;

@@ -27,7 +27,7 @@ namespace Storage {
 File::File(Handle<String> path):
 Storage::File(path),
 hFile(NULL),
-uPosition(0)
+m_Position(0)
 {}
 
 
@@ -37,7 +37,7 @@ uPosition(0)
 
 VOID File::Close()
 {
-unique_lock lock(cMutex);
+unique_lock lock(m_Mutex);
 CloseInternal();
 }
 
@@ -51,12 +51,12 @@ return file;
 
 Status File::Create(FileCreateMode create, FileAccessMode access, FileShareMode share)
 {
-unique_lock lock(cMutex);
+unique_lock lock(m_Mutex);
 CloseInternal();
 UINT ucreate=FileGetCreateMode(create);
 UINT uacc=FileGetAccessMode(access);
 UINT ushare=FileGetShareMode(share);
-LPCTSTR path=hPath->Begin();
+LPCTSTR path=m_Path->Begin();
 SetLastError(0);
 HANDLE file=CreateFile(path, uacc, ushare, nullptr, ucreate, 0, NULL);
 if(file==INVALID_HANDLE_VALUE)
@@ -81,7 +81,7 @@ return Status::Success;
 
 BOOL File::SetSize(FILE_SIZE size)
 {
-unique_lock lock(cMutex);
+unique_lock lock(m_Mutex);
 if(!hFile)
 	return false;
 if(!Seek(size))
@@ -98,7 +98,7 @@ return true;
 
 SIZE_T File::Available()
 {
-unique_lock lock(cMutex);
+unique_lock lock(m_Mutex);
 return AvailableInternal();
 }
 
@@ -109,14 +109,14 @@ return Read(buf, size, nullptr);
 
 SIZE_T File::Read(VOID* buf, SIZE_T size, BOOL* cancel_ptr)
 {
-unique_lock lock(cMutex);
+unique_lock lock(m_Mutex);
 if(!hFile)
 	return 0;
 if(!buf)
 	{
 	SIZE_T available=AvailableInternal();
 	SIZE_T copy=Min(size, available);
-	uPosition+=copy;
+	m_Position+=copy;
 	return copy;
 	}
 auto buf_ptr=(BYTE*)buf;
@@ -127,12 +127,12 @@ while(pos<size)
 	{
 	UINT copy=Min((UINT)(size-pos), 0x1000000U);
 	DWORD read=0;
-	ov.Offset=(UINT)uPosition;
-	ov.OffsetHigh=(UINT)(uPosition>>32);
+	ov.Offset=(UINT)m_Position;
+	ov.OffsetHigh=(UINT)(m_Position>>32);
 	if(!ReadFile(hFile, &buf_ptr[pos], copy, &read, &ov))
 		break;
 	pos+=read;
-	uPosition+=read;
+	m_Position+=read;
 	if(read<copy)
 		break;
 	if(cancel_ptr)
@@ -151,7 +151,7 @@ return pos;
 
 VOID File::Flush()
 {
-unique_lock lock(cMutex);
+unique_lock lock(m_Mutex);
 if(!hFile)
 	return;
 FlushFileBuffers(hFile);
@@ -164,7 +164,7 @@ return Write(buf, size, nullptr);
 
 SIZE_T File::Write(VOID const* buf, SIZE_T size, BOOL* cancel_ptr)
 {
-unique_lock lock(cMutex);
+unique_lock lock(m_Mutex);
 if(!hFile)
 	return 0;
 auto buf_ptr=(BYTE const*)buf;
@@ -174,12 +174,12 @@ while(pos<size)
 	{
 	UINT copy=Min((UINT)(size-pos), 0x1000000U);
 	DWORD written=0;
-	ov.Offset=(UINT)uPosition;
-	ov.OffsetHigh=(UINT)(uPosition>>32);
+	ov.Offset=(UINT)m_Position;
+	ov.OffsetHigh=(UINT)(m_Position>>32);
 	if(!WriteFile(hFile, &buf_ptr[pos], copy, &written, &ov))
 		break;
 	pos+=written;
-	uPosition+=written;
+	m_Position+=written;
 	if(written<copy)
 		break;
 	if(cancel_ptr)
@@ -198,7 +198,7 @@ return pos;
 
 FILE_SIZE File::GetSize()
 {
-unique_lock lock(cMutex);
+unique_lock lock(m_Mutex);
 if(!hFile)
 	return 0;
 return GetFileSize(hFile);
@@ -206,14 +206,14 @@ return GetFileSize(hFile);
 
 BOOL File::Seek(UINT64 pos)
 {
-unique_lock lock(cMutex);
+unique_lock lock(m_Mutex);
 if(!hFile)
 	return false;
 LONG lo=(LONG)pos;
 LONG hi=(LONG)(pos>>32);
 if(SetFilePointer(hFile, lo, &hi, FILE_BEGIN)==INVALID_SET_FILE_POINTER)
 	return false;
-uPosition=pos;
+m_Position=pos;
 return true;
 }
 
@@ -227,7 +227,7 @@ SIZE_T File::AvailableInternal()
 if(!hFile)
 	return 0;
 UINT64 size=GetFileSize(hFile);
-UINT64 available=size-uPosition;
+UINT64 available=size-m_Position;
 if(available>SIZE_MAX)
 	return SIZE_MAX;
 return (SIZE_T)available;

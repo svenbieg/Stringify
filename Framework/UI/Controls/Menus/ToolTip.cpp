@@ -51,7 +51,7 @@ pControl->PointerLeft.Remove(this);
 
 VOID ToolTip::Close()
 {
-hTimer=nullptr;
+m_Timer=nullptr;
 if(hPanel)
 	{
 	hPanel->Visible=false;
@@ -77,9 +77,9 @@ Close();
 
 VOID ToolTip::OnControlPointerEntered()
 {
-hTimer=new Timer();
-hTimer->Triggered.Add(this, &ToolTip::OnTimerTriggered);
-hTimer->StartOnce(1000);
+m_Timer=new Timer();
+m_Timer->Triggered.Add(this, &ToolTip::OnTimerTriggered);
+m_Timer->StartOnce(1000);
 }
 
 VOID ToolTip::OnControlPointerLeft()
@@ -106,7 +106,7 @@ VOID ToolTip::OnTimerTriggered()
 {
 if(hPanel)
 	return;
-hTimer=nullptr;
+m_Timer=nullptr;
 auto frame=pControl->GetFrame();
 auto theme=frame->GetTheme();
 hPanel=new Panel(frame);

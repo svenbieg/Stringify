@@ -319,9 +319,9 @@ if(SubMenu)
 	{
 	if(!SubMenu->Visible)
 		{
-		hTimer=new Timer();
-		hTimer->Triggered.Add(this, &PopupMenuItem::OnTimerTriggered);
-		hTimer->StartOnce(300);
+		m_Timer=new Timer();
+		m_Timer->Triggered.Add(this, &PopupMenuItem::OnTimerTriggered);
+		m_Timer->StartOnce(300);
 		}
 	}
 }
@@ -329,12 +329,12 @@ if(SubMenu)
 VOID PopupMenuItem::OnPointerLeft()
 {
 Invalidate();
-hTimer=nullptr;
+m_Timer=nullptr;
 }
 
 VOID PopupMenuItem::OnTimerTriggered()
 {
-hTimer=nullptr;
+m_Timer=nullptr;
 Open();
 }
 

@@ -54,7 +54,7 @@ private:
 	VOID OnConnectionClosed();
 	Handle<Task> hListenTask;
 	HANDLE hNamedPipe;
-	Handle<String> hPath;
+	Handle<String> m_Path;
 };
 
 }

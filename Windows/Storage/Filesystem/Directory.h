@@ -48,7 +48,7 @@ public:
 
 private:
 	// Common
-	Concurrency::Mutex cMutex;
+	Concurrency::Mutex m_Mutex;
 };
 
 
@@ -65,14 +65,14 @@ public:
 
 	// Common
 	BOOL First();
-	Handle<Object> GetCurrent()const override { return hCurrent; }
-	BOOL HasCurrent()const override { return hCurrent!=nullptr; }
+	Handle<Object> GetCurrent()const override { return m_Current; }
+	BOOL HasCurrent()const override { return m_Current!=nullptr; }
 	BOOL MoveNext()override;
 
 private:
 	// Common
-	Handle<Object> hCurrent;
-	Handle<Directory> hDirectory;
+	Handle<Object> m_Current;
+	Handle<Directory> m_Directory;
 	HANDLE hFind;
 };
 

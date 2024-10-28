@@ -59,9 +59,9 @@ private:
 	// Common
 	SIZE_T AvailableInternal();
 	VOID CloseInternal();
-	std::shared_mutex cMutex;
+	std::shared_mutex m_Mutex;
 	HANDLE hFile;
-	UINT64 uPosition;
+	UINT64 m_Position;
 };
 
 }}

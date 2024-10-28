@@ -72,7 +72,6 @@ public:
 
 private:
 	// Common
-	VOID DoScroll();
 	ScrollBarButton GetButton(POINT const& Point);
 	VOID OnPointerDown(Handle<PointerEventArgs> Args);
 	VOID OnPointerLeft();

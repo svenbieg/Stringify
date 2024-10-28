@@ -23,8 +23,8 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)CharClass.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Collections\Log.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Collections\LogEntry.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Culture\Language.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Culture\LanguageClass.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Culture\Language.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Devices\Clock.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Devices\Random.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Enum.h" />

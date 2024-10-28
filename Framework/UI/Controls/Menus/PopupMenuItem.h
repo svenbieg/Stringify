@@ -72,7 +72,7 @@ private:
 	VOID OnTimerTriggered();
 	Handle<Bitmap> hIcon;
 	Handle<Bitmap> hIconDisabled;
-	Handle<Timer> hTimer;
+	Handle<Timer> m_Timer;
 	UINT uIconWidth;
 	UINT uLabelWidth;
 	UINT uShortcutWidth;

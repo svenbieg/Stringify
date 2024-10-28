@@ -11,6 +11,7 @@
 
 #include "Clusters/list.hpp"
 #include "Clusters/map.hpp"
+#include "Collections/StringList.h"
 #include "Storage/Streams/InputStream.h"
 #include "UI/Controls/Menus/PopupMenu.h"
 #include "UI/Timer.h"
@@ -35,12 +36,14 @@ public:
 	// Using
 	using InputStream=Storage::Streams::InputStream;
 	using PopupMenu=UI::Controls::Menus::PopupMenu;
+	using StringList=Collections::StringList;
 
 	// Con-/Destructors
 	Input(Window* Parent);
 
 	// Common
-	VOID AppendLine(Handle<String> Text);
+	VOID AppendLine(Handle<String> Line);
+	VOID AppendLines(Handle<StringList> Lines);
 	VOID Clear();
 	VOID ClearSelection();
 	Handle<PopupMenu> ContextMenu;
@@ -107,18 +110,18 @@ private:
 	VOID UpdateLine(INPUT_LINE& Line);
 	VOID UpdatePointer();
 	VOID UpdateSelection();
-	Clusters::list<INPUT_LINE> cLines;
-	Clusters::map<UINT, UINT> cLineWidths;
-	Handle<Timer> hCursorTimer;
-	POINT ptCursor;
-	POINT ptPointer;
-	POINT ptSelectionEnd;
-	POINT ptSelectionFirst;
-	POINT ptSelectionLast;
-	POINT ptSelectionStart;
-	UINT uCursorTime;
-	volatile InputFlags uInputFlags;
-	UINT uLineHeight;
+	POINT m_CursorPos;
+	UINT m_CursorTime;
+	Handle<Timer> m_CursorTimer;
+	InputFlags m_InputFlags;
+	Clusters::list<INPUT_LINE> m_Lines;
+	UINT m_LineHeight;
+	Clusters::map<UINT, UINT> m_LineWidths;
+	POINT m_PointerPos;
+	POINT m_SelectionEnd;
+	POINT m_SelectionFirst;
+	POINT m_SelectionLast;
+	POINT m_SelectionStart;
 };
 
 }}

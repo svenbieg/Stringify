@@ -221,15 +221,6 @@ if(GetFlag(m_Flags, WindowFlags::Rearrange))
 	ClearFlag(m_Flags, WindowFlags::Rearrange);
 	RECT rc_client=GetClientRect();
 	this->Rearrange(target, rc_client);
-	return;
-	}
-for(auto it=Children->First(); it->HasCurrent(); it->MoveNext())
-	{
-	auto child=it->GetCurrent();
-	if(!child->Visible)
-		continue;
-	RECT rc=child->GetRect();
-	child->Move(target, rc);
 	}
 }
 

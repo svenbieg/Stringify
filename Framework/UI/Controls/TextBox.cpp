@@ -45,9 +45,14 @@ hInput->SelectionChanged.Add(this, &TextBox::OnInputSelectionChanged);
 // Common
 //========
 
-VOID TextBox::AppendLine(Handle<String> text)
+VOID TextBox::AppendLine(Handle<String> line)
 {
-hInput->AppendLine(text);
+hInput->AppendLine(line);
+}
+
+VOID TextBox::AppendLines(Handle<StringList> lines)
+{
+hInput->AppendLines(lines);
 }
 
 VOID TextBox::Clear()

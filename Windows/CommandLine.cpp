@@ -45,12 +45,12 @@ return GetCommandLine();
 
 Handle<CommandLine> CommandLine::Get()
 {
-if(!hCurrent)
+if(!m_Current)
 	{
 	LPTSTR cmd_line=GetCommandLine();
-	hCurrent=new CommandLine(cmd_line);
+	m_Current=new CommandLine(cmd_line);
 	}
-return hCurrent;
+return m_Current;
 }
 
 LPCTSTR CommandLine::ScanArgument(LPCTSTR cmd_line, LPCTSTR* arg_ptr, UINT* len_ptr)
@@ -93,4 +93,4 @@ return nullptr;
 // Common Private
 //================
 
-Handle<CommandLine> CommandLine::hCurrent;
+Handle<CommandLine> CommandLine::m_Current;
