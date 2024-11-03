@@ -67,7 +67,7 @@ VOID Application::DispatchHandler(DispatchedHandler* handler)
 {
 ScopedLock lock(m_Mutex);
 DispatchedHandler::Append(m_DispatchedHandler, handler);
-PostThreadMessage(uThreadId, WM_DISPATCH, 0, 0);
+PostThreadMessage(m_ThreadId, WM_DISPATCH, 0, 0);
 }
 
 VOID Application::Quit()
@@ -116,7 +116,7 @@ UI::Application(name, version)
 {
 Current=this;
 SetUnhandledExceptionFilter(UnhandledExceptionHandler);
-uThreadId=GetCurrentThreadId();
+m_ThreadId=GetCurrentThreadId();
 }
 
 

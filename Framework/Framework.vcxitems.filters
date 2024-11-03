@@ -168,9 +168,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Frame.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Timer.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Application.cpp">
       <Filter>UI</Filter>
     </ClCompile>
@@ -349,9 +346,6 @@
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Bitmaps\File.h">
       <Filter>Resources\Bitmaps</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Timer.h">
-      <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Application.h">
       <Filter>UI</Filter>

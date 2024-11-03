@@ -96,7 +96,7 @@ private:
 	VOID OnPointerEntered();
 	VOID OnPointerLeft();
 	VOID OnPointerUp(Handle<PointerEventArgs> Args);
-	InteractiveFlags uInteractiveFlags;
+	InteractiveFlags m_InteractiveFlags;
 };
 
 }}

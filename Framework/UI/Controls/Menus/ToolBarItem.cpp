@@ -79,17 +79,17 @@ if(!Icon)
 auto theme=GetTheme();
 FLOAT scale=GetScaleFactor();
 rc.SetPadding(Padding*scale);
-if(!hIcon)
-	hIcon=Icon->GetBitmap(16*scale);
-auto icon=hIcon;
+if(!m_Icon)
+	m_Icon=Icon->GetBitmap(16*scale);
+auto icon=m_Icon;
 if(!Enabled)
 	{
-	if(!hIconDisabled)
+	if(!m_IconDisabled)
 		{
-		hIconDisabled=hIcon->Copy();
-		DisableMenuBitmap(hIconDisabled);
+		m_IconDisabled=m_Icon->Copy();
+		DisableMenuBitmap(m_IconDisabled);
 		}
-	icon=hIconDisabled;
+	icon=m_IconDisabled;
 	}
 SIZE ico_size=icon->GetDimensions();
 RECT ico_rc(ico_size);

@@ -51,7 +51,7 @@ private:
 	// Common
 	VOID OnInputSelectionChanged();
 	VOID OnReadOnlyChanged(BOOL ReadOnly);
-	Handle<Input> hInput;
+	Handle<Input> m_Input;
 };
 
 }}

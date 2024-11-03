@@ -43,9 +43,9 @@ private:
 	VOID OnPointerDown(Handle<PointerEventArgs> Args);
 	VOID OnPointerMoved(Handle<PointerEventArgs> Args);
 	VOID OnPointerUp(Handle<PointerEventArgs> Args);
-	UINT uStartSize;
 	POINT m_StartPoint;
-	Orientation uOrientation;
+	UINT m_StartSize;
+	Orientation m_Orientation;
 };
 
 }}

@@ -50,8 +50,8 @@ class COLOR
 {
 public:
 	// Con-/Destructors
-	COLOR(UINT Color=0): uColor(Color) {}
-	COLOR(Colors Color): uColor((UINT)Color) {}
+	COLOR(UINT Color=0): m_Color(Color) {}
+	COLOR(Colors Color): m_Color((UINT)Color) {}
 	COLOR(BYTE R, BYTE G, BYTE B, BYTE A=0xFF) { Set(R, G, B, A); }
 
 	// Static Access
@@ -65,33 +65,33 @@ public:
 	static Handle<String> ToString(COLOR Color);
 
 	// Access
-	inline operator UINT()const { return uColor; }
-	inline BYTE GetAlpha()const { return (BYTE)(uColor>>24); }
-	inline BYTE GetBlue()const { return (BYTE)(uColor>>16); }
-	inline BYTE GetGreen()const { return (BYTE)(uColor>>8); }
-	inline BOOL GetMonochrome()const { return uColor>=0xFF808080; }
-	inline BYTE GetRed()const { return (BYTE)uColor; }
+	inline operator UINT()const { return m_Color; }
+	inline BYTE GetAlpha()const { return (BYTE)(m_Color>>24); }
+	inline BYTE GetBlue()const { return (BYTE)(m_Color>>16); }
+	inline BYTE GetGreen()const { return (BYTE)(m_Color>>8); }
+	inline BOOL GetMonochrome()const { return m_Color>=0xFF808080; }
+	inline BYTE GetRed()const { return (BYTE)m_Color; }
 	inline BOOL IsTransparent()const { return GetAlpha()<0xFF; }
-	inline UINT Reverse()const { return Reverse(uColor); }
-	inline UINT GetRGB()const { return uColor&0xFFFFFF; }
-	inline Handle<String> ToString()const { return ToString(uColor); }
+	inline UINT Reverse()const { return Reverse(m_Color); }
+	inline UINT GetRGB()const { return m_Color&0xFFFFFF; }
+	inline Handle<String> ToString()const { return ToString(m_Color); }
 
 	// Arithmetik
 	COLOR& operator+=(COLOR Color);
-	inline COLOR operator+(COLOR Color) { COLOR c(uColor); c+=Color; return c; }
+	inline COLOR operator+(COLOR Color) { COLOR c(m_Color); c+=Color; return c; }
 
 	// Modification
-	inline VOID Set(BYTE R, BYTE G, BYTE B, BYTE A=0xFF) { uColor=((UINT)A<<24)|((UINT)B<<16)|((UINT)G<<8)|R; }
+	inline VOID Set(BYTE R, BYTE G, BYTE B, BYTE A=0xFF) { m_Color=((UINT)A<<24)|((UINT)B<<16)|((UINT)G<<8)|R; }
 	VOID SetAlpha(BYTE Alpha);
 	VOID SetBlue(BYTE Blue);
 	VOID SetBrightness(FLOAT Brightness);
 	VOID SetGreen(BYTE Green);
-	VOID SetMonochrome(BOOL Monochrome);
+	VOID SetMonochrome(BOOL m_Monochrome);
 	VOID SetRed(BYTE Red);
 
 private:
 	// Common
-	UINT uColor;
+	UINT m_Color;
 };
 
 }

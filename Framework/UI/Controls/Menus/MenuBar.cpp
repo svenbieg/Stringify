@@ -33,8 +33,8 @@ namespace UI {
 MenuBar::MenuBar(UI::Window* parent):
 WrapPanel(parent),
 Menu(nullptr),
-bEntering(false),
-pOldFrame(nullptr)
+m_Entering(false),
+m_OldFrame(nullptr)
 {
 Padding.Set(2, 0, 2, 0);
 m_Panel=this;
@@ -73,13 +73,13 @@ VOID MenuBar::OnFrameKeyDown(Handle<KeyEventArgs> args)
 {
 if(Accelerate(args->Key))
 	{
-	bEntering=false;
+	m_Entering=false;
 	args->Handled=true;
 	return;
 	}
 if(args->Key!=VirtualKey::Alt)
 	return;
-if(bEntering)
+if(m_Entering)
 	return;
 if(GetFlag(m_MenuFlags, MenuFlags::KeyboardAccess))
 	{
@@ -89,7 +89,7 @@ if(GetFlag(m_MenuFlags, MenuFlags::KeyboardAccess))
 Exit();
 SetFlag(m_MenuFlags, MenuFlags::KeyboardAccess);
 Application::Current->SetCurrentMenu(this);
-bEntering=true;
+m_Entering=true;
 Invalidate();
 args->Handled=true;
 }
@@ -116,9 +116,9 @@ VOID MenuBar::OnFrameKeyUp(Handle<KeyEventArgs> args)
 if(args->Key!=VirtualKey::Alt)
 	return;
 args->Handled=true;
-if(bEntering)
+if(m_Entering)
 	{
-	bEntering=false;
+	m_Entering=false;
 	Select();
 	}
 }
@@ -126,11 +126,11 @@ if(bEntering)
 VOID MenuBar::OnParentChanged()
 {
 auto frame=GetFrame();
-if(frame==pOldFrame)
+if(frame==m_OldFrame)
 	return;
-if(pOldFrame)
-	pOldFrame->KeyEvent.Remove(this);
-pOldFrame=frame;
+if(m_OldFrame)
+	m_OldFrame->KeyEvent.Remove(this);
+m_OldFrame=frame;
 if(frame)
 	frame->KeyEvent.Add(this, &MenuBar::OnFrameKeyEvent);
 }

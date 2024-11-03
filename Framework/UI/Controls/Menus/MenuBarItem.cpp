@@ -51,7 +51,7 @@ PointerLeft.Add(this, &MenuBarItem::OnPointerLeft);
 Handle<PopupMenuItem> MenuBarItem::Add(Handle<Sentence> label)
 {
 if(!SubMenu)
-	SubMenu=new PopupMenu(this, pMenu);
+	SubMenu=new PopupMenu(this, m_Menu);
 return SubMenu->Add(label);
 }
 
@@ -72,7 +72,7 @@ Graphics::SIZE MenuBarItem::GetMinSize(RenderTarget* target)
 {
 auto font=GetFont();
 FLOAT scale=GetScaleFactor();
-SIZE size=target->MeasureText(font, scale, hLabel->Begin());
+SIZE size=target->MeasureText(font, scale, m_Label->Begin());
 size.AddPadding(Padding*scale);
 return size.Max(MinSize*scale);
 }
@@ -88,14 +88,14 @@ if(!Enabled)
 FLOAT scale=GetScaleFactor();
 RECT rc_text=rc;
 rc_text.SetPadding(Padding*scale);
-auto label=hLabel->Begin();
+auto label=m_Label->Begin();
 target->TextColor=text_color;
 target->Font=font;
 target->DrawText(rc_text, scale, label);
 BOOL accelerate=Accelerator;
 if(!Enabled)
 	accelerate=false;
-if(!pMenu->HasAcceleration())
+if(!m_Menu->HasAcceleration())
 	accelerate=false;
 if(accelerate)
 	{
@@ -128,7 +128,7 @@ switch(args->Key)
 	{
 	case VirtualKey::Down:
 		{
-		pMenu->Open(this);
+		m_Menu->Open(this);
 		return;
 		}
 	case VirtualKey::Left:
@@ -137,13 +137,13 @@ switch(args->Key)
 		if(control)
 			{
 			auto item=Convert<MenuItem>(control);
-			pMenu->Select(item);
+			m_Menu->Select(item);
 			}
 		return;
 		}
 	case VirtualKey::Return:
 		{
-		pMenu->Open(this);
+		m_Menu->Open(this);
 		return;
 		}
 	case VirtualKey::Right:
@@ -152,7 +152,7 @@ switch(args->Key)
 		if(control)
 			{
 			auto item=Convert<MenuItem>(control);
-			pMenu->Select(item);
+			m_Menu->Select(item);
 			}
 		return;
 		}
@@ -168,20 +168,20 @@ args->Handled=false;
 VOID MenuBarItem::OnLabelChanged(Handle<Sentence> label)
 {
 Accelerator=GetMenuAccelerator(label->Begin());
-hLabel=GetMenuLabel(label->Begin());
+m_Label=GetMenuLabel(label->Begin());
 Invalidate(true);
 }
 
 VOID MenuBarItem::OnPointerDown()
 {
-pMenu->KillKeyboardAccess();
-pMenu->Switch(this);
+m_Menu->KillKeyboardAccess();
+m_Menu->Switch(this);
 }
 
 VOID MenuBarItem::OnPointerEntered()
 {
-pMenu->KillKeyboardAccess();
-pMenu->Select(this);
+m_Menu->KillKeyboardAccess();
+m_Menu->Select(this);
 Invalidate();
 }
 

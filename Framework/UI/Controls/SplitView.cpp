@@ -34,8 +34,8 @@ SplitView::SplitView(Window* parent, Orientation orientation):
 Interactive(parent),
 Distance(0),
 Size(0),
-uStartSize(0),
-uOrientation(orientation)
+m_StartSize(0),
+m_Orientation(orientation)
 {
 FLOAT scale=GetScaleFactor();
 Distance=8*scale;
@@ -53,12 +53,12 @@ PointerUp.Add(this, &SplitView::OnPointerUp);
 Handle<Cursor> SplitView::GetCursor()
 {
 auto theme=GetTheme();
-switch(uOrientation)
+switch(m_Orientation)
 	{
 	case Orientation::Horizontal:
-		return theme->GetSizeVerticalCursor();
+		return theme->SizeVerticalCursor;
 	case Orientation::Vertical:
-		return theme->GetSizeHorizontalCursor();
+		return theme->SizeHorizontalCursor;
 	}
 return nullptr;
 }
@@ -81,7 +81,7 @@ if(!child1)
 	}
 RECT rc1(rc);
 RECT rc2(rc);
-switch(uOrientation)
+switch(m_Orientation)
 	{
 	case Orientation::Horizontal:
 		{
@@ -109,7 +109,7 @@ VOID SplitView::OnPointerDown(Handle<PointerEventArgs> args)
 {
 if(args->Button!=PointerButton::Left)
 	return;
-uStartSize=Size;
+m_StartSize=Size;
 m_StartPoint=args->Point;
 CapturePointer();
 args->Handled=true;
@@ -117,10 +117,10 @@ args->Handled=true;
 
 VOID SplitView::OnPointerMoved(Handle<PointerEventArgs> args)
 {
-if(uStartSize==0)
+if(m_StartSize==0)
 	return;
 POINT const& pt=args->Point;
-switch(uOrientation)
+switch(m_Orientation)
 	{
 	case Orientation::Horizontal:
 		{
@@ -146,7 +146,7 @@ VOID SplitView::OnPointerUp(Handle<PointerEventArgs> args)
 {
 if(args->Button!=PointerButton::Left)
 	return;
-uStartSize=0;
+m_StartSize=0;
 ReleasePointer();
 args->Handled=true;
 }

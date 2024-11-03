@@ -52,7 +52,7 @@ UINT a2=c.GetAlpha();
 UINT r=((255-a2)*r1+a2*r2)/255;
 UINT g=((255-a2)*g1+a2*g2)/255;
 UINT b=((255-a2)*b1+a2*b2)/255;
-uColor=(a1<<24)|(b<<16)|(g<<8)|r;
+m_Color=(a1<<24)|(b<<16)|(g<<8)|r;
 return *this;
 }
 
@@ -63,14 +63,14 @@ return *this;
 
 VOID COLOR::SetAlpha(BYTE a)
 {
-uColor&=0xFFFFFF;
-uColor|=(UINT)a<<24;
+m_Color&=0xFFFFFF;
+m_Color|=(UINT)a<<24;
 }
 
 VOID COLOR::SetBlue(BYTE b)
 {
-uColor&=0xFF00FFFF;
-uColor|=(UINT)b<<16;
+m_Color&=0xFF00FFFF;
+m_Color|=(UINT)b<<16;
 }
 
 VOID COLOR::SetBrightness(FLOAT f)
@@ -86,19 +86,19 @@ Set(r, g, b, a);
 
 VOID COLOR::SetGreen(BYTE g)
 {
-uColor&=0xFFFF00FF;
-uColor|=(UINT)g<<8;
+m_Color&=0xFFFF00FF;
+m_Color|=(UINT)g<<8;
 }
 
 VOID COLOR::SetMonochrome(BOOL b)
 {
-uColor=(UINT)(b? 0xFFFFFFFF: 0xFF000000);
+m_Color=(UINT)(b? 0xFFFFFFFF: 0xFF000000);
 }
 
 VOID COLOR::SetRed(BYTE r)
 {
-uColor&=0xFFFFFF00;
-uColor|=r;
+m_Color&=0xFFFFFF00;
+m_Color|=r;
 }
 
 }

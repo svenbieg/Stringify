@@ -40,7 +40,7 @@ public:
 
 private:
 	// Common
-	Orientation uOrientation;
+	Orientation m_Orientation;
 };
 
 }}

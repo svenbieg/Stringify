@@ -44,7 +44,7 @@ private:
 	VOID OnInputSelectionChanged();
 	VOID OnMaskChanged(TCHAR Mask);
 	VOID OnTextChanged(Handle<String> Text);
-	Handle<Input> hInput;
+	Handle<Input> m_Input;
 };
 
 }}

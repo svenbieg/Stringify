@@ -23,10 +23,12 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)CharClass.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Collections\Log.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Collections\LogEntry.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Collections\Settings.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Culture\LanguageClass.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Culture\Language.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Devices\Clock.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Devices\Random.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Devices\Timers\Clock.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Devices\Timers\Timer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Enum.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Flags.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)FloatClass.h" />
@@ -55,10 +57,12 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)BoolClass.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Collections\Log.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Collections\LogEntry.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Collections\Settings.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Culture\Language.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Culture\LanguageClass.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Devices\Clock.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Devices\Random.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Devices\Timers\Clock.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Devices\Timers\Timer.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Enum.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Flags.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Guid.cpp" />

@@ -48,8 +48,8 @@ private:
 	VOID OnFrameKeyDown(Handle<KeyEventArgs> Args);
 	VOID OnFrameKeyUp(Handle<KeyEventArgs> Args);
 	VOID OnParentChanged();
-	BOOL bEntering;
-	Frame* pOldFrame;
+	BOOL m_Entering;
+	Frame* m_OldFrame;
 };
 
 }}}

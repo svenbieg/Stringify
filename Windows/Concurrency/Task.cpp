@@ -28,7 +28,7 @@ namespace Concurrency {
 
 Task::Task(std::function<VOID()> proc):
 Cancelled(false),
-m_Id(0),
+s_Id(0),
 m_Procedure(proc),
 m_Thread(NULL)
 {
@@ -37,8 +37,8 @@ if(m_Thread==INVALID_HANDLE_VALUE)
 	m_Thread=NULL;
 if(!m_Thread)
 	throw E_INVALIDARG;
-m_Id=GetThreadId(m_Thread);
-m_Tasks.add(m_Id, this);
+s_Id=GetThreadId(m_Thread);
+m_Tasks.add(s_Id, this);
 m_This=this;
 ResumeThread(m_Thread);
 }
@@ -47,7 +47,7 @@ Task::~Task()
 {
 if(m_Thread)
 	{
-	m_Tasks.remove(m_Id);
+	m_Tasks.remove(s_Id);
 	CloseHandle(m_Thread);
 	}
 }

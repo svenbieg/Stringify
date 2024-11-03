@@ -30,15 +30,15 @@ Label(nullptr, var)
 
 Label::Label(Window* parent, Handle<Variable> var):
 TextBlock(parent),
-hVariable(var)
+m_Variable(var)
 {
-Text=hVariable->ToString();
-hVariable->Changed.Add(this, &Label::OnVariableChanged);
+Text=m_Variable->ToString();
+m_Variable->Changed.Add(this, &Label::OnVariableChanged);
 }
 
 Label::~Label()
 {
-hVariable->Changed.Remove(this);
+m_Variable->Changed.Remove(this);
 }
 
 
@@ -48,7 +48,7 @@ hVariable->Changed.Remove(this);
 
 VOID Label::OnVariableChanged()
 {
-Text=hVariable->ToString();
+Text=m_Variable->ToString();
 }
 
 }}

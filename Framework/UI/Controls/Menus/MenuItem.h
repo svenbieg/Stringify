@@ -54,7 +54,7 @@ protected:
 
 	// Common
 	VOID OnKeyDown(Handle<KeyEventArgs> Args);
-	Menu* pMenu;
+	Menu* m_Menu;
 };
 
 }}}

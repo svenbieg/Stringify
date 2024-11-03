@@ -75,7 +75,7 @@ SIZE title_size(0, 0);
 if(Title)
 	{
 	auto theme=GetTheme();
-	auto font=theme->GetDefaultFont();
+	auto font=theme->DefaultFont;
 	title_size=target->MeasureText(font, scale, Title->Begin());
 	}
 rc.Top+=title_size.Height;

@@ -65,7 +65,7 @@ Graphics::SIZE PopupMenu::GetMinSize(RenderTarget* target)
 {
 FLOAT scale=GetScaleFactor();
 auto theme=GetTheme();
-auto font=theme->GetDefaultFont();
+auto font=theme->DefaultFont;
 UINT label_width=0;
 UINT shortcut_width=0;
 bool icon=false;

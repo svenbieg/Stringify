@@ -29,8 +29,10 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Convertible.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Devices\Serial\SerialPort.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Devices\Timer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Devices\Timers\SystemTimer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ErrorHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ExceptionHelper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)MemoryHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Network\GatewayHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Network\Tcp\TcpSocket.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Network\Tls\TlsSocket.h" />
@@ -55,6 +57,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Concurrency\Task.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Devices\Serial\SerialPort.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Devices\Timer.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Devices\Timers\SystemTimer.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ExceptionHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Network\GatewayHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Network\Tcp\TcpSocket.cpp" />

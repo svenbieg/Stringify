@@ -114,7 +114,7 @@ return theme->WindowBrush;
 Handle<Cursor> Input::GetCursor()
 {
 auto theme=GetTheme();
-return theme->GetTextCursor();
+return theme->TextCursor;
 }
 
 Graphics::RECT Input::GetCursorRect()
@@ -495,7 +495,7 @@ return pt_end;
 UINT Input::GetLineHeight(RenderTarget* target, FLOAT scale)
 {
 auto theme=GetTheme();
-auto font=theme->GetDefaultFont();
+auto font=theme->DefaultFont;
 SIZE size=target->MeasureText(font, scale, TEXT("Ag"), 2);
 return size.Height;
 }

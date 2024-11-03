@@ -52,7 +52,7 @@ auto popup=Convert<PopupMenu>(Window->Parent);
 if(popup)
 	pt.Set(rc.Right, rc.Top);
 SubMenu->Show(pt);
-if(pMenu->HasKeyboardAccess())
+if(m_Menu->HasKeyboardAccess())
 	SubMenu->Select();
 }
 
@@ -69,7 +69,7 @@ Window->SetFocus();
 MenuItem::MenuItem(Interactive* window, Menu* menu):
 Accelerator(0),
 Window(window),
-pMenu(menu)
+m_Menu(menu)
 {}
 
 
@@ -84,11 +84,11 @@ switch(args->Key)
 	{
 	case VirtualKey::Escape:
 		{
-		pMenu->Close();
+		m_Menu->Close();
 		return;
 		}
 	}
-args->Handled=pMenu->Accelerate(args->Key);
+args->Handled=m_Menu->Accelerate(args->Key);
 }
 
 }}}

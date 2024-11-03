@@ -14,7 +14,6 @@
 #define SECURITY_WIN32
 
 #include <Windows.h>
-#include <assert.h>
 
 #undef CopyMemory
 #undef FillMemory
@@ -26,6 +25,8 @@
 #undef INT_MAX
 #undef INT_MIN
 #undef UINT_MAX
+
+#include "MemoryHelper.h"
 
 
 //======================

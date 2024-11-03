@@ -32,7 +32,7 @@ namespace Graphics {
 
 Icon::Icon(WORD id):
 Graphics::Icon(nullptr),
-m_Id(id)
+s_Id(id)
 {
 UINT count=GetResourceIconCount(id);
 UINT* sizes=new UINT[count];
@@ -42,7 +42,7 @@ for(UINT u=0; u<count; u++)
 	{
 	UINT size=sizes[u];
 	HINSTANCE instance=GetModuleHandle(nullptr);
-	HICON hicon=(HICON)LoadImage(instance, MAKEINTRESOURCE(m_Id), IMAGE_ICON, size, size, 0);
+	HICON hicon=(HICON)LoadImage(instance, MAKEINTRESOURCE(s_Id), IMAGE_ICON, size, size, 0);
 	ICONINFO info;
 	GetIconInfo(hicon, &info);
 	UINT buf_size=GetBitmapBits(info.hbmColor, 0, nullptr);
@@ -59,7 +59,7 @@ m_Icons=icons;
 
 Icon::Icon(ICON const* icons):
 Graphics::Icon(icons),
-m_Id(0)
+s_Id(0)
 {
 auto icon=m_Icons;
 while(icon->Size)
@@ -82,7 +82,7 @@ while(icon->Size)
 
 Icon::~Icon()
 {
-if(m_Id)
+if(s_Id)
 	{
 	auto icon=m_Icons;
 	while(icon->Size)

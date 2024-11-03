@@ -32,7 +32,7 @@ namespace UI {
 
 ToolTip::ToolTip(Interactive* control, Handle<Sentence> text):
 Text(this, text),
-pControl(control)
+m_Control(control)
 {
 Text.Changed.Add(this, &ToolTip::OnTextChanged);
 OnTextChanged();
@@ -40,8 +40,8 @@ OnTextChanged();
 
 ToolTip::~ToolTip()
 {
-pControl->PointerEntered.Remove(this);
-pControl->PointerLeft.Remove(this);
+m_Control->PointerEntered.Remove(this);
+m_Control->PointerLeft.Remove(this);
 }
 
 
@@ -52,9 +52,9 @@ pControl->PointerLeft.Remove(this);
 VOID ToolTip::Close()
 {
 m_Timer=nullptr;
-if(hPanel)
+if(m_Panel)
 	{
-	hPanel->Visible=false;
+	m_Panel->Visible=false;
 	Application::Current->Dispatch(this, &ToolTip::DoClose);
 	}
 }
@@ -66,8 +66,8 @@ if(hPanel)
 
 VOID ToolTip::DoClose()
 {
-hPanel->Parent=nullptr;
-hPanel=nullptr;
+m_Panel->Parent=nullptr;
+m_Panel=nullptr;
 }
 
 VOID ToolTip::OnControlClicked()
@@ -89,35 +89,35 @@ Close();
 
 VOID ToolTip::OnTextChanged()
 {
-pControl->Clicked.Remove(this);
-pControl->PointerEntered.Remove(this);
-pControl->PointerLeft.Remove(this);
+m_Control->Clicked.Remove(this);
+m_Control->PointerEntered.Remove(this);
+m_Control->PointerLeft.Remove(this);
 if(Text)
 	{
-	pControl->Clicked.Add(this, &ToolTip::OnControlClicked);
-	pControl->PointerEntered.Add(this, &ToolTip::OnControlPointerEntered);
-	pControl->PointerLeft.Add(this, &ToolTip::OnControlPointerLeft);
+	m_Control->Clicked.Add(this, &ToolTip::OnControlClicked);
+	m_Control->PointerEntered.Add(this, &ToolTip::OnControlPointerEntered);
+	m_Control->PointerLeft.Add(this, &ToolTip::OnControlPointerLeft);
 	}
-if(hPanel)
+if(m_Panel)
 	OnTimerTriggered();
 }
 
 VOID ToolTip::OnTimerTriggered()
 {
-if(hPanel)
+if(m_Panel)
 	return;
 m_Timer=nullptr;
-auto frame=pControl->GetFrame();
+auto frame=m_Control->GetFrame();
 auto theme=frame->GetTheme();
-hPanel=new Panel(frame);
-hPanel->Background=theme->WindowBrush;
-hPanel->Border=true;
-auto text_block=new TextBlock(hPanel);
+m_Panel=new Panel(frame);
+m_Panel->Background=theme->WindowBrush;
+m_Panel->Border=true;
+auto text_block=new TextBlock(m_Panel);
 text_block->Margin.Set(4, 2, 4, 2);
 text_block->Text=Text->Begin();
-auto rc_control=pControl->GetFrameRect();
+auto rc_control=m_Control->GetFrameRect();
 Graphics::POINT pt(rc_control.Left, rc_control.Bottom);
-hPanel->SetPosition(pt);
+m_Panel->SetPosition(pt);
 }
 
 }}}

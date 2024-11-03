@@ -57,7 +57,7 @@ private:
 	VOID OnPointerDown();
 	VOID OnPointerEntered();
 	VOID OnPointerLeft();
-	Handle<String> hLabel;
+	Handle<String> m_Label;
 };
 
 }}}

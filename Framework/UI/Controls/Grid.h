@@ -134,10 +134,10 @@ private:
 	VOID SetPixels(GridSizeList& Sizes, UINT Total);
 	VOID SetStars(GridSizeList& Sizes, UINT Total);
 	VOID UpdateRaster(Graphics::RECT const& Rect);
-	GridSizeList cColumns;
-	GridPosition cPosition;
-	GridPositionMap cPositions;
-	GridSizeList cRows;
+	GridSizeList m_Columns;
+	GridPosition m_Position;
+	GridPositionMap m_Positions;
+	GridSizeList m_Rows;
 };
 
 }}

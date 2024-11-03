@@ -53,7 +53,7 @@ if(Font)
 if(Parent)
 	return Parent->GetFont();
 auto theme=GetTheme();
-return theme->GetDefaultFont();
+return theme->DefaultFont;
 }
 
 Frame* Window::GetFrame()

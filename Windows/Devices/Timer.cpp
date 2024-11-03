@@ -25,7 +25,7 @@ namespace Devices {
 
 Timer::Timer():
 hWindow(NULL),
-iInterval(0)
+m_Interval(0)
 {
 HINSTANCE hinst=GetModuleHandleA(nullptr);
 WNDCLASSA wc;
@@ -56,7 +56,7 @@ VOID Timer::StartOnce(UINT ms)
 if(!hWindow)
 	return;
 Stop();
-iInterval=ms;
+m_Interval=ms;
 SetTimer(hWindow, 0, ms, nullptr);
 }
 
@@ -65,7 +65,7 @@ VOID Timer::StartPeriodic(UINT ms)
 if(!hWindow)
 	return;
 Stop();
-iInterval=-(INT)ms;
+m_Interval=-(INT)ms;
 SetTimer(hWindow, 0, ms, nullptr);
 }
 
@@ -74,7 +74,7 @@ VOID Timer::Stop()
 if(!hWindow)
 	return;
 KillTimer(hWindow, 0);
-iInterval=0;
+m_Interval=0;
 }
 
 
@@ -97,7 +97,7 @@ if(timer)
 	if(msg==WM_TIMER)
 		{
 		timer->Triggered(timer);
-		if(timer->iInterval>0)
+		if(timer->m_Interval>0)
 			timer->Stop();
 		return 0;
 		}

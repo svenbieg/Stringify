@@ -29,7 +29,7 @@ Interactive::Interactive(Window* parent):
 Control(parent),
 Enabled(this, true),
 TabStop(false),
-uInteractiveFlags(InteractiveFlags::None)
+m_InteractiveFlags(InteractiveFlags::None)
 {
 Enabled.Changed.Add(this, &Interactive::OnEnabledChanged);
 Focused.Add(this, &Interactive::OnFocused);
@@ -225,7 +225,7 @@ while(control)
 VOID Interactive::OnPointerDown(Handle<PointerEventArgs> args)
 {
 if(args->Button==PointerButton::Left)
-	SetFlag(uInteractiveFlags, InteractiveFlags::LeftButtonDown);
+	SetFlag(m_InteractiveFlags, InteractiveFlags::LeftButtonDown);
 }
 
 VOID Interactive::OnPointerEntered()
@@ -245,8 +245,8 @@ VOID Interactive::OnPointerUp(Handle<PointerEventArgs> args)
 {
 if(args->Button!=PointerButton::Left)
 	return;
-BOOL clicked=GetFlag(uInteractiveFlags, InteractiveFlags::LeftButtonDown);
-ClearFlag(uInteractiveFlags, InteractiveFlags::LeftButtonDown);
+BOOL clicked=GetFlag(m_InteractiveFlags, InteractiveFlags::LeftButtonDown);
+ClearFlag(m_InteractiveFlags, InteractiveFlags::LeftButtonDown);
 if(clicked)
 	Clicked(this, args);
 }

@@ -38,11 +38,11 @@ HorizontalBar->Visibility=ScrollBarVisibility::Hidden;
 Mask.Changed.Add(this, &EditBox::OnMaskChanged);
 Text.Changed.Add(this, &EditBox::OnTextChanged);
 VerticalBar->Visibility=ScrollBarVisibility::Hidden;
-hInput=new Input(Body);
-hInput->Focused.Add(this, &EditBox::OnInputFocused);
-hInput->Padding.Set(2, 2, 2, 2);
-hInput->SelectionChanged.Add(this, &EditBox::OnInputSelectionChanged);
-hInput->TabStop=true;
+m_Input=new Input(Body);
+m_Input->Focused.Add(this, &EditBox::OnInputFocused);
+m_Input->Padding.Set(2, 2, 2, 2);
+m_Input->SelectionChanged.Add(this, &EditBox::OnInputSelectionChanged);
+m_Input->TabStop=true;
 }
 
 
@@ -53,7 +53,7 @@ hInput->TabStop=true;
 Graphics::SIZE EditBox::GetMinSize(RenderTarget* target)
 {
 SIZE size(1, 1);
-SIZE min_size=hInput->GetMinSize(target);
+SIZE min_size=m_Input->GetMinSize(target);
 size.Height+=min_size.Height;
 FLOAT scale=GetScaleFactor();
 return size.Max(MinSize*scale);
@@ -61,7 +61,7 @@ return size.Max(MinSize*scale);
 
 VOID EditBox::Rearrange(RenderTarget* target, RECT& rc)
 {
-UINT line_height=hInput->GetLineHeight();
+UINT line_height=m_Input->GetLineHeight();
 HorizontalBar->Step=line_height;
 ScrollBox::Rearrange(target, rc);
 }
@@ -74,25 +74,25 @@ ScrollBox::Rearrange(target, rc);
 VOID EditBox::OnInputFocused(FocusReason reason)
 {
 if(reason==FocusReason::Keyboard)
-	hInput->SelectAll();
+	m_Input->SelectAll();
 }
 
 VOID EditBox::OnInputSelectionChanged()
 {
-RECT rc_cursor=hInput->GetCursorRect();
+RECT rc_cursor=m_Input->GetCursorRect();
 SetHotspot(rc_cursor);
 SelectionChanged(this);
 }
 
 VOID EditBox::OnMaskChanged(TCHAR mask)
 {
-hInput->Mask=mask;
-hInput->Invalidate(true);
+m_Input->Mask=mask;
+m_Input->Invalidate(true);
 }
 
 VOID EditBox::OnTextChanged(Handle<String> text)
 {
-hInput->SetText(text);
+m_Input->SetText(text);
 }
 
 }}

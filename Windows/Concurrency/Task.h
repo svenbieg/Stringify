@@ -42,7 +42,7 @@ private:
 	VOID DoTask();
 	static DWORD WINAPI TaskProc(VOID* Param);
 	Signal m_Done;
-	DWORD m_Id;
+	DWORD s_Id;
 	Mutex m_Mutex;
 	std::function<VOID()> m_Procedure;
 	static Clusters::shared_map<DWORD, Task*> m_Tasks;

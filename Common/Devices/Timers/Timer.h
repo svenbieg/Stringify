@@ -9,7 +9,8 @@
 // Namespace
 //===========
 
-namespace UI {
+namespace Devices {
+	namespace Timers {
 
 
 //=======
@@ -24,7 +25,7 @@ public:
 	~Timer();
 
 	// Common
-	BOOL IsStarted()const { return iInterval!=0; }
+	BOOL IsStarted()const { return m_Interval!=0; }
 	VOID Reset();
 	VOID StartOnce(UINT MilliSeconds);
 	VOID StartPeriodic(UINT MilliSeconds);
@@ -35,8 +36,8 @@ private:
 	// Common
 	VOID DoTrigger();
 	VOID OnClockTick();
-	INT iInterval;
-	UINT64 uLastTime;
+	INT m_Interval;
+	UINT64 m_NextTime;
 };
 
-}
+}}

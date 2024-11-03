@@ -40,7 +40,7 @@ protected:
 private:
 	// Common
 	static LONG WINAPI UnhandledExceptionHandler(EXCEPTION_POINTERS* Info);
-	DWORD uThreadId;
+	DWORD m_ThreadId;
 };
 
 }

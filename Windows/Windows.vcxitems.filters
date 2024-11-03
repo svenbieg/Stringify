@@ -55,6 +55,9 @@
       <Filter>Concurrency</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Devices\Timers\SystemTimer.cpp">
+      <Filter>Devices\Timers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)ComPointer.h" />
@@ -127,6 +130,10 @@
       <Filter>Concurrency</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)MemoryHelper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Devices\Timers\SystemTimer.h">
+      <Filter>Devices\Timers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Configuration">
@@ -167,6 +174,9 @@
     </Filter>
     <Filter Include="Concurrency">
       <UniqueIdentifier>{00013306-fb61-4ee1-ab79-0f665f41eb3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Devices\Timers">
+      <UniqueIdentifier>{004cef37-1d6f-4c69-845c-a686050ce9b7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

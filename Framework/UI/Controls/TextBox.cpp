@@ -34,10 +34,10 @@ AlignHorizontal=HorizontalAlignment::Stretch;
 AlignVertical=VerticalAlignment::Stretch;
 ReadOnly.Changed.Add(this, &TextBox::OnReadOnlyChanged);
 ZoomMax=10.f;
-hInput=new Input(Body);
-hInput->MultiLine=true;
-hInput->Padding.Set(2, 2, 2, 2);
-hInput->SelectionChanged.Add(this, &TextBox::OnInputSelectionChanged);
+m_Input=new Input(Body);
+m_Input->MultiLine=true;
+m_Input->Padding.Set(2, 2, 2, 2);
+m_Input->SelectionChanged.Add(this, &TextBox::OnInputSelectionChanged);
 }
 
 
@@ -47,52 +47,52 @@ hInput->SelectionChanged.Add(this, &TextBox::OnInputSelectionChanged);
 
 VOID TextBox::AppendLine(Handle<String> line)
 {
-hInput->AppendLine(line);
+m_Input->AppendLine(line);
 }
 
 VOID TextBox::AppendLines(Handle<StringList> lines)
 {
-hInput->AppendLines(lines);
+m_Input->AppendLines(lines);
 }
 
 VOID TextBox::Clear()
 {
-hInput->Clear();
+m_Input->Clear();
 SetPosition(0, 0);
 }
 
 VOID TextBox::ReadFromStream(Handle<InputStream> stream)
 {
-hInput->ReadFromStream(stream);
+m_Input->ReadFromStream(stream);
 }
 
 VOID TextBox::Rearrange(RenderTarget* target, RECT& rc)
 {
-RECT rc_input=hInput->GetRect();
-SIZE size=hInput->GetMinSize(target);
+RECT rc_input=m_Input->GetRect();
+SIZE size=m_Input->GetMinSize(target);
 rc_input.SetSize(size);
-hInput->Move(target, rc_input);
-UINT line_height=hInput->GetLineHeight();
+m_Input->Move(target, rc_input);
+UINT line_height=m_Input->GetLineHeight();
 HorizontalBar->Step=line_height;
 VerticalBar->Step=line_height;
 if(m_Hotspot)
-	m_Hotspot=hInput->GetCursorRect();
+	m_Hotspot=m_Input->GetCursorRect();
 ScrollBox::Rearrange(target, rc);
 }
 
 VOID TextBox::SelectAll()
 {
-hInput->SelectAll();
+m_Input->SelectAll();
 }
 
 VOID TextBox::SetFocus()
 {
-hInput->SetFocus();
+m_Input->SetFocus();
 }
 
 VOID TextBox::SetText(Handle<String> text)
 {
-hInput->SetText(text);
+m_Input->SetText(text);
 }
 
 
@@ -102,14 +102,14 @@ hInput->SetText(text);
 
 VOID TextBox::OnInputSelectionChanged()
 {
-RECT rc_cursor=hInput->GetCursorRect();
+RECT rc_cursor=m_Input->GetCursorRect();
 SetHotspot(rc_cursor);
 SelectionChanged(this);
 }
 
 VOID TextBox::OnReadOnlyChanged(BOOL read_only)
 {
-hInput->ReadOnly=read_only;
+m_Input->ReadOnly=read_only;
 }
 
 }}

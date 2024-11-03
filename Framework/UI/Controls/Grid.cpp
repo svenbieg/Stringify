@@ -54,15 +54,15 @@ return row;
 
 Grid* Grid::At(UINT col, UINT row)
 {
-cPosition.Column=col;
-cPosition.Row=row;
+m_Position.Column=col;
+m_Position.Row=row;
 return this;
 }
 
 Graphics::SIZE Grid::GetMinSize(RenderTarget* target)
 {
 InitRaster(target);
-SIZE size(GridMinSize(cColumns), GridMinSize(cRows));
+SIZE size(GridMinSize(m_Columns), GridMinSize(m_Rows));
 FLOAT scale=GetScaleFactor();
 size.AddPadding(Padding*scale);
 return size.Max(MinSize*scale);
@@ -100,7 +100,7 @@ for(auto it=Children->First(); it->HasCurrent(); it->MoveNext())
 Graphics::RECT Grid::GetChildRect(Window* child, SIZE const& min_size, RECT const& margin)
 {
 GridPosition pos;
-cPositions.try_get(child, &pos);
+m_Positions.try_get(child, &pos);
 HorizontalAlignment align_h=HorizontalAlignment::Stretch;
 auto col=Columns->GetAt(pos.Column);
 if(col)
@@ -109,8 +109,8 @@ VerticalAlignment align_v=VerticalAlignment::Stretch;
 auto row=Rows->GetAt(pos.Row);
 if(row)
 	align_v=row->Alignment;
-GridSize const& col_size=cColumns.get_at(pos.Column);
-GridSize const& row_size=cRows.get_at(pos.Row);
+GridSize const& col_size=m_Columns.get_at(pos.Column);
+GridSize const& row_size=m_Rows.get_at(pos.Row);
 RECT rc;
 rc.Left=col_size.Offset+margin.Left;
 rc.Right=col_size.Offset+col_size.SetSize-margin.Right;
@@ -165,11 +165,11 @@ return rc;
 
 VOID Grid::InitColumns(UINT count, FLOAT scale)
 {
-InitSizes(cColumns, count);
+InitSizes(m_Columns, count);
 for(UINT u=0; u<count; u++)
 	{
 	auto col=Columns->GetAt(u);
-	GridSize& size=cColumns[u];
+	GridSize& size=m_Columns[u];
 	size.MinSize=0;
 	size.Offset=0;
 	size.SetSize=0;
@@ -182,9 +182,9 @@ for(UINT u=0; u<count; u++)
 
 VOID Grid::InitRaster(RenderTarget* target)
 {
-UINT col_count=cColumns.get_count();
-UINT row_count=cRows.get_count();
-for(auto it=cPositions.cbegin(); it.has_current(); it.move_next())
+UINT col_count=m_Columns.get_count();
+UINT row_count=m_Rows.get_count();
+for(auto it=m_Positions.cbegin(); it.has_current(); it.move_next())
 	{
 	auto obj=it->get_key();
 	auto child=Convert<Control>(obj);
@@ -207,7 +207,7 @@ for(auto it=Children->First(); it->HasCurrent(); it->MoveNext())
 	if(!child->Visible)
 		continue;
 	GridPosition pos(0, 0);
-	cPositions.try_get(child, &pos);
+	m_Positions.try_get(child, &pos);
 	SIZE min_size=child->GetMinSize(target);
 	auto control=Convert<Control>(child);
 	if(control)
@@ -215,8 +215,8 @@ for(auto it=Children->First(); it->HasCurrent(); it->MoveNext())
 		RECT const& margin=control->Margin;
 		min_size.AddPadding(margin*scale);
 		}
-	GridSize& col=cColumns.get_at(pos.Column);
-	GridSize& row=cRows.get_at(pos.Row);
+	GridSize& col=m_Columns.get_at(pos.Column);
+	GridSize& row=m_Rows.get_at(pos.Row);
 	col.MinSize=Max(col.MinSize, min_size.Width);
 	row.MinSize=Max(row.MinSize, min_size.Height);
 	}
@@ -224,11 +224,11 @@ for(auto it=Children->First(); it->HasCurrent(); it->MoveNext())
 
 VOID Grid::InitRows(UINT count, FLOAT scale)
 {
-InitSizes(cRows, count);
+InitSizes(m_Rows, count);
 for(UINT u=0; u<count; u++)
 	{
 	auto row=Rows->GetAt(u);
-	GridSize& size=cRows[u];
+	GridSize& size=m_Rows[u];
 	size.MinSize=0;
 	size.Offset=0;
 	size.SetSize=0;
@@ -263,18 +263,18 @@ VOID Grid::OnChildAdded(Handle<Window> child)
 UINT col_count=Columns->GetCount();
 if(col_count==0)
 	col_count=1;
-cPositions[child]=cPosition;
-cPosition.Column++;
-if(cPosition.Column==col_count)
+m_Positions[child]=m_Position;
+m_Position.Column++;
+if(m_Position.Column==col_count)
 	{
-	cPosition.Column=0;
-	cPosition.Row++;
+	m_Position.Column=0;
+	m_Position.Row++;
 	}
 }
 
 VOID Grid::OnChildRemoved(Handle<Window> child)
 {
-cPositions.remove(child);
+m_Positions.remove(child);
 Invalidate(true);
 }
 
@@ -370,12 +370,12 @@ for(UINT u=0; u<count; u++)
 VOID Grid::UpdateRaster(RECT const& rc)
 {
 SIZE size=rc.GetSize();
-SetPixels(cColumns, size.Width);
-SetPixels(cRows, size.Height);
-SetStars(cColumns, size.Width);
-SetStars(cRows, size.Height);
-SetOffsets(cColumns, Padding.Left);
-SetOffsets(cRows, Padding.Top);
+SetPixels(m_Columns, size.Width);
+SetPixels(m_Rows, size.Height);
+SetStars(m_Columns, size.Width);
+SetStars(m_Rows, size.Height);
+SetOffsets(m_Columns, Padding.Left);
+SetOffsets(m_Rows, Padding.Top);
 }
 
 }}

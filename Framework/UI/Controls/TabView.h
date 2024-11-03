@@ -48,7 +48,7 @@ private:
 	using TabMap=Collections::Map<Window*, Handle<TabInfo>>;
 
 	// Common
-	Handle<TabMap> hTabs;
+	Handle<TabMap> m_Tabs;
 };
 
 }}

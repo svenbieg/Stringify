@@ -60,8 +60,8 @@ private:
 	VOID OnFocusLost();
 	VOID OnPointerEntered();
 	VOID OnPointerLeft();
-	Handle<Bitmap> hIcon;
-	Handle<Bitmap> hIconDisabled;
+	Handle<Bitmap> m_Icon;
+	Handle<Bitmap> m_IconDisabled;
 };
 
 }}}

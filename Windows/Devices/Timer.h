@@ -24,7 +24,7 @@ public:
 	~Timer();
 
 	// Common
-	BOOL IsStarted()const { return iInterval!=0; }
+	BOOL IsStarted()const { return m_Interval!=0; }
 	VOID StartOnce(UINT MilliSeconds);
 	VOID StartPeriodic(UINT MilliSeconds);
 	VOID Stop();
@@ -34,7 +34,7 @@ private:
 	// Common
 	static LRESULT CALLBACK WndProc(HWND Window, UINT Message, WPARAM WParam, LPARAM LParam);
 	HWND hWindow;
-	INT iInterval;
+	INT m_Interval;
 };
 
 }

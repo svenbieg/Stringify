@@ -36,7 +36,7 @@ public:
 private:
 	// Common
 	VOID OnVariableChanged();
-	Handle<Variable> hVariable;
+	Handle<Variable> m_Variable;
 };
 
 }}

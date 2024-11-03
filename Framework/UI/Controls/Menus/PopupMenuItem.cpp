@@ -37,9 +37,9 @@ Interactive(menu->GetPanel()),
 MenuItem(this, menu),
 Label(this),
 Padding(12, 3, 12, 3),
-uIconWidth(0),
-uLabelWidth(0),
-uShortcutWidth(0)
+m_IconWidth(0),
+m_LabelWidth(0),
+m_ShortcutWidth(0)
 {
 Interactive::Clicked.Add(this, &PopupMenuItem::OnClicked);
 if(!label)
@@ -74,9 +74,9 @@ Graphics::SIZE PopupMenuItem::GetMinSize(RenderTarget* target)
 {
 SIZE size(0, 0);
 FLOAT scale=GetScaleFactor();
-size.Width+=uIconWidth;
-size.Width+=uLabelWidth;
-size.Width+=uShortcutWidth;
+size.Width+=m_IconWidth;
+size.Width+=m_LabelWidth;
+size.Width+=m_ShortcutWidth;
 if(Text)
 	{
 	if(Icon)
@@ -115,17 +115,17 @@ UINT height=rc.GetHeight();
 UINT left=rc.Left;
 if(Icon)
 	{
-	if(!hIcon)
-		hIcon=Icon->GetBitmap(height);
-	auto icon=hIcon;
+	if(!m_Icon)
+		m_Icon=Icon->GetBitmap(height);
+	auto icon=m_Icon;
 	if(!Enabled)
 		{
-		if(!hIconDisabled)
+		if(!m_IconDisabled)
 			{
-			hIconDisabled=hIcon->Copy();
-			DisableMenuBitmap(hIconDisabled);
+			m_IconDisabled=m_Icon->Copy();
+			DisableMenuBitmap(m_IconDisabled);
 			}
-		icon=hIconDisabled;
+		icon=m_IconDisabled;
 		}
 	SIZE ico_size=icon->GetDimensions();
 	RECT ico_rc(ico_size);
@@ -136,7 +136,7 @@ if(Icon)
 	RECT dst_rc(ico_left, ico_top, ico_left+ico_size.Width, ico_top+ico_size.Height);
 	target->DrawBitmap(dst_rc, icon, ico_rc);
 	}
-left+=uIconWidth;
+left+=m_IconWidth;
 auto font=GetFont();
 auto text_color=theme->TextBrush;
 if(!Enabled)
@@ -151,7 +151,7 @@ target->DrawText(label_rc, scale, label);
 BOOL accelerate=Accelerator;
 if(!Enabled)
 	accelerate=false;
-if(!pMenu->HasAcceleration())
+if(!m_Menu->HasAcceleration())
 	accelerate=false;
 if(accelerate)
 	{
@@ -167,7 +167,7 @@ if(accelerate)
 		target->DrawLine(from, to, text_color, 1);
 		}
 	}
-left+=uLabelWidth;
+left+=m_LabelWidth;
 if(Shortcut)
 	{
 	auto shortcut=Shortcut->Begin();
@@ -195,9 +195,9 @@ if(SubMenu)
 
 VOID PopupMenuItem::SetColumns(UINT icon_width, UINT label_width, UINT shortcut_width)
 {
-uIconWidth=icon_width;
-uLabelWidth=label_width;
-uShortcutWidth=shortcut_width;
+m_IconWidth=icon_width;
+m_LabelWidth=label_width;
+m_ShortcutWidth=shortcut_width;
 }
 
 
@@ -212,7 +212,7 @@ Clicked(this);
 
 VOID PopupMenuItem::OnClicked()
 {
-pMenu->Exit();
+m_Menu->Exit();
 Application::Current->Dispatch(this, &PopupMenuItem::DoClick);
 }
 
@@ -249,7 +249,7 @@ switch(args->Key)
 		if(control)
 			{
 			auto item=Convert<MenuItem>(control);
-			pMenu->Select(item);
+			m_Menu->Select(item);
 			}
 		return;
 		}
@@ -264,14 +264,14 @@ switch(args->Key)
 		}
 	case VirtualKey::Up:
 		{
-		auto parent_menu=pMenu->GetParentMenu();
+		auto parent_menu=m_Menu->GetParentMenu();
 		auto menubar=Convert<MenuBar>(parent_menu->GetPanel());
 		if(menubar)
 			{
 			auto control=Interactive::GetNextControl(Parent, nullptr, 0);
 			if(control==this)
 				{
-				pMenu->Close();
+				m_Menu->Close();
 				return;
 				}
 			}
@@ -279,7 +279,7 @@ switch(args->Key)
 		if(control)
 			{
 			auto item=Convert<MenuItem>(control);
-			pMenu->Select(item);
+			m_Menu->Select(item);
 			}
 		return;
 		}
@@ -305,11 +305,11 @@ if(SubMenu)
 VOID PopupMenuItem::OnPointerEntered()
 {
 Invalidate();
-pMenu->KillKeyboardAccess();
+m_Menu->KillKeyboardAccess();
 auto current=Application::Current->GetCurrentMenu();
 if(current==SubMenu)
 	return;
-auto menu=pMenu;
+auto menu=m_Menu;
 while(current!=menu)
 	{
 	current->Close();

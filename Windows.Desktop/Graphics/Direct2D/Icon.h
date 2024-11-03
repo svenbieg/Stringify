@@ -39,7 +39,7 @@ public:
 private:
 	// Common
 	Clusters::map<UINT, HICON> m_Handles;
-	WORD m_Id;
+	WORD s_Id;
 };
 
 

@@ -27,7 +27,7 @@ namespace UI {
 TabView::TabView(Window* parent):
 Control(parent)
 {
-hTabs=new TabMap();
+m_Tabs=new TabMap();
 }
 
 
@@ -39,14 +39,14 @@ Handle<TabView::TabInfo> TabView::AddTab(Window* tab)
 {
 tab->Parent=this;
 Handle<TabInfo> tab_info=new TabInfo();
-hTabs->Add(tab, tab_info);
+m_Tabs->Add(tab, tab_info);
 return tab_info;
 }
 
 VOID TabView::RemoveTab(Window* tab)
 {
 tab->Parent=nullptr;
-hTabs->Remove(tab);
+m_Tabs->Remove(tab);
 }
 
 }}

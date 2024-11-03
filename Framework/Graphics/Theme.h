@@ -49,14 +49,14 @@ public:
 	Handle<Brush> WindowBrush;
 
 	// Fonts
-	virtual Handle<Font> GetDefaultFont()=0;
+	Handle<Font> DefaultFont;
 
 	// Cursors
-	virtual Handle<Cursor> GetDefaultCursor()=0;
-	virtual Handle<Cursor> GetHandPointCursor()=0;
-	virtual Handle<Cursor> GetSizeHorizontalCursor()=0;
-	virtual Handle<Cursor> GetSizeVerticalCursor()=0;
-	virtual Handle<Cursor> GetTextCursor()=0;
+	Handle<Cursor> DefaultCursor;
+	Handle<Cursor> HandPointCursor;
+	Handle<Cursor> SizeHorizontalCursor;
+	Handle<Cursor> SizeVerticalCursor;
+	Handle<Cursor> TextCursor;
 
 protected:
 	// Con-/Destructors

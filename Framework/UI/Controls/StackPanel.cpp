@@ -31,7 +31,7 @@ StackPanel(nullptr, orientation)
 StackPanel::StackPanel(Window* parent, Orientation orientation):
 Panel(parent),
 AlignChildren(Alignment::Default),
-uOrientation(orientation)
+m_Orientation(orientation)
 {}
 
 
@@ -55,7 +55,7 @@ for(auto it=Children->First(); it->HasCurrent(); it->MoveNext())
 		RECT const& margin=control->Margin;
 		child_size.AddPadding(margin*scale);
 		}
-	if(uOrientation==Orientation::Horizontal)
+	if(m_Orientation==Orientation::Horizontal)
 		{
 		size.Width+=child_size.Width;
 		size.Height=Max(size.Height, child_size.Height);
@@ -97,7 +97,7 @@ for(auto it=Children->First(); it->HasCurrent(); it->MoveNext())
 		{
 		case Alignment::Alternate:
 			{
-			if(uOrientation==Orientation::Horizontal)
+			if(m_Orientation==Orientation::Horizontal)
 				{
 				rc_move.Top=rc.Bottom-child_size.Height;
 				}
@@ -109,7 +109,7 @@ for(auto it=Children->First(); it->HasCurrent(); it->MoveNext())
 			}
 		case Alignment::Center:
 			{
-			if(uOrientation==Orientation::Horizontal)
+			if(m_Orientation==Orientation::Horizontal)
 				{
 				rc_move.Top=(rc.Bottom-child_size.Height)/2;
 				}
@@ -121,7 +121,7 @@ for(auto it=Children->First(); it->HasCurrent(); it->MoveNext())
 			}
 		case Alignment::Stretch:
 			{
-			if(uOrientation==Orientation::Horizontal)
+			if(m_Orientation==Orientation::Horizontal)
 				{
 				child_size.Height=rc.Bottom-rc.Top;
 				}
@@ -142,7 +142,7 @@ for(auto it=Children->First(); it->HasCurrent(); it->MoveNext())
 	if(control)
 		rc_child.SetPadding(control->Margin*scale);
 	child->Move(target, rc_child);
-	if(uOrientation==Orientation::Horizontal)
+	if(m_Orientation==Orientation::Horizontal)
 		{
 		rc_move.Left=rc_move.Right;
 		}

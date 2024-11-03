@@ -12,9 +12,9 @@
 #include "Clusters/list.hpp"
 #include "Clusters/map.hpp"
 #include "Collections/StringList.h"
+#include "Devices/Timers/Timer.h"
 #include "Storage/Streams/InputStream.h"
 #include "UI/Controls/Menus/PopupMenu.h"
-#include "UI/Timer.h"
 #include "Interactive.h"
 
 
@@ -37,6 +37,7 @@ public:
 	using InputStream=Storage::Streams::InputStream;
 	using PopupMenu=UI::Controls::Menus::PopupMenu;
 	using StringList=Collections::StringList;
+	using Timer=Devices::Timers::Timer;
 
 	// Con-/Destructors
 	Input(Window* Parent);

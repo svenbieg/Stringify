@@ -90,6 +90,7 @@ MoveWindow(m_Handle, rc.Left, rc.Top, size.Width, size.Height, true);
 
 VOID Overlapped::Repaint()
 {
+ThrowIfNotMainThread();
 if(m_Handle)
 	{
 	InvalidateRect(m_Handle, nullptr, false);
