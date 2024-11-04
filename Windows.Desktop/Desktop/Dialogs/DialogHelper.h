@@ -9,7 +9,7 @@
 // Using
 //=======
 
-#include "Sentence.h"
+#include "Culture/Sentence.h"
 
 
 //===========
@@ -24,6 +24,6 @@ namespace Desktop {
 // Common
 //========
 
-Handle<String> FilterFromSentence(Handle<Sentence> Sentence);
+Handle<String> FilterFromSentence(Handle<Culture::Sentence> Sentence);
 
 }}

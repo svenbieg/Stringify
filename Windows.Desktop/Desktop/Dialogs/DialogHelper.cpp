@@ -11,6 +11,8 @@
 
 #include "DialogHelper.h"
 
+using namespace Culture;
+
 
 //===========
 // Namespace

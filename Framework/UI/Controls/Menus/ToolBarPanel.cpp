@@ -12,6 +12,8 @@
 #include "ToolBar.h"
 #include "ToolBarPanel.h"
 
+using namespace Culture;
+
 
 //===========
 // Namespace

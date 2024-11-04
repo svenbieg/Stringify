@@ -9,10 +9,10 @@
 // Using
 //=======
 
-#include "Devices/Timers/Timer.h"
+#include "Culture/Sentence.h"
+#include "Timing/Timer.h"
 #include "UI/Controls/Interactive.h"
 #include "UI/Controls/Panel.h"
-#include "Sentence.h"
 
 
 //===========
@@ -32,7 +32,8 @@ class ToolTip: public Object
 {
 public:
 	// Using
-	using Timer=Devices::Timers::Timer;
+	using Sentence=Culture::Sentence;
+	using Timer=Timing::Timer;
 
 	// Con-/Destructors
 	ToolTip(Interactive* Control, Handle<Sentence> Text=nullptr);

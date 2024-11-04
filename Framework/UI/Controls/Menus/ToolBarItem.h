@@ -39,6 +39,7 @@ class ToolBarItem: public Interactive
 public:
 	// Using
 	using Bitmap=Graphics::Bitmap;
+	using Sentence=Culture::Sentence;
 
 	// Con-/Destructors
 	ToolBarItem(ToolBarPanel* Parent, Handle<Sentence> ToolTip=nullptr);

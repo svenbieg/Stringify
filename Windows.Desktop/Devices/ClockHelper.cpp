@@ -12,7 +12,7 @@
 #include <time.h>
 #include "ClockHelper.h"
 
-using namespace Physics;
+using namespace Timing;
 
 
 //===========

@@ -40,7 +40,7 @@ public:
 	ToolBarPanel(ToolBar* Parent);
 
 	// Common
-	Handle<ToolBarItem> Add(Handle<Sentence> ToolTip=nullptr);
+	Handle<ToolBarItem> Add(Handle<Culture::Sentence> ToolTip=nullptr);
 	VOID Render(RenderTarget* Target, RECT& Rect)override;
 };
 

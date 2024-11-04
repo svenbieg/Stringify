@@ -40,6 +40,9 @@ SaveFile
 class PathEdit: public Grid
 {
 public:
+	// Using
+	using Sentence=Culture::Sentence;
+
 	// Con-/Destructors
 	PathEdit(Window* Parent, PathEditMode Mode=PathEditMode::OpenFile);
 

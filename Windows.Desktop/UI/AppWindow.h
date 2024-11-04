@@ -30,6 +30,7 @@ class AppWindow: public Overlapped
 public:
 	// Using
 	using Panel=UI::Controls::Panel;
+	using Sentence=Culture::Sentence;
 	using StackPanel=UI::Controls::StackPanel;
 
 	// Common

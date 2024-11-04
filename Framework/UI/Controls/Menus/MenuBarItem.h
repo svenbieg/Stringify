@@ -38,6 +38,7 @@ class MenuBarItem: public Interactive, public MenuItem
 public:
 	// Using
 	using KeyEventArgs=UI::Input::KeyEventArgs;
+	using Sentence=Culture::Sentence;
 
 	// Con-/Destructors
 	MenuBarItem(MenuBar* MenuBar, Handle<Sentence> Label);

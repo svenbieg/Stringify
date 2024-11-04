@@ -26,6 +26,9 @@ namespace UI {
 class ToolWindow: public Overlapped
 {
 public:
+	// Using
+	using Sentence=Culture::Sentence;
+
 	// Con-/Destructors
 	ToolWindow();
 	ToolWindow(HWND Parent);

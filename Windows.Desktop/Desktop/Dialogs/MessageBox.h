@@ -20,6 +20,9 @@ namespace Desktop {
 class MessageBox
 {
 public:
+	// Using
+	using Sentence=Culture::Sentence;
+
 	// Common
 	static VOID Error(Handle<Sentence> Title, Handle<Sentence> Message);
 	static VOID Info(Handle<Sentence> Title, Handle<Sentence> Message);

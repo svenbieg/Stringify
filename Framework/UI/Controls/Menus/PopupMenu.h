@@ -43,6 +43,7 @@ public:
 	using KeyEventArgs=UI::Input::KeyEventArgs;
 	using KeyEventType=UI::Input::KeyEventType;
 	using Menu=UI::Controls::Menus::Menu;
+	using Sentence=Culture::Sentence;
 
 	// Con-/Destructors
 	PopupMenu(Window* Parent, Menu* ParentMenu=nullptr);

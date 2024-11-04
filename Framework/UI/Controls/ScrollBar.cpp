@@ -9,7 +9,7 @@
 // Using
 //=======
 
-#include "Devices/Timers/Clock.h"
+#include "Timing/Clock.h"
 #include "ScrollBar.h"
 
 using namespace Devices::Timers;

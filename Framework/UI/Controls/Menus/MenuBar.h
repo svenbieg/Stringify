@@ -30,6 +30,9 @@ namespace UI {
 class MenuBar: public WrapPanel, public Menu
 {
 public:
+	// Using
+	using Sentence=Culture::Sentence;
+
 	// Con-/Destructors
 	MenuBar(UI::Window* Parent);
 	~MenuBar();

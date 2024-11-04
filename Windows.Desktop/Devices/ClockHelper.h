@@ -9,7 +9,7 @@
 // Using
 //=======
 
-#include "Physics/TimePoint.h"
+#include "Timing/TimePoint.h"
 
 
 //===========
@@ -23,6 +23,6 @@ namespace Devices {
 // Common
 //========
 
-BOOL ClockGetTime(Physics::TIMEPOINT& TimePoint, UINT Delta=0);
+BOOL ClockGetTime(Timing::TIMEPOINT& TimePoint, UINT Delta=0);
 
 }

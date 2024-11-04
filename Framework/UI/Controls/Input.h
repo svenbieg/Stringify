@@ -12,8 +12,8 @@
 #include "Clusters/list.hpp"
 #include "Clusters/map.hpp"
 #include "Collections/StringList.h"
-#include "Devices/Timers/Timer.h"
 #include "Storage/Streams/InputStream.h"
+#include "Timing/Timer.h"
 #include "UI/Controls/Menus/PopupMenu.h"
 #include "Interactive.h"
 
@@ -37,7 +37,7 @@ public:
 	using InputStream=Storage::Streams::InputStream;
 	using PopupMenu=UI::Controls::Menus::PopupMenu;
 	using StringList=Collections::StringList;
-	using Timer=Devices::Timers::Timer;
+	using Timer=Timing::Timer;
 
 	// Con-/Destructors
 	Input(Window* Parent);
