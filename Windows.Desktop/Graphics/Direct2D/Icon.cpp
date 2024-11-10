@@ -13,7 +13,7 @@
 #include "Icon.h"
 #include "ImagingFactory.h"
 
-using namespace Clusters;
+using namespace Collections;
 using namespace Resources::Icons;
 using namespace Storage;
 

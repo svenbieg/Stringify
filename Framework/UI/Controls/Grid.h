@@ -9,8 +9,8 @@
 // Using
 //=======
 
-#include "Clusters/list.hpp"
-#include "Clusters/map.hpp"
+#include "Collections/list.hpp"
+#include "Collections/map.hpp"
 #include "UI/Alignment.h"
 #include "Control.h"
 
@@ -105,7 +105,7 @@ private:
 			UINT Column;
 			UINT Row;
 		};
-	using GridPositionMap=Clusters::map<Window*, GridPosition>;
+	using GridPositionMap=Collections::map<Window*, GridPosition>;
 
 	// Grid-Size
 	class GridSize
@@ -119,7 +119,7 @@ private:
 			UINT Size;
 			GridUnit Unit;
 		};
-	using GridSizeList=Clusters::list<GridSize>;
+	using GridSizeList=Collections::list<GridSize>;
 
 	// Common
 	Graphics::RECT GetChildRect(Window* Child, Graphics::SIZE const& MinSize, Graphics::RECT const& Margin);

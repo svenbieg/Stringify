@@ -38,7 +38,7 @@ if(m_Thread==INVALID_HANDLE_VALUE)
 if(!m_Thread)
 	throw E_INVALIDARG;
 s_Id=GetThreadId(m_Thread);
-m_Tasks.add(s_Id, this);
+s_Tasks.add(s_Id, this);
 m_This=this;
 ResumeThread(m_Thread);
 }
@@ -47,7 +47,7 @@ Task::~Task()
 {
 if(m_Thread)
 	{
-	m_Tasks.remove(s_Id);
+	s_Tasks.remove(s_Id);
 	CloseHandle(m_Thread);
 	}
 }
@@ -69,7 +69,7 @@ m_Done.Wait(lock);
 Handle<Task> Task::GetTask(DWORD id)
 {
 Task* task=nullptr;
-m_Tasks.try_get(id, &task);
+s_Tasks.try_get(id, &task);
 return task;
 }
 
@@ -106,6 +106,6 @@ task->DoTask();
 return 0;
 }
 
-Clusters::shared_map<DWORD, Task*> Task::m_Tasks;
+Collections::shared_map<DWORD, Task*> Task::s_Tasks;
 
 }

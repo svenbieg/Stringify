@@ -9,8 +9,8 @@
 // Using
 //=======
 
-#include "Clusters/list.hpp"
-#include "Clusters/map.hpp"
+#include "Collections/list.hpp"
+#include "Collections/map.hpp"
 #include "Collections/StringList.h"
 #include "Storage/Streams/InputStream.h"
 #include "Timing/Timer.h"
@@ -74,7 +74,7 @@ private:
 	// Line
 	typedef struct
 		{
-		Clusters::list<UINT> Offsets;
+		Collections::list<UINT> Offsets;
 		Handle<String> Text;
 		}INPUT_LINE;
 
@@ -115,9 +115,9 @@ private:
 	UINT m_CursorTime;
 	Handle<Timer> m_CursorTimer;
 	InputFlags m_InputFlags;
-	Clusters::list<INPUT_LINE> m_Lines;
+	Collections::list<INPUT_LINE> m_Lines;
 	UINT m_LineHeight;
-	Clusters::map<UINT, UINT> m_LineWidths;
+	Collections::map<UINT, UINT> m_LineWidths;
 	POINT m_PointerPos;
 	POINT m_SelectionEnd;
 	POINT m_SelectionFirst;

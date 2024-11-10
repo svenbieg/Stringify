@@ -19,6 +19,8 @@
 // Common
 //========
 
+inline void Abort() { throw AbortException(); }
+
 #ifdef _DEBUG
 
 inline VOID DebugPrint(LPCSTR Text) { OutputDebugStringA(Text); }

@@ -9,7 +9,7 @@
 // Using
 //=======
 
-#include "Clusters/shared_map.hpp"
+#include "Collections/shared_map.hpp"
 
 
 //===========
@@ -45,9 +45,9 @@ private:
 	DWORD s_Id;
 	Mutex m_Mutex;
 	std::function<VOID()> m_Procedure;
-	static Clusters::shared_map<DWORD, Task*> m_Tasks;
 	Handle<Task> m_This;
 	HANDLE m_Thread;
+	static Collections::shared_map<DWORD, Task*> s_Tasks;
 };
 
 }

@@ -17,7 +17,6 @@
 #include "UI/Application.h"
 #include "Input.h"
 
-using namespace Clusters;
 using namespace Graphics;
 using namespace Storage;
 using namespace Storage::Streams;

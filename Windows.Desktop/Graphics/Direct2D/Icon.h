@@ -9,7 +9,7 @@
 // Using
 //=======
 
-#include "Clusters/map.hpp"
+#include "Collections/map.hpp"
 #include "Graphics/Icon.h"
 
 
@@ -38,7 +38,7 @@ public:
 
 private:
 	// Common
-	Clusters::map<UINT, HICON> m_Handles;
+	Collections::map<UINT, HICON> m_Handles;
 	WORD s_Id;
 };
 
