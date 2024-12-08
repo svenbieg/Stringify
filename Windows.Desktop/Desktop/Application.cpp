@@ -20,7 +20,7 @@ using namespace Culture;
 using namespace Resources::Strings;
 using namespace UI;
 
-extern VOID Initialize();
+extern INT Main();
 
 
 //=============
@@ -29,22 +29,14 @@ extern VOID Initialize();
 
 #ifndef _WINDOWS_CONSOLE
 
+INT g_ShowCommand=0;
+
 INT WINAPI WinMain(HINSTANCE inst, HINSTANCE prev_inst, LPSTR cmd_line, INT show_cmd)
 {
 SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
 CurrentLanguage=GetCurrentLanguage();
-Initialize();
-auto app=Desktop::Application::Current;
-auto app_wnd=UI::AppWindow::Current;
-if(app_wnd)
-	app_wnd->Show(show_cmd);
-INT status=0;
-if(app)
-	{
-	status=app->Run();
-	app->Quit();
-	}
-return status;
+g_ShowCommand=show_cmd;
+return Main();
 }
 
 #endif
@@ -81,6 +73,9 @@ PostQuitMessage(0);
 INT Application::Run()
 {
 ScopedLock lock(m_Mutex);
+auto app_wnd=UI::AppWindow::Current;
+if(app_wnd)
+	app_wnd->Show(g_ShowCommand);
 INT status=0;
 MSG msg;
 lock.Unlock();

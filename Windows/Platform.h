@@ -15,28 +15,26 @@
 
 #include <Windows.h>
 
+#undef INT_MAX
+#undef INT_MIN
+#undef UINT_MAX
+#undef VOID
+
 #undef CopyMemory
 #undef FillMemory
 #undef MessageBox
 #undef MoveMemory
 #undef ZeroMemory
 
-#undef VOID
-#undef INT_MAX
-#undef INT_MIN
-#undef UINT_MAX
-
-#include "MemoryHelper.h"
-
 
 //======================
 // Forward-Declarations
 //======================
 
-constexpr SIZE_T PAGE_SIZE=4096;
+#define __long long
+#define __longlong long long
 
-typedef UINT64 FILE_SIZE;
-typedef UINT64 QWORD;
+typedef unsigned __longlong int FILE_SIZE;
 
 constexpr FILE_SIZE FILE_SIZE_MAX=0xFFFFFFFFFFFFFFFF;
 

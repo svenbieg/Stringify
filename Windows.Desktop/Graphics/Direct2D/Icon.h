@@ -48,25 +48,17 @@ private:
 //========
 
 template <>
-class Handle<Icon>
+class Handle<Icon>: public ::Details::HandleBase<Icon>
 {
 public:
 	// Using
+	using _base_t=::Details::HandleBase<Icon>;
+	using _base_t::_base_t;
 	using ICON=Resources::Icons::ICON;
 
 	// Con-/Destructors
-	Handle(): m_Icon(nullptr) {}
-	Handle(INT Id) { HandleCreate(&m_Icon, new Icon(Id)); }
-	Handle(ICON const* Resource) { HandleCreate(&m_Icon, new Icon(Resource)); }
-	Handle(Icon* Icon) { HandleCreate(&m_Icon, Icon); }
-
-	// Access
-	inline operator bool()const { return m_Icon!=nullptr; }
-	inline Icon* operator->()const { return m_Icon; }
-
-private:
-	// Common
-	Icon* m_Icon;
+	Handle(INT Id) { Create(new Icon(Id)); }
+	Handle(ICON const* Resource) { Create(new Icon(Resource)); }
 };
 
 }}

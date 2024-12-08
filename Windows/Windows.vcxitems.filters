@@ -130,7 +130,6 @@
       <Filter>Concurrency</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)MemoryHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Devices\Timers\SystemTimer.h">
       <Filter>Devices\Timers</Filter>
     </ClInclude>

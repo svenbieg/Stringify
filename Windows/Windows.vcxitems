@@ -32,7 +32,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Devices\Timers\SystemTimer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ErrorHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ExceptionHelper.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)MemoryHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Network\GatewayHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Network\Tcp\TcpSocket.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Network\Tls\TlsSocket.h" />
