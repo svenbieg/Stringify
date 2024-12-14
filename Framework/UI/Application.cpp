@@ -138,8 +138,8 @@ m_CurrentInput->SelectAll();
 // Con-/Destructors Protected
 //============================
 
-Application::Application(LPCSTR name, LPCSTR version):
-Core::Application(name, version),
+Application::Application(LPCSTR name):
+Core::Application(name),
 m_CurrentInput(nullptr),
 m_CurrentMenu(nullptr),
 m_PointerFocus(nullptr)

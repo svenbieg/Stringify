@@ -49,7 +49,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)System\ThreadPoolTimer.cpp">
       <Filter>System</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)TaskHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)CommandLine.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Concurrency\Task.cpp">
       <Filter>Concurrency</Filter>
@@ -57,6 +56,9 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Devices\Timers\SystemTimer.cpp">
       <Filter>Devices\Timers</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Concurrency\MainTask.cpp">
+      <Filter>Concurrency</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -111,7 +113,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)System\ThreadPoolTimer.h">
       <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)TaskHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)CommandLine.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Platform.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\Mutex.h">
@@ -132,6 +133,12 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Devices\Timers\SystemTimer.h">
       <Filter>Devices\Timers</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\MainTask.h">
+      <Filter>Concurrency</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\Scheduler.h">
+      <Filter>Concurrency</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

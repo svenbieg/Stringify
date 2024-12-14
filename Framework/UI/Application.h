@@ -57,7 +57,7 @@ public:
 
 protected:
 	// Con-/Destructors
-	Application(LPCSTR Name, LPCSTR Version);
+	Application(LPCSTR Name);
 
 private:
 	// Common

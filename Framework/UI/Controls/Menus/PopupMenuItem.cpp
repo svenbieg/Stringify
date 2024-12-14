@@ -9,12 +9,14 @@
 // Using
 //=======
 
+#include "Concurrency/MainTask.h"
 #include "UI/Input/Shortcut.h"
 #include "UI/Application.h"
 #include "MenuBar.h"
 #include "MenuHelper.h"
 #include "PopupMenu.h"
 
+using namespace Concurrency;
 using namespace Graphics;
 using namespace UI::Input;
 
@@ -213,7 +215,7 @@ Clicked(this);
 VOID PopupMenuItem::OnClicked()
 {
 m_Menu->Exit();
-Application::Current->Dispatch(this, &PopupMenuItem::DoClick);
+MainTask::Dispatch(this, &PopupMenuItem::DoClick);
 }
 
 VOID PopupMenuItem::OnLabelChanged(Handle<Sentence> label)

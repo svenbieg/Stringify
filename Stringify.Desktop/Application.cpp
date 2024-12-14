@@ -9,6 +9,7 @@
 // Using
 //=======
 
+#include "Concurrency/MainTask.h"
 #include "Resources/Strings/Application.h"
 #include "Storage/Filesystem/File.h"
 #include "Storage/Streams/StreamReader.h"
@@ -27,9 +28,10 @@ using namespace UI::Controls;
 // Entry-Point
 //=============
 
-VOID Initialize()
+INT Main()
 {
-new Stringify::Application();
+Handle<Stringify::Application> app=new Stringify::Application();
+return app->Run();
 }
 
 
@@ -119,13 +121,13 @@ result_box->Enabled=true;
 result_box->ReadOnly=true;
 Handle<Intermediate> buf=new Intermediate(PAGE_SIZE);
 buf->SetFormat(StreamFormat::Ansi);
-m_ConvertTask=CreateTask(this, &Application::DoConvert, buf, stream);
-m_ParseTask=CreateTask(this, &Application::DoParse, buf);
+m_ConvertTask=Scheduler::CreateTask(this, [this, buf, stream](){ DoConvert(buf, stream); });
+m_ParseTask=Scheduler::CreateTask(this, [this, buf](){ DoParse(buf); });
 }
 
 VOID Application::DoConvert(Handle<Intermediate> dst, Handle<InputStream> src)
 {
-auto task=GetCurrentTask();
+auto task=Task::Get();
 StreamWriter writer(dst);
 writer.PrintChar('\"');
 SIZE_T line_len=0;
@@ -157,7 +159,7 @@ dst->Flush();
 VOID Application::DoParse(Handle<Intermediate> stream)
 {
 ScopedLock lock(m_Mutex);
-auto task=GetCurrentTask();
+auto task=Task::Get();
 auto result_box=m_Window->ResultBox;
 StreamReader reader(stream);
 CHAR buf[LINE_LEN+8];
@@ -171,12 +173,12 @@ while(!task->Cancelled)
 	if(reader.LastChar=='\r')
 		reader.Skip();
 	Handle<String> line=new String(buf);
-	Dispatch(result_box, [result_box, line]() { result_box->AppendLine(line); });
+	MainTask::Dispatch(result_box, [result_box, line]() { result_box->AppendLine(line); });
 	if(reader.LastChar==0)
 		break;
 	}
 if(!task->Cancelled)
-	Dispatch(this, &Application::OnComplete);
+	MainTask::Dispatch(this, &Application::OnComplete);
 }
 
 VOID Application::OnComplete()

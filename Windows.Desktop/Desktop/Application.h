@@ -28,14 +28,13 @@ class Application: public UI::Application
 public:
 	// Common
 	static Application* Current;
-	VOID DispatchHandler(DispatchedHandler* Handler)override;
 	VOID Quit()override;
 	INT Run()override;
 	Event<Application> UnhandledException;
 
 protected:
 	// Con-/Destructors
-	Application(LPCSTR Name, LPCSTR Version="1.0");
+	Application(LPCSTR Name);
 
 private:
 	// Common

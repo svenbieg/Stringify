@@ -9,12 +9,12 @@
 // Using
 //=======
 
-#include "Core/Application.h"
+#include "Concurrency/MainTask.h"
 #include "UI/Controls/TextBlock.h"
 #include "UI/Frame.h"
 #include "ToolTip.h"
 
-using namespace Core;
+using namespace Concurrency;
 
 
 //===========
@@ -55,7 +55,7 @@ m_Timer=nullptr;
 if(m_Panel)
 	{
 	m_Panel->Visible=false;
-	Application::Current->Dispatch(this, &ToolTip::DoClose);
+	MainTask::Dispatch(this, &ToolTip::DoClose);
 	}
 }
 

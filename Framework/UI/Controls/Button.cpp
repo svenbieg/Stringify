@@ -9,12 +9,12 @@
 // Using
 //=======
 
-#include "Core/Application.h"
+#include "Concurrency/MainTask.h"
 #include "Button.h"
 #include "Grid.h"
 #include "TextBlock.h"
 
-using namespace Core;
+using namespace Concurrency;
 using namespace Graphics;
 
 
@@ -118,7 +118,7 @@ Invalidate();
 
 VOID Button::OnInteractiveClicked()
 {
-Application::Current->Dispatch(this, &Button::DoClick);
+MainTask::Dispatch(this, &Button::DoClick);
 }
 
 VOID Button::OnPointerEntered()

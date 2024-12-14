@@ -9,12 +9,12 @@
 // Using
 //=======
 
-#include "Core/Application.h"
+#include "Concurrency/MainTask.h"
 #include "MenuHelper.h"
 #include "ToolBarItem.h"
 #include "ToolBarPanel.h"
 
-using namespace Core;
+using namespace Concurrency;
 using namespace Graphics;
 
 
@@ -108,7 +108,7 @@ Clicked(this);
 
 VOID ToolBarItem::OnClicked()
 {
-Application::Current->Dispatch(this, &ToolBarItem::DoClick);
+MainTask::Dispatch(this, &ToolBarItem::DoClick);
 }
 
 VOID ToolBarItem::OnFocused()

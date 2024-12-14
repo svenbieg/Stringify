@@ -9,10 +9,10 @@
 // Using
 //=======
 
-#include "Core/Application.h"
+#include "Concurrency/MainTask.h"
 #include "NamedPipe.h"
 
-using namespace Core;
+using namespace Concurrency;
 
 
 //===========
@@ -76,7 +76,7 @@ if(hNamedPipe==INVALID_HANDLE_VALUE)
 	hNamedPipe=NULL;
 if(hNamedPipe==NULL)
 	return;
-hListenTask=CreateTask(this, &NamedPipe::ListenProc);
+hListenTask=Scheduler::CreateTask(this, &NamedPipe::ListenProc);
 }
 
 
@@ -143,7 +143,7 @@ if(!connected)
 ConnectionReceived(this);
 CloseHandle(hNamedPipe);
 hNamedPipe=NULL;
-Application::Current->Dispatch(this, &NamedPipe::OnConnectionClosed);
+MainTask::Dispatch(this, &NamedPipe::OnConnectionClosed);
 }
 
 VOID NamedPipe::OnConnectionClosed()

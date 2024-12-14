@@ -9,12 +9,12 @@
 // Using
 //=======
 
-#include "Core/Application.h"
+#include "Concurrency/MainTask.h"
 #include "Storage/Streams/StreamReader.h"
 #include "Storage/Streams/StreamWriter.h"
 #include "ProcessServer.h"
 
-using namespace Core;
+using namespace Concurrency;
 using namespace Storage::Streams;
 
 
@@ -70,7 +70,7 @@ while(1)
 		hNamedPipe->Flush();
 		continue;
 		}
-	Application::Current->Dispatch(this, [this, msg]() { OnMessageReceived(msg); });
+	MainTask::Dispatch(this, [this, msg]() { OnMessageReceived(msg); });
 	}
 }
 

@@ -28,7 +28,7 @@ namespace Devices {
 
 SystemTimer::SystemTimer()
 {
-m_Task=CreateTask(this, &SystemTimer::TaskProc);
+m_Task=Scheduler::CreateTask(this, &SystemTimer::TaskProc);
 }
 
 SystemTimer::~SystemTimer()
@@ -54,7 +54,7 @@ return s_Current;
 
 VOID SystemTimer::TaskProc()
 {
-auto task=GetCurrentTask();
+auto task=Task::Get();
 while(!task->Cancelled)
 	{
 	Tick(this);

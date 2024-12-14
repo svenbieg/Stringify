@@ -54,9 +54,11 @@ constexpr FILE_SIZE FILE_SIZE_MAX=0xFFFFFFFFFFFFFFFF;
 // Common
 //========
 
+#include "Concurrency/Scheduler.h"
+#include "Concurrency/SharedLock.h"
+#include "Concurrency/Signal.h"
 #include "ComPointer.h"
 #include "Convertible.h"
 #include "ErrorHelper.h"
 #include "ResourceHelper.h"
-#include "TaskHelper.h"
 #include "TimeHelper.h"

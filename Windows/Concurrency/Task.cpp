@@ -9,10 +9,9 @@
 // Using
 //=======
 
-#include "Core/Application.h"
 #include "Task.h"
 
-using namespace Core;
+using namespace Collections;
 
 
 //===========
@@ -26,30 +25,11 @@ namespace Concurrency {
 // Con-/Destructors
 //==================
 
-Task::Task(std::function<VOID()> proc):
-Cancelled(false),
-s_Id(0),
-m_Procedure(proc),
-m_Thread(NULL)
-{
-m_Thread=CreateThread(nullptr, 0, TaskProc, this, CREATE_SUSPENDED, nullptr);
-if(m_Thread==INVALID_HANDLE_VALUE)
-	m_Thread=NULL;
-if(!m_Thread)
-	throw E_INVALIDARG;
-s_Id=GetThreadId(m_Thread);
-s_Tasks.add(s_Id, this);
-m_This=this;
-ResumeThread(m_Thread);
-}
-
 Task::~Task()
 {
-if(m_Thread)
-	{
-	s_Tasks.remove(s_Id);
+if(m_Thread!=NULL)
 	CloseHandle(m_Thread);
-	}
+s_Tasks.remove(m_Id);
 }
 
 
@@ -66,11 +46,16 @@ Cancelled=true;
 m_Done.Wait(lock);
 }
 
-Handle<Task> Task::GetTask(DWORD id)
+Handle<Task> Task::Get()
 {
-Task* task=nullptr;
-s_Tasks.try_get(id, &task);
-return task;
+DWORD id=GetCurrentThreadId();
+return s_Tasks.get(id);
+}
+
+VOID Task::Resume()
+{
+m_This=this;
+ResumeThread(m_Thread);
 }
 
 VOID Task::Wait()
@@ -82,30 +67,53 @@ m_Done.Wait(lock);
 }
 
 
+//============================
+// Con-/Destructors Protected
+//============================
+
+Task::Task():
+Cancelled(false),
+m_Id(0),
+m_Status(Status::Pending),
+m_Then(nullptr),
+m_Thread(NULL)
+{
+m_Thread=CreateThread(nullptr, 0, TaskProc, this, CREATE_SUSPENDED, &m_Id);
+if(m_Thread==INVALID_HANDLE_VALUE)
+	m_Thread=NULL;
+if(!m_Thread)
+	throw InvalidArgumentException();
+s_Tasks.add(m_Id, this);
+}
+
+
 //================
 // Common Private
 //================
 
-VOID Task::DoTask()
-{
-m_This=nullptr;
-try
-	{
-	m_Procedure();
-	}
-catch(std::exception&)
-	{
-	}
-m_Done.Trigger();
-}
-
 DWORD WINAPI Task::TaskProc(VOID* param)
 {
 Handle<Task> task=(Task*)param;
-task->DoTask();
+task->m_This=nullptr;
+Status status=Status::Success;
+try
+	{
+	task->Run();
+	}
+catch(Exception& e)
+	{
+	status=e.GetStatus();
+	}
+task->m_Status=status;
+task->m_Done.Trigger();
+if(task->m_Then)
+	{
+	MainTask::Dispatch(task->m_Then);
+	task->m_Then=nullptr;
+	}
 return 0;
 }
 
-Collections::shared_map<DWORD, Task*> Task::s_Tasks;
+shared_map<DWORD, Task*> Task::s_Tasks;
 
 }

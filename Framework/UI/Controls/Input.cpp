@@ -9,7 +9,7 @@
 // Using
 //=======
 
-#include "Core/Application.h"
+#include "Concurrency/MainTask.h"
 #include "Storage/Clipboard.h"
 #include "Storage/Streams/StreamReader.h"
 #include "Storage/StaticBuffer.h"
@@ -17,6 +17,7 @@
 #include "UI/Application.h"
 #include "Input.h"
 
+using namespace Concurrency;
 using namespace Graphics;
 using namespace Storage;
 using namespace Storage::Streams;
@@ -991,8 +992,7 @@ else
 	m_CursorPos.Set(end_char, end_line);
 	}
 Invalidate(true);
-auto app=Core::Application::Current;
-app->Dispatch(this, &Input::NotifySelectionChanged);
+MainTask::Dispatch(this, &Input::NotifySelectionChanged);
 }
 
 }}

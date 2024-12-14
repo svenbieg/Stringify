@@ -12,7 +12,6 @@
 #include <assert.h>
 #include "MemoryHelper.h"
 #include "StringClass.h"
-#include "TaskHelper.h"
 
 
 //========
@@ -31,16 +30,9 @@ Handle<String> text=new String(Format, Arguments...);
 OutputDebugString(text->Begin());
 }
 
-inline VOID ThrowIfNotMainThread()
-{
-if(GetCurrentTask())
-	throw E_NOINTERFACE;
-}
-
 #else
 
 #define DebugPrint(...)
-#define ThrowIfNotMainThread(...)
 
 #endif
 

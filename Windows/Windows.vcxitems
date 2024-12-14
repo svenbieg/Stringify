@@ -21,7 +21,9 @@
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)CommandLine.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ComPointer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\MainTask.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\Mutex.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\Scheduler.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\ScopedLock.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\SharedLock.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\Signal.h" />
@@ -48,11 +50,11 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)System\ProcessClient.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)System\ProcessServer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)System\ThreadPoolTimer.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)TaskHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)TimeHelper.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)CommandLine.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Concurrency\MainTask.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Concurrency\Task.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Devices\Serial\SerialPort.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Devices\Timer.cpp" />
@@ -75,7 +77,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)System\ProcessClient.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)System\ProcessServer.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)System\ThreadPoolTimer.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)TaskHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)TimeHelper.cpp" />
   </ItemGroup>
   <ItemGroup>

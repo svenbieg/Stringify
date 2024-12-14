@@ -10,11 +10,11 @@
 //=======
 
 #include <windowsx.h>
-#include "Core/Application.h"
+#include "Concurrency/MainTask.h"
 #include "Graphics/Direct2D/Theme.h"
 #include "Overlapped.h"
 
-using namespace Core;
+using namespace Concurrency;
 
 using D2DCursor=Graphics::Direct2D::Cursor;
 using D2DTheme=Graphics::Direct2D::Theme;
@@ -90,7 +90,6 @@ MoveWindow(m_Handle, rc.Left, rc.Top, size.Width, size.Height, true);
 
 VOID Overlapped::Repaint()
 {
-ThrowIfNotMainThread();
 if(m_Handle)
 	{
 	InvalidateRect(m_Handle, nullptr, false);
@@ -415,7 +414,7 @@ return 0;
 
 VOID Overlapped::OnInvalidated()
 {
-Application::Current->Dispatch(this, &Overlapped::Repaint);
+MainTask::Dispatch(this, &Overlapped::Repaint);
 }
 
 VOID Overlapped::OnVisibleChanged(BOOL visible)
