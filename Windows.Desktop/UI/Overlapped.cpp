@@ -339,8 +339,6 @@ switch(msg)
 		::GetWindowRect(m_Handle, &rc_wnd);
 		RECT rc(rc_wnd.left, rc_wnd.top, rc_wnd.right, rc_wnd.bottom);
 		Frame::Move(m_RenderTarget, rc);
-		if(!GetFlag(m_Flags, WindowFlags::Repaint))
-			break;
 		:: RECT rc_client;
 		::GetClientRect(m_Handle, &rc_client);
 		rc.Set(0, 0, rc_client.right, rc_client.bottom);

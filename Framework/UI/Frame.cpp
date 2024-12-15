@@ -60,8 +60,6 @@ VOID Frame::Invalidate(BOOL rearrange)
 {
 if(rearrange)
 	SetFlag(m_Flags, WindowFlags::Rearrange);
-if(GetFlag(m_Flags, WindowFlags::Repaint))
-	return;
 SetFlag(m_Flags, WindowFlags::Repaint);
 Invalidated(this);
 }
