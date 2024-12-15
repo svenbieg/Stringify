@@ -77,7 +77,7 @@ return (IMAGE_RESOURCE_DATA_ENTRY*)&root[entry->OffsetToData];
 
 IMAGE_RESOURCE_DATA_ENTRY* GetResourceData(IMAGE_RESOURCE_DIRECTORY* parent, LPCSTR name)
 {
-UINT name_len=StringLength(name);
+UINT name_len=StringHelper::Length(name);
 assert(name_len>0);
 BYTE* dir=(BYTE*)parent;
 UINT pos=sizeof(IMAGE_RESOURCE_DIRECTORY);
@@ -85,7 +85,7 @@ for(UINT u=0; u<parent->NumberOfNamedEntries; u++)
 	{
 	IMAGE_RESOURCE_DIRECTORY_ENTRY* entry=(IMAGE_RESOURCE_DIRECTORY_ENTRY*)&dir[pos];
 	IMAGE_RESOURCE_DIR_STRING_T* str=(IMAGE_RESOURCE_DIR_STRING_T*)&dir[entry->NameOffset];
-	if(str->Length==name_len&&StringCompare(str->NameString, name, name_len)==0)
+	if(str->Length==name_len&&StringHelper::Compare(str->NameString, name, name_len)==0)
 		{
 		if(entry->DataIsDirectory)
 			throw(EINVAL);
@@ -121,7 +121,7 @@ return 0;
 
 IMAGE_RESOURCE_DIRECTORY* GetResourceDirectory(IMAGE_RESOURCE_DIRECTORY* parent, LPCSTR name)
 {
-UINT name_len=StringLength(name);
+UINT name_len=StringHelper::Length(name);
 assert(name_len>0);
 BYTE* dir=(BYTE*)parent;
 UINT pos=sizeof(IMAGE_RESOURCE_DIRECTORY);
@@ -129,7 +129,7 @@ for(UINT u=0; u<parent->NumberOfNamedEntries; u++)
 	{
 	IMAGE_RESOURCE_DIRECTORY_ENTRY* entry=(IMAGE_RESOURCE_DIRECTORY_ENTRY*)&dir[pos];
 	IMAGE_RESOURCE_DIR_STRING_T* str=(IMAGE_RESOURCE_DIR_STRING_T*)&dir[entry->NameOffset];
-	if(str->Length==name_len&&StringCompare(str->NameString, name, name_len)==0)
+	if(str->Length==name_len&&StringHelper::Compare(str->NameString, name, name_len)==0)
 		{
 		if(!entry->DataIsDirectory)
 			throw(EINVAL);
@@ -162,7 +162,7 @@ IMAGE_SECTION_HEADER* rc_section=nullptr;
 for(UINT u=0; u<nt->FileHeader.NumberOfSections; u++)
 	{
 	IMAGE_SECTION_HEADER* p=(IMAGE_SECTION_HEADER*)&pBase[section_entry];
-	if(StringCompare((LPCSTR)p->Name, ".rsrc", 5)==0)
+	if(StringHelper::Compare((LPCSTR)p->Name, ".rsrc", 5)==0)
 		{
 		rc_section=p;
 		break;

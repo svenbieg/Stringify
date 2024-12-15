@@ -69,7 +69,7 @@ INT status=WSAStartup(MAKEWORD(2,2), &wsa);
 if(status!=0)
 	return false;
 CHAR host[32];
-StringCopy(host, 32, host_name->Begin());
+StringHelper::Copy(host, 32, host_name->Begin());
 addrinfo info;
 ZeroMemory(&info, sizeof(info));
 info.ai_family=AF_INET;
@@ -109,7 +109,7 @@ addr.ai_protocol=IPPROTO_TCP;
 addr.ai_flags=AI_PASSIVE;
 addrinfo* paddr=nullptr;
 CHAR port_str[8];
-StringPrint(port_str, 8, "%u", (UINT)port);
+StringHelper::Print(port_str, 8, "%u", (UINT)port);
 status=getaddrinfo(NULL, port_str, &addr, &paddr);
 if(status!=0)
 	throw E_FAIL;

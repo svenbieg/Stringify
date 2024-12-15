@@ -51,7 +51,7 @@ BOOL ProcessClient::Connect()
 {
 CHAR exe_path[MAX_PATH];
 GetModuleFileNameA(NULL, exe_path, MAX_PATH);
-auto exe_name=PathGetLastComponent(exe_path);
+auto exe_name=PathHelper::GetLastComponent(exe_path);
 hNamedPipe=new NamedPipe(exe_name);
 if(hNamedPipe->Connect())
 	{
@@ -93,7 +93,7 @@ StreamReader reader(hNamedPipe);
 TCHAR id_str[32];
 reader.ReadString(id_str, 32, '\n');
 UINT id=0;
-if(StringScan(id_str, "0x%x", &id)!=1)
+if(StringHelper::Scan(id_str, "0x%x", &id)!=1)
 	return 0;
 return id;
 }

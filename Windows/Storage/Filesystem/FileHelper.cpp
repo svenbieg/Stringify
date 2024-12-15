@@ -35,7 +35,7 @@ if(!path)
 	return false;
 if(DirectoryExists(path))
 	return true;
-UINT dir_len=PathGetDirectoryLength(path);
+UINT dir_len=PathHelper::GetDirectoryLength(path);
 if(dir_len>0)
 	{
 	Handle<String> parent=new String(dir_len-1, path);
@@ -185,7 +185,7 @@ Handle<String> GetNextFileName(LPCTSTR path)
 {
 if(!path)
 	return nullptr;
-UINT dir_len=PathGetDirectoryLength(path);
+UINT dir_len=PathHelper::GetDirectoryLength(path);
 Handle<String> dir;
 LPCTSTR dir_ptr=nullptr;
 if(dir_len>0)
@@ -198,9 +198,9 @@ Handle<String> new_name;
 TCHAR name[MAX_PATH];
 TCHAR ext[8];
 UINT id=0;
-if(StringScan(file_name, "%s (%u).%s", name, MAX_PATH, &id, ext, 8)==3)
+if(StringHelper::Scan(file_name, "%s (%u).%s", name, MAX_PATH, &id, ext, 8)==3)
 	return new String("%s%s (%u).%s", dir_ptr, name, id+1, ext);
-if(StringScan(file_name, "%s.%s", name, MAX_PATH, ext, 8)==2)
+if(StringHelper::Scan(file_name, "%s.%s", name, MAX_PATH, ext, 8)==2)
 	 return new String("%s%s (%u).%s", dir_ptr, name, 1, ext);
 return nullptr;
 }

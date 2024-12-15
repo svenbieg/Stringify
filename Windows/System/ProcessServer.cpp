@@ -41,7 +41,7 @@ VOID ProcessServer::Listen()
 {
 CHAR exe_path[MAX_PATH];
 GetModuleFileNameA(NULL, exe_path, MAX_PATH);
-auto exe_name=PathGetLastComponent(exe_path);
+auto exe_name=PathHelper::GetLastComponent(exe_path);
 hNamedPipe=new NamedPipe(exe_name);
 hNamedPipe->ConnectionReceived.Add(this, &ProcessServer::OnNamedPipeConnectionReceived);
 hNamedPipe->Listen();
@@ -64,7 +64,7 @@ while(1)
 		{
 		UINT id=GetCurrentProcessId();
 		CHAR id_str[32];
-		StringPrint(id_str, 32, "0x%x\n", id);
+		StringHelper::Print(id_str, 32, "0x%x\n", id);
 		StreamWriter writer(hNamedPipe);
 		writer.Print(id_str);
 		hNamedPipe->Flush();

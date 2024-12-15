@@ -47,7 +47,7 @@ while(mod.hModule)
 	{
 	#ifdef _UNICODE
 	CHAR str[MAX_PATH];
-	StringCopy(str, MAX_PATH, mod.szModule);
+	StringHelper::Copy(str, MAX_PATH, mod.szModule);
 	#else
 	LPSTR str=mod.szModule;
 	#endif
@@ -113,7 +113,7 @@ for(UINT frame=0; frame<levels; frame++)
 		break;
 	if(!SymFromAddr(proc, sf.AddrPC.Offset, 0, sym_info))
 		continue;
-	len+=StringCopy(&str[len], size-len-2, sym_info->Name);
+	len+=StringHelper::Copy(&str[len], size-len-2, sym_info->Name);
 	str[len++]='\n';
 	str[len]=0;
 	if(len>=size)

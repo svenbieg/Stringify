@@ -319,7 +319,7 @@ if(m_SelectionLast.Top<line_count)
 		auto text=last_line.Text->Begin();
 		str_after=new String(&text[m_SelectionLast.Left]);
 		after=str_after->Begin();
-		after_len=StringLength(after);
+		after_len=StringHelper::Length(after);
 		}
 	}
 UINT line_id=m_SelectionFirst.Top;
@@ -352,14 +352,14 @@ while(replace[str_pos])
 	auto str=const_cast<LPTSTR>(text->Begin());
 	if(before)
 		{
-		StringCopy(str, line_len+1, before);
-		StringCopy(&str[before_len], line_len+1-before_len, &replace[line_start], insert_len);
+		StringHelper::Copy(str, line_len+1, before);
+		StringHelper::Copy(&str[before_len], line_len+1-before_len, &replace[line_start], insert_len);
 		before=nullptr;
 		before_len=0;
 		}
 	else
 		{
-		StringCopy(str, line_len+1, &replace[line_start], insert_len);
+		StringHelper::Copy(str, line_len+1, &replace[line_start], insert_len);
 		}
 	INPUT_LINE& line=m_Lines.insert_at(m_SelectionStart.Top);
 	line.Text=text;
@@ -378,11 +378,11 @@ if(line_len>0)
 	auto str=const_cast<LPTSTR>(text->Begin());
 	UINT pos=0;
 	if(before_len)
-		pos+=StringCopy(&str[pos], line_len+1-pos, before);
+		pos+=StringHelper::Copy(&str[pos], line_len+1-pos, before);
 	if(insert_len)
-		pos+=StringCopy(&str[pos], line_len+1-pos, &replace[line_start], insert_len);
+		pos+=StringHelper::Copy(&str[pos], line_len+1-pos, &replace[line_start], insert_len);
 	if(after_len)
-		pos+=StringCopy(&str[pos], line_len+1-pos, after);
+		pos+=StringHelper::Copy(&str[pos], line_len+1-pos, after);
 	line.Text=text;
 	UpdateLine(line);
 	}
@@ -519,25 +519,25 @@ if(pt_start.Top==pt_end.Top)
 	INPUT_LINE const& line=m_Lines.get_at(pt_start.Top);
 	UINT copy=pt_end.Left-pt_start.Left;
 	auto text=line.Text->Begin();
-	return StringCopy(buf, size, &text[pt_start.Left], copy);
+	return StringHelper::Copy(buf, size, &text[pt_start.Left], copy);
 	}
 UINT line_id=pt_start.Top;
 auto it=m_Lines.cbegin(line_id);
 INPUT_LINE const& first_line=it.get_current();
 auto text=first_line.Text->Begin();
-UINT len=StringCopy(buf, size, &text[pt_start.Left]);
+UINT len=StringHelper::Copy(buf, size, &text[pt_start.Left]);
 it.move_next();
 for(++line_id; line_id<pt_end.Top; it.move_next(), line_id++)
 	{
-	len+=StringCopy(&buf[len], size-len, TEXT("\r\n"));
+	len+=StringHelper::Copy(&buf[len], size-len, TEXT("\r\n"));
 	INPUT_LINE const& line=it.get_current();
 	text=line.Text->Begin();
-	len+=StringCopy(&buf[len], size-len, text);
+	len+=StringHelper::Copy(&buf[len], size-len, text);
 	}
-len+=StringCopy(&buf[len], size-len, TEXT("\r\n"));
+len+=StringHelper::Copy(&buf[len], size-len, TEXT("\r\n"));
 INPUT_LINE const& last_line=it.get_current();
 text=last_line.Text->Begin();
-len+=StringCopy(&buf[len], size-len, text, pt_end.Left);
+len+=StringHelper::Copy(&buf[len], size-len, text, pt_end.Left);
 return len;
 }
 

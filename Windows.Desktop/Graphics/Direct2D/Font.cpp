@@ -29,7 +29,7 @@ Font::Font(LPCSTR family, UINT size, UINT weight):
 m_Format(nullptr),
 m_Info({ 0 })
 {
-StringCopy(m_Info.lfFaceName, 32, family);
+StringHelper::Copy(m_Info.lfFaceName, 32, family);
 m_Info.lfHeight=size;
 m_Info.lfWeight=weight;
 }

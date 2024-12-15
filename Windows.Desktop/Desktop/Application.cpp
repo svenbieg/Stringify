@@ -113,11 +113,11 @@ UINT context_len=PrintExceptionContext(info->ContextRecord, 3, context, 128);
 CHAR msg[256];
 if(context_len>0)
 	{
-	StringPrint(msg, 256, "%s\n\n%s", caption, context);
+	StringHelper::Print(msg, 256, "%s\n\n%s", caption, context);
 	}
 else
 	{
-	StringPrint(msg, 256, "%s", caption);
+	StringHelper::Print(msg, 256, "%s", caption);
 	}
 auto app=Application::Current;
 auto app_wnd=AppWindow::Current;

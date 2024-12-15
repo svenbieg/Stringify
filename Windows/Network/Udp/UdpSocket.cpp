@@ -92,7 +92,7 @@ addr.ai_protocol=IPPROTO_UDP;
 addr.ai_flags=AI_PASSIVE;
 addrinfo* paddr=nullptr;
 CHAR pport[8];
-StringPrint(pport, 8, "%u", port);
+StringHelper::Print(pport, 8, "%u", port);
 status=getaddrinfo(nullptr, pport, &addr, &paddr);
 if(status!=0)
 	return false;

@@ -24,7 +24,7 @@ namespace UI {
 // Char-Map
 //==========
 
-CHAR CharMap[256]=
+constexpr CHAR CharMap[256]=
 	{
 //    0    1    2    3    4    5    6    7    8    9    A    B    C    D    E    F
 	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0, // 0x00..0x0F
@@ -45,7 +45,7 @@ CHAR CharMap[256]=
 	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0, // 0xF0..0xFF
 	};
 
-CHAR CharMapShift[256]=
+constexpr CHAR CharMapShift[256]=
 	{
 //    0    1    2    3    4    5    6    7    8    9    A    B    C    D    E    F
 	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0, // 0x00..0x0F
@@ -66,7 +66,7 @@ CHAR CharMapShift[256]=
 	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0, // 0xF0..0xFF
 	};
 
-CHAR CharMapCtrl[256]=
+constexpr CHAR CharMapCtrl[256]=
 	{
 //    0    1    2    3    4    5    6    7    8    9    A    B    C    D    E    F
 	  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0, // 0x00..0x0F
@@ -94,26 +94,26 @@ CHAR CharMapCtrl[256]=
 
 VirtualKey VirtualKeyFromString(LPCSTR str)
 {
-UINT len=StringLength(str);
+UINT len=StringHelper::Length(str);
 if(!len)
 	return VirtualKey::None;
 if(len==1)
-	return (VirtualKey)CharToCapital(str[0]);
-if(StringCompare(str, "ALT", 0, false)==0)
+	return (VirtualKey)CharHelper::ToCapital(str[0]);
+if(StringHelper::Compare(str, "alt", 0, false)==0)
 	return VirtualKey::Alt;
-if(StringCompare(str, "CTRL", 0, false)==0)
+if(StringHelper::Compare(str, "ctrl", 0, false)==0)
 	return VirtualKey::Control;
-if(StringCompare(str, "DEL", 0, false)==0)
+if(StringHelper::Compare(str, "del", 0, false)==0)
 	return VirtualKey::Delete;
-if(StringCompare(str, "ENTF", 0, false)==0)
+if(StringHelper::Compare(str, "entf", 0, false)==0)
 	return VirtualKey::Delete;
-if(StringCompare(str, "STRG", 0, false)==0)
+if(StringHelper::Compare(str, "strg", 0, false)==0)
 	return VirtualKey::Control;
 CHAR c=0;
 UINT func=0;
-if(StringScan(str, "%c%u", &c, &func)==2)
+if(StringHelper::Scan(str, "%c%u", &c, &func)==2)
 	{
-	if(CharCompare(c, 'F', false)!=0)
+	if(CharHelper::Compare(c, 'F', false)!=0)
 		return VirtualKey::None;
 	return (VirtualKey)(111+func);
 	}

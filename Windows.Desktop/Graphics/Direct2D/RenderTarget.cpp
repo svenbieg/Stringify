@@ -103,7 +103,7 @@ m_Target->DrawRectangle(d2d_rc, d2d_brush, width);
 VOID RenderTarget::DrawText(RECT const& rc, FLOAT scale, LPCTSTR text, UINT len)
 {
 if(len==0)
-	len=StringLength(text);
+	len=StringHelper::Length(text);
 D2D1_MATRIX_3X2_F mx_transform;
 m_Target->GetTransform(&mx_transform);
 auto mx_translate=D2D1::Matrix3x2F::Translation(rc.Left, rc.Top);
@@ -156,7 +156,7 @@ m_Target->FillRectangle(d2d_rc, d2d_brush);
 SIZE RenderTarget::MeasureText(Handle<Graphics::Font> font, FLOAT scale, LPCTSTR text, UINT len)
 {
 if(!len)
-	len=StringLength(text);
+	len=StringHelper::Length(text);
 #ifdef _UNICODE
 LPCWSTR str=text;
 #else

@@ -58,20 +58,20 @@ LPCTSTR CommandLine::ScanArgument(LPCTSTR cmd_line, LPCTSTR* arg_ptr, UINT* len_
 if(!cmd_line||!cmd_line[0])
 	return nullptr;
 UINT pos=0;
-while(CharEqual(cmd_line[pos], ' '))
+while(CharHelper::Equal(cmd_line[pos], ' '))
 	pos++;
 UINT len=1;
-if(CharEqual(cmd_line[pos], '\"'))
+if(CharHelper::Equal(cmd_line[pos], '\"'))
 	{
 	pos++;
-	if(!StringFindChar(&cmd_line[pos], '\"', &len))
+	if(!StringHelper::FindChar(&cmd_line[pos], '\"', &len))
 		return nullptr;
 	}
 else
 	{
 	while(cmd_line[pos+len])
 		{
-		if(CharEqual(cmd_line[pos+len], ' '))
+		if(CharHelper::Equal(cmd_line[pos+len], ' '))
 			break;
 		len++;
 		}
@@ -81,7 +81,7 @@ if(arg_ptr)
 if(len_ptr)
 	*len_ptr=len;
 LPCTSTR next=&cmd_line[pos+len+1];
-while(CharEqual(next[0], ' '))
+while(CharHelper::Equal(next[0], ' '))
 	next++;
 if(next[0])
 	return next;

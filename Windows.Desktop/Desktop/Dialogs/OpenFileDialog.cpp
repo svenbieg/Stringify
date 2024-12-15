@@ -40,10 +40,10 @@ Handle<String> folder;
 if(path)
 	{
 	auto path_ptr=path->Begin();
-	UINT dir_len=PathGetDirectoryLength(path_ptr);
+	UINT dir_len=PathHelper::GetDirectoryLength(path_ptr);
 	if(dir_len)
 		folder=new String(dir_len, path_ptr);
-	StringCopy(file_path, MAX_PATH, &path_ptr[dir_len]);
+	StringHelper::Copy(file_path, MAX_PATH, &path_ptr[dir_len]);
 	}
 if(!title)
 	title=STR_FILE_OPEN;

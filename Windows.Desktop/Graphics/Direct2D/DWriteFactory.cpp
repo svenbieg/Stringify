@@ -36,7 +36,7 @@ FLOAT height=(FLOAT)info.lfHeight;
 if(height<0)
 	height*=-1.f;
 WCHAR face_name[32];
-StringCopy(face_name, 32, info.lfFaceName);
+StringHelper::Copy(face_name, 32, info.lfFaceName);
 DWRITE_FONT_STRETCH stretch=DWRITE_FONT_STRETCH_NORMAL;
 IDWriteTextFormat* format=nullptr;
 m_Factory->CreateTextFormat(face_name, nullptr, weight, style, DWRITE_FONT_STRETCH_NORMAL, height, L"", &format);

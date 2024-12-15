@@ -60,8 +60,8 @@ if(!text)
 	return 0;
 for(UINT pos=0; text[pos]; pos++)
 	{
-	if(CharCompare(text[pos], '&')==0)
-		return CharToCapital(text[pos+1]);
+	if(CharHelper::Compare(text[pos], '&')==0)
+		return CharHelper::ToCapital(text[pos+1]);
 	}
 return 0;
 }
@@ -71,7 +71,7 @@ Handle<String> GetMenuLabel(LPCSTR text)
 if(!text)
 	return nullptr;
 UINT len=0;
-StringFindChar(text, '|', &len);
+StringHelper::FindChar(text, '|', &len);
 Handle<String> label=new String(len, text);
 return label->Replace("&", "");
 }
@@ -81,7 +81,7 @@ Handle<String> GetMenuShortcut(LPCSTR text)
 if(!text)
 	return nullptr;
 UINT pos=0;
-if(StringFindChar(text, '|', &pos))
+if(StringHelper::FindChar(text, '|', &pos))
 	return new String(&text[pos+1]);
 return nullptr;
 }

@@ -97,10 +97,10 @@ VOID Application::Open(Handle<String> path)
 {
 if(!path)
 	return;
-LPCTSTR ext=PathGetExtension(path->Begin());
+LPCTSTR ext=PathHelper::GetExtension(path->Begin());
 if(!ext)
 	return;
-if(StringCompare(ext, "ico", 0, false)==0)
+if(StringHelper::Compare(ext, "ico", 0, false)==0)
 	{
 	OpenIcon(path);
 	return;

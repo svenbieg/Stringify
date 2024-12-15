@@ -158,7 +158,7 @@ if(!m_Menu->HasAcceleration())
 if(accelerate)
 	{
 	UINT pos=0;
-	if(StringFindChar(label, Accelerator, &pos, false))
+	if(StringHelper::FindChar(label, Accelerator, &pos, false))
 		{
 		SIZE size_from(0, 0);
 		if(pos>0)

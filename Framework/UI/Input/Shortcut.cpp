@@ -35,7 +35,7 @@ auto shortcut=text->Begin();
 CHAR str1[8];
 CHAR str2[8];
 CHAR str3[8];
-UINT count=StringScan(shortcut, "%s+%s+%s", str1, 8, str2, 8, str3, 8);
+UINT count=StringHelper::Scan(shortcut, "%s+%s+%s", str1, 8, str2, 8, str3, 8);
 if(count==0)
 	return 0;
 UINT code=0;
