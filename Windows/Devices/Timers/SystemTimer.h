@@ -25,6 +25,8 @@ public:
 	~SystemTimer();
 
 	// Common
+	static SIZE_T GetTickCount();
+	static SIZE_T Microseconds();
 	static Handle<SystemTimer> Open();
 	Event<SystemTimer> Tick;
 

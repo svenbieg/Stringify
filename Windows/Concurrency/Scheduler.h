@@ -10,7 +10,10 @@
 //=======
 
 #include "MainTask.h"
+#include "SharedLock.h"
+#include "Signal.h"
 #include "Task.h"
+#include "TaskLock.h"
 
 
 //===========

@@ -23,7 +23,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Network\Tcp\TcpSocket.cpp">
       <Filter>Network\Tcp</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)TimeHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Security\Rsa\RsaKey.cpp">
       <Filter>Security\Rsa</Filter>
     </ClCompile>
@@ -86,7 +85,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Network\Tcp\TcpSocket.h">
       <Filter>Network\Tcp</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)TimeHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Security\Rsa\RsaKey.h">
       <Filter>Security\Rsa</Filter>
     </ClInclude>

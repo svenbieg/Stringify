@@ -41,6 +41,21 @@ m_Task->Cancel();
 // Common
 //========
 
+SIZE_T SystemTimer::GetTickCount()
+{
+return (SIZE_T)::GetTickCount64();
+}
+
+SIZE_T SystemTimer::Microseconds()
+{
+LARGE_INTEGER ticks;
+QueryPerformanceFrequency(&ticks);
+ticks.QuadPart/=1000;
+LARGE_INTEGER time;
+QueryPerformanceCounter(&time);
+return time.QuadPart/ticks.QuadPart;
+}
+
 Handle<SystemTimer> SystemTimer::Open()
 {
 if(!s_Current)

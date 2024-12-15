@@ -51,7 +51,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)System\ProcessClient.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)System\ProcessServer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)System\ThreadPoolTimer.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)TimeHelper.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)CommandLine.cpp" />
@@ -78,7 +77,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)System\ProcessClient.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)System\ProcessServer.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)System\ThreadPoolTimer.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)TimeHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)Configuration\Compiler.props" />

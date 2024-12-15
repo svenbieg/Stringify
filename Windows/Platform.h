@@ -61,4 +61,3 @@ constexpr FILE_SIZE FILE_SIZE_MAX=0xFFFFFFFFFFFFFFFF;
 #include "Convertible.h"
 #include "ErrorHelper.h"
 #include "ResourceHelper.h"
-#include "TimeHelper.h"
