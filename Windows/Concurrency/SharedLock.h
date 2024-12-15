@@ -9,7 +9,7 @@
 // Using
 //=======
 
-#include "Mutex.h"
+#include "ScopedLock.h"
 
 
 //===========
@@ -23,16 +23,11 @@ namespace Concurrency {
 // Shared-Lock
 //=============
 
-class SharedLock: private std::unique_lock<std::mutex>
+class SharedLock: public ScopedLock
 {
 public:
 	// Con-/Destructors
-	inline SharedLock(Mutex& Mutex): unique_lock(Mutex) {}
-
-	// Common
-	inline VOID Lock() { lock(); }
-	inline VOID Release() { release(); }
-	inline VOID Unlock() { unlock(); }
+	inline SharedLock(Mutex& Mutex): ScopedLock(Mutex) {}
 };
 
 }

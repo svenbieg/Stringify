@@ -71,15 +71,15 @@ INT status=0;
 MSG msg;
 while(GetMessage(&msg, NULL, 0, 0))
 	{
-	if(msg.message==WM_QUIT)
-		{
-		status=(INT)msg.wParam;
-		break;
-		}
 	if(msg.message==WM_DISPATCH)
 		{
 		DispatchedQueue::Run();
 		continue;
+		}
+	if(msg.message==WM_QUIT)
+		{
+		status=(INT)msg.wParam;
+		break;
 		}
 	TranslateMessage(&msg);
 	DispatchMessage(&msg);

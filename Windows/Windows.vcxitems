@@ -28,6 +28,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\SharedLock.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\Signal.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\Task.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\TaskLock.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Convertible.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Devices\Serial\SerialPort.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Devices\Timer.h" />

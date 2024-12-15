@@ -24,7 +24,6 @@ namespace Concurrency {
 //======================
 
 class ScopedLock;
-class SharedLock;
 
 
 //=======
@@ -36,7 +35,6 @@ class Mutex: protected std::mutex
 public:
 	// Friends
 	friend ScopedLock;
-	friend SharedLock;
 
 	// Con-/Destructors
 	inline Mutex() {}

@@ -140,6 +140,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\Scheduler.h">
       <Filter>Concurrency</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\TaskLock.h">
+      <Filter>Concurrency</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Configuration">

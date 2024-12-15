@@ -33,6 +33,13 @@ public:
 	// Common
 	inline VOID Cancel() { throw NotImplementedException(); }
 	inline VOID Trigger() { notify_all(); }
+	inline BOOL Wait()
+		{
+		Mutex mutex;
+		ScopedLock lock(mutex);
+		wait(lock);
+		return true;
+		}
 	inline BOOL Wait(ScopedLock& Lock) { wait(Lock); return true; }
 	inline BOOL Wait(ScopedLock& Lock, UINT Timeout)
 		{
