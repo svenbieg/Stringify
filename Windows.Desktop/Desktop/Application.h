@@ -28,8 +28,7 @@ class Application: public UI::Application
 public:
 	// Common
 	static Application* Current;
-	VOID Quit()override;
-	INT Run()override;
+	INT Run();
 	Event<Application> UnhandledException;
 
 protected:

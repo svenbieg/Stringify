@@ -81,13 +81,13 @@ if(args->Key!=VirtualKey::Alt)
 	return;
 if(m_Entering)
 	return;
-if(GetFlag(m_MenuFlags, MenuFlags::KeyboardAccess))
+if(FlagHelper::Get(m_MenuFlags, MenuFlags::KeyboardAccess))
 	{
 	Exit();
 	return;
 	}
 Exit();
-SetFlag(m_MenuFlags, MenuFlags::KeyboardAccess);
+FlagHelper::Set(m_MenuFlags, MenuFlags::KeyboardAccess);
 Application::Current->SetCurrentMenu(this);
 m_Entering=true;
 Invalidate();

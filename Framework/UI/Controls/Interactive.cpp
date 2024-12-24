@@ -225,7 +225,7 @@ while(control)
 VOID Interactive::OnPointerDown(Handle<PointerEventArgs> args)
 {
 if(args->Button==PointerButton::Left)
-	SetFlag(m_InteractiveFlags, InteractiveFlags::LeftButtonDown);
+	FlagHelper::Set(m_InteractiveFlags, InteractiveFlags::LeftButtonDown);
 }
 
 VOID Interactive::OnPointerEntered()
@@ -245,8 +245,8 @@ VOID Interactive::OnPointerUp(Handle<PointerEventArgs> args)
 {
 if(args->Button!=PointerButton::Left)
 	return;
-BOOL clicked=GetFlag(m_InteractiveFlags, InteractiveFlags::LeftButtonDown);
-ClearFlag(m_InteractiveFlags, InteractiveFlags::LeftButtonDown);
+BOOL clicked=FlagHelper::Get(m_InteractiveFlags, InteractiveFlags::LeftButtonDown);
+FlagHelper::Clear(m_InteractiveFlags, InteractiveFlags::LeftButtonDown);
 if(clicked)
 	Clicked(this, args);
 }

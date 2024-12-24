@@ -9,11 +9,9 @@
 // Using
 //=======
 
-#include "Core/Application.h"
 #include "UI/Frame.h"
 #include "ScrollBox.h"
 
-using namespace Core;
 using namespace Graphics;
 using namespace UI::Controls;
 using namespace UI::Input;
@@ -144,15 +142,15 @@ VOID ScrollBox::SetPosition(INT left, INT top)
 auto content=Body->GetVisibleChild(0);
 if(!content)
 	return;
-left=Max(left, 0);
-top=Max(top, 0);
+left=TypeHelper::Max(left, 0);
+top=TypeHelper::Max(top, 0);
 RECT body_rect=Body->GetClientRect();
 SIZE body_size=body_rect.GetSize();
 RECT content_rect=content->GetRect();
 SIZE content_size=content_rect.GetSize();
 if(content_size.Width>body_size.Width)
 	{
-	left=Min(left, content_size.Width-body_size.Width);
+	left=TypeHelper::Min(left, content_size.Width-body_size.Width);
 	}
 else
 	{
@@ -160,7 +158,7 @@ else
 	}
 if(content_size.Height>body_size.Height)
 	{
-	top=Min(top, content_size.Height-body_size.Height);
+	top=TypeHelper::Min(top, content_size.Height-body_size.Height);
 	}
 else
 	{
@@ -175,8 +173,8 @@ VOID ScrollBox::Zoom(FLOAT zoom)
 auto content=Body->GetVisibleChild(0);
 if(!content)
 	return;
-zoom=Max(ZoomMin, zoom);
-zoom=Min(ZoomMax, zoom);
+zoom=TypeHelper::Max(ZoomMin, zoom);
+zoom=TypeHelper::Min(ZoomMax, zoom);
 m_Zoom=zoom;
 content->Scale=m_Zoom;
 Invalidate(true);

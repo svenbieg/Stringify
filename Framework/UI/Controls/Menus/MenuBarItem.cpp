@@ -167,8 +167,8 @@ args->Handled=false;
 
 VOID MenuBarItem::OnLabelChanged(Handle<Sentence> label)
 {
-Accelerator=GetMenuAccelerator(label->Begin());
-m_Label=GetMenuLabel(label->Begin());
+Accelerator=MenuHelper::GetAccelerator(label->Begin());
+m_Label=MenuHelper::GetLabel(label->Begin());
 Invalidate(true);
 }
 

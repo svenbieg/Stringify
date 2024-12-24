@@ -55,7 +55,7 @@ ToolWindow(parent? parent->GetHandle(): HWND_DESKTOP)
 
 VOID ToolWindow::OnTitleChanged(Handle<Sentence> title)
 {
-SetWindowTextA(m_Handle, title? title->Begin(): "");
+SetWindowText(m_Handle, title? title->Begin(): TEXT(""));
 }
 
 }

@@ -36,7 +36,7 @@ if(snap_shot==INVALID_HANDLE_VALUE)
 if(!snap_shot)
 	return false;
 MODULEENTRY32 mod;
-ZeroMemory(&mod, sizeof(MODULEENTRY32));
+MemoryHelper::Fill(&mod, sizeof(MODULEENTRY32), 0);
 mod.dwSize=sizeof(MODULEENTRY32);
 if(!Module32First(snap_shot, &mod))
 	{
@@ -69,9 +69,9 @@ if(!LoadSymbols())
 HANDLE proc=GetCurrentProcess();
 HANDLE thread=GetCurrentThread();
 CONTEXT context;
-CopyMemory(&context, pc, sizeof(CONTEXT));
+MemoryHelper::Copy(&context, pc, sizeof(CONTEXT));
 STACKFRAME64 sf;
-ZeroMemory(&sf, sizeof(STACKFRAME64));
+MemoryHelper::Fill(&sf, sizeof(STACKFRAME64), 0);
 #ifdef _ARM_
 DWORD dwarch=IMAGE_FILE_MACHINE_ARM;
 sf.AddrFrame.Offset=0;
@@ -101,7 +101,7 @@ sf.AddrStack.Offset=context.Rsp;
 sf.AddrStack.Mode=AddrModeFlat;
 #endif
 auto sym_info=(SYMBOL_INFO*)operator new(sizeof(SYMBOL_INFO)+MAX_SYM_NAME_LEN);
-ZeroMemory(sym_info, sizeof(SYMBOL_INFO));
+MemoryHelper::Fill(sym_info, sizeof(SYMBOL_INFO), 0);
 sym_info->SizeOfStruct=sizeof(SYMBOL_INFO);
 sym_info->MaxNameLen=MAX_SYM_NAME_LEN;
 UINT len=0;

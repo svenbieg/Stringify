@@ -26,8 +26,8 @@ namespace Resources {
 
 constexpr STRING STR_EXCEPTION[]=
 	{
-	{ LNG::DE, "Unbehandelte Ausnahme" },
-	{ LNG::EN, "Unhandled Exception" },
+	{ LNG::DE, L"Unbehandelte Ausnahme" },
+	{ LNG::EN, L"Unhandled Exception" },
 	{ LNG::None, nullptr }
 	};
 

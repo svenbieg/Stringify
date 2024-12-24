@@ -96,13 +96,13 @@ for(auto it=m_Panel->Children->First(); it->HasCurrent(); it->MoveNext())
 	if(label)
 		{
 		SIZE size=target->MeasureText(font, scale, label->Begin());
-		label_width=Max(label_width, size.Width);
+		label_width=TypeHelper::Max(label_width, size.Width);
 		}
 	auto shortcut=item->Shortcut;
 	if(shortcut)
 		{
 		SIZE size=target->MeasureText(font, scale, shortcut->Begin());
-		shortcut_width=Max(shortcut_width, size.Width);
+		shortcut_width=TypeHelper::Max(shortcut_width, size.Width);
 		}
 	auto sub_menu=item->SubMenu;
 	if(sub_menu)
@@ -152,7 +152,7 @@ Application::Current->SetCurrentMenu(this);
 BOOL keyboard=false;
 if(m_ParentMenu)
 	keyboard|=m_ParentMenu->HasKeyboardAccess();
-SetFlag(m_MenuFlags, MenuFlags::KeyboardAccess, keyboard);
+FlagHelper::Set(m_MenuFlags, MenuFlags::KeyboardAccess, keyboard);
 RECT rc(pt.Left, pt.Top, pt.Left, pt.Top);
 Move(rc);
 Visible=true;

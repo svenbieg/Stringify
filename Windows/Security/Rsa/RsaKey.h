@@ -10,7 +10,6 @@
 //=======
 
 #include "Storage/Buffer.h"
-#include "Storage/StaticBuffer.h"
 
 
 //===========
@@ -31,14 +30,13 @@ public:
 	// Using
 	using Buffer=Storage::Buffer;
 	using Seekable=Storage::Seekable;
-	using StaticBuffer=Storage::StaticBuffer;
 
 	// Con-/Destructors
 	RsaKey(Handle<Seekable> Exponent, Handle<Seekable> Module);
 	~RsaKey();
 
 	// Common
-	BOOL Verify(Handle<StaticBuffer> Data, Handle<Buffer> Signature);
+	BOOL Verify(Handle<Buffer> Data, Handle<Buffer> Signature);
 
 private:
 	// Common

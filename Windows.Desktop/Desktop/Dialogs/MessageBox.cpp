@@ -54,11 +54,11 @@ return status==IDOK;
 // Common Private
 //================
 
-INT MessageBox::Show(LPCSTR title, LPCSTR msg, UINT type)
+INT MessageBox::Show(LPCTSTR title, LPCTSTR msg, UINT type)
 {
 auto app_wnd=AppWindow::Current;
 HWND hwnd=app_wnd? app_wnd->GetHandle(): NULL;
-return MessageBoxA(hwnd, title, msg, type);
+return MessageBoxT(hwnd, title, msg, type);
 }
 
 }}

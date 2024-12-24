@@ -70,7 +70,7 @@ if(Text)
 	auto font=GetFont();
 	SIZE text_size=target->MeasureText(font, scale, Text->Begin());
 	size.Width+=text_size.Width;
-	size.Height=Max(size.Height, text_size.Height);
+	size.Height=TypeHelper::Max(size.Height, text_size.Height);
 	}
 size.AddPadding(Padding*scale);
 return size.Max(MinSize*scale);

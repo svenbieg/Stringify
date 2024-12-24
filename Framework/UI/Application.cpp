@@ -9,12 +9,14 @@
 // Using
 //=======
 
+#include "Concurrency/DispatchedQueue.h"
 #include "Storage/Clipboard.h"
 #include "UI/Controls/Input.h"
 #include "UI/Input/Shortcut.h"
 #include "Application.h"
 #include "Frame.h"
 
+using namespace Concurrency;
 using namespace Storage;
 using namespace UI::Input;
 
@@ -41,6 +43,11 @@ if(m_CurrentMenu)
 	}
 }
 
+VOID Application::Quit()
+{
+DispatchedQueue::Exit();
+}
+
 VOID Application::SetCurrentInput(Input* input)
 {
 if(m_CurrentInput==input)
@@ -63,15 +70,15 @@ if(m_PointerFocus)
 
 BOOL Application::Shortcut(Handle<KeyEventArgs> args)
 {
-BOOL alt=GetFlag(args->Flags, KeyEventFlags::Alt);
-BOOL ctrl=GetFlag(args->Flags, KeyEventFlags::Ctrl);
+BOOL alt=FlagHelper::Get(args->Flags, KeyEventFlags::Alt);
+BOOL ctrl=FlagHelper::Get(args->Flags, KeyEventFlags::Ctrl);
 if(ctrl|alt)
 	{
-	BOOL shift=GetFlag(args->Flags, KeyEventFlags::Shift);
+	BOOL shift=FlagHelper::Get(args->Flags, KeyEventFlags::Shift);
 	ShortcutFlags shortcut=(ShortcutFlags)args->Key;
-	SetFlag(shortcut, ShortcutFlags::Alt, alt);
-	SetFlag(shortcut, ShortcutFlags::Ctrl, ctrl);
-	SetFlag(shortcut, ShortcutFlags::Shift, shift);
+	FlagHelper::Set(shortcut, ShortcutFlags::Alt, alt);
+	FlagHelper::Set(shortcut, ShortcutFlags::Ctrl, ctrl);
+	FlagHelper::Set(shortcut, ShortcutFlags::Shift, shift);
 	auto control=Shortcuts->Get((UINT)shortcut);
 	if(control)
 		{
@@ -138,10 +145,10 @@ m_CurrentInput->SelectAll();
 // Con-/Destructors Protected
 //============================
 
-Application::Application(LPCSTR name):
-Core::Application(name),
+Application::Application(Handle<Sentence> name):
 m_CurrentInput(nullptr),
 m_CurrentMenu(nullptr),
+m_Name(name),
 m_PointerFocus(nullptr)
 {
 Current=this;

@@ -87,7 +87,7 @@ if(!Enabled)
 	if(!m_IconDisabled)
 		{
 		m_IconDisabled=m_Icon->Copy();
-		DisableMenuBitmap(m_IconDisabled);
+		MenuHelper::GetBitmapDisabled(m_IconDisabled);
 		}
 	icon=m_IconDisabled;
 	}

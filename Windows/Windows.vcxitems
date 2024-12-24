@@ -21,6 +21,8 @@
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)CommandLine.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ComPointer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\DispatchedHandler.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\DispatchedQueue.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\MainTask.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\Mutex.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\Scheduler.h" />
@@ -54,7 +56,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)CommandLine.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Concurrency\DispatchedQueue.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Concurrency\MainTask.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Concurrency\Signal.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Concurrency\Task.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Devices\Serial\SerialPort.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Devices\Timer.cpp" />

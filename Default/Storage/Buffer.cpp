@@ -25,25 +25,39 @@ namespace Storage {
 
 Buffer::Buffer(SIZE_T size):
 m_Buffer(new BYTE[size]),
+m_Options(BufferOptions::None),
 m_Position(0),
 m_Size(size)
 {}
 
-Buffer::Buffer(VOID const* buf, SIZE_T size):
-m_Buffer(new BYTE[size]),
+Buffer::Buffer(VOID const* buf, SIZE_T size, BufferOptions options):
+m_Buffer(nullptr),
+m_Options(options),
 m_Position(0),
 m_Size(size)
 {
-CopyMemory(m_Buffer, buf, size);
+switch(options)
+	{
+	case BufferOptions::Static:
+		{
+		m_Buffer=(BYTE*)buf;
+		break;
+		}
+	default:
+		{
+		if(size==0)
+			throw InvalidArgumentException();
+		m_Buffer=new BYTE[size];
+		MemoryHelper::Copy(m_Buffer, buf, size);
+		break;
+		}
+	}
 }
 
 Buffer::~Buffer()
 {
-if(m_Buffer)
-	{
+if(m_Options!=BufferOptions::Static)
 	delete m_Buffer;
-	m_Buffer=nullptr;
-	}
 }
 
 
@@ -53,15 +67,19 @@ if(m_Buffer)
 
 SIZE_T Buffer::Available()
 {
+if(m_Size==0)
+	return 0;
 return m_Size-m_Position;
 }
 
 SIZE_T Buffer::Read(VOID* buf, SIZE_T size)
 {
-SIZE_T available=m_Size-m_Position;
-SIZE_T copy=Min(size, available);
+SIZE_T available=SIZE_MAX;
+if(m_Size!=0)
+	available=m_Size-m_Position;
+SIZE_T copy=TypeHelper::Min(size, available);
 if(buf)
-	CopyMemory(buf, &m_Buffer[m_Position], copy);
+	MemoryHelper::Copy(buf, &m_Buffer[m_Position], copy);
 m_Position+=copy;
 return copy;
 }
@@ -71,15 +89,13 @@ return copy;
 // Output-Stream
 //===============
 
-VOID Buffer::Flush()
-{
-}
-
 SIZE_T Buffer::Write(VOID const* buf, SIZE_T size)
 {
+if(m_Size==0)
+	return 0;
 SIZE_T available=m_Size-m_Position;
-SIZE_T copy=Min(size, available);
-CopyMemory(&m_Buffer[m_Position], buf, copy);
+SIZE_T copy=TypeHelper::Min(size, available);
+MemoryHelper::Copy(&m_Buffer[m_Position], buf, copy);
 m_Position+=copy;
 return copy;
 }
@@ -91,7 +107,7 @@ return copy;
 
 BOOL Buffer::Seek(FILE_SIZE pos)
 {
-if(pos>m_Size-1)
+if(m_Size&&pos>m_Size-1)
 	return false;
 m_Position=(SIZE_T)pos;
 return true;
@@ -104,22 +120,13 @@ return true;
 
 SIZE_T Buffer::Fill(UINT value, SIZE_T size)
 {
+if(m_Size==0)
+	return 0;
 SIZE_T available=m_Size-m_Position;
 if(size==0)
 	size=available;
-SIZE_T copy=Min(size, available);
-FillMemory(&m_Buffer[m_Position], copy, value);
-m_Position+=copy;
-return copy;
-}
-
-SIZE_T Buffer::Zero(SIZE_T size)
-{
-SIZE_T available=m_Size-m_Position;
-if(size==0)
-	size=available;
-SIZE_T copy=Min(size, available);
-ZeroMemory(&m_Buffer[m_Position], copy);
+SIZE_T copy=TypeHelper::Min(size, available);
+MemoryHelper::Fill(&m_Buffer[m_Position], copy, value);
 m_Position+=copy;
 return copy;
 }

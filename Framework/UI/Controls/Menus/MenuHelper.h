@@ -21,13 +21,18 @@ namespace UI {
 		namespace Menus {
 
 
-//========
-// Common
-//========
+//=============
+// Menu-Helper
+//=============
 
-VOID DisableMenuBitmap(Handle<Graphics::Bitmap> Bitmap);
-CHAR GetMenuAccelerator(LPCSTR Text);
-Handle<String> GetMenuLabel(LPCSTR Text);
-Handle<String> GetMenuShortcut(LPCSTR Text);
+class MenuHelper
+{
+public:
+	// Common
+	static CHAR GetAccelerator(LPCTSTR Text);
+	static VOID GetBitmapDisabled(Handle<Graphics::Bitmap> Bitmap);
+	static Handle<String> GetLabel(LPCTSTR Text);
+	static Handle<String> GetShortcut(LPCTSTR Text);
+};
 
 }}}

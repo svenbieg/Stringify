@@ -36,7 +36,7 @@ INT WINAPI WinMain(HINSTANCE inst, HINSTANCE prev_inst, LPSTR cmd_line, INT show
 {
 SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
 MainTask::Initialize();
-CurrentLanguage=GetCurrentLanguage();
+Language::Current=GetCurrentLanguage();
 g_ShowCommand=show_cmd;
 return Main();
 }
@@ -56,11 +56,6 @@ namespace Desktop {
 //========
 
 Application* Application::Current=nullptr;
-
-VOID Application::Quit()
-{
-PostQuitMessage(0);
-}
 
 INT Application::Run()
 {
@@ -107,10 +102,10 @@ SetUnhandledExceptionFilter(UnhandledExceptionHandler);
 
 LONG WINAPI Application::UnhandledExceptionHandler(EXCEPTION_POINTERS* info)
 {
-LPCSTR caption=Translate(STR_EXCEPTION);
+auto caption=Sentence::Translate(STR_EXCEPTION);
 CHAR context[128];
 UINT context_len=PrintExceptionContext(info->ContextRecord, 3, context, 128);
-CHAR msg[256];
+TCHAR msg[256];
 if(context_len>0)
 	{
 	StringHelper::Print(msg, 256, "%s\n\n%s", caption, context);
@@ -122,7 +117,8 @@ else
 auto app=Application::Current;
 auto app_wnd=AppWindow::Current;
 HWND hwnd=app_wnd? app_wnd->GetHandle(): NULL;
-MessageBoxA(hwnd, msg, app->Name, MB_ICONERROR|MB_OK);
+auto name=app->GetName();
+MessageBoxT(hwnd, msg, name->Begin(), MB_ICONERROR|MB_OK);
 app->UnhandledException(app);
 ExitProcess(0);
 return 0;

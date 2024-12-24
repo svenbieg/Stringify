@@ -20,11 +20,15 @@
 #undef UINT_MAX
 #undef VOID
 
-#undef CopyMemory
-#undef FillMemory
 #undef MessageBox
-#undef MoveMemory
-#undef ZeroMemory
+#ifdef _UNICODE
+#define MessageBoxT MessageBoxW
+#else
+#define MessageBoxT MessageBoxA
+#endif
+
+#undef ClearFlag
+#undef SetFlag
 
 
 //======================
@@ -37,6 +41,7 @@
 typedef unsigned __longlong int FILE_SIZE;
 
 constexpr FILE_SIZE FILE_SIZE_MAX=0xFFFFFFFFFFFFFFFF;
+constexpr UINT PAGE_SIZE=4096;
 
 #define WM_DISPATCH (WM_USER+1)
 

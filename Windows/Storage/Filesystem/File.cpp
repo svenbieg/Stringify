@@ -115,7 +115,7 @@ if(!hFile)
 if(!buf)
 	{
 	SIZE_T available=AvailableInternal();
-	SIZE_T copy=Min(size, available);
+	SIZE_T copy=TypeHelper::Min(size, available);
 	m_Position+=copy;
 	return copy;
 	}
@@ -125,7 +125,7 @@ ZeroMemory(&ov, sizeof(OVERLAPPED));
 SIZE_T pos=0;
 while(pos<size)
 	{
-	UINT copy=Min((UINT)(size-pos), 0x1000000U);
+	UINT copy=TypeHelper::Min((UINT)(size-pos), 0x1000000U);
 	DWORD read=0;
 	ov.Offset=(UINT)m_Position;
 	ov.OffsetHigh=(UINT)(m_Position>>32);
@@ -172,7 +172,7 @@ OVERLAPPED ov={ 0 };
 SIZE_T pos=0;
 while(pos<size)
 	{
-	UINT copy=Min((UINT)(size-pos), 0x1000000U);
+	UINT copy=TypeHelper::Min((UINT)(size-pos), 0x1000000U);
 	DWORD written=0;
 	ov.Offset=(UINT)m_Position;
 	ov.OffsetHigh=(UINT)(m_Position>>32);

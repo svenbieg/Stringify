@@ -38,7 +38,7 @@ m_PointerCapture(nullptr),
 // Private
 m_Focus(nullptr)
 {
-ZeroMemory(m_Keys, 256);
+MemoryHelper::Fill(m_Keys, 256, 0);
 }
 
 
@@ -59,8 +59,8 @@ return size.Max(MinSize*scale);
 VOID Frame::Invalidate(BOOL rearrange)
 {
 if(rearrange)
-	SetFlag(m_Flags, WindowFlags::Rearrange);
-SetFlag(m_Flags, WindowFlags::Repaint);
+	FlagHelper::Set(m_Flags, WindowFlags::Rearrange);
+FlagHelper::Set(m_Flags, WindowFlags::Repaint);
 Invalidated(this);
 }
 
@@ -73,7 +73,7 @@ VOID Frame::KillFocus()
 {
 SetFocus(nullptr);
 SetPointerCapture(nullptr);
-ZeroMemory(m_Keys, 256);
+MemoryHelper::Fill(m_Keys, 256, 0);
 }
 
 VOID Frame::Rearrange(RenderTarget* target, RECT& rc)
@@ -115,9 +115,9 @@ if(m_Focus)
 BOOL Frame::DoKey(KeyEventType type, Handle<KeyEventArgs> args)
 {
 UpdateKeys(type, args->Key);
-SetFlag(args->Flags, KeyEventFlags::Alt, IsKeyDown(VirtualKey::Alt));
-SetFlag(args->Flags, KeyEventFlags::Ctrl, IsKeyDown(VirtualKey::Control));
-SetFlag(args->Flags, KeyEventFlags::Shift, IsKeyDown(VirtualKey::Shift));
+FlagHelper::Set(args->Flags, KeyEventFlags::Alt, IsKeyDown(VirtualKey::Alt));
+FlagHelper::Set(args->Flags, KeyEventFlags::Ctrl, IsKeyDown(VirtualKey::Control));
+FlagHelper::Set(args->Flags, KeyEventFlags::Shift, IsKeyDown(VirtualKey::Shift));
 if(type==KeyEventType::KeyDown)
 	{
 	if(Application::Current->Shortcut(args))

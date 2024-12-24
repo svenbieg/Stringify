@@ -121,7 +121,7 @@ switch(m_Orientation)
 			color=(m_Highlight==ScrollBarButton::Bar)? br_highlight: br_control;
 			UINT size=rc.Right-2*width;
 			UINT bar=size*Fraction;
-			bar=Max(bar, width);
+			bar=TypeHelper::Max(bar, width);
 			UINT scroll=size-bar;
 			RECT rc_bar(rc);
 			rc_bar.Top+=padding;
@@ -151,7 +151,7 @@ switch(m_Orientation)
 			color=(m_Highlight==ScrollBarButton::Bar)? br_highlight: br_control;
 			UINT size=rc.Bottom-2*width;
 			UINT bar=size*Fraction;
-			bar=Max(bar, width);
+			bar=TypeHelper::Max(bar, width);
 			UINT scroll=size-bar;
 			RECT rc_bar(rc);
 			rc_bar.Left+=padding;
@@ -273,8 +273,8 @@ INT move=pos-start;
 move/=Fraction;
 pos=(INT)m_Start+move;
 if(pos<0)
-	pos=Max(pos, 0);
-pos=Min(pos, (INT)Range);
+	pos=TypeHelper::Max(pos, 0);
+pos=TypeHelper::Min(pos, (INT)Range);
 Position=pos;
 Scrolled(this);
 args->Handled=true;
@@ -294,8 +294,8 @@ if(m_StartPoint.Left!=-1)
 VOID ScrollBar::OnSystemTimer()
 {
 INT pos=Position+m_Step;
-pos=Max(pos, 0);
-pos=Min(pos, (INT)Range);
+pos=TypeHelper::Max(pos, 0);
+pos=TypeHelper::Min(pos, (INT)Range);
 if(Position==pos)
 	{
 	StopScrolling();

@@ -27,7 +27,19 @@ namespace UI {
 // Common
 //========
 
-VOID DisableMenuBitmap(Handle<Graphics::Bitmap> bmp)
+CHAR MenuHelper::GetAccelerator(LPCTSTR text)
+{
+if(!text)
+	return 0;
+for(UINT pos=0; text[pos]; pos++)
+	{
+	if(CharHelper::Compare(text[pos], '&')==0)
+		return CharHelper::ToCapitalAnsi(text[pos+1]);
+	}
+return 0;
+}
+
+VOID MenuHelper::GetBitmapDisabled(Handle<Graphics::Bitmap> bmp)
 {
 auto size=bmp->GetDimensions();
 for(UINT y=0; y<size.Height; y++)
@@ -47,26 +59,14 @@ for(UINT y=0; y<size.Height; y++)
 			{
 			b=(BYTE)(128.f-(128.f-b)*0.5f);
 			}
-		b=Min(b+0x30, 0xFF);
+		b=TypeHelper::Min(b+0x30, 0xFF);
 		pc[0]=pc[1]=pc[2]=b;
 		bmp->SetPixel(x, y, c);
 		}
 	}
 }
 
-CHAR GetMenuAccelerator(LPCSTR text)
-{
-if(!text)
-	return 0;
-for(UINT pos=0; text[pos]; pos++)
-	{
-	if(CharHelper::Compare(text[pos], '&')==0)
-		return CharHelper::ToCapital(text[pos+1]);
-	}
-return 0;
-}
-
-Handle<String> GetMenuLabel(LPCSTR text)
+Handle<String> MenuHelper::GetLabel(LPCTSTR text)
 {
 if(!text)
 	return nullptr;
@@ -76,7 +76,7 @@ Handle<String> label=new String(len, text);
 return label->Replace("&", "");
 }
 
-Handle<String> GetMenuShortcut(LPCSTR text)
+Handle<String> MenuHelper::GetShortcut(LPCTSTR text)
 {
 if(!text)
 	return nullptr;

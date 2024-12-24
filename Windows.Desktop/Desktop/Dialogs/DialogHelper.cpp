@@ -30,7 +30,7 @@ Handle<String> FilterFromSentence(Handle<Sentence> sentence)
 {
 if(!sentence)
 	return nullptr;
-LPCSTR filter_str=sentence->Begin();
+auto filter_str=sentence->Begin();
 UINT len=StringHelper::Length(filter_str);
 Handle<String> filter=new String(len+2, nullptr);
 auto filter_ptr=const_cast<LPTSTR>(filter->Begin());

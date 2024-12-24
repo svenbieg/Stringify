@@ -29,6 +29,7 @@ DeviceNotReady,
 FileExists,
 FileNotFound,
 InvalidArgument,
+InvalidContext,
 NotImplemented,
 OutOfMemory,
 OutOfRange,
@@ -40,12 +41,12 @@ Timeout
 // Common
 //========
 
-inline bool Succeeded(Status Status)
+inline BOOL Succeeded(Status Status)
 {
-return !GetFlag(Status, Status::Error);
+return !FlagHelper::Get(Status, Status::Error);
 }
 
-inline bool Failed(Status Status)
+inline BOOL Failed(Status Status)
 {
-return GetFlag(Status, Status::Error);
+return FlagHelper::Get(Status, Status::Error);
 }

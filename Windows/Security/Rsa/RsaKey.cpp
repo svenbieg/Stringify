@@ -63,7 +63,7 @@ if(hKey!=NULL)
 // Common
 //========
 
-BOOL RsaKey::Verify(Handle<StaticBuffer> data, Handle<Buffer> sig)
+BOOL RsaKey::Verify(Handle<Buffer> data, Handle<Buffer> sig)
 {
 if(!data||!sig)
 	return false;

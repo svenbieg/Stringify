@@ -85,11 +85,11 @@ if(Text)
 		size.Height=16*scale;
 	auto font=GetFont();
 	SIZE label_size=target->MeasureText(font, scale, Text->Begin());
-	size.Height=Max(size.Height, label_size.Height);
+	size.Height=TypeHelper::Max(size.Height, label_size.Height);
 	if(Shortcut)
 		{
 		SIZE shortcut_size=target->MeasureText(font, scale, Shortcut->Begin());
-		size.Height=Max(size.Height, shortcut_size.Height);
+		size.Height=TypeHelper::Max(size.Height, shortcut_size.Height);
 		}
 	}
 else
@@ -125,7 +125,7 @@ if(Icon)
 		if(!m_IconDisabled)
 			{
 			m_IconDisabled=m_Icon->Copy();
-			DisableMenuBitmap(m_IconDisabled);
+			MenuHelper::GetBitmapDisabled(m_IconDisabled);
 			}
 		icon=m_IconDisabled;
 		}
@@ -222,9 +222,9 @@ VOID PopupMenuItem::OnLabelChanged(Handle<Sentence> label)
 {
 if(label)
 	{
-	Accelerator=GetMenuAccelerator(label->Begin());
-	Shortcut=GetMenuShortcut(label->Begin());
-	Text=GetMenuLabel(label->Begin());
+	Accelerator=MenuHelper::GetAccelerator(label->Begin());
+	Shortcut=MenuHelper::GetShortcut(label->Begin());
+	Text=MenuHelper::GetLabel(label->Begin());
 	auto shortcut=ShortcutFromString(Shortcut);
 	if(shortcut)
 		Application::Current->Shortcuts->Set(shortcut, this, false);

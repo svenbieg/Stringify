@@ -20,6 +20,13 @@
 namespace Concurrency {
 
 
+//======================
+// Forward-Declarations
+//======================
+
+class DispatchedQueue;
+
+
 //========
 // Signal
 //========
@@ -27,25 +34,22 @@ namespace Concurrency {
 class Signal: private std::condition_variable
 {
 public:
+	// Friends
+	friend DispatchedQueue;
+
 	// Con-/Destructors
 	inline Signal() {}
 
 	// Common
 	inline VOID Cancel() { throw NotImplementedException(); }
 	inline VOID Trigger() { notify_all(); }
-	inline BOOL Wait()
-		{
-		Mutex mutex;
-		ScopedLock lock(mutex);
-		wait(lock);
-		return true;
-		}
-	inline BOOL Wait(ScopedLock& Lock) { wait(Lock); return true; }
-	inline BOOL Wait(ScopedLock& Lock, UINT Timeout)
-		{
-		auto status=wait_for(Lock, std::chrono::milliseconds(Timeout));
-		return (status==std::cv_status::no_timeout);
-		}
+	BOOL Wait();
+	BOOL Wait(ScopedLock& Lock);
+	BOOL Wait(ScopedLock& Lock, UINT Timeout);
+
+private:
+	// Common
+	BOOL WaitInternal();
 };
 
 }

@@ -58,11 +58,11 @@ for(auto it=Children->First(); it->HasCurrent(); it->MoveNext())
 	if(m_Orientation==Orientation::Horizontal)
 		{
 		size.Width+=child_size.Width;
-		size.Height=Max(size.Height, child_size.Height);
+		size.Height=TypeHelper::Max(size.Height, child_size.Height);
 		}
 	else
 		{
-		size.Width=Max(size.Width, child_size.Width);
+		size.Width=TypeHelper::Max(size.Width, child_size.Width);
 		size.Height+=child_size.Height;
 		}
 	}

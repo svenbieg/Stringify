@@ -48,17 +48,17 @@ for(UINT u=0; u<count; u++)
 		{
 		case VirtualKey::Alt:
 			{
-			SetFlag(flags, ShortcutFlags::Alt);
+			FlagHelper::Set(flags, ShortcutFlags::Alt);
 			continue;
 			}
 		case VirtualKey::Control:
 			{
-			SetFlag(flags, ShortcutFlags::Ctrl);
+			FlagHelper::Set(flags, ShortcutFlags::Ctrl);
 			continue;
 			}
 		case VirtualKey::Shift:
 			{
-			SetFlag(flags, ShortcutFlags::Alt);
+			FlagHelper::Set(flags, ShortcutFlags::Alt);
 			continue;
 			}
 		default:

@@ -28,7 +28,7 @@ namespace UI {
 
 BOOL Menu::Accelerate(VirtualKey key)
 {
-if(!GetFlag(m_MenuFlags, MenuFlags::KeyboardAccess))
+if(!FlagHelper::Get(m_MenuFlags, MenuFlags::KeyboardAccess))
 	return false;
 CHAR acc=(CHAR)key;
 for(auto it=m_Panel->Children->First(); it->HasCurrent(); it->MoveNext())
@@ -60,7 +60,7 @@ if(m_SelectedItem)
 	m_SelectedItem->KillFocus();
 	m_SelectedItem=nullptr;
 	}
-ClearFlag(m_MenuFlags, MenuFlags::KeyboardAccess);
+FlagHelper::Clear(m_MenuFlags, MenuFlags::KeyboardAccess);
 Application::Current->SetCurrentMenu(m_ParentMenu);
 if(m_ParentMenu)
 	{
@@ -69,12 +69,6 @@ if(m_ParentMenu)
 		m_ParentMenu->Select();
 	}
 }
-
-//VOID Menu::Close(MenuItem* item)
-//{
-//if(m_OpenItem==item)
-//	m_OpenItem=nullptr;
-//}
 
 VOID Menu::DoKey(KeyEventType type, Handle<KeyEventArgs> args)
 {
@@ -100,7 +94,7 @@ if(m_ParentMenu)
 
 BOOL Menu::HasAcceleration()
 {
-if(!GetFlag(m_MenuFlags, MenuFlags::KeyboardAccess))
+if(!FlagHelper::Get(m_MenuFlags, MenuFlags::KeyboardAccess))
 	return false;
 return Application::Current->GetCurrentMenu()==this;
 }
@@ -121,7 +115,7 @@ return m_ParentMenu->IsParentMenu(menu);
 
 VOID Menu::KillKeyboardAccess()
 {
-ClearFlag(m_MenuFlags, MenuFlags::KeyboardAccess);
+FlagHelper::Clear(m_MenuFlags, MenuFlags::KeyboardAccess);
 if(m_SelectedItem)
 	{
 	m_SelectedItem->KillFocus();
@@ -169,7 +163,7 @@ if(m_SelectedItem!=item)
 	}
 if(m_SelectedItem)
 	{
-	if(GetFlag(m_MenuFlags, MenuFlags::KeyboardAccess))
+	if(FlagHelper::Get(m_MenuFlags, MenuFlags::KeyboardAccess))
 		m_SelectedItem->SetFocus();
 	if(IsOpen())
 		Open(m_SelectedItem);

@@ -118,7 +118,7 @@ Handle<Bitmap> Bitmap::Copy()const
 Handle<Bitmap> bmp=new Bitmap(m_Width, m_Height, m_BitsPerPixel);
 auto src=Begin();
 auto dst=const_cast<BYTE*>(bmp->Begin());
-CopyMemory(dst, src, m_Size);
+MemoryHelper::Copy(dst, src, m_Size);
 return bmp;
 }
 
@@ -127,10 +127,10 @@ VOID Bitmap::FillRect(RECT const& rc, COLOR c)
 if(c.GetAlpha()==0)
 	return;
 RECT rc_fill(rc);
-rc_fill.Left=Max(rc_fill.Left, 0);
-rc_fill.Top=Max(rc_fill.Top, 0);
-rc_fill.Right=Min(rc_fill.Right, (INT)m_Width);
-rc_fill.Bottom=Min(rc_fill.Bottom, (INT)m_Height);
+rc_fill.Left=TypeHelper::Max(rc_fill.Left, 0);
+rc_fill.Top=TypeHelper::Max(rc_fill.Top, 0);
+rc_fill.Right=TypeHelper::Min(rc_fill.Right, (INT)m_Width);
+rc_fill.Bottom=TypeHelper::Min(rc_fill.Bottom, (INT)m_Height);
 for(INT y=(INT)rc_fill.Top; y<rc_fill.Bottom; y++)
 	{
 	for(INT x=(INT)rc_fill.Left; x<rc_fill.Right; x++)
@@ -154,7 +154,7 @@ switch(m_BitsPerPixel)
 	case 24:
 		{
 		UINT pos=top*m_Pitch+left*3;
-		CopyMemory(&c, &buf[pos], 3);
+		MemoryHelper::Copy(&c, &buf[pos], 3);
 		break;
 		}
 	case 32:

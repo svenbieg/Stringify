@@ -55,7 +55,7 @@ VOID SerialPort::SetBaudRate(BaudRate baud)
 if(hFile==NULL)
 	return;
 DCB params;
-ZeroMemory(&params, sizeof(DCB));
+MemoryHelper::Fill(&params, sizeof(DCB), 0);
 params.BaudRate=(DWORD)baud;
 params.ByteSize=8;
 params.StopBits=ONESTOPBIT;

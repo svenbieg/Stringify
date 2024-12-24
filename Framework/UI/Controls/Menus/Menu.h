@@ -44,7 +44,7 @@ public:
 	Window* GetPanel()const { return m_Panel; }
 	Menu* GetParentMenu()const { return m_ParentMenu; }
 	BOOL HasAcceleration();
-	BOOL HasKeyboardAccess() { return GetFlag(m_MenuFlags, MenuFlags::KeyboardAccess); }
+	BOOL HasKeyboardAccess() { return FlagHelper::Get(m_MenuFlags, MenuFlags::KeyboardAccess); }
 	BOOL IsOpen();
 	BOOL IsParentMenu(Menu* Menu);
 	VOID KillKeyboardAccess();

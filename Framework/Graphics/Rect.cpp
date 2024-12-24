@@ -68,18 +68,18 @@ VOID RECT::Normalize()
 {
 INT left=Left;
 INT top=Top;
-Left=Min(left, Right);
-Top=Min(top, Bottom);
-Right=Max(left, Right);
-Bottom=Max(top, Bottom);
+Left=TypeHelper::Min(left, Right);
+Top=TypeHelper::Min(top, Bottom);
+Right=TypeHelper::Max(left, Right);
+Bottom=TypeHelper::Max(top, Bottom);
 }
 
 VOID RECT::SetBounds(RECT const& rc)
 {
-Left=Max(Left, rc.Left);
-Top=Max(Top, rc.Top);
-Right=Min(Right, rc.Right);
-Bottom=Min(Bottom, rc.Bottom);
+Left=TypeHelper::Max(Left, rc.Left);
+Top=TypeHelper::Max(Top, rc.Top);
+Right=TypeHelper::Min(Right, rc.Right);
+Bottom=TypeHelper::Min(Bottom, rc.Bottom);
 }
 
 VOID RECT::SetMinSize(SIZE const& min_size)

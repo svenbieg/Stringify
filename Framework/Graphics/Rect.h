@@ -39,8 +39,8 @@ public:
 	UINT GetWidth()const;
 
 	// Comparison
-	inline bool operator==(RECT const& Rect) { return CompareMemory(this, &Rect, sizeof(RECT))==0; }
-	inline bool operator!=(RECT const& Rect) { return CompareMemory(this, &Rect, sizeof(RECT))!=0; }
+	inline bool operator==(RECT const& Rect) { return MemoryHelper::Compare(this, &Rect, sizeof(RECT))==0; }
+	inline bool operator!=(RECT const& Rect) { return MemoryHelper::Compare(this, &Rect, sizeof(RECT))!=0; }
 	bool Inside(RECT const& Rect)const;
 	bool Intersection(RECT const& Rect)const;
 

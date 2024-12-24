@@ -245,8 +245,8 @@ while(1)
 	{
 	if(uInputSize>0)
 		{
-		read=Min(size, (SIZE_T)uInputSize);
-		CopyMemory(dst, pInput, read);
+		read=TypeHelper::Min(size, (SIZE_T)uInputSize);
+		MemoryHelper::Copy(dst, pInput, read);
 		if(read<uInputSize)
 			MoveMemory(pInput, &pInput[read], uInputSize-read);
 		uInputSize-=read;
@@ -295,7 +295,7 @@ while(1)
 		if(src_buf!=nullptr)
 			{
 			UINT copy=src_buf->cbBuffer;
-			CopyMemory(&pInput[uInputSize], src_buf->pvBuffer, copy);
+			MemoryHelper::Copy(&pInput[uInputSize], src_buf->pvBuffer, copy);
 			uInputSize+=copy;
 			break;
 			}
@@ -349,8 +349,8 @@ while(pos<size)
 	UINT msg_max=cStreamSizes.cbMaximumMessage;
 	if(uOutputSize==msg_max)
 		Flush();
-	UINT copy=Min((UINT)(size-pos), msg_max-uBufferSize);
-	CopyMemory(&pOutput[cStreamSizes.cbHeader+uOutputSize], &src[pos], copy);
+	UINT copy=TypeHelper::Min((UINT)(size-pos), msg_max-uBufferSize);
+	MemoryHelper::Copy(&pOutput[cStreamSizes.cbHeader+uOutputSize], &src[pos], copy);
 	uOutputSize+=copy;
 	pos+=copy;
 	}

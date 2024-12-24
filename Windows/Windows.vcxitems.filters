@@ -59,6 +59,12 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Concurrency\MainTask.cpp">
       <Filter>Concurrency</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Concurrency\DispatchedQueue.cpp">
+      <Filter>Concurrency</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Concurrency\Signal.cpp">
+      <Filter>Concurrency</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)ComPointer.h" />
@@ -139,6 +145,12 @@
       <Filter>Concurrency</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\TaskLock.h">
+      <Filter>Concurrency</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\DispatchedHandler.h">
+      <Filter>Concurrency</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\DispatchedQueue.h">
       <Filter>Concurrency</Filter>
     </ClInclude>
   </ItemGroup>

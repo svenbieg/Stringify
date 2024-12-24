@@ -31,7 +31,7 @@ public:
 
 private:
 	// Common
-	static INT Show(LPCSTR Title, LPCSTR Message, UINT Type);
+	static INT Show(LPCTSTR Title, LPCTSTR Message, UINT Type);
 };
 
 }}

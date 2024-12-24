@@ -25,7 +25,7 @@ namespace Storage {
 // Common
 //========
 
-SIZE_T StreamCopy(OutputStream* dst, InputStream* src, SIZE_T size)
+SIZE_T StreamHelper::Copy(OutputStream* dst, InputStream* src, SIZE_T size)
 {
 if(!dst||!src)
 	return 0;
@@ -36,7 +36,7 @@ BYTE* buf_ptr=buf->Begin();
 SIZE_T pos=0;
 while(pos<size)
 	{
-	SIZE_T copy=Min(size-pos, PAGE_SIZE);
+	SIZE_T copy=TypeHelper::Min(size-pos, PAGE_SIZE);
 	SIZE_T read=src->Read(buf_ptr, copy);
 	if(!read)
 		break;

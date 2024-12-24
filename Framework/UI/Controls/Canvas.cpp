@@ -51,8 +51,8 @@ for(auto it=Children->First(); it->HasCurrent(); it->MoveNext())
 		right+=margin.Right;
 		bottom+=margin.Bottom;
 		}
-	size.Width=Max(size.Width, right);
-	size.Height=Max(size.Height, bottom);
+	size.Width=TypeHelper::Max(size.Width, right);
+	size.Height=TypeHelper::Max(size.Height, bottom);
 	}
 FLOAT scale=GetScaleFactor();
 return size.Max(MinSize*scale);

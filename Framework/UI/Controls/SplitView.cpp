@@ -126,16 +126,16 @@ switch(m_Orientation)
 		{
 		UINT height=m_Rect.GetHeight();
 		Size+=m_StartPoint.Top-pt.Top;
-		Size=Max(Size, 20U);
-		Size=Min(Size, height-20);
+		Size=TypeHelper::Max(Size, 20U);
+		Size=TypeHelper::Min(Size, height-20);
 		break;
 		}
 	case Orientation::Vertical:
 		{
 		UINT width=m_Rect.GetWidth();
 		Size+=m_StartPoint.Left-pt.Left;
-		Size=Max(Size, 20U);
-		Size=Min(Size, width-20);
+		Size=TypeHelper::Max(Size, 20U);
+		Size=TypeHelper::Min(Size, width-20);
 		break;
 		}
 	}

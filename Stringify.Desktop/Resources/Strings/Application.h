@@ -5,13 +5,6 @@
 #pragma once
 
 
-//=======
-// Using
-//=======
-
-#include "Resources/Strings/String.h"
-
-
 //===========
 // Namespace
 //===========

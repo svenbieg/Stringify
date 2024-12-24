@@ -9,7 +9,8 @@
 // Using
 //=======
 
-#include "Concurrency/DispatchedQueue.h"
+#include "DispatchedQueue.h"
+#include "Task.h"
 
 
 //===========
@@ -57,6 +58,16 @@ public:
 		PostThreadMessage(s_ThreadId, WM_DISPATCH, 0, 0);
 		}
 	static VOID Initialize();
+	static inline VOID ThrowIf()
+		{
+		if(Task::Get()==nullptr)
+			throw InvalidContextException();
+		}
+	static inline VOID ThrowIfNot()
+		{
+		if(Task::Get())
+			throw InvalidContextException();
+		}
 
 private:
 	// Common

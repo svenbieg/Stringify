@@ -90,8 +90,8 @@ for(auto it=Children->First(); it->HasCurrent(); it->MoveNext())
 	auto control=Convert<Control>(child);
 	if(control)
 		child_size.AddPadding(control->Margin*scale);
-	size.Width=Max(size.Width, child_size.Width);
-	size.Height=Max(size.Height, child_size.Height);
+	size.Width=TypeHelper::Max(size.Width, child_size.Width);
+	size.Height=TypeHelper::Max(size.Height, child_size.Height);
 	}
 return size.Max(MinSize*scale);
 }
@@ -148,11 +148,11 @@ return nullptr;
 
 VOID Window::Invalidate(BOOL rearrange)
 {
-SetFlag(m_Flags, WindowFlags::Repaint);
-if(GetFlag(m_Flags, WindowFlags::Rearrange))
+FlagHelper::Set(m_Flags, WindowFlags::Repaint);
+if(FlagHelper::Get(m_Flags, WindowFlags::Rearrange))
 	return;
 if(rearrange)
-	SetFlag(m_Flags, WindowFlags::Rearrange);
+	FlagHelper::Set(m_Flags, WindowFlags::Rearrange);
 BOOL transparent=false;
 if(Parent)
 	{
@@ -213,12 +213,12 @@ VOID Window::Move(RenderTarget* target, RECT const& rc)
 {
 if(m_Rect!=rc)
 	{
-	SetFlag(m_Flags, WindowFlags::Update);
+	FlagHelper::Set(m_Flags, WindowFlags::Update);
 	m_Rect=rc;
 	}
-if(GetFlag(m_Flags, WindowFlags::Rearrange))
+if(FlagHelper::Get(m_Flags, WindowFlags::Rearrange))
 	{
-	ClearFlag(m_Flags, WindowFlags::Rearrange);
+	FlagHelper::Clear(m_Flags, WindowFlags::Rearrange);
 	RECT rc_client=GetClientRect();
 	this->Rearrange(target, rc_client);
 	}
@@ -291,7 +291,7 @@ Invalidate(true);
 
 VOID Window::OnVisibleChanged(BOOL visible)
 {
-ClearFlag(m_Flags, WindowFlags::Rearrange);
+FlagHelper::Clear(m_Flags, WindowFlags::Rearrange);
 if(visible)
 	{
 	Invalidate(true);

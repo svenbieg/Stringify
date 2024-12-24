@@ -191,11 +191,11 @@ for(auto it=m_Positions.cbegin(); it.has_current(); it.move_next())
 	if(!child)
 		continue;
 	auto pos=it->get_value();
-	col_count=Max(col_count, pos.Column+1);
-	row_count=Max(row_count, pos.Row+1);
+	col_count=TypeHelper::Max(col_count, pos.Column+1);
+	row_count=TypeHelper::Max(row_count, pos.Row+1);
 	}
-col_count=Max(col_count, 1U);
-row_count=Max(row_count, 1U);
+col_count=TypeHelper::Max(col_count, 1U);
+row_count=TypeHelper::Max(row_count, 1U);
 FLOAT scale=GetScaleFactor();
 InitColumns(col_count, scale);
 InitRows(row_count, scale);
@@ -217,8 +217,8 @@ for(auto it=Children->First(); it->HasCurrent(); it->MoveNext())
 		}
 	GridSize& col=m_Columns.get_at(pos.Column);
 	GridSize& row=m_Rows.get_at(pos.Row);
-	col.MinSize=Max(col.MinSize, min_size.Width);
-	row.MinSize=Max(row.MinSize, min_size.Height);
+	col.MinSize=TypeHelper::Max(col.MinSize, min_size.Width);
+	row.MinSize=TypeHelper::Max(row.MinSize, min_size.Height);
 	}
 }
 
@@ -350,7 +350,7 @@ for(UINT u=0; u<count; u++)
 	GridSize& size=sizes.get_at(u);
 	if(size.Unit!=GridUnit::Star)
 		continue;
-	UINT set=Max(size.MinSize, size.Size*star);
+	UINT set=TypeHelper::Max(size.MinSize, size.Size*star);
 	if(set>space)
 		{
 		size.SetSize=space;

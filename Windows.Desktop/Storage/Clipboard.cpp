@@ -42,7 +42,7 @@ HGLOBAL hglobal=GlobalAlloc(GMEM_MOVEABLE, size);
 if(hglobal)
 	{
 	auto buf=GlobalLock(hglobal);
-	CopyMemory(buf, text->Begin(), size);
+	MemoryHelper::Copy(buf, text->Begin(), size);
 	GlobalUnlock(hglobal);
 	SetClipboardData(CF_UNICODETEXT, hglobal);
 	}

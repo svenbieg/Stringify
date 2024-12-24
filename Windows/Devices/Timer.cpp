@@ -29,7 +29,7 @@ m_Interval(0)
 {
 HINSTANCE hinst=GetModuleHandleA(nullptr);
 WNDCLASSA wc;
-ZeroMemory(&wc, sizeof(WNDCLASSA));
+MemoryHelper::Fill(&wc, sizeof(WNDCLASSA), 0);
 wc.hInstance=hinst;
 wc.lpfnWndProc=WndProc;
 wc.lpszClassName="Timer";

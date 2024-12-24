@@ -9,12 +9,10 @@
 // Using
 //=======
 
-#include "Core/Application.h"
 #include "Graphics/Direct2D/Icon.h"
 #include "UI/Controls/Grid.h"
 #include "AppWindow.h"
 
-using namespace Core;
 using namespace UI::Controls;
 
 using D2DIcon=Graphics::Direct2D::Icon;
@@ -67,7 +65,7 @@ SetWindowLong(m_Handle, GWL_EXSTYLE, WS_EX_APPWINDOW);
 Closed.Add(this, &AppWindow::OnClosed);
 Icon.Changed.Add(this, &AppWindow::OnIconChanged);
 Title.Changed.Add(this, &AppWindow::OnTitleChanged);
-Title=Application::Current->Name;
+Title=Application::Current->GetName();
 auto grid=new Grid(this);
 grid->AddRow(1, GridUnit::Auto);
 grid->AddRow(1, GridUnit::Star);
@@ -149,7 +147,7 @@ SendMessage(m_Handle, WM_SETICON, ICON_BIG, (LPARAM)ico_big);
 
 VOID AppWindow::OnTitleChanged(Handle<Sentence> title)
 {
-SetWindowTextA(m_Handle, title? title->Begin(): "");
+SetWindowText(m_Handle, title? title->Begin(): TEXT(""));
 }
 
 }

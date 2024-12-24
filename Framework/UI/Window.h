@@ -65,7 +65,7 @@ public:
 	virtual Handle<Theme> GetTheme();
 	Handle<Window> GetVisibleChild(UINT Id);
 	virtual VOID Invalidate(BOOL Rearrange=false);
-	BOOL IsInvalidated() { return GetFlag(m_Flags, WindowFlags::Repaint); }
+	BOOL IsInvalidated() { return FlagHelper::Get(m_Flags, WindowFlags::Repaint); }
 	BOOL IsParentOf(Window* Child);
 	BOOL IsVisible();
 	SIZE MinSize;
@@ -77,7 +77,7 @@ public:
 	Event<Window, RenderTarget*, RECT&> Rendered;
 	FLOAT Scale;
 	VOID SetPosition(POINT const& Position);
-	VOID Validate() { ClearFlag(m_Flags, WindowFlags::Repaint); }
+	VOID Validate() { FlagHelper::Clear(m_Flags, WindowFlags::Repaint); }
 	Property<Window, BOOL> Visible;
 
 protected:

@@ -57,7 +57,7 @@ if(content)
 		}
 	}
 SIZE size;
-size.Width=Max(title_size.Width, content_size.Width);
+size.Width=TypeHelper::Max(title_size.Width, content_size.Width);
 size.Height=title_size.Height+content_size.Height;
 size.AddPadding(Padding*scale);
 size.AddPadding(1, 1, 1, 1);

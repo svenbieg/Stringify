@@ -37,9 +37,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Storage\File.h">
       <Filter>Storage</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Storage\StaticBuffer.h">
-      <Filter>Storage</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Collections\Vector.h">
       <Filter>Collections</Filter>
     </ClInclude>
@@ -66,9 +63,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Collections\StringList.h">
       <Filter>Collections</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Core\Application.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Streams\StreamHelper.h">
       <Filter>Storage\Streams</Filter>
     </ClInclude>
@@ -83,9 +77,6 @@
       <Filter>Collections</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Exception.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Encoding\Dwarf\Dwarf.h">
-      <Filter>Storage\Encoding\Dwarf</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Collections\cluster.hpp">
       <Filter>Collections</Filter>
     </ClInclude>
@@ -110,11 +101,8 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Collections\shared_map.hpp">
       <Filter>Collections</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\DispatchedHandler.h">
-      <Filter>Concurrency</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\DispatchedQueue.h">
-      <Filter>Concurrency</Filter>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Encoding\Dwarf.h">
+      <Filter>Storage\Encoding</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -132,17 +120,11 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Storage\File.cpp">
       <Filter>Storage</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Storage\StaticBuffer.cpp">
-      <Filter>Storage</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Storage\Intermediate.cpp">
       <Filter>Storage</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Collections\StringList.cpp">
       <Filter>Collections</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Core\Application.cpp">
-      <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Storage\Streams\StreamHelper.cpp">
       <Filter>Storage\Streams</Filter>
@@ -156,11 +138,9 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Collections\Node.cpp">
       <Filter>Collections</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Storage\Encoding\Dwarf\Dwarf.cpp">
-      <Filter>Storage\Encoding\Dwarf</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Concurrency\DispatchedQueue.cpp">
-      <Filter>Concurrency</Filter>
+    <ClCompile Include="$(MSBuildThisFileDirectory)MemoryHelper.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Storage\Encoding\Dwarf.cpp">
+      <Filter>Storage\Encoding</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -173,20 +153,8 @@
     <Filter Include="Collections">
       <UniqueIdentifier>{dbd5d5fd-db4e-40f0-9b20-2e4bff03e78e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core">
-      <UniqueIdentifier>{bff08e3e-51aa-4b21-9a7a-07516a794c62}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Storage\Encoding">
       <UniqueIdentifier>{0839ad31-9b52-4a75-ae7b-3f6be2828f3c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Storage\Encoding\Dwarf">
-      <UniqueIdentifier>{42658492-a0f4-43dd-8d2b-b1ba1a167023}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Concurrency">
-      <UniqueIdentifier>{a599b9e5-8824-40a8-837d-5b692a5ca505}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)README.md" />
   </ItemGroup>
 </Project>
