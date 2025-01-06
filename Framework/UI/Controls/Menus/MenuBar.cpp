@@ -30,18 +30,6 @@ namespace UI {
 // Con-/Destructors
 //==================
 
-MenuBar::MenuBar(UI::Window* parent):
-WrapPanel(parent),
-Menu(nullptr),
-m_Entering(false),
-m_OldFrame(nullptr)
-{
-Padding.Set(2, 0, 2, 0);
-m_Panel=this;
-Parent.Changed.Add(this, &MenuBar::OnParentChanged);
-OnParentChanged();
-}
-
 MenuBar::~MenuBar()
 {
 auto frame=GetFrame();
@@ -55,13 +43,29 @@ frame->KeyEvent.Remove(this);
 
 Handle<MenuBarItem> MenuBar::Add(Handle<Sentence> label)
 {
-return new MenuBarItem(this, label);
+return MenuBarItem::Create(this, label);
 }
 
 Handle<Brush> MenuBar::GetBackgroundBrush()
 {
 auto theme=GetTheme();
 return theme->ControlBrush;
+}
+
+
+//==========================
+// Con-/Destructors Private
+//==========================
+
+MenuBar::MenuBar(Window* parent):
+WrapPanel(parent),
+Menu(nullptr),
+m_Entering(false)
+{
+Padding.Set(2, 0, 2, 0);
+m_Panel=this;
+auto frame=GetFrame();
+frame->KeyEvent.Add(this, &MenuBar::OnFrameKeyEvent);
 }
 
 
@@ -88,7 +92,7 @@ if(FlagHelper::Get(m_MenuFlags, MenuFlags::KeyboardAccess))
 	}
 Exit();
 FlagHelper::Set(m_MenuFlags, MenuFlags::KeyboardAccess);
-Application::Current->SetCurrentMenu(this);
+Application::Get()->SetCurrentMenu(this);
 m_Entering=true;
 Invalidate();
 args->Handled=true;
@@ -121,18 +125,6 @@ if(m_Entering)
 	m_Entering=false;
 	Select();
 	}
-}
-
-VOID MenuBar::OnParentChanged()
-{
-auto frame=GetFrame();
-if(frame==m_OldFrame)
-	return;
-if(m_OldFrame)
-	m_OldFrame->KeyEvent.Remove(this);
-m_OldFrame=frame;
-if(frame)
-	frame->KeyEvent.Add(this, &MenuBar::OnFrameKeyEvent);
 }
 
 }}}

@@ -20,21 +20,6 @@ namespace UI {
 	namespace Controls {
 
 
-//==================
-// Con-/Destructors
-//==================
-
-StackPanel::StackPanel(Orientation orientation):
-StackPanel(nullptr, orientation)
-{}
-
-StackPanel::StackPanel(Window* parent, Orientation orientation):
-Panel(parent),
-AlignChildren(Alignment::Default),
-m_Orientation(orientation)
-{}
-
-
 //========
 // Common
 //========
@@ -43,13 +28,13 @@ Graphics::SIZE StackPanel::GetMinSize(RenderTarget* target)
 {
 SIZE size(0, 0);
 FLOAT scale=GetScaleFactor();
-for(auto it=Children->First(); it->HasCurrent(); it->MoveNext())
+for(auto it=Children->Begin(); it->HasCurrent(); it->MoveNext())
 	{
 	auto child=it->GetCurrent();
 	if(!child->Visible)
 		continue;
 	SIZE child_size=child->GetMinSize(target);
-	auto control=Convert<Control>(child);
+	auto control=child.As<Control>();
 	if(control)
 		{
 		RECT const& margin=control->Margin;
@@ -81,13 +66,13 @@ if(border)
 FLOAT scale=GetScaleFactor();
 rc.SetPadding(Padding*scale);
 RECT rc_move(rc);
-for(auto it=Children->First(); it->HasCurrent(); it->MoveNext())
+for(auto it=Children->Begin(); it->HasCurrent(); it->MoveNext())
 	{
 	auto child=it->GetCurrent();
 	if(!child->Visible)
 		continue;
 	SIZE child_size=child->GetMinSize(target);
-	auto control=Convert<Control>(child);
+	auto control=child.As<Control>();
 	if(control)
 		{
 		RECT const& margin=control->Margin;
@@ -152,5 +137,16 @@ for(auto it=Children->First(); it->HasCurrent(); it->MoveNext())
 		}
 	}
 }
+
+
+//============================
+// Con-/Destructors Protected
+//============================
+
+StackPanel::StackPanel(Window* parent, Orientation orientation):
+Panel(parent),
+AlignChildren(Alignment::Default),
+m_Orientation(orientation)
+{}
 
 }}

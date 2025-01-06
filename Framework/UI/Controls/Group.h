@@ -28,7 +28,7 @@ class Group: public Control
 {
 public:
 	// Con-/Destructors
-	Group(Window* Parent=nullptr, Handle<String> Title=nullptr);
+	static inline Handle<Group> Create(Window* Parent, Handle<String> Title=nullptr) { return new Group(Parent, Title); }
 
 	// Common
 	SIZE GetMinSize(RenderTarget* Target)override;
@@ -36,6 +36,10 @@ public:
 	VOID Rearrange(RenderTarget* Target, RECT& Rect)override;
 	VOID Render(RenderTarget* Target, RECT& Rect)override;
 	Handle<String> Title;
+
+private:
+	// Con-/Destructors
+	Group(Window* Parent, Handle<String> Title);
 };
 
 }}

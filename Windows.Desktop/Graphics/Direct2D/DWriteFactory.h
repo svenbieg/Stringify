@@ -10,6 +10,7 @@
 //=======
 
 #include <dwrite.h>
+#include "ComPointer.h"
 
 
 //===========
@@ -27,18 +28,21 @@ namespace Graphics {
 class DWriteFactory: public Object
 {
 public:
+	// Con-/Destructors
+	~DWriteFactory();
+	static Handle<DWriteFactory> Get();
+
 	// Common
 	ComPointer<IDWriteTextFormat> CreateTextFormat(LOGFONT const& Info);
 	ComPointer<IDWriteTextLayout> CreateTextLayout(LPCWSTR Text, UINT Length, IDWriteTextFormat* Format);
-	static Handle<DWriteFactory> Open();
 
 private:
 	// Con-/Destructors
 	DWriteFactory();
 
 	// Common
-	static Handle<DWriteFactory> m_Current;
 	ComPointer<IDWriteFactory> m_Factory;
+	static DWriteFactory* s_Current;
 };
 
 }}

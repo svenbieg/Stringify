@@ -30,7 +30,7 @@ VOID Clipboard::Copy(Handle<String> text)
 {
 if(!text)
 	return;
-auto app_wnd=AppWindow::Current;
+auto app_wnd=AppWindow::Get();
 if(!app_wnd)
 	return;
 if(!OpenClipboard(app_wnd->GetHandle()))
@@ -51,7 +51,7 @@ CloseClipboard();
 
 Handle<String> Clipboard::GetText()
 {
-auto app_wnd=AppWindow::Current;
+auto app_wnd=AppWindow::Get();
 if(!OpenClipboard(app_wnd->GetHandle()))
 	return nullptr;
 Handle<String> text;
@@ -59,7 +59,7 @@ HANDLE data=GetClipboardData(CF_UNICODETEXT);
 if(data)
 	{
 	auto buf=(LPCWSTR)GlobalLock(data);
-	text=new String(buf);
+	text=String::Create(buf);
 	GlobalUnlock(data);
 	}
 CloseClipboard();

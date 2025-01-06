@@ -9,7 +9,7 @@
 // Using
 //=======
 
-#include "Concurrency/MainTask.h"
+#include "Concurrency/DispatchedQueue.h"
 #include "Storage/Clipboard.h"
 #include "Storage/Streams/StreamReader.h"
 #include "Storage/Buffer.h"
@@ -32,36 +32,6 @@ namespace UI {
 	namespace Controls {
 
 
-//==================
-// Con-/Destructors
-//==================
-
-Input::Input(Window* parent):
-Interactive(parent),
-Mask(0),
-MultiLine(false),
-ReadOnly(false),
-m_CursorPos(-1, -1),
-m_CursorTime(0),
-m_InputFlags(InputFlags::None),
-m_LineHeight(0),
-m_PointerPos(-1, -1),
-m_SelectionEnd(-1, -1),
-m_SelectionFirst(-1, -1),
-m_SelectionLast(-1, -1),
-m_SelectionStart(-1, -1)
-{
-ContextMenu=new EditMenu();
-Focused.Add(this, &Input::OnFocused);
-FocusLost.Add(this, &Input::OnFocusLost);
-KeyDown.Add(this, &Input::OnKeyDown);
-KeyUp.Add(this, &Input::OnKeyUp);
-PointerDown.Add(this, &Input::OnPointerDown);
-PointerMoved.Add(this, &Input::OnPointerMoved);
-PointerUp.Add(this, &Input::OnPointerUp);
-}
-
-
 //========
 // Common
 //========
@@ -78,7 +48,7 @@ VOID Input::AppendLines(Handle<StringList> lines)
 {
 if(!lines)
 	return;
-for(auto it=lines->First(); it->HasCurrent(); it->MoveNext())
+for(auto it=lines->Begin(); it->HasCurrent(); it->MoveNext())
 	{
 	INPUT_LINE& line=m_Lines.append();
 	line.Text=it->GetCurrent();
@@ -158,7 +128,7 @@ Handle<String> Input::GetSelection()
 UINT len=GetTextLength(m_SelectionFirst, m_SelectionLast);
 if(!len)
 	return nullptr;
-Handle<String> text=new String(len, nullptr);
+auto text=String::Create(len, nullptr);
 auto buf=const_cast<LPTSTR>(text->Begin());
 GetText(m_SelectionFirst, m_SelectionLast, buf, len+1);
 return text;
@@ -171,7 +141,7 @@ POINT pt_end=GetEndPoint();
 UINT len=GetTextLength(pt_start, pt_end);
 if(!len)
 	return nullptr;
-Handle<String> text=new String(len, nullptr);
+auto text=String::Create(len, nullptr);
 auto buf=const_cast<LPTSTR>(text->Begin());
 GetText(pt_start, pt_end, buf, len+1);
 return text;
@@ -179,7 +149,7 @@ return text;
 
 BOOL Input::KillFocus()
 {
-auto app=Application::Current;
+auto app=Application::Get();
 if(app->GetCurrentInput()==this)
 	app->SetCurrentInput(nullptr);
 return Interactive::KillFocus();
@@ -219,7 +189,7 @@ UINT last_line=first_line+line_count-1;
 BOOL show_sel=true;
 if(m_SelectionFirst==m_SelectionLast)
 	show_sel=false;
-if(Application::Current->GetCurrentInput()!=this)
+if(Application::Get()->GetCurrentInput()!=this)
 	show_sel=false;
 if(show_sel)
 	{
@@ -305,7 +275,7 @@ if(m_SelectionFirst.Top<line_count)
 		{
 		INPUT_LINE& first_line=m_Lines.get_at(m_SelectionFirst.Top);
 		auto text=first_line.Text->Begin();
-		str_before=new String(m_SelectionFirst.Left, text);
+		str_before=String::Create(m_SelectionFirst.Left, text);
 		before=str_before->Begin();
 		before_len=m_SelectionFirst.Left;
 		}
@@ -317,7 +287,7 @@ if(m_SelectionLast.Top<line_count)
 	if(m_SelectionLast.Left<line_len)
 		{
 		auto text=last_line.Text->Begin();
-		str_after=new String(&text[m_SelectionLast.Left]);
+		str_after=String::Create(&text[m_SelectionLast.Left]);
 		after=str_after->Begin();
 		after_len=StringHelper::Length(after);
 		}
@@ -348,7 +318,7 @@ while(replace[str_pos])
 		}
 	UINT insert_len=str_pos-line_start;
 	UINT line_len=before_len+insert_len;
-	Handle<String> text=new String(line_len, nullptr);
+	auto text=String::Create(line_len, nullptr);
 	auto str=const_cast<LPTSTR>(text->Begin());
 	if(before)
 		{
@@ -374,7 +344,7 @@ UINT line_len=before_len+insert_len+after_len;
 INPUT_LINE& line=m_Lines.insert_at(m_SelectionFirst.Top);
 if(line_len>0)
 	{
-	Handle<String> text=new String(line_len, nullptr);
+	auto text=String::Create(line_len, nullptr);
 	auto str=const_cast<LPTSTR>(text->Begin());
 	UINT pos=0;
 	if(before_len)
@@ -410,7 +380,7 @@ SetSelection(m_SelectionEnd, m_SelectionEnd);
 VOID Input::SetFocus(FocusReason reason)
 {
 Interactive::SetFocus(reason);
-Application::Current->SetCurrentInput(this);
+Application::Get()->SetCurrentInput(this);
 }
 
 VOID Input::SetSelection(POINT const& pt_start, POINT const& pt_end)
@@ -437,8 +407,38 @@ if(!text)
 	Clear();
 	return;
 	}
-Handle<Buffer> buf=new Buffer(text->Begin(), 0, BufferOptions::Static);
+auto buf=Buffer::Create(text->Begin(), 0, BufferOptions::Static);
 ReadFromStream(buf);
+}
+
+
+//==========================
+// Con-/Destructors Private
+//==========================
+
+Input::Input(Window* parent):
+Interactive(parent),
+Mask(0),
+MultiLine(false),
+ReadOnly(false),
+m_CursorPos(-1, -1),
+m_CursorTime(0),
+m_InputFlags(InputFlags::None),
+m_LineHeight(0),
+m_PointerPos(-1, -1),
+m_SelectionEnd(-1, -1),
+m_SelectionFirst(-1, -1),
+m_SelectionLast(-1, -1),
+m_SelectionStart(-1, -1)
+{
+ContextMenu=EditMenu::Create(this);
+Focused.Add(this, &Input::OnFocused);
+FocusLost.Add(this, &Input::OnFocusLost);
+KeyDown.Add(this, &Input::OnKeyDown);
+KeyUp.Add(this, &Input::OnKeyUp);
+PointerDown.Add(this, &Input::OnPointerDown);
+PointerMoved.Add(this, &Input::OnPointerMoved);
+PointerUp.Add(this, &Input::OnPointerUp);
 }
 
 
@@ -860,7 +860,7 @@ BOOL Input::ShowContextMenu(POINT pt)
 {
 if(!ContextMenu)
 	return false;
-auto edit_menu=Convert<EditMenu>(ContextMenu);
+auto edit_menu=ContextMenu.As<EditMenu>();
 if(edit_menu)
 	{
 	auto clipboard=Clipboard::Open();
@@ -892,7 +892,7 @@ if(show)
 		}
 	else
 		{
-		m_CursorTimer=new Timer();
+		m_CursorTimer=Timer::Create();
 		m_CursorTimer->Triggered.Add(this, &Input::OnCursorTimer);
 		m_CursorTimer->StartPeriodic(500);
 		}
@@ -992,7 +992,7 @@ else
 	m_CursorPos.Set(end_char, end_line);
 	}
 Invalidate(true);
-MainTask::Dispatch(this, &Input::NotifySelectionChanged);
+DispatchedQueue::Append(this, &Input::NotifySelectionChanged);
 }
 
 }}

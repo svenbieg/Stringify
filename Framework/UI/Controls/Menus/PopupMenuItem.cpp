@@ -9,7 +9,7 @@
 // Using
 //=======
 
-#include "Concurrency/MainTask.h"
+#include "Concurrency/DispatchedQueue.h"
 #include "UI/Input/Shortcut.h"
 #include "UI/Application.h"
 #include "MenuBar.h"
@@ -28,31 +28,6 @@ using namespace UI::Input;
 namespace UI {
 	namespace Controls {
 		namespace Menus {
-
-
-//==================
-// Con-/Destructors
-//==================
-
-PopupMenuItem::PopupMenuItem(PopupMenu* menu, Handle<Sentence> label):
-Interactive(menu->GetPanel()),
-MenuItem(this, menu),
-Label(this),
-Padding(12, 3, 12, 3),
-m_IconWidth(0),
-m_LabelWidth(0),
-m_ShortcutWidth(0)
-{
-Interactive::Clicked.Add(this, &PopupMenuItem::OnClicked);
-if(!label)
-	Enabled=false;
-Label.Changed.Add(this, &PopupMenuItem::OnLabelChanged);
-Label=label;
-KeyDown.Add(this, &PopupMenuItem::OnKeyDown);
-PointerDown.Add(this, &PopupMenuItem::OnPointerDown);
-PointerEntered.Add(this, &PopupMenuItem::OnPointerEntered);
-PointerLeft.Add(this, &PopupMenuItem::OnPointerLeft);
-}
 
 
 //========
@@ -203,6 +178,31 @@ m_ShortcutWidth=shortcut_width;
 }
 
 
+//==========================
+// Con-/Destructors Private
+//==========================
+
+PopupMenuItem::PopupMenuItem(PopupMenu* parent, Handle<Sentence> label):
+Interactive(parent->GetPanel()),
+MenuItem(this, parent),
+Label(this),
+Padding(12, 3, 12, 3),
+m_IconWidth(0),
+m_LabelWidth(0),
+m_ShortcutWidth(0)
+{
+Interactive::Clicked.Add(this, &PopupMenuItem::OnClicked);
+if(!label)
+	Enabled=false;
+Label.Changed.Add(this, &PopupMenuItem::OnLabelChanged);
+Label=label;
+KeyDown.Add(this, &PopupMenuItem::OnKeyDown);
+PointerDown.Add(this, &PopupMenuItem::OnPointerDown);
+PointerEntered.Add(this, &PopupMenuItem::OnPointerEntered);
+PointerLeft.Add(this, &PopupMenuItem::OnPointerLeft);
+}
+
+
 //================
 // Common Private
 //================
@@ -215,7 +215,7 @@ Clicked(this);
 VOID PopupMenuItem::OnClicked()
 {
 m_Menu->Exit();
-MainTask::Dispatch(this, &PopupMenuItem::DoClick);
+DispatchedQueue::Append(this, &PopupMenuItem::DoClick);
 }
 
 VOID PopupMenuItem::OnLabelChanged(Handle<Sentence> label)
@@ -227,7 +227,7 @@ if(label)
 	Text=MenuHelper::GetLabel(label->Begin());
 	auto shortcut=ShortcutFromString(Shortcut);
 	if(shortcut)
-		Application::Current->Shortcuts->Set(shortcut, this, false);
+		Application::Get()->Shortcuts->Set(shortcut, this, false);
 	Enabled=true;
 	}
 else
@@ -247,10 +247,10 @@ switch(args->Key)
 	{
 	case VirtualKey::Down:
 		{
-		auto control=Interactive::GetNextControl(Parent, this, 1);
+		auto control=Interactive::GetNextControl(m_Parent, this, 1);
 		if(control)
 			{
-			auto item=Convert<MenuItem>(control);
+			auto item=dynamic_cast<MenuItem*>(control);
 			m_Menu->Select(item);
 			}
 		return;
@@ -267,20 +267,20 @@ switch(args->Key)
 	case VirtualKey::Up:
 		{
 		auto parent_menu=m_Menu->GetParentMenu();
-		auto menubar=Convert<MenuBar>(parent_menu->GetPanel());
+		auto menubar=dynamic_cast<MenuBar*>(parent_menu->GetPanel());
 		if(menubar)
 			{
-			auto control=Interactive::GetNextControl(Parent, nullptr, 0);
+			auto control=Interactive::GetNextControl(m_Parent, nullptr, 0);
 			if(control==this)
 				{
 				m_Menu->Close();
 				return;
 				}
 			}
-		auto control=Interactive::GetNextControl(Parent, this, -1);
+		auto control=Interactive::GetNextControl(m_Parent, this, -1);
 		if(control)
 			{
-			auto item=Convert<MenuItem>(control);
+			auto item=dynamic_cast<MenuItem*>(control);
 			m_Menu->Select(item);
 			}
 		return;
@@ -308,20 +308,21 @@ VOID PopupMenuItem::OnPointerEntered()
 {
 Invalidate();
 m_Menu->KillKeyboardAccess();
-auto current=Application::Current->GetCurrentMenu();
+auto app=Application::Get();
+auto current=app->GetCurrentMenu();
 if(current==SubMenu)
 	return;
 auto menu=m_Menu;
 while(current!=menu)
 	{
 	current->Close();
-	current=Application::Current->GetCurrentMenu();
+	current=app->GetCurrentMenu();
 	}
 if(SubMenu)
 	{
 	if(!SubMenu->Visible)
 		{
-		m_Timer=new Timer();
+		m_Timer=Timer::Create();
 		m_Timer->Triggered.Add(this, &PopupMenuItem::OnTimerTriggered);
 		m_Timer->StartOnce(300);
 		}

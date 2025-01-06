@@ -37,20 +37,19 @@ Storage::Directory(path)
 // Storage.Directory
 //===================
 
+Handle<Storage::DirectoryIterator> Directory::Begin()
+{
+return new DirectoryIterator(this);
+}
+
 Handle<Storage::File> Directory::CreateFile(Handle<String> path, FileCreateMode create, FileAccessMode access, FileShareMode share)
 {
 ScopedLock lock(m_Mutex);
-Handle<String> file_path=new String("%s\\%s", m_Path, path);
+auto file_path=String::Create("%s\\%s", m_Path, path);
 Handle<File> file=new File(file_path);
 if(Failed(file->Create(create, access, share)))
 	return nullptr;
 return file;
-}
-
-Handle<Storage::DirectoryIterator> Directory::First()
-{
-Handle<DirectoryIterator> it=new DirectoryIterator(this);
-return it;
 }
 
 Handle<Object> Directory::Get(Handle<String> path)
@@ -58,15 +57,14 @@ Handle<Object> Directory::Get(Handle<String> path)
 if(!path)
 	return nullptr;
 ScopedLock lock(m_Mutex);
-Handle<String> item_path=new String("%s\\%s", m_Path, path);
-WIN32_FIND_DATA fd;
-ZeroMemory(&fd, sizeof(WIN32_FIND_DATA));
-HANDLE hfind=FindFirstFileEx(item_path->Begin(), FindExInfoBasic, &fd, FindExSearchNameMatch, nullptr, FIND_FIRST_EX_LARGE_FETCH);
-if(hfind==INVALID_HANDLE_VALUE)
-	hfind=NULL;
-if(!hfind)
+auto item_path=String::Create("%s\\%s", m_Path, path);
+WIN32_FIND_DATA fd={ 0 };
+HANDLE find=FindFirstFileEx(item_path->Begin(), FindExInfoBasic, &fd, FindExSearchNameMatch, nullptr, FIND_FIRST_EX_LARGE_FETCH);
+if(find==INVALID_HANDLE_VALUE)
+	find=NULL;
+if(!find)
 	return nullptr;
-FindClose(hfind);
+FindClose(find);
 if(fd.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY)
 	{
 	return new Directory(item_path);
@@ -115,9 +113,8 @@ if(hFind)
 	hFind=NULL;
 	}
 auto path=m_Directory->GetPath();
-WIN32_FIND_DATA fd;
-ZeroMemory(&fd, sizeof(WIN32_FIND_DATA));
-Handle<String> mask=new String("%s\\*.*", path->Begin());
+WIN32_FIND_DATA fd={ 0 };
+auto mask=String::Create("%s\\*.*", path->Begin());
 hFind=FindFirstFileEx(mask->Begin(), FindExInfoBasic, &fd, FindExSearchNameMatch, nullptr, FIND_FIRST_EX_LARGE_FETCH);
 if(hFind==INVALID_HANDLE_VALUE)
 	hFind=NULL;
@@ -132,7 +129,7 @@ while(fd.cFileName[0]=='.')
 		return false;
 		}
 	}
-Handle<String> item_path=new String("%s\\%s", path->Begin(), fd.cFileName);
+auto item_path=String::Create("%s\\%s", path->Begin(), fd.cFileName);
 if(fd.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY)
 	{
 	m_Current=new Directory(item_path);
@@ -151,8 +148,7 @@ if(!hFind)
 	m_Current=nullptr;
 	return false;
 	}
-WIN32_FIND_DATA fd;
-ZeroMemory(&fd, sizeof(WIN32_FIND_DATA));
+WIN32_FIND_DATA fd={ 0 };
 if(!FindNextFile(hFind, &fd))
 	{
 	FindClose(hFind);
@@ -161,7 +157,7 @@ if(!FindNextFile(hFind, &fd))
 	return false;
 	}
 auto path=m_Directory->GetPath();
-Handle<String> item_path=new String("%s\\%s", path->Begin(), fd.cFileName);
+auto item_path=String::Create("%s\\%s", path->Begin(), fd.cFileName);
 if(fd.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY)
 	{
 	m_Current=new Directory(item_path);

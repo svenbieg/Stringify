@@ -47,7 +47,10 @@ public:
 	using Timer=Timing::Timer;
 
 	// Con-/Destructors
-	PopupMenuItem(PopupMenu* PopupMenu, Handle<Sentence> Label);
+	static inline Handle<PopupMenuItem> Create(PopupMenu* Parent, Handle<Sentence> Label)
+		{
+		return new PopupMenuItem(Parent, Label);
+		}
 
 	// Common
 	Event<PopupMenuItem> Clicked;
@@ -63,6 +66,9 @@ public:
 	Handle<String> Text;
 
 private:
+	// Con-/Destructors
+	PopupMenuItem(PopupMenu* Parent, Handle<Sentence> Label);
+
 	// Common
 	VOID DoClick();
 	VOID OnClicked();

@@ -25,25 +25,6 @@ namespace UI {
 		namespace Menus {
 
 
-//==================
-// Con-/Destructors
-//==================
-
-MenuBarItem::MenuBarItem(MenuBar* menu, Handle<Sentence> label):
-Interactive(menu->GetPanel()),
-MenuItem(this, menu),
-Label(this),
-Padding(6, 2, 6, 2)
-{
-Label.Changed.Add(this, &MenuBarItem::OnLabelChanged);
-Label=label;
-KeyDown.Add(this, &MenuBarItem::OnKeyDown);
-PointerDown.Add(this, &MenuBarItem::OnPointerDown);
-PointerEntered.Add(this, &MenuBarItem::OnPointerEntered);
-PointerLeft.Add(this, &MenuBarItem::OnPointerLeft);
-}
-
-
 //========
 // Common
 //========
@@ -51,7 +32,7 @@ PointerLeft.Add(this, &MenuBarItem::OnPointerLeft);
 Handle<PopupMenuItem> MenuBarItem::Add(Handle<Sentence> label)
 {
 if(!SubMenu)
-	SubMenu=new PopupMenu(this, m_Menu);
+	SubMenu=PopupMenu::Create(this, m_Menu);
 return SubMenu->Add(label);
 }
 
@@ -114,6 +95,25 @@ if(accelerate)
 }
 
 
+//==========================
+// Con-/Destructors Private
+//==========================
+
+MenuBarItem::MenuBarItem(MenuBar* parent, Handle<Sentence> label):
+Interactive(parent->GetPanel()),
+MenuItem(this, parent),
+Label(this),
+Padding(6, 2, 6, 2)
+{
+Label.Changed.Add(this, &MenuBarItem::OnLabelChanged);
+Label=label;
+KeyDown.Add(this, &MenuBarItem::OnKeyDown);
+PointerDown.Add(this, &MenuBarItem::OnPointerDown);
+PointerEntered.Add(this, &MenuBarItem::OnPointerEntered);
+PointerLeft.Add(this, &MenuBarItem::OnPointerLeft);
+}
+
+
 //================
 // Common Private
 //================
@@ -133,10 +133,10 @@ switch(args->Key)
 		}
 	case VirtualKey::Left:
 		{
-		auto control=Interactive::GetNextControl(Parent, this, -1);
+		auto control=Interactive::GetNextControl(m_Parent, this, -1);
 		if(control)
 			{
-			auto item=Convert<MenuItem>(control);
+			auto item=dynamic_cast<MenuItem*>(control);
 			m_Menu->Select(item);
 			}
 		return;
@@ -148,10 +148,10 @@ switch(args->Key)
 		}
 	case VirtualKey::Right:
 		{
-		auto control=Interactive::GetNextControl(Parent, this, -1);
+		auto control=Interactive::GetNextControl(m_Parent, this, -1);
 		if(control)
 			{
-			auto item=Convert<MenuItem>(control);
+			auto item=dynamic_cast<MenuItem*>(control);
 			m_Menu->Select(item);
 			}
 		return;

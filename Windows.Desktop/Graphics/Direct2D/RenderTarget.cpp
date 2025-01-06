@@ -9,9 +9,7 @@
 // Using
 //=======
 
-#include "D2DFactory.h"
 #include "RenderTarget.h"
-#include "DWriteFactory.h"
 
 using D2DBitmap=Graphics::Direct2D::Bitmap;
 
@@ -22,19 +20,6 @@ using D2DBitmap=Graphics::Direct2D::Bitmap;
 
 namespace Graphics {
 	namespace Direct2D {
-
-
-//==================
-// Con-/Destructors
-//==================
-
-RenderTarget::RenderTarget()
-{
-auto factory=D2DFactory::Open();
-m_Target=factory->CreateRenderTarget();
-m_Target->SetAntialiasMode(D2D1_ANTIALIAS_MODE_ALIASED);
-m_Target->SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_CLEARTYPE);
-}
 
 
 //========
@@ -78,8 +63,7 @@ VOID RenderTarget::DrawPolygon(POINT const* points, UINT count, Handle<Graphics:
 {
 if(!count)
 	return;
-auto factory=D2DFactory::Open();
-auto geometry=factory->CreatePathGeometry();
+auto geometry=m_D2DFactory->CreatePathGeometry();
 ID2D1GeometrySink* sink=nullptr;
 geometry->Open(&sink);
 auto pt=D2D1::Point2F(points[0].Left, points[0].Top);
@@ -109,14 +93,14 @@ m_Target->GetTransform(&mx_transform);
 auto mx_translate=D2D1::Matrix3x2F::Translation(rc.Left, rc.Top);
 auto mx_scale=D2D1::Matrix3x2F::Scale(scale, scale);
 m_Target->SetTransform(mx_scale*mx_transform*mx_translate);
-auto d2d_format=Convert<Direct2D::Font>(Font)->GetFormat();
+auto d2d_format=Font.As<Direct2D::Font>()->GetFormat();
 auto d2d_rc=D2D1::RectF(0, 0, rc.GetWidth(), rc.GetHeight());
 auto d2d_brush=Brush::Get(m_Target, TextColor);
 #ifdef _UNICODE
 LPCWSTR str=text;
 #else
 WCHAR str[128];
-StringCopy(str, 128, text);
+StringHelper::Copy(str, 128, text);
 #endif
 m_Target->DrawText(str, len, d2d_format, d2d_rc, d2d_brush);
 m_Target->SetTransform(mx_transform);
@@ -131,8 +115,7 @@ VOID RenderTarget::FillPolygon(POINT const* points, UINT count, Handle<Graphics:
 {
 if(!count)
 	return;
-auto factory=D2DFactory::Open();
-auto geometry=factory->CreatePathGeometry();
+auto geometry=m_D2DFactory->CreatePathGeometry();
 ID2D1GeometrySink* sink=nullptr;
 geometry->Open(&sink);
 auto pt=D2D1::Point2F(points[0].Left, points[0].Top);
@@ -161,13 +144,13 @@ if(!len)
 LPCWSTR str=text;
 #else
 WCHAR str[128];
-StringCopy(str, 128, text, len);
+StringHelper::Copy(str, 128, text, len);
 #endif
-auto factory=DWriteFactory::Open();
-auto d2d_format=Convert<Direct2D::Font>(font)->GetFormat();
-auto layout=factory->CreateTextLayout(str, len, d2d_format);
-DWRITE_TEXT_METRICS metrics;
-ZeroMemory(&metrics, sizeof(DWRITE_TEXT_METRICS));
+if(!m_DWriteFactory)
+	m_DWriteFactory=DWriteFactory::Get();
+auto d2d_format=font.As<Direct2D::Font>()->GetFormat();
+auto layout=m_DWriteFactory->CreateTextLayout(str, len, d2d_format);
+DWRITE_TEXT_METRICS metrics={ 0 };
 layout->GetMetrics(&metrics);
 return SIZE (metrics.widthIncludingTrailingWhitespace*scale+1, metrics.height*scale+1);
 }
@@ -176,6 +159,19 @@ VOID RenderTarget::Unclip()
 {
 m_Target->SetTransform(D2D1::Matrix3x2F::Identity());
 m_Target->PopAxisAlignedClip();
+}
+
+
+//==========================
+// Con-/Destructors Private
+//==========================
+
+RenderTarget::RenderTarget()
+{
+m_D2DFactory=D2DFactory::Get();
+m_Target=m_D2DFactory->CreateRenderTarget();
+m_Target->SetAntialiasMode(D2D1_ANTIALIAS_MODE_ALIASED);
+m_Target->SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_CLEARTYPE);
 }
 
 

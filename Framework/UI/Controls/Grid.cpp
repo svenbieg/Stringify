@@ -20,20 +20,6 @@ namespace UI {
 	namespace Controls {
 
 
-//==================
-// Con-/Destructors
-//==================
-
-Grid::Grid(Window* parent):
-Control(parent)
-{
-Children->Added.Add(this, &Grid::OnChildAdded);
-Children->Removed.Add(this, &Grid::OnChildRemoved);
-Columns=new ColumnList();
-Rows=new RowList();
-}
-
-
 //========
 // Common
 //========
@@ -74,7 +60,7 @@ InitRaster(target);
 FLOAT scale=GetScaleFactor();
 rc.SetPadding(Padding*scale);
 UpdateRaster(rc);
-for(auto it=Children->First(); it->HasCurrent(); it->MoveNext())
+for(auto it=Children->Begin(); it->HasCurrent(); it->MoveNext())
 	{
 	auto child=it->GetCurrent();
 	if(!child)
@@ -83,13 +69,27 @@ for(auto it=Children->First(); it->HasCurrent(); it->MoveNext())
 		continue;
 	SIZE min_size=child->GetMinSize(target);
 	RECT margin(0, 0, 0, 0);
-	auto control=Convert<Control>(child);
+	auto control=child.As<Control>();
 	if(control)
 		margin=control->Margin*scale;
 	RECT rc_child=GetChildRect(child, min_size, margin);
 	rc_child.Move(rc.Left, rc.Top);
 	child->Move(target, rc_child);
 	}
+}
+
+
+//============================
+// Con-/Destructors Protected
+//============================
+
+Grid::Grid(Window* parent):
+Control(parent)
+{
+Children->Added.Add(this, &Grid::OnChildAdded);
+Children->Removed.Add(this, &Grid::OnChildRemoved);
+Columns=ColumnList::Create();
+Rows=RowList::Create();
 }
 
 
@@ -187,7 +187,7 @@ UINT row_count=m_Rows.get_count();
 for(auto it=m_Positions.cbegin(); it.has_current(); it.move_next())
 	{
 	auto obj=it->get_key();
-	auto child=Convert<Control>(obj);
+	auto child=dynamic_cast<Control*>(obj);
 	if(!child)
 		continue;
 	auto pos=it->get_value();
@@ -199,7 +199,7 @@ row_count=TypeHelper::Max(row_count, 1U);
 FLOAT scale=GetScaleFactor();
 InitColumns(col_count, scale);
 InitRows(row_count, scale);
-for(auto it=Children->First(); it->HasCurrent(); it->MoveNext())
+for(auto it=Children->Begin(); it->HasCurrent(); it->MoveNext())
 	{
 	auto child=it->GetCurrent();
 	if(!child)
@@ -209,7 +209,7 @@ for(auto it=Children->First(); it->HasCurrent(); it->MoveNext())
 	GridPosition pos(0, 0);
 	m_Positions.try_get(child, &pos);
 	SIZE min_size=child->GetMinSize(target);
-	auto control=Convert<Control>(child);
+	auto control=child.As<Control>();
 	if(control)
 		{
 		RECT const& margin=control->Margin;

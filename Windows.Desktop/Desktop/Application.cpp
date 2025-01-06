@@ -9,7 +9,7 @@
 // Using
 //=======
 
-#include "Concurrency/MainTask.h"
+#include "Concurrency/DispatchedQueue.h"
 #include "Culture/LanguageHelper.h"
 #include "Resources/Strings/Exception.h"
 #include "UI/AppWindow.h"
@@ -28,14 +28,14 @@ extern INT Main();
 // Entry-Point
 //=============
 
-#ifndef _WINDOWS_CONSOLE
-
 INT g_ShowCommand=0;
+
+#ifndef _WINDOWS_CONSOLE
 
 INT WINAPI WinMain(HINSTANCE inst, HINSTANCE prev_inst, LPSTR cmd_line, INT show_cmd)
 {
 SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
-MainTask::Initialize();
+DispatchedQueue::Initialize();
 Language::Current=GetCurrentLanguage();
 g_ShowCommand=show_cmd;
 return Main();
@@ -51,15 +51,23 @@ return Main();
 namespace Desktop {
 
 
+//==================
+// Con-/Destructors
+//==================
+
+Application::~Application()
+{
+s_Current=nullptr;
+}
+
+
 //========
 // Common
 //========
 
-Application* Application::Current=nullptr;
-
 INT Application::Run()
 {
-auto app_wnd=UI::AppWindow::Current;
+auto app_wnd=UI::AppWindow::Get();
 if(app_wnd)
 	app_wnd->Show(g_ShowCommand);
 INT status=0;
@@ -91,7 +99,7 @@ return status;
 Application::Application(LPCSTR name):
 UI::Application(name)
 {
-Current=this;
+s_Current=this;
 SetUnhandledExceptionFilter(UnhandledExceptionHandler);
 }
 
@@ -114,8 +122,8 @@ else
 	{
 	StringHelper::Print(msg, 256, "%s", caption);
 	}
-auto app=Application::Current;
-auto app_wnd=AppWindow::Current;
+auto app=Application::Get();
+auto app_wnd=AppWindow::Get();
 HWND hwnd=app_wnd? app_wnd->GetHandle(): NULL;
 auto name=app->GetName();
 MessageBoxT(hwnd, msg, name->Begin(), MB_ICONERROR|MB_OK);
@@ -123,5 +131,7 @@ app->UnhandledException(app);
 ExitProcess(0);
 return 0;
 }
+
+Application* Application::s_Current=nullptr;
 
 }

@@ -12,6 +12,7 @@
 #include "Graphics/RenderTarget.h"
 #include "Bitmap.h"
 #include "Brush.h"
+#include "D2DFactory.h"
 #include "Font.h"
 
 
@@ -31,7 +32,7 @@ class RenderTarget: public Graphics::RenderTarget
 {
 public:
 	// Con-/Destructors
-	RenderTarget();
+	static inline Handle<RenderTarget> Create() { return new RenderTarget(); }
 
 	// Common
 	VOID BeginDraw(HDC DeviceContext, RECT const& Rect);
@@ -48,9 +49,14 @@ public:
 	SIZE MeasureText(Handle<Graphics::Font> Font, FLOAT Scale, LPCTSTR Text, UINT Length=0)override;
 	VOID Unclip()override;
 
-protected:
+private:
+	// Con-/Destructors
+	RenderTarget();
+
 	// Common
 	D2D_POINT_2F D2DPoint(POINT const& Point);
+	Handle<D2DFactory> m_D2DFactory;
+	Handle<DWriteFactory> m_DWriteFactory;
 	POINT m_Offset;
 	ComPointer<ID2D1DCRenderTarget> m_Target;
 };

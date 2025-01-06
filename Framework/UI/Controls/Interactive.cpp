@@ -21,27 +21,6 @@ namespace UI {
 	namespace Controls {
 
 
-//==================
-// Con-/Destructors
-//==================
-
-Interactive::Interactive(Window* parent):
-Control(parent),
-Enabled(this, true),
-TabStop(false),
-m_InteractiveFlags(InteractiveFlags::None)
-{
-Enabled.Changed.Add(this, &Interactive::OnEnabledChanged);
-Focused.Add(this, &Interactive::OnFocused);
-FocusLost.Add(this, &Interactive::OnFocusLost);
-KeyDown.Add(this, &Interactive::OnKeyDown);
-PointerDown.Add(this, &Interactive::OnPointerDown);
-PointerEntered.Add(this, &Interactive::OnPointerEntered);
-PointerLeft.Add(this, &Interactive::OnPointerLeft);
-PointerUp.Add(this, &Interactive::OnPointerUp);
-}
-
-
 //========
 // Common
 //========
@@ -58,7 +37,7 @@ if(!window)
 	{
 	if(!control)
 		return nullptr;
-	window=control->Parent;
+	window=control->m_Parent;
 	}
 Interactive* next=nullptr;
 BOOL fwd=(relative>=0);
@@ -74,7 +53,7 @@ return frame->GetFocus()==this;
 
 BOOL Interactive::HasPointerFocus()
 {
-return Application::Current->GetPointerFocus()==this;
+return Application::Get()->GetPointerFocus()==this;
 }
 
 BOOL Interactive::IsCapturingPointer()
@@ -87,16 +66,16 @@ BOOL Interactive::IsEnabled()
 {
 if(!Enabled)
 	return false;
-Window* parent=Parent;
+Window* parent=m_Parent;
 while(parent)
 	{
-	auto interactive=Convert<Interactive>(parent);
+	auto interactive=dynamic_cast<Interactive*>(parent);
 	if(interactive)
 		{
 		if(!interactive->Enabled)
 			return false;
 		}
-	parent=parent->Parent;
+	parent=parent->GetParent();
 	}
 return true;
 }
@@ -124,13 +103,34 @@ frame->SetFocus(this, reason);
 }
 
 
+//============================
+// Con-/Destructors Protected
+//============================
+
+Interactive::Interactive(Window* parent):
+Control(parent),
+Enabled(this, true),
+TabStop(false),
+m_InteractiveFlags(InteractiveFlags::None)
+{
+Enabled.Changed.Add(this, &Interactive::OnEnabledChanged);
+Focused.Add(this, &Interactive::OnFocused);
+FocusLost.Add(this, &Interactive::OnFocusLost);
+KeyDown.Add(this, &Interactive::OnKeyDown);
+PointerDown.Add(this, &Interactive::OnPointerDown);
+PointerEntered.Add(this, &Interactive::OnPointerEntered);
+PointerLeft.Add(this, &Interactive::OnPointerLeft);
+PointerUp.Add(this, &Interactive::OnPointerUp);
+}
+
+
 //================
 // Common Private
 //================
 
 BOOL Interactive::GetNext(Window* window, Interactive* control, Interactive** next_ptr, INT* relative_ptr, BOOL fwd, UINT level)
 {
-auto it=window->Children->First();
+auto it=window->Children->Begin();
 if(!it->HasCurrent())
 	return false;
 BOOL repeat=(level==0);
@@ -155,7 +155,7 @@ if(control)
 else
 	{
 	if(!fwd)
-		it->Last();
+		it->End();
 	}
 INT dir=(fwd? 1: -1);
 for(; it->HasCurrent(); it->Move(fwd, repeat))
@@ -163,7 +163,7 @@ for(; it->HasCurrent(); it->Move(fwd, repeat))
 	auto child=it->GetCurrent();
 	if(!child->Visible)
 		continue;
-	auto interactive=Convert<Interactive>(child);
+	auto interactive=child.As<Interactive>();
 	if(interactive)
 		{
 		if(!interactive->Enabled)

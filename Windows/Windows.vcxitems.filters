@@ -7,18 +7,11 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Storage\Filesystem\FileHelper.cpp">
       <Filter>Storage\Filesystem</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)ResourceHelper.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Devices\Timer.cpp">
-      <Filter>Devices</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Network\GatewayHelper.cpp">
       <Filter>Network</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Network\Tls\TlsSocket.cpp">
       <Filter>Network\Tls</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Network\Udp\UdpSocket.cpp">
-      <Filter>Network\Udp</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Network\Tcp\TcpSocket.cpp">
       <Filter>Network\Tcp</Filter>
@@ -45,9 +38,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Devices\Serial\SerialPort.cpp">
       <Filter>Devices\Serial</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)System\ThreadPoolTimer.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)CommandLine.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Concurrency\Task.cpp">
       <Filter>Concurrency</Filter>
@@ -56,14 +46,27 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Devices\Timers\SystemTimer.cpp">
       <Filter>Devices\Timers</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Concurrency\MainTask.cpp">
-      <Filter>Concurrency</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Concurrency\DispatchedQueue.cpp">
       <Filter>Concurrency</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Concurrency\Signal.cpp">
       <Filter>Concurrency</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Resources\ResourceHelper.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)RandomHelper.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Network\Tcp\TcpConnection.cpp">
+      <Filter>Network\Tcp</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Network\Udp\UdpSocket.cpp">
+      <Filter>Network\Udp</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Network\Udp\UdpMessage.cpp">
+      <Filter>Network\Udp</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Network\Tls\TlsConnection.cpp">
+      <Filter>Network\Tls</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -74,19 +77,12 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Filesystem\FileHelper.h">
       <Filter>Storage\Filesystem</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)ResourceHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ErrorHelper.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Devices\Timer.h">
-      <Filter>Devices</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Network\GatewayHelper.h">
       <Filter>Network</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Network\Tls\TlsSocket.h">
       <Filter>Network\Tls</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Network\Udp\UdpSocket.h">
-      <Filter>Network\Udp</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Network\Tcp\TcpSocket.h">
       <Filter>Network\Tcp</Filter>
@@ -97,7 +93,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Filesystem\Directory.h">
       <Filter>Storage\Filesystem</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Convertible.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Storage\NamedPipe.h">
       <Filter>Storage</Filter>
     </ClInclude>
@@ -113,9 +108,6 @@
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Devices\Serial\SerialPort.h">
       <Filter>Devices\Serial</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)System\ThreadPoolTimer.h">
-      <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)CommandLine.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Platform.h" />
@@ -138,12 +130,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Devices\Timers\SystemTimer.h">
       <Filter>Devices\Timers</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\MainTask.h">
-      <Filter>Concurrency</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\Scheduler.h">
-      <Filter>Concurrency</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\TaskLock.h">
       <Filter>Concurrency</Filter>
     </ClInclude>
@@ -152,6 +138,25 @@
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\DispatchedQueue.h">
       <Filter>Concurrency</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resources\ResourceHelper.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)RandomHelper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Network\Tcp\TcpConnection.h">
+      <Filter>Network\Tcp</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Network\Udp\UdpSocket.h">
+      <Filter>Network\Udp</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Network\Udp\UdpMessage.h">
+      <Filter>Network\Udp</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Network\Tls\TlsConnection.h">
+      <Filter>Network\Tls</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Network\Tls\TlsCertificate.h">
+      <Filter>Network\Tls</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -173,9 +178,6 @@
     <Filter Include="Network\Tcp">
       <UniqueIdentifier>{dca15038-0f80-43aa-85a8-6ea8109774a9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Network\Udp">
-      <UniqueIdentifier>{c211fccc-8282-4698-bcf8-179a86876148}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Network\Tls">
       <UniqueIdentifier>{44a8065f-55ab-4139-9657-6c39607041f4}</UniqueIdentifier>
     </Filter>
@@ -196,6 +198,12 @@
     </Filter>
     <Filter Include="Devices\Timers">
       <UniqueIdentifier>{004cef37-1d6f-4c69-845c-a686050ce9b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{015788a0-2389-42a7-b6aa-106a4db13bb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network\Udp">
+      <UniqueIdentifier>{546787c8-9d5b-4c83-9a6a-33c0cba07558}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

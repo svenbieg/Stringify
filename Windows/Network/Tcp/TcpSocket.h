@@ -9,8 +9,7 @@
 // Using
 //=======
 
-#include <WinSock2.h>
-#include "Storage/Streams/RandomAccessStream.h"
+#include "TcpConnection.h"
 
 
 //===========
@@ -25,31 +24,28 @@ namespace Network {
 // TCP-Socket
 //============
 
-class TcpSocket: public Storage::Streams::RandomAccessStream
+class TcpSocket: public Object
 {
 public:
+	// Using
+	using IP_ADDR=Network::Ip::IP_ADDR;
+
 	// Con-/Destructors
-	TcpSocket(SOCKET Socket=INVALID_SOCKET, UINT RemoteIp=0);
-	~TcpSocket();
+	~TcpSocket() { Close(); }
+	static inline Handle<TcpSocket> Create() { return new TcpSocket(); }
 
 	// Common
-	Handle<TcpSocket> Accept();
+	Handle<TcpConnection> Accept();
 	VOID Close();
-	BOOL Connect(Handle<String> HostName, WORD Port);
+	Handle<TcpConnection> Connect(IP_ADDR Host, WORD Port);
 	VOID Listen(WORD Port);
-	UINT RemoteIp;
 
-	// Input-Stream
-	SIZE_T Available()override;
-	SIZE_T Read(VOID* Buffer, SIZE_T Size)override;
+private:
+	// Con-/Destructors
+	TcpSocket();
 
-	// Output-Stream
-	VOID Flush()override;
-	SIZE_T Write(VOID const* Buffer, SIZE_T Size)override;
-
-protected:
 	// Common
-	SOCKET uSocket;
+	SOCKET m_Socket;
 };
 
 }}

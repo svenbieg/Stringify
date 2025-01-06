@@ -28,26 +28,6 @@ namespace UI {
 // Con-/Destructors
 //==================
 
-ScrollBar::ScrollBar(Window* parent, Orientation orientation):
-Interactive(parent),
-Fraction(0.f),
-Position(0),
-Range(0),
-Step(10),
-Visibility(ScrollBarVisibility::Auto),
-Width(12),
-m_Highlight(ScrollBarButton::None),
-m_Orientation(orientation),
-m_Step(0),
-m_Start(0),
-m_StartPoint(-1, -1)
-{
-PointerDown.Add(this, &ScrollBar::OnPointerDown);
-PointerLeft.Add(this, &ScrollBar::OnPointerLeft);
-PointerMoved.Add(this, &ScrollBar::OnPointerMoved);
-PointerUp.Add(this, &ScrollBar::OnPointerUp);
-}
-
 ScrollBar::~ScrollBar()
 {
 StopScrolling();
@@ -164,6 +144,31 @@ switch(m_Orientation)
 		break;
 		}
 	}
+}
+
+
+//==========================
+// Con-/Destructors Private
+//==========================
+
+ScrollBar::ScrollBar(Window* parent, Orientation orientation):
+Interactive(parent),
+Fraction(0.f),
+Position(0),
+Range(0),
+Step(10),
+Visibility(ScrollBarVisibility::Auto),
+Width(12),
+m_Highlight(ScrollBarButton::None),
+m_Orientation(orientation),
+m_Step(0),
+m_Start(0),
+m_StartPoint(-1, -1)
+{
+PointerDown.Add(this, &ScrollBar::OnPointerDown);
+PointerLeft.Add(this, &ScrollBar::OnPointerLeft);
+PointerMoved.Add(this, &ScrollBar::OnPointerMoved);
+PointerUp.Add(this, &ScrollBar::OnPointerUp);
 }
 
 
@@ -307,15 +312,21 @@ Scrolled(this);
 
 VOID ScrollBar::StartScrolling(INT step)
 {
-auto clock=SystemTimer::Open();
-clock->Tick.Remove(this);
-clock->Tick.Add(this, &ScrollBar::OnSystemTimer);
+if(!m_Timer)
+	{
+	m_Timer=SystemTimer::Get();
+	m_Timer->Triggered.Add(this, &ScrollBar::OnSystemTimer);
+	}
 m_Step=step;
 }
 
 VOID ScrollBar::StopScrolling()
 {
-SystemTimer::Open()->Tick.Remove(this);
+if(m_Timer)
+	{
+	m_Timer->Triggered.Remove(this);
+	m_Timer=nullptr;
+	}
 m_Step=0;
 }
 

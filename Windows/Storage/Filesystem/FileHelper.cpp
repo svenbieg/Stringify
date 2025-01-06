@@ -38,7 +38,7 @@ if(DirectoryExists(path))
 UINT dir_len=PathHelper::GetDirectoryLength(path);
 if(dir_len>0)
 	{
-	Handle<String> parent=new String(dir_len-1, path);
+	auto parent=String::Create(dir_len-1, path);
 	if(!CreateDirectoryTree(parent->Begin()))
 		return false;
 	}
@@ -100,7 +100,7 @@ if(!path)
 	return false;
 #ifndef _UNICODE
 WCHAR wpath[MAX_PATH];
-StringCopy(wpath, MAX_PATH, path);
+StringHelper::Copy(wpath, MAX_PATH, path);
 HANDLE file=CreateFile2(wpath, FILE_READ_ATTRIBUTES, FILE_SHARE_ALL, OPEN_EXISTING, nullptr);
 #else
 HANDLE file=CreateFile2(path, FILE_READ_ATTRIBUTES, FILE_SHARE_ALL, OPEN_EXISTING, nullptr);
@@ -159,8 +159,7 @@ UINT GetFileCount(LPCTSTR mask)
 {
 if(!mask)
 	return 0;
-WIN32_FIND_DATA fd;
-ZeroMemory(&fd, sizeof(WIN32_FIND_DATA));
+WIN32_FIND_DATA fd={ 0 };
 HANDLE find=FindFirstFileEx(mask, FindExInfoBasic, &fd, FindExSearchNameMatch, nullptr, FIND_FIRST_EX_LARGE_FETCH);
 if(!find||find==INVALID_HANDLE_VALUE)
 	return 0;
@@ -190,7 +189,7 @@ Handle<String> dir;
 LPCTSTR dir_ptr=nullptr;
 if(dir_len>0)
 	{
-	dir=new String(dir_len, path);
+	dir=String::Create(dir_len, path);
 	dir_ptr=dir->Begin();
 	}
 auto file_name=&path[dir_len];
@@ -199,9 +198,9 @@ TCHAR name[MAX_PATH];
 TCHAR ext[8];
 UINT id=0;
 if(StringHelper::Scan(file_name, "%s (%u).%s", name, MAX_PATH, &id, ext, 8)==3)
-	return new String("%s%s (%u).%s", dir_ptr, name, id+1, ext);
+	return String::Create("%s%s (%u).%s", dir_ptr, name, id+1, ext);
 if(StringHelper::Scan(file_name, "%s.%s", name, MAX_PATH, ext, 8)==2)
-	 return new String("%s%s (%u).%s", dir_ptr, name, 1, ext);
+	 return String::Create("%s%s (%u).%s", dir_ptr, name, 1, ext);
 return nullptr;
 }
 

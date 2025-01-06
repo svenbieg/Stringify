@@ -29,7 +29,7 @@ class EditBox: public ScrollBox
 {
 public:
 	// Con-/Destructors
-	EditBox(Window* Parent=nullptr);
+	static inline Handle<EditBox> Create(Window* Parent) { return new EditBox(Parent); }
 
 	// Common
 	SIZE GetMinSize(RenderTarget* Target)override;
@@ -39,6 +39,9 @@ public:
 	DynamicHandle<EditBox, String> Text;
 
 private:
+	// Con-/Destructors
+	EditBox(Window* Parent);
+
 	// Common
 	VOID OnInputFocused(FocusReason Reason);
 	VOID OnInputSelectionChanged();

@@ -23,33 +23,6 @@ namespace Graphics {
 // Con-/Destructors
 //==================
 
-Bitmap::Bitmap(UINT width, UINT height, WORD bpp):
-m_BitsPerPixel(bpp),
-m_Buffer(nullptr),
-m_Height(height),
-m_Pitch(0),
-m_Resource(nullptr),
-m_Size(0),
-m_Width(width)
-{
-m_Pitch=width*bpp/8;
-m_Size=m_Height*m_Pitch;
-m_Buffer=new BYTE[m_Size];
-}
-
-Bitmap::Bitmap(UINT width, UINT height, UINT size, LPCSTR resource):
-m_Buffer(nullptr),
-m_Resource(resource),
-m_BitsPerPixel(0),
-m_Height(height),
-m_Pitch(size/height),
-m_Size(size),
-m_Width(width)
-{
-UINT pixel_size=m_Pitch/width;
-m_BitsPerPixel=pixel_size*8;
-}
-
 Bitmap::~Bitmap()
 {
 if(m_Buffer)
@@ -208,6 +181,37 @@ switch(m_BitsPerPixel)
 	default:
 		break;
 	}
+}
+
+//==========================
+// Con-/Destructors Private
+//==========================
+
+Bitmap::Bitmap(UINT width, UINT height, WORD bpp):
+m_BitsPerPixel(bpp),
+m_Buffer(nullptr),
+m_Height(height),
+m_Pitch(0),
+m_Resource(nullptr),
+m_Size(0),
+m_Width(width)
+{
+m_Pitch=width*bpp/8;
+m_Size=m_Height*m_Pitch;
+m_Buffer=new BYTE[m_Size];
+}
+
+Bitmap::Bitmap(UINT width, UINT height, UINT size, LPCSTR resource):
+m_Buffer(nullptr),
+m_Resource(resource),
+m_BitsPerPixel(0),
+m_Height(height),
+m_Pitch(size/height),
+m_Size(size),
+m_Width(width)
+{
+UINT pixel_size=m_Pitch/width;
+m_BitsPerPixel=pixel_size*8;
 }
 
 }

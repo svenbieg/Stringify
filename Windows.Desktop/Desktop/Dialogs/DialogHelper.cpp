@@ -32,7 +32,7 @@ if(!sentence)
 	return nullptr;
 auto filter_str=sentence->Begin();
 UINT len=StringHelper::Length(filter_str);
-Handle<String> filter=new String(len+2, nullptr);
+auto filter=String::Create(len+2, nullptr);
 auto filter_ptr=const_cast<LPTSTR>(filter->Begin());
 for(UINT u=0; u<len; u++)
 	{

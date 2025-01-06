@@ -30,8 +30,8 @@ BYTE g=c.GetGreen();
 BYTE b=c.GetBlue();
 BYTE a=c.GetAlpha();
 if(a<0xFF)
-	return new String("#%02x%02x%02x%02x", a, r, g, b);
-return new String("#%02x%02x%02x", r, g, b);
+	return String::Create("#%02x%02x%02x%02x", a, r, g, b);
+return String::Create("#%02x%02x%02x", r, g, b);
 }
 
 

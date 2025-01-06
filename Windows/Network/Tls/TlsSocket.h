@@ -9,8 +9,7 @@
 // Using
 //=======
 
-#include <security.h>
-#include "Network/Tcp/TcpSocket.h"
+#include "TlsConnection.h"
 
 
 //===========
@@ -25,47 +24,28 @@ namespace Network {
 // TLS-Socket
 //============
 
-class TlsSocket: public Storage::Streams::RandomAccessStream
+class TlsSocket: public Object
 {
 public:
 	// Using
-	using TcpSocket=Network::Tcp::TcpSocket;
+	using IP_ADDR=Network::Ip::IP_ADDR;
 
 	// Con-/Destructors
-	TlsSocket(Handle<TcpSocket> Socket);
-	~TlsSocket();
+	~TlsSocket() { Close(); }
+	static inline Handle<TlsSocket> Create() { return new TlsSocket(); }
 
 	// Common
-	BOOL Accept(Handle<String> HostName);
+	Handle<TlsConnection> Accept();
 	VOID Close();
-	BOOL Handshake(Handle<String> HostName);
-	Handle<TcpSocket> Socket;
-
-	// Input-Stream
-	SIZE_T Available()override;
-	SIZE_T Read(VOID* Buffer, SIZE_T Size)override;
-
-	// Output-Stream
-	VOID Flush()override;
-	SIZE_T Write(VOID const* Buffer, SIZE_T Size)override;
+	Handle<TlsConnection> Connect(IP_ADDR Host, WORD Port);
+	VOID Listen(WORD Port);
 
 private:
-	// Settings
-	static constexpr UINT TLS_BUF_SIZE=32768;
+	// Con-/Destructors
+	TlsSocket();
 
 	// Common
-	VOID CloseInternal();
-	SecPkgContext_StreamSizes cStreamSizes;
-	CredHandle hCredential;
-	CtxtHandle hSecurityContext;
-	CHAR m_Buffer[TLS_BUF_SIZE];
-	PCCERT_CONTEXT pContext;
-	CHAR pInput[TLS_BUF_SIZE];
-	CHAR pOutput[TLS_BUF_SIZE];
-	UINT uBufferSize;
-	UINT uInputSize;
-	UINT uMissingSize;
-	UINT uOutputSize;
+	SOCKET m_Socket;
 };
 
 }}

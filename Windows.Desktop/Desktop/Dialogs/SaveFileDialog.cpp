@@ -42,7 +42,7 @@ if(path)
 	auto path_ptr=path->Begin();
 	UINT dir_len=PathHelper::GetDirectoryLength(path_ptr);
 	if(dir_len)
-		folder=new String(dir_len, path_ptr);
+		folder=String::Create(dir_len, path_ptr);
 	StringHelper::Copy(file_path, MAX_PATH, &path_ptr[dir_len]);
 	}
 if(!title)
@@ -51,11 +51,10 @@ if(!filter)
 	filter=STR_FILTER_ALL;
 Handle<String> title_str=title->Begin();
 Handle<String> filter_str=FilterFromSentence(filter);
-OPENFILENAME ofn;
-ZeroMemory(&ofn, sizeof(OPENFILENAME));
+OPENFILENAME ofn={ 0 };
 ofn.lStructSize=sizeof(OPENFILENAME);
 ofn.hInstance=GetModuleHandle(nullptr);
-ofn.hwndOwner=AppWindow::Current->GetHandle();
+ofn.hwndOwner=AppWindow::Get()->GetHandle();
 ofn.lpstrFile=file_path;
 ofn.lpstrInitialDir=folder? folder->Begin(): nullptr;
 ofn.lpstrTitle=title_str->Begin();
@@ -63,7 +62,7 @@ ofn.nMaxFile=MAX_PATH;
 ofn.lpstrFilter=filter_str->Begin();
 if(!GetSaveFileName(&ofn))
 	return nullptr;
-return new String(file_path);
+return String::Create(file_path);
 }
 
 }}

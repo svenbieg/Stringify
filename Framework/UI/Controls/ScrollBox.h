@@ -32,7 +32,7 @@ public:
 	using PointerEventArgs=UI::Input::PointerEventArgs;
 
 	// Con-/Destructors
-	ScrollBox(Window* Parent=nullptr);
+	static inline Handle<ScrollBox> Create(Window* Parent) { return new ScrollBox(Parent); }
 
 	// Common
 	HorizontalAlignment AlignHorizontal;
@@ -53,6 +53,9 @@ public:
 	FLOAT ZoomMin;
 
 protected:
+	// Con-/Destructors
+	ScrollBox(Window* Parent);
+
 	// Common
 	RECT m_Hotspot;
 

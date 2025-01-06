@@ -20,6 +20,23 @@ namespace Graphics {
 	namespace Direct2D {
 
 
+//==================
+// Con-/Destructors
+//==================
+
+ImagingFactory::~ImagingFactory()
+{
+s_Current=nullptr;
+}
+
+Handle<ImagingFactory> ImagingFactory::Get()
+{
+if(!s_Current)
+	s_Current=new ImagingFactory();
+return s_Current;
+}
+
+
 //========
 // Common
 //========
@@ -91,7 +108,7 @@ IWICStream* stream=nullptr;
 m_Factory->CreateStream(&stream);
 #ifndef _UNICODE
 WCHAR str[MAX_PATH];
-StringCopy(str, MAX_PATH, path->Begin());
+StringHelper::Copy(str, MAX_PATH, path->Begin());
 #else
 LPCWSTR str=path->Begin();
 #endif
@@ -106,13 +123,6 @@ ComPointer<IWICBitmap> ImagingFactory::CreateBitmap(UINT width, UINT height)
 IWICBitmap* bitmap=nullptr;
 m_Factory->CreateBitmap(width, height, GUID_WICPixelFormat32bppPBGRA, WICBitmapCacheOnLoad, &bitmap);
 return bitmap;
-}
-
-ImagingFactory* ImagingFactory::Open()
-{
-if(!m_Current)
-	m_Current=new ImagingFactory();
-return m_Current;
 }
 
 
@@ -133,6 +143,6 @@ m_Factory.Initialize(factory);
 // Common Private
 //================
 
-Handle<ImagingFactory> ImagingFactory::m_Current;
+ImagingFactory* ImagingFactory::s_Current=nullptr;
 
 }}

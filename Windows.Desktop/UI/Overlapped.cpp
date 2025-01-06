@@ -10,7 +10,7 @@
 //=======
 
 #include <windowsx.h>
-#include "Concurrency/MainTask.h"
+#include "Concurrency/DispatchedQueue.h"
 #include "Graphics/Direct2D/Theme.h"
 #include "Overlapped.h"
 
@@ -142,11 +142,7 @@ Move(rc);
 // Con-/Destructors Protected
 //============================
 
-Overlapped::Overlapped():
-Overlapped(HWND_DESKTOP)
-{}
-
-Overlapped::Overlapped(HWND parent):
+Overlapped::Overlapped(Overlapped* parent):
 m_Cursor(NULL),
 m_Handle(NULL)
 {
@@ -156,11 +152,10 @@ Background=theme->ControlBrush;
 Invalidated.Add(this, &Overlapped::OnInvalidated);
 Visible.Changed.Add(this, &Overlapped::OnVisibleChanged);
 Visible.Set(false, false);
-m_RenderTarget=new D2DRenderTarget();
+m_RenderTarget=D2DRenderTarget::Create();
 LPCTSTR class_name=TEXT("Overlapped");
 HINSTANCE inst=GetModuleHandle(nullptr);
-WNDCLASSEX wc;
-ZeroMemory(&wc, sizeof(WNDCLASSEX));
+WNDCLASSEX wc={ 0 };
 wc.cbSize=sizeof(WNDCLASSEX);
 wc.hCursor=m_Cursor;
 wc.hInstance=inst;
@@ -170,22 +165,11 @@ wc.style=CS_HREDRAW|CS_VREDRAW;
 SetLastError(0);
 RegisterClassEx(&wc);
 UINT style=WS_OVERLAPPED;
-m_Handle=CreateWindowEx(0, class_name, nullptr, style, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, parent, NULL, inst, this);
+HWND hwnd_parent=parent? parent->m_Handle: HWND_DESKTOP;
+m_Handle=CreateWindowEx(0, class_name, nullptr, style, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, hwnd_parent, NULL, inst, this);
 if(m_Handle==INVALID_HANDLE_VALUE)
 	m_Handle=NULL;
 }
-
-Overlapped::Overlapped(Window* parent):
-Overlapped(parent? parent->GetFrame(): nullptr)
-{}
-
-Overlapped::Overlapped(Frame* parent):
-Overlapped(Convert<Overlapped>(parent))
-{}
-
-Overlapped::Overlapped(Overlapped* parent):
-Overlapped(parent? parent->GetHandle(): HWND_DESKTOP)
-{}
 
 
 //================
@@ -414,7 +398,7 @@ return 0;
 
 VOID Overlapped::OnInvalidated()
 {
-MainTask::Dispatch(this, &Overlapped::Repaint);
+DispatchedQueue::Append(this, &Overlapped::Repaint);
 }
 
 VOID Overlapped::OnVisibleChanged(BOOL visible)

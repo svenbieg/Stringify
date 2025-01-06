@@ -9,7 +9,7 @@
 // Using
 //=======
 
-#include <WinSock2.h>
+#include "UdpMessage.h"
 
 
 //===========
@@ -27,19 +27,22 @@ namespace Network {
 class UdpSocket: public Object
 {
 public:
+	// Using
+	using IP_ADDR=Network::Ip::IP_ADDR;
+
 	// Con-/Destructors
-	UdpSocket();
-	~UdpSocket();
+	~UdpSocket() { Close(); }
+	static inline Handle<UdpSocket> Create() { return new UdpSocket(); }
 
 	// Common
-	static BOOL Broadcast(WORD Port, VOID const* Buffer, WORD Size);
+	VOID Broadcast(WORD Port, Handle<UdpMessage> Message);
 	VOID Close();
-	BOOL Listen(WORD Port);
-	WORD Read(VOID* Buffer, WORD Size);
+	Handle<UdpMessage> Receive(WORD Port);
+	VOID Send(IP_ADDR To, WORD Port, Handle<UdpMessage> Message);
 
 private:
-	// Common
-	SOCKET uSocket;
+	// Con-/Destructors
+	UdpSocket();
 };
 
 }}

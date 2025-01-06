@@ -22,6 +22,23 @@ namespace Graphics {
 	namespace Direct2D {
 
 
+//==================
+// Con-/Destructors
+//==================
+
+D2DFactory::~D2DFactory()
+{
+s_Current=nullptr;
+}
+
+Handle<D2DFactory> D2DFactory::Get()
+{
+if(!s_Current)
+	s_Current=new D2DFactory();
+return s_Current;
+}
+
+
 //========
 // Common
 //========
@@ -44,13 +61,6 @@ m_Factory->CreateDCRenderTarget(&props, &target);
 return target;
 }
 
-Handle<D2DFactory> D2DFactory::Open()
-{
-if(!m_Current)
-	m_Current=new D2DFactory();
-return m_Current;
-}
-
 
 //==========================
 // Con-/Destructors Private
@@ -59,7 +69,7 @@ return m_Current;
 D2DFactory::D2DFactory()
 {
 D2D1_FACTORY_OPTIONS d2dfo;
-ZeroMemory(&d2dfo, sizeof(D2D1_FACTORY_OPTIONS));
+MemoryHelper::Fill(&d2dfo, sizeof(d2dfo), 0);
 #ifdef _DEBUG
 d2dfo.debugLevel=D2D1_DEBUG_LEVEL_INFORMATION;
 #endif
@@ -73,6 +83,6 @@ m_Factory.Initialize(factory);
 // Common Private
 //================
 
-Handle<D2DFactory> D2DFactory::m_Current;
+D2DFactory* D2DFactory::s_Current=nullptr;
 
 }}

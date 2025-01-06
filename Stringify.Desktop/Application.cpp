@@ -9,7 +9,8 @@
 // Using
 //=======
 
-#include "Concurrency/MainTask.h"
+#include "Concurrency/DispatchedQueue.h"
+#include "Concurrency/Task.h"
 #include "Resources/Strings/Application.h"
 #include "Storage/Filesystem/File.h"
 #include "Storage/Streams/StreamReader.h"
@@ -119,10 +120,10 @@ auto result_box=m_Window->ResultBox;
 result_box->Clear();
 result_box->Enabled=true;
 result_box->ReadOnly=true;
-Handle<Intermediate> buf=new Intermediate(PAGE_SIZE);
+Handle<Intermediate> buf=Intermediate::Create(PAGE_SIZE);
 buf->SetFormat(StreamFormat::Ansi);
-m_ConvertTask=Scheduler::CreateTask(this, [this, buf, stream](){ DoConvert(buf, stream); });
-m_ParseTask=Scheduler::CreateTask(this, [this, buf](){ DoParse(buf); });
+m_ConvertTask=Task::Create(this, [this, buf, stream](){ DoConvert(buf, stream); });
+m_ParseTask=Task::Create(this, [this, buf](){ DoParse(buf); });
 }
 
 VOID Application::DoConvert(Handle<Intermediate> dst, Handle<InputStream> src)
@@ -172,13 +173,13 @@ while(!task->Cancelled)
 		break;
 	if(reader.LastChar=='\r')
 		reader.Skip();
-	Handle<String> line=new String(buf);
-	MainTask::Dispatch(result_box, [result_box, line]() { result_box->AppendLine(line); });
+	auto line=String::Create(buf);
+	DispatchedQueue::Append(result_box, [result_box, line]() { result_box->AppendLine(line); });
 	if(reader.LastChar==0)
 		break;
 	}
 if(!task->Cancelled)
-	MainTask::Dispatch(this, &Application::OnComplete);
+	DispatchedQueue::Append(this, &Application::OnComplete);
 }
 
 VOID Application::OnComplete()
@@ -206,7 +207,7 @@ INT status=GetObject(hbmp, sizeof(BITMAP), &bmp);
 if(status==0)
 	return;
 UINT size=bmp.bmWidthBytes*bmp.bmHeight;
-Handle<Buffer> buf=new Buffer(size);
+auto buf=Buffer::Create(size);
 GetBitmapBits(hbmp, size, buf->Begin());
 Convert(buf);
 }

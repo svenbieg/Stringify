@@ -37,8 +37,11 @@ public:
 	using Sentence=Culture::Sentence;
 	using ShortcutMap=Collections::Map<UINT, Interactive*>;
 
+	// Con-/Destructors
+	~Application();
+	static inline Application* Get() { return s_Current; }
+
 	// Common
-	static Application* Current;
 	VOID ExitMenu();
 	inline Input* GetCurrentInput()const { return m_CurrentInput; }
 	inline Menu* GetCurrentMenu()const { return m_CurrentMenu; }
@@ -68,6 +71,7 @@ private:
 	Menu* m_CurrentMenu;
 	Handle<Sentence> m_Name;
 	Interactive* m_PointerFocus;
+	static Application* s_Current;
 };
 
 }

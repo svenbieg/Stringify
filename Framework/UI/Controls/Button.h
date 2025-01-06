@@ -29,7 +29,10 @@ class Button: public Interactive
 {
 public:
 	// Con-/Destructors
-	Button(Window* Parent=nullptr, Handle<String> Text=nullptr);
+	static inline Handle<Button> Create(Window* Parent, Handle<String> Text=nullptr)
+		{
+		return new Button(Parent, Text);
+		}
 
 	// Common
 	BOOL Border;
@@ -41,6 +44,9 @@ public:
 	Handle<String> Text;
 
 private:
+	// Con-/Destructors
+	Button(Window* Parent, Handle<String> Text);
+
 	// Common
 	VOID DoClick();
 	VOID OnFocused();

@@ -22,30 +22,6 @@ namespace UI {
 	namespace Controls {
 
 
-//==================
-// Con-/Destructors
-//==================
-
-SplitView::SplitView(Orientation orientation):
-SplitView(nullptr, orientation)
-{}
-
-SplitView::SplitView(Window* parent, Orientation orientation):
-Interactive(parent),
-Distance(0),
-Size(0),
-m_StartSize(0),
-m_Orientation(orientation)
-{
-FLOAT scale=GetScaleFactor();
-Distance=8*scale;
-Size=200*scale;
-PointerDown.Add(this, &SplitView::OnPointerDown);
-PointerMoved.Add(this, &SplitView::OnPointerMoved);
-PointerUp.Add(this, &SplitView::OnPointerUp);
-}
-
-
 //========
 // Common
 //========
@@ -98,6 +74,26 @@ switch(m_Orientation)
 	}
 child0->Move(target, rc1);
 child1->Move(target, rc2);
+}
+
+
+//==========================
+// Con-/Destructors Private
+//==========================
+
+SplitView::SplitView(Window* parent, Orientation orientation):
+Interactive(parent),
+Distance(0),
+Size(0),
+m_StartSize(0),
+m_Orientation(orientation)
+{
+FLOAT scale=GetScaleFactor();
+Distance=8*scale;
+Size=200*scale;
+PointerDown.Add(this, &SplitView::OnPointerDown);
+PointerMoved.Add(this, &SplitView::OnPointerMoved);
+PointerUp.Add(this, &SplitView::OnPointerUp);
 }
 
 

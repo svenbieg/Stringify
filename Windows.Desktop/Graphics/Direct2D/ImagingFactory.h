@@ -10,6 +10,7 @@
 //=======
 
 #include <wincodec.h>
+#include "ComPointer.h"
 
 
 //===========
@@ -27,6 +28,10 @@ namespace Graphics {
 class ImagingFactory: public Object
 {
 public:
+	// Con-/Destructors
+	~ImagingFactory();
+	static Handle<ImagingFactory> Get();
+
 	// Common
 	ComPointer<IWICBitmap> CreateBitmap(WORD Resource);
 	ComPointer<IWICBitmap> CreateBitmap(HICON Icon);
@@ -34,15 +39,14 @@ public:
 	ComPointer<IWICBitmap> CreateBitmap(IWICStream* Stream);
 	ComPointer<IWICBitmap> CreateBitmap(Handle<String> Path);
 	ComPointer<IWICBitmap> CreateBitmap(UINT Width, UINT Height);
-	static ImagingFactory* Open();
 
 private:
 	// Con-/Destructors
 	ImagingFactory();
 
 	// Common
-	static Handle<ImagingFactory> m_Current;
 	ComPointer<IWICImagingFactory2> m_Factory;
+	static ImagingFactory* s_Current;
 };
 
 }}

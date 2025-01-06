@@ -10,6 +10,7 @@
 //=======
 
 #include <namedpipeapi.h>
+#include "Concurrency/Task.h"
 #include "Storage/Streams/RandomAccessStream.h"
 
 
@@ -50,10 +51,9 @@ public:
 
 private:
 	// Common
-	VOID ListenProc();
-	VOID OnConnectionClosed();
-	Handle<Task> hListenTask;
-	HANDLE hNamedPipe;
+	VOID DoListen();
+	Handle<Task> m_ListenTask;
+	HANDLE m_NamedPipe;
 	Handle<String> m_Path;
 };
 

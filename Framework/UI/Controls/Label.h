@@ -29,11 +29,13 @@ class Label: public TextBlock
 {
 public:
 	// Con-/Destructors
-	Label(Handle<Variable> Variable);
-	Label(Window* Parent, Handle<Variable> Variable);
 	~Label();
+	static inline Handle<Label> Create(Window* Parent, Handle<Variable> Variable) { return new Label(Parent, Variable); }
 
 private:
+	// Con-/Destructors
+	Label(Window* Parent, Handle<Variable> Variable);
+
 	// Common
 	VOID OnVariableChanged();
 	Handle<Variable> m_Variable;

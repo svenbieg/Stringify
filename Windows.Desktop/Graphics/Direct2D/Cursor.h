@@ -28,16 +28,19 @@ class Cursor: public Graphics::Cursor
 {
 public:
 	// Con-/Destructors
-	Cursor(LPCTSTR Id);
 	~Cursor();
+	static inline Handle<Cursor> Create(LPCTSTR Id) { return new Cursor(Id); }
 
 	// Common
-	HCURSOR GetHandle()const { return hCursor; }
+	inline HCURSOR GetHandle()const { return m_Cursor; }
 	VOID Set()override;
 
 private:
+	// Con-/Destructors
+	Cursor(LPCTSTR Id);
+
 	// Common
-	HCURSOR hCursor;
+	HCURSOR m_Cursor;
 };
 
 }}

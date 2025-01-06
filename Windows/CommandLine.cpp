@@ -18,7 +18,7 @@
 
 CommandLine::CommandLine(LPTSTR cmd_line)
 {
-Arguments=new StringList();
+Arguments=StringList::Create();
 if(!cmd_line||!cmd_line[0])
 	return;
 LPCTSTR next=cmd_line;
@@ -28,7 +28,7 @@ while(next)
 	LPCTSTR str=nullptr;
 	UINT len=0;
 	next=ScanArgument(next, &str, &len);
-	Handle<String> cmd=new String(len, str);
+	auto cmd=String::Create(len, str);
 	Arguments->Append(cmd, false);
 	}
 }

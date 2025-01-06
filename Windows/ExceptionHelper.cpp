@@ -35,8 +35,7 @@ if(snap_shot==INVALID_HANDLE_VALUE)
 	snap_shot=NULL;
 if(!snap_shot)
 	return false;
-MODULEENTRY32 mod;
-MemoryHelper::Fill(&mod, sizeof(MODULEENTRY32), 0);
+MODULEENTRY32 mod={ 0 };
 mod.dwSize=sizeof(MODULEENTRY32);
 if(!Module32First(snap_shot, &mod))
 	{
@@ -70,8 +69,7 @@ HANDLE proc=GetCurrentProcess();
 HANDLE thread=GetCurrentThread();
 CONTEXT context;
 MemoryHelper::Copy(&context, pc, sizeof(CONTEXT));
-STACKFRAME64 sf;
-MemoryHelper::Fill(&sf, sizeof(STACKFRAME64), 0);
+STACKFRAME64 sf={ 0 };
 #ifdef _ARM_
 DWORD dwarch=IMAGE_FILE_MACHINE_ARM;
 sf.AddrFrame.Offset=0;

@@ -10,6 +10,7 @@
 //=======
 
 #include <d2d1_2.h>
+#include "ComPointer.h"
 
 
 //===========
@@ -27,19 +28,22 @@ namespace Graphics {
 class D2DFactory: public Object
 {
 public:
+	// Con-/Destructors
+	~D2DFactory();
+	static Handle<D2DFactory> Get();
+
 	// Common
 	ComPointer<ID2D1PathGeometry> CreatePathGeometry();
 	ComPointer<ID2D1DCRenderTarget> CreateRenderTarget();
-	ID2D1Factory* Get()const { return m_Factory; }
-	static Handle<D2DFactory> Open();
+	ID2D1Factory* GetFactory()const { return m_Factory; }
 
 private:
 	// Con-/Destructors
 	D2DFactory();
 
 	// Common
-	static Handle<D2DFactory> m_Current;
 	ComPointer<ID2D1Factory> m_Factory;
+	static D2DFactory* s_Current;
 };
 
 }}

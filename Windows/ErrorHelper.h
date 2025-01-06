@@ -18,15 +18,13 @@
 // Common
 //========
 
-inline void Abort() { throw AbortException(); }
-
 #ifdef _DEBUG
 
 inline VOID DebugPrint(LPCSTR Text) { OutputDebugStringA(Text); }
 
 template <class... _args_t> VOID DebugPrint(LPCSTR Format, _args_t... Arguments)
 {
-Handle<String> text=new String(Format, Arguments...);
+auto text=String::Create(Format, Arguments...);
 OutputDebugString(text->Begin());
 }
 
@@ -36,4 +34,4 @@ OutputDebugString(text->Begin());
 
 #endif
 
-inline VOID ThrowIfFailed(HRESULT Status) { if(FAILED(Status))throw Status; }
+inline VOID ThrowIfFailed(HRESULT Status) { if(FAILED(Status))throw AbortException(); }

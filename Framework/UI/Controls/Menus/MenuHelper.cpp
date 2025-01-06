@@ -72,7 +72,7 @@ if(!text)
 	return nullptr;
 UINT len=0;
 StringHelper::FindChar(text, '|', &len);
-Handle<String> label=new String(len, text);
+auto label=String::Create(len, text);
 return label->Replace("&", "");
 }
 
@@ -82,7 +82,7 @@ if(!text)
 	return nullptr;
 UINT pos=0;
 if(StringHelper::FindChar(text, '|', &pos))
-	return new String(&text[pos+1]);
+	return String::Create(&text[pos+1]);
 return nullptr;
 }
 

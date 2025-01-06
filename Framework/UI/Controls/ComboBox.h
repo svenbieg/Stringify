@@ -28,7 +28,11 @@ class ComboBox: public Grid
 {
 public:
 	// Con-/Destructors
-	ComboBox(Window* Parent=nullptr);
+	static inline Handle<ComboBox> Create(Window* Parent) { return new ComboBox(Parent); }
+
+private:
+	// Con-/Destructors
+	ComboBox(Window* Parent);
 };
 
 }}

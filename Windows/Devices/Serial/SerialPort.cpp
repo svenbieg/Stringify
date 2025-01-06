@@ -27,7 +27,7 @@ namespace Devices {
 SerialPort::SerialPort(UINT id):
 hFile(NULL)
 {
-Handle<String> path=new String("\\\\.\\COM%u", id);
+auto path=String::Create("\\\\.\\COM%u", id);
 hFile=CreateFile(path->Begin(), GENERIC_READ|GENERIC_WRITE, 0, nullptr, OPEN_EXISTING, 0, NULL);
 if(hFile==INVALID_HANDLE_VALUE)
 	hFile=NULL;
@@ -54,8 +54,7 @@ VOID SerialPort::SetBaudRate(BaudRate baud)
 {
 if(hFile==NULL)
 	return;
-DCB params;
-MemoryHelper::Fill(&params, sizeof(DCB), 0);
+DCB params={ 0 };
 params.BaudRate=(DWORD)baud;
 params.ByteSize=8;
 params.StopBits=ONESTOPBIT;

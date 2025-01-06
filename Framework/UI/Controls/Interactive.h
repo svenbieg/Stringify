@@ -51,7 +51,7 @@ public:
 	using VirtualKey=UI::Input::VirtualKey;
 
 	// Con-/Destructors
-	Interactive(Window* Parent=nullptr);
+	static inline Handle<Interactive> Create(Window* Parent) { return new Interactive(Parent); }
 
 	// Common
 	VOID CapturePointer();
@@ -77,6 +77,10 @@ public:
 	VOID ReleasePointer();
 	virtual VOID SetFocus(FocusReason Reason=FocusReason::None);
 	BOOL TabStop;
+
+protected:
+	// Con-/Destructors
+	Interactive(Window* Parent);
 
 private:
 	// Flags

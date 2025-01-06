@@ -28,7 +28,7 @@ namespace Graphics {
 ComPointer<ID2D1Bitmap> Bitmap::Get(ID2D1RenderTarget* target, Graphics::Bitmap* bmp)
 {
 D2D1_BITMAP_PROPERTIES props;
-ZeroMemory(&props, sizeof(D2D1_BITMAP_PROPERTIES));
+MemoryHelper::Fill(&props, sizeof(props), 0);
 props.pixelFormat=D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED);
 auto buf=bmp->Begin();
 auto size=bmp->GetDimensions();

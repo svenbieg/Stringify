@@ -31,12 +31,15 @@ public:
 	using ICON=Resources::Icons::ICON;
 
 	// Con-/Destructors
-	Icon(ICON const* Icons=nullptr);
+	static inline Handle<Icon> Create(ICON const* Resource=nullptr) { return new Icon(Resource); }
 
 	// Common
 	Handle<Bitmap> GetBitmap(UINT Size);
 
 protected:
+	// Con-/Destructors
+	Icon(ICON const* Resource);
+
 	// Common
 	ICON const* GetIcon(UINT Size);
 	ICON const* m_Icons;

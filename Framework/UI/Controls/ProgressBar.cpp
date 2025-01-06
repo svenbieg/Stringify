@@ -22,17 +22,6 @@ namespace UI {
 	namespace Controls {
 
 
-//==================
-// Con-/Destructors
-//==================
-
-ProgressBar::ProgressBar(Window* parent):
-Panel(parent)
-{
-MinSize.Set(0, 14);
-}
-
-
 //========
 // Common
 //========
@@ -41,6 +30,17 @@ Handle<Brush> ProgressBar::GetBorderBrush()
 {
 auto theme=GetTheme();
 return theme->BorderBrush;
+}
+
+
+//==========================
+// Con-/Destructors Private
+//==========================
+
+ProgressBar::ProgressBar(Window* parent):
+Panel(parent)
+{
+MinSize.Set(0, 14);
 }
 
 }}

@@ -9,6 +9,7 @@
 // Using
 //=======
 
+#include "Devices/Timers/SystemTimer.h"
 #include "UI/Orientation.h"
 #include "Interactive.h"
 
@@ -53,8 +54,14 @@ Visible
 class ScrollBar: public Interactive
 {
 public:
+	// Using
+	using SystemTimer=Devices::Timers::SystemTimer;
+
 	// Con-/Destructors
-	ScrollBar(Window* Parent, Orientation Orientation=Orientation::Horizontal);
+	static inline Handle<ScrollBar> Create(Window* Parent, Orientation Orientation=Orientation::Horizontal)
+		{
+		return new ScrollBar(Parent, Orientation);
+		}
 	~ScrollBar();
 
 	// Common
@@ -71,6 +78,9 @@ public:
 	UINT Width;
 
 private:
+	// Con-/Destructors
+	ScrollBar(Window* Parent, Orientation Orientation);
+
 	// Common
 	ScrollBarButton GetButton(POINT const& Point);
 	VOID OnPointerDown(Handle<PointerEventArgs> Args);
@@ -85,6 +95,7 @@ private:
 	UINT m_Start;
 	POINT m_StartPoint;
 	INT m_Step;
+	Handle<SystemTimer> m_Timer;
 };
 
 }}

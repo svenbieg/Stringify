@@ -28,11 +28,19 @@ using namespace UI::Input;
 namespace UI {
 
 
+//==================
+// Con-/Destructors
+//==================
+
+Application::~Application()
+{
+s_Current=nullptr;
+}
+
+
 //========
 // Common
 //========
-
-Application* Application::Current=nullptr;
 
 VOID Application::ExitMenu()
 {
@@ -151,8 +159,15 @@ m_CurrentMenu(nullptr),
 m_Name(name),
 m_PointerFocus(nullptr)
 {
-Current=this;
-Shortcuts=new ShortcutMap();
+s_Current=this;
+Shortcuts=ShortcutMap::Create();
 }
+
+
+//================
+// Common Private
+//================
+
+Application* Application::s_Current=nullptr;
 
 }

@@ -29,7 +29,7 @@ class HyperLink: public Interactive
 {
 public:
 	// Con-/Destructors
-	HyperLink(Window* Parent=nullptr);
+	static inline Handle<HyperLink> Create(Window* Parent) { return new HyperLink(Parent); }
 
 	// Common
 	SIZE GetMinSize(RenderTarget* Target)override;
@@ -37,6 +37,10 @@ public:
 	VOID Render(RenderTarget* Target, RECT& Rect)override;
 	Handle<String> Text;
 	Handle<Brush> TextColor;
+
+private:
+	// Con-/Destructors
+	HyperLink(Window* Parent);
 };
 
 }}

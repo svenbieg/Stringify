@@ -28,10 +28,14 @@ class ProgressBar: public Panel
 {
 public:
 	// Con-/Destructors
-	ProgressBar(Window* Parent=nullptr);
+	static inline Handle<ProgressBar> Create(Window* Parent) { return new ProgressBar(Parent); }
 
 	// Common
 	Handle<Brush> GetBorderBrush()override;
+
+private:
+	// Con-/Destructors
+	ProgressBar(Window* Parent);
 };
 
 }}

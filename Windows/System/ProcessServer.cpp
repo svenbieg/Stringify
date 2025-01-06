@@ -9,7 +9,7 @@
 // Using
 //=======
 
-#include "Concurrency/MainTask.h"
+#include "Concurrency/DispatchedQueue.h"
 #include "Storage/Streams/StreamReader.h"
 #include "Storage/Streams/StreamWriter.h"
 #include "ProcessServer.h"
@@ -70,7 +70,7 @@ while(1)
 		hNamedPipe->Flush();
 		continue;
 		}
-	MainTask::Dispatch(this, [this, msg]() { OnMessageReceived(msg); });
+	DispatchedQueue::Append(this, [this, msg]() { OnMessageReceived(msg); });
 	}
 }
 

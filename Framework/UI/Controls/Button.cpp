@@ -9,7 +9,7 @@
 // Using
 //=======
 
-#include "Concurrency/MainTask.h"
+#include "Concurrency/DispatchedQueue.h"
 #include "Button.h"
 #include "Grid.h"
 #include "TextBlock.h"
@@ -24,24 +24,6 @@ using namespace Graphics;
 
 namespace UI {
 	namespace Controls {
-
-
-//==================
-// Con-/Destructors
-//==================
-
-Button::Button(Window* parent, Handle<String> text):
-Interactive(parent),
-Border(false),
-Padding(20, 4, 20, 4),
-Text(text)
-{
-Interactive::Clicked.Add(this, &Button::OnInteractiveClicked);
-Focused.Add(this, &Button::OnFocused);
-FocusLost.Add(this, &Button::OnFocusLost);
-PointerEntered.Add(this, &Button::OnPointerEntered);
-PointerLeft.Add(this, &Button::OnPointerLeft);
-}
 
 
 //========
@@ -97,6 +79,24 @@ if(Text)
 }
 
 
+//==========================
+// Con-/Destructors Private
+//==========================
+
+Button::Button(Window* parent, Handle<String> text):
+Interactive(parent),
+Border(false),
+Padding(20, 4, 20, 4),
+Text(text)
+{
+Interactive::Clicked.Add(this, &Button::OnInteractiveClicked);
+Focused.Add(this, &Button::OnFocused);
+FocusLost.Add(this, &Button::OnFocusLost);
+PointerEntered.Add(this, &Button::OnPointerEntered);
+PointerLeft.Add(this, &Button::OnPointerLeft);
+}
+
+
 //================
 // Common Private
 //================
@@ -118,7 +118,7 @@ Invalidate();
 
 VOID Button::OnInteractiveClicked()
 {
-MainTask::Dispatch(this, &Button::DoClick);
+DispatchedQueue::Append(this, &Button::DoClick);
 }
 
 VOID Button::OnPointerEntered()

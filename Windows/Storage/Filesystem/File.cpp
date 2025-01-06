@@ -120,8 +120,7 @@ if(!buf)
 	return copy;
 	}
 auto buf_ptr=(BYTE*)buf;
-OVERLAPPED ov;
-ZeroMemory(&ov, sizeof(OVERLAPPED));
+OVERLAPPED ov={ 0 };
 SIZE_T pos=0;
 while(pos<size)
 	{

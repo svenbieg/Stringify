@@ -38,21 +38,21 @@ namespace Stringify {
 AppWindow::AppWindow()
 {
 Body->Padding.Set(8, 8, 8, 8);
-Icon=new D2DIcon(ICO_APP);
+Icon=D2DIcon::Create(ICO_APP);
 MinSize.Set(480, 512);
-auto grid=new Grid(Body);
+auto grid=Grid::Create(Body);
 grid->AddColumn(1, GridUnit::Star);
 grid->AddRow(1, GridUnit::Auto);
 grid->AddRow(1, GridUnit::Star);
-auto group=new Group(grid, "Binary");
-auto edit=new PathEdit(group);
+auto group=Group::Create(grid, "Binary");
+auto edit=PathEdit::Create(group);
 edit->MinSize.Set(400, 0);
 edit->Path.Changed.Add(this, &AppWindow::OnPathEditPathChanged);
-group=new Group(grid, "String");
+group=Group::Create(grid, "String");
 group->Margin.Set(0, 8, 0, 0);
-ResultBox=new TextBox(group);
+ResultBox=TextBox::Create(group);
 ResultBox->Enabled=false;
-ResultBox->Font=new D2DFont("Lucida Console");
+ResultBox->Font=D2DFont::Create("Lucida Console");
 Shrink();
 }
 

@@ -37,14 +37,19 @@ SaveFile
 // Path-Edit
 //===========
 
-class PathEdit: public Grid
+class PathEdit: public UI::Controls::Grid
 {
 public:
 	// Using
+	using Button=UI::Controls::Button;
+	using EditBox=UI::Controls::EditBox;
 	using Sentence=Culture::Sentence;
 
 	// Con-/Destructors
-	PathEdit(Window* Parent, PathEditMode Mode=PathEditMode::OpenFile);
+	static inline Handle<PathEdit> Create(Window* Parent, PathEditMode Mode=PathEditMode::OpenFile)
+		{
+		return new PathEdit(Parent, Mode);
+		}
 
 	// Common
 	Handle<Sentence> Filter;
@@ -52,11 +57,14 @@ public:
 	DynamicHandle<PathEdit, String> Path;
 
 private:
+	// Con-/Destructors
+	PathEdit(Window* Parent, PathEditMode Mode);
+
 	// Common
 	VOID OnButtonClicked();
 	VOID OnPathChanged(Handle<String> Path);
-	Handle<Button> hButton;
-	Handle<EditBox> hEditBox;
+	Handle<Button> m_Button;
+	Handle<EditBox> m_EditBox;
 };
 
 }}

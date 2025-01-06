@@ -11,7 +11,8 @@
 
 #include "Graphics/Direct2D/Icon.h"
 #include "UI/Controls/Grid.h"
-#include "AppWindow.h"
+#include "UI/Application.h"
+#include "UI/AppWindow.h"
 
 using namespace UI::Controls;
 
@@ -25,14 +26,23 @@ using D2DIcon=Graphics::Direct2D::Icon;
 namespace UI {
 
 
+//==================
+// Con-/Destructors
+//==================
+
+AppWindow::~AppWindow()
+{
+s_Current=nullptr;
+}
+
+
 //========
 // Common
 //========
 
 VOID AppWindow::Activate()
 {
-WINDOWPLACEMENT place;
-ZeroMemory(&place, sizeof(WINDOWPLACEMENT));
+WINDOWPLACEMENT place={ 0 };
 place.length=sizeof(WINDOWPLACEMENT);
 GetWindowPlacement(m_Handle, &place);
 if(place.showCmd==SW_SHOWMINIMIZED)
@@ -48,8 +58,6 @@ if(m_Handle)
 	SendMessage(m_Handle, WM_CLOSE, 0, 0);
 }
 
-Handle<AppWindow> AppWindow::Current;
-
 
 //============================
 // Con-/Destructors Protected
@@ -59,21 +67,21 @@ AppWindow::AppWindow():
 Icon(this),
 Title(this)
 {
-Current=this;
+s_Current=this;
 SetWindowLong(m_Handle, GWL_STYLE, WS_OVERLAPPEDWINDOW);
 SetWindowLong(m_Handle, GWL_EXSTYLE, WS_EX_APPWINDOW);
 Closed.Add(this, &AppWindow::OnClosed);
 Icon.Changed.Add(this, &AppWindow::OnIconChanged);
 Title.Changed.Add(this, &AppWindow::OnTitleChanged);
-Title=Application::Current->GetName();
-auto grid=new Grid(this);
+Title=Application::Get()->GetName();
+auto grid=Grid::Create(this);
 grid->AddRow(1, GridUnit::Auto);
 grid->AddRow(1, GridUnit::Star);
 grid->AddRow(1, GridUnit::Auto);
-Header=new StackPanel(grid, Orientation::Vertical);
+Header=StackPanel::Create(grid, Orientation::Vertical);
 Header->AlignChildren=Alignment::Stretch;
-Body=new Panel(grid);
-Footer=new StackPanel(grid, Orientation::Vertical);
+Body=Panel::Create(grid);
+Footer=StackPanel::Create(grid, Orientation::Vertical);
 Footer->AlignChildren=Alignment::Stretch;
 }
 
@@ -131,7 +139,7 @@ return Overlapped::HandleMessage(msg, wparam, lparam, handled);
 
 VOID AppWindow::OnClosed()
 {
-Application::Current->Quit();
+Application::Get()->Quit();
 }
 
 VOID AppWindow::OnIconChanged(Handle<Graphics::Icon> icon)
@@ -149,5 +157,7 @@ VOID AppWindow::OnTitleChanged(Handle<Sentence> title)
 {
 SetWindowText(m_Handle, title? title->Begin(): TEXT(""));
 }
+
+AppWindow* AppWindow::s_Current=nullptr;
 
 }

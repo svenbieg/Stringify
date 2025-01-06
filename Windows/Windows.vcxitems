@@ -23,27 +23,28 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)ComPointer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\DispatchedHandler.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\DispatchedQueue.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\MainTask.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\Mutex.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\Scheduler.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\ScopedLock.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\SharedLock.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\Signal.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\Task.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\TaskLock.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Convertible.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Devices\Serial\SerialPort.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Devices\Timer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Devices\Timers\SystemTimer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ErrorHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ExceptionHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Network\GatewayHelper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Network\Tcp\TcpConnection.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Network\Tcp\TcpSocket.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Network\Tls\TlsCertificate.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Network\Tls\TlsConnection.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Network\Tls\TlsSocket.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Network\Udp\UdpMessage.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Network\Udp\UdpSocket.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Platform.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)ResourceHelper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)RandomHelper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resources\ResourceHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Security\Rsa\RsaKey.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Filesystem\Directory.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Filesystem\File.h" />
@@ -52,26 +53,27 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Storage\NamedPipe.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)System\ProcessClient.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)System\ProcessServer.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)System\ThreadPoolTimer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)CommandLine.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Concurrency\DispatchedQueue.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Concurrency\MainTask.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Concurrency\Signal.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Concurrency\Task.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Devices\Serial\SerialPort.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Devices\Timer.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Devices\Timers\SystemTimer.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ExceptionHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Network\GatewayHelper.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Network\Tcp\TcpConnection.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Network\Tcp\TcpSocket.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Network\Tls\TlsConnection.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Network\Tls\TlsSocket.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Network\Udp\UdpMessage.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Network\Udp\UdpSocket.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)ResourceHelper.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)RandomHelper.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Resources\ResourceHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Security\Rsa\RsaKey.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Storage\Filesystem\Directory.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Storage\Filesystem\File.cpp" />
@@ -80,7 +82,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Storage\NamedPipe.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)System\ProcessClient.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)System\ProcessServer.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)System\ThreadPoolTimer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)Configuration\Compiler.props" />

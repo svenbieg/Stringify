@@ -9,9 +9,8 @@
 // Using
 //=======
 
+#include "Concurrency/Task.h"
 #include "SystemTimer.h"
-
-using namespace Concurrency;
 
 
 //===========
@@ -26,14 +25,14 @@ namespace Devices {
 // Con-/Destructors
 //==================
 
-SystemTimer::SystemTimer()
-{
-m_Task=Scheduler::CreateTask(this, &SystemTimer::TaskProc);
-}
-
 SystemTimer::~SystemTimer()
 {
-m_Task->Cancel();
+if(m_Task)
+	{
+	m_Task->Cancel();
+	m_Task=nullptr;
+	}
+s_Current=nullptr;
 }
 
 
@@ -41,12 +40,19 @@ m_Task->Cancel();
 // Common
 //========
 
-SIZE_T SystemTimer::GetTickCount()
+Handle<SystemTimer> SystemTimer::Get()
 {
-return (SIZE_T)::GetTickCount64();
+if(!s_Current)
+	s_Current=new SystemTimer();
+return s_Current;
 }
 
-SIZE_T SystemTimer::Microseconds()
+UINT64 SystemTimer::GetTickCount()
+{
+return ::GetTickCount64();
+}
+
+UINT64 SystemTimer::Microseconds()
 {
 LARGE_INTEGER ticks;
 QueryPerformanceFrequency(&ticks);
@@ -56,12 +62,17 @@ QueryPerformanceCounter(&time);
 return time.QuadPart/ticks.QuadPart;
 }
 
-Handle<SystemTimer> SystemTimer::Open()
+
+//==========================
+// Con-/Destructors Private
+//==========================
+
+SystemTimer::SystemTimer()
 {
-if(!s_Current)
-	s_Current=new SystemTimer();
-return s_Current;
+s_Current=this;
+m_Task=Task::Create(this, &SystemTimer::TaskProc);
 }
+
 
 //================
 // Common Private
@@ -72,11 +83,11 @@ VOID SystemTimer::TaskProc()
 auto task=Task::Get();
 while(!task->Cancelled)
 	{
-	Tick(this);
+	Triggered(this);
 	Sleep(10);
 	}
 }
 
-Handle<SystemTimer> SystemTimer::s_Current;
+SystemTimer* SystemTimer::s_Current=nullptr;
 
 }}

@@ -29,7 +29,7 @@ class EditMenu: public PopupMenu
 {
 public:
 	// Con-/Destructors
-	EditMenu();
+	static inline Handle<EditMenu> Create(Window* Parent) { return new EditMenu(Parent); }
 
 	// Common
 	Handle<PopupMenuItem> Copy;
@@ -37,6 +37,10 @@ public:
 	Handle<PopupMenuItem> Delete;
 	Handle<PopupMenuItem> Paste;
 	Handle<PopupMenuItem> SelectAll;
+
+private:
+	// Con-/Destructors
+	EditMenu(Window* Parent);
 };
 
 }}}

@@ -35,7 +35,8 @@ public:
 	using D2DCursor=Graphics::Direct2D::Cursor;
 	using D2DFont=Graphics::Direct2D::Font;
 
-	// Common
+	// Con-/Destructors
+	~Theme();
 	static Handle<Theme> Get();
 
 private:
@@ -44,7 +45,7 @@ private:
 
 	// Common
 	inline COLOR SystemColor(INT Index) { return GetSysColor(Index)|0xFF000000; }
-	static Handle<Theme> m_Current;
+	static Theme* s_Current;
 };
 
 }}

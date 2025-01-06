@@ -25,34 +25,6 @@ namespace UI {
 	namespace Controls {
 
 
-//==================
-// Con-/Destructors
-//==================
-
-ScrollBox::ScrollBox(Window* parent):
-Control(parent),
-AlignHorizontal(HorizontalAlignment::Left),
-AlignVertical(VerticalAlignment::Top),
-Enabled(this, true),
-ZoomMax(1.f),
-ZoomMin(1.f),
-m_StartPoint(-1, -1),
-m_Zoom(1.f)
-{
-Body=new Interactive(this);
-Body->PointerDown.Add(this, &ScrollBox::OnBodyPointerDown);
-Body->PointerMoved.Add(this, &ScrollBox::OnBodyPointerMoved);
-Body->PointerUp.Add(this, &ScrollBox::OnBodyPointerUp);
-Body->PointerWheel.Add(this, &ScrollBox::OnBodyPointerWheel);
-VerticalBar=new ScrollBar(this, Orientation::Vertical);
-VerticalBar->Scrolled.Add(this, &ScrollBox::OnScrollBarScrolled);
-VerticalBar->Visible=false;
-HorizontalBar=new ScrollBar(this, Orientation::Horizontal);
-HorizontalBar->Scrolled.Add(this, &ScrollBox::OnScrollBarScrolled);
-HorizontalBar->Visible=false;
-}
-
-
 //========
 // Common
 //========
@@ -178,6 +150,34 @@ zoom=TypeHelper::Min(ZoomMax, zoom);
 m_Zoom=zoom;
 content->Scale=m_Zoom;
 Invalidate(true);
+}
+
+
+//============================
+// Con-/Destructors Protected
+//============================
+
+ScrollBox::ScrollBox(Window* parent):
+Control(parent),
+AlignHorizontal(HorizontalAlignment::Left),
+AlignVertical(VerticalAlignment::Top),
+Enabled(this, true),
+ZoomMax(1.f),
+ZoomMin(1.f),
+m_StartPoint(-1, -1),
+m_Zoom(1.f)
+{
+Body=Interactive::Create(this);
+Body->PointerDown.Add(this, &ScrollBox::OnBodyPointerDown);
+Body->PointerMoved.Add(this, &ScrollBox::OnBodyPointerMoved);
+Body->PointerUp.Add(this, &ScrollBox::OnBodyPointerUp);
+Body->PointerWheel.Add(this, &ScrollBox::OnBodyPointerWheel);
+VerticalBar=ScrollBar::Create(this, Orientation::Vertical);
+VerticalBar->Scrolled.Add(this, &ScrollBox::OnScrollBarScrolled);
+VerticalBar->Visible=false;
+HorizontalBar=ScrollBar::Create(this, Orientation::Horizontal);
+HorizontalBar->Scrolled.Add(this, &ScrollBox::OnScrollBarScrolled);
+HorizontalBar->Visible=false;
 }
 
 

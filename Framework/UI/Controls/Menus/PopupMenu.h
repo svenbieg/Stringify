@@ -46,7 +46,10 @@ public:
 	using Sentence=Culture::Sentence;
 
 	// Con-/Destructors
-	PopupMenu(Window* Parent, Menu* ParentMenu=nullptr);
+	static inline Handle<PopupMenu> Create(Window* Parent, Menu* ParentMenu=nullptr)
+		{
+		return new PopupMenu(Parent, ParentMenu);
+		}
 
 	// Common
 	Handle<PopupMenuItem> Add(Handle<Sentence> Label);
@@ -56,6 +59,10 @@ public:
 	VOID KillFocus()override;
 	Event<PopupMenu> Opened;
 	VOID Show(POINT const& Point);
+
+protected:
+	// Con-/Destructors
+	PopupMenu(Window* Parent, Menu* ParentMenu);
 };
 
 }}}

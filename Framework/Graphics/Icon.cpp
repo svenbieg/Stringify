@@ -21,15 +21,6 @@ using namespace Resources::Icons;
 namespace Graphics {
 
 
-//==================
-// Con-/Destructors
-//==================
-
-Icon::Icon(ICON const* icons):
-m_Icons(icons)
-{}
-
-
 //========
 // Common
 //========
@@ -40,8 +31,17 @@ auto icon=GetIcon(size);
 if(!icon)
 	return nullptr;
 size=icon->Size;
-return new Bitmap(size, size, size*size*4, icon->Buffer);
+return Bitmap::Create(size, size, size*size*4, icon->Buffer);
 }
+
+
+//============================
+// Con-/Destructors Protected
+//============================
+
+Icon::Icon(ICON const* resource):
+m_Icons(resource)
+{}
 
 
 //==================

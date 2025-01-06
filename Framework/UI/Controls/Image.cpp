@@ -20,18 +20,6 @@ namespace UI {
 	namespace Controls {
 
 
-//==================
-// Con-/Destructors
-//==================
-
-Image::Image(Window* parent):
-Control(parent),
-Source(this)
-{
-Source.Changed.Add(this, &Image::OnSourceChanged);
-}
-
-
 //========
 // Common
 //========
@@ -54,6 +42,18 @@ if(!Source)
 SIZE size=Source->GetDimensions();
 RECT rc_src(size);
 target->DrawBitmap(rc, Source, rc_src);
+}
+
+
+//==========================
+// Con-/Destructors Private
+//==========================
+
+Image::Image(Window* parent):
+Control(parent),
+Source(this)
+{
+Source.Changed.Add(this, &Image::OnSourceChanged);
 }
 
 

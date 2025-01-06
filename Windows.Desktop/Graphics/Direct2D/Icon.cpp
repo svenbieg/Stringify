@@ -9,11 +9,13 @@
 // Using
 //=======
 
+#include "Resources/ResourceHelper.h"
 #include "Storage/Buffer.h"
 #include "Icon.h"
 #include "ImagingFactory.h"
 
 using namespace Collections;
+using namespace Resources;
 using namespace Resources::Icons;
 using namespace Storage;
 
@@ -34,9 +36,9 @@ Icon::Icon(WORD id):
 Graphics::Icon(nullptr),
 s_Id(id)
 {
-UINT count=GetResourceIconCount(id);
+UINT count=ResourceHelper::GetIconCount(id);
 UINT* sizes=new UINT[count];
-GetResourceIconSize(id, sizes, count);
+ResourceHelper::GetIconSize(id, sizes, count);
 ICON* icons=new ICON[count+1];
 for(UINT u=0; u<count; u++)
 	{
@@ -66,11 +68,10 @@ while(icon->Size)
 	{
 	UINT size=icon->Size;
 	HBITMAP bitmap=CreateBitmap(size, size, 1, 32, icon->Buffer);
-	Handle<Buffer> buf=new Buffer(size*size*4);
+	auto buf=Buffer::Create(size*size*4);
 	buf->Fill(0xFFFFFFFF);
 	HBITMAP mask=CreateBitmap(size, size, 1, 32, buf->Begin());
-	ICONINFO info;
-	ZeroMemory(&info, sizeof(ICONINFO));
+	ICONINFO info={ 0 };
 	info.fIcon=TRUE;
 	info.hbmColor=bitmap;
 	info.hbmMask=mask;

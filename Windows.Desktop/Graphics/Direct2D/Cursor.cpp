@@ -24,18 +24,13 @@ namespace Graphics {
 // Con-/Destructors
 //==================
 
-Cursor::Cursor(LPCTSTR id):
-hCursor(NULL)
-{
-hCursor=LoadCursor(NULL, id);
-if(hCursor==INVALID_HANDLE_VALUE)
-	hCursor=NULL;
-}
-
 Cursor::~Cursor()
 {
-if(hCursor)
-	DeleteObject(hCursor);
+if(m_Cursor)
+	{
+	DeleteObject(m_Cursor);
+	m_Cursor=NULL;
+	}
 }
 
 
@@ -45,7 +40,20 @@ if(hCursor)
 
 VOID Cursor::Set()
 {
-SetCursor(hCursor);
+SetCursor(m_Cursor);
+}
+
+
+//==========================
+// Con-/Destructors Private
+//==========================
+
+Cursor::Cursor(LPCTSTR id):
+m_Cursor(NULL)
+{
+m_Cursor=LoadCursor(NULL, id);
+if(m_Cursor==INVALID_HANDLE_VALUE)
+	throw InvalidArgumentException();
 }
 
 }}

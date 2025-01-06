@@ -43,11 +43,11 @@ public:
 	using VirtualKey=UI::Input::VirtualKey;
 
 	// Con-/Destructors
-	Frame();
+	static inline Handle<Frame> Create() { return new Frame(); }
 
 	// Common
 	Handle<Interactive> GetFocus()const { return m_Focus; }
-	Frame* GetFrame()override { return this; }
+	inline Frame* GetFrame()override { return this; }
 	POINT GetFrameOffset()const override { return POINT(0, 0); }
 	SIZE GetMinSize(RenderTarget* Target)override;
 	Interactive* GetPointerCapture()const { return m_PointerCapture; }
@@ -64,6 +64,9 @@ public:
 	virtual VOID SetPointerCapture(Interactive* Capture) { m_PointerCapture=Capture; }
 
 protected:
+	// Con-/Destructors
+	Frame();
+
 	// Common
 	BOOL DoKey(KeyEventType Type, Handle<KeyEventArgs> Args);
 	VOID DoPointer(PointerEventType Type, Handle<PointerEventArgs> Args);

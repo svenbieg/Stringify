@@ -30,13 +30,19 @@ class StackPanel: public Panel
 {
 public:
 	// Con-/Destructors
-	StackPanel(Orientation Orientation=Orientation::Horizontal);
-	StackPanel(Window* Parent, Orientation Orientation=Orientation::Horizontal);
+	static inline Handle<StackPanel> Create(Window* Parent, Orientation Orientation=Orientation::Horizontal)
+		{
+		return new StackPanel(Parent, Orientation);
+		}
 
 	// Common
 	Alignment AlignChildren;
 	virtual SIZE GetMinSize(RenderTarget* Target)override;
 	VOID Rearrange(RenderTarget* Target, RECT& Rect)override;
+
+protected:
+	// Con-/Destructors
+	StackPanel(Window* Parent, Orientation Orientation=Orientation::Horizontal);
 
 private:
 	// Common

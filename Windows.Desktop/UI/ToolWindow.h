@@ -30,14 +30,14 @@ public:
 	using Sentence=Culture::Sentence;
 
 	// Con-/Destructors
-	ToolWindow();
-	ToolWindow(HWND Parent);
-	ToolWindow(Window* Parent);
-	ToolWindow(Frame* Parent);
-	ToolWindow(Overlapped* Parent);
+	static inline Handle<ToolWindow> Create(Overlapped* Parent=nullptr) { return new ToolWindow(Parent); }
 
 	// Common
 	DynamicHandle<ToolWindow, Sentence> Title;
+
+protected:
+	// Con-/Destructors
+	ToolWindow(Overlapped* Parent);
 
 private:
 	// Common

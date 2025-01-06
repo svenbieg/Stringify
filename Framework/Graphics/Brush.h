@@ -27,12 +27,15 @@ class Brush: public Object
 {
 public:
 	// Con-/Destructors
-	Brush(COLOR Color): m_Color(Color) {}
+	static inline Handle<Brush> Create(COLOR Color) { return new Brush(Color); }
 
 	// Common
 	inline COLOR GetColor()const { return m_Color; }
 
 private:
+	// Con-/Destructors
+	Brush(COLOR Color): m_Color(Color) {}
+
 	// Common
 	COLOR m_Color;
 };

@@ -33,7 +33,7 @@ public:
 	using StringList=Collections::StringList;
 
 	// Con-/Destructors
-	TextBox(Window* Parent);
+	static inline Handle<TextBox> Create(Window* Parent) { return new TextBox(Parent); }
 
 	// Common
 	VOID AppendLine(Handle<String> Line);
@@ -48,6 +48,9 @@ public:
 	VOID SetText(Handle<String> Text);
 
 private:
+	// Con-/Destructors
+	TextBox(Window* Parent);
+
 	// Common
 	VOID OnInputSelectionChanged();
 	VOID OnReadOnlyChanged(BOOL ReadOnly);

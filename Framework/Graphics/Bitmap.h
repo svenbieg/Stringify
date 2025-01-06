@@ -29,9 +29,15 @@ class Bitmap: public Object
 {
 public:
 	// Con-/Destructors
-	Bitmap(UINT Width, UINT Height, WORD BitsPerPixel);
-	Bitmap(UINT Width, UINT Height, UINT Size, LPCSTR Resource);
 	~Bitmap();
+	static inline Handle<Bitmap> Create(UINT Width, UINT Height, WORD BitsPerPixel)
+		{
+		return new Bitmap(Width, Height, BitsPerPixel);
+		}
+	static inline Handle<Bitmap> Create(UINT Width, UINT Height, UINT Size, LPCSTR Resource)
+		{
+		return new Bitmap(Width, Height, Size, Resource);
+		}
 
 	// Common
 	BYTE const* Begin()const;
@@ -55,6 +61,11 @@ protected:
 	LPCSTR m_Resource;
 	UINT m_Size;
 	UINT m_Width;
+
+private:
+	// Con-/Destructors
+	Bitmap(UINT Width, UINT Height, WORD BitsPerPixel);
+	Bitmap(UINT Width, UINT Height, UINT Size, LPCSTR Resource);
 };
 
 }

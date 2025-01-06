@@ -22,16 +22,6 @@ namespace UI {
 	namespace Controls {
 
 
-//==================
-// Con-/Destructors
-//==================
-
-Panel::Panel(Window* parent):
-Control(parent),
-Border(false)
-{}
-
-
 //========
 // Common
 //========
@@ -52,7 +42,7 @@ auto content=GetVisibleChild(0);
 if(content)
 	{
 	size=content->GetMinSize(target);
-	auto control=Convert<Control>(content);
+	auto control=content.As<Control>();
 	if(control)
 		{
 		RECT const& margin=control->Margin;
@@ -80,7 +70,7 @@ auto content=GetVisibleChild(0);
 if(!content)
 	return;
 RECT rc_content=rc;
-auto control=Convert<Control>(content);
+auto control=content.As<Control>();
 if(control)
 	rc_content.SetPadding(control->Margin*scale);
 content->Move(target, rc_content);
@@ -96,5 +86,15 @@ if(border)
 	rc.SetPadding(1, 1, 1, 1);
 	}
 }
+
+
+//============================
+// Con-/Destructors Protected
+//============================
+
+Panel::Panel(Window* parent):
+Control(parent),
+Border(false)
+{}
 
 }}

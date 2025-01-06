@@ -11,6 +11,7 @@
 
 #include <d2d1_2.h>
 #include "Graphics/Brush.h"
+#include "ComPointer.h"
 
 
 //===========

@@ -9,10 +9,7 @@
 // Using
 //=======
 
-#include "Concurrency/MainTask.h"
 #include "NamedPipe.h"
-
-using namespace Concurrency;
 
 
 //===========
@@ -27,9 +24,9 @@ namespace Storage {
 //==================
 
 NamedPipe::NamedPipe(Handle<String> name):
-hNamedPipe(NULL)
+m_NamedPipe(NULL)
 {
-m_Path=new String("\\\\.\\pipe\\ipc_%s", name);
+m_Path=String::Create("\\\\.\\pipe\\ipc_%s", name);
 }
 
 NamedPipe::~NamedPipe()
@@ -44,39 +41,39 @@ Close();
 
 VOID NamedPipe::Close()
 {
-if(hNamedPipe)
+if(!m_NamedPipe)
+	return;
+if(m_ListenTask)
 	{
-	if(hListenTask)
-		{
-		CancelSynchronousIo(hListenTask->GetHandle());
-		hListenTask=nullptr;
-		}
-	CloseHandle(hNamedPipe);
-	hNamedPipe=NULL;
+	m_ListenTask->Cancel();
+	CancelSynchronousIo(m_ListenTask->GetHandle());
+	m_ListenTask=nullptr;
 	}
+CloseHandle(m_NamedPipe);
+m_NamedPipe=NULL;
 }
 
 BOOL NamedPipe::Connect()
 {
-assert(hNamedPipe==NULL);
-hNamedPipe=CreateFile(m_Path->Begin(), GENERIC_READ|GENERIC_WRITE, 0, nullptr, OPEN_EXISTING, 0, NULL);
-if(hNamedPipe==INVALID_HANDLE_VALUE)
-	hNamedPipe=NULL;
-if(hNamedPipe==NULL)
+assert(m_NamedPipe==NULL);
+m_NamedPipe=CreateFile(m_Path->Begin(), GENERIC_READ|GENERIC_WRITE, 0, nullptr, OPEN_EXISTING, 0, NULL);
+if(m_NamedPipe==INVALID_HANDLE_VALUE)
+	m_NamedPipe=NULL;
+if(m_NamedPipe==NULL)
 	return false;
 return true;
 }
 
 VOID NamedPipe::Listen()
 {
-assert(hNamedPipe==NULL);
+assert(m_NamedPipe==NULL);
 DWORD open_mode=PIPE_ACCESS_DUPLEX|FILE_FLAG_FIRST_PIPE_INSTANCE|FILE_FLAG_WRITE_THROUGH;
-hNamedPipe=CreateNamedPipe(m_Path->Begin(), open_mode, 0, 1, PAGE_SIZE, PAGE_SIZE, 0, nullptr);
-if(hNamedPipe==INVALID_HANDLE_VALUE)
-	hNamedPipe=NULL;
-if(hNamedPipe==NULL)
+m_NamedPipe=CreateNamedPipe(m_Path->Begin(), open_mode, 0, 1, PAGE_SIZE, PAGE_SIZE, 0, nullptr);
+if(m_NamedPipe==INVALID_HANDLE_VALUE)
+	m_NamedPipe=NULL;
+if(m_NamedPipe==NULL)
 	return;
-hListenTask=Scheduler::CreateTask(this, &NamedPipe::ListenProc);
+m_ListenTask=Task::Create(this, &NamedPipe::DoListen);
 }
 
 
@@ -91,13 +88,13 @@ return 0;
 
 SIZE_T NamedPipe::Read(VOID* buf, SIZE_T size)
 {
-if(!hNamedPipe)
+if(!m_NamedPipe)
 	return 0;
 DWORD read=0;
-if(!ReadFile(hNamedPipe, buf, (UINT)size, &read, nullptr))
+if(!ReadFile(m_NamedPipe, buf, (UINT)size, &read, nullptr))
 	{
-	CloseHandle(hNamedPipe);
-	hNamedPipe=NULL;
+	CloseHandle(m_NamedPipe);
+	m_NamedPipe=NULL;
 	return 0;
 	}
 return read;
@@ -110,20 +107,20 @@ return read;
 
 VOID NamedPipe::Flush()
 {
-if(!hNamedPipe)
+if(!m_NamedPipe)
 	return;
-FlushFileBuffers(hNamedPipe);
+FlushFileBuffers(m_NamedPipe);
 }
 
 SIZE_T NamedPipe::Write(VOID const* buf, SIZE_T size)
 {
-if(!hNamedPipe)
+if(!m_NamedPipe)
 	return 0;
 DWORD written=0;
-if(!WriteFile(hNamedPipe, buf, (DWORD)size, &written, nullptr))
+if(!WriteFile(m_NamedPipe, buf, (DWORD)size, &written, nullptr))
 	{
-	CloseHandle(hNamedPipe);
-	hNamedPipe=NULL;
+	CloseHandle(m_NamedPipe);
+	m_NamedPipe=NULL;
 	return 0;
 	}
 return written;
@@ -134,22 +131,18 @@ return written;
 // Common Private
 //================
 
-VOID NamedPipe::ListenProc()
+VOID NamedPipe::DoListen()
 {
-SetLastError(0);
-BOOL connected=ConnectNamedPipe(hNamedPipe, nullptr);
-if(!connected)
-	return;
-ConnectionReceived(this);
-CloseHandle(hNamedPipe);
-hNamedPipe=NULL;
-MainTask::Dispatch(this, &NamedPipe::OnConnectionClosed);
-}
-
-VOID NamedPipe::OnConnectionClosed()
-{
-hListenTask=nullptr;
-Listen();
+auto task=Task::Get();
+while(!task->Cancelled)
+	{
+	BOOL connected=ConnectNamedPipe(m_NamedPipe, nullptr);
+	if(!connected)
+		break;
+	ConnectionReceived(this);
+	CloseHandle(m_NamedPipe);
+	m_NamedPipe=NULL;
+	}
 }
 
 }

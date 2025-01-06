@@ -21,11 +21,18 @@
 #define RC_TYPE_ICONGROUP 14
 
 
+//===========
+// Namespace
+//===========
+
+namespace Resources {
+
+
 //============
 // Entrypoint
 //============
 
-BYTE* pBase=nullptr;
+BYTE* g_Base=nullptr;
 
 
 //=========
@@ -54,14 +61,14 @@ IMAGE_RESOURCE_DIRECTORY* GetResourceRoot();
 // Ressources
 //============
 
-IMAGE_RESOURCE_DIRECTORY* pRoot=nullptr;
+IMAGE_RESOURCE_DIRECTORY* g_Root=nullptr;
 
 IMAGE_RESOURCE_DATA_ENTRY* GetResourceData(IMAGE_RESOURCE_DIRECTORY* parent, UINT id)
 {
 BYTE* dir=(BYTE*)parent;
 UINT pos=sizeof(IMAGE_RESOURCE_DIRECTORY);
 pos+=parent->NumberOfNamedEntries*sizeof(IMAGE_RESOURCE_DIRECTORY_ENTRY);
-BYTE* root=(BYTE*)pRoot;
+BYTE* root=(BYTE*)g_Root;
 IMAGE_RESOURCE_DIRECTORY_ENTRY* entry=(IMAGE_RESOURCE_DIRECTORY_ENTRY*)&dir[pos];
 for(UINT u=1; u<parent->NumberOfIdEntries; u++)
 	{
@@ -89,7 +96,7 @@ for(UINT u=0; u<parent->NumberOfNamedEntries; u++)
 		{
 		if(entry->DataIsDirectory)
 			throw(EINVAL);
-		BYTE* root=(BYTE*)pRoot;
+		BYTE* root=(BYTE*)g_Root;
 		return (IMAGE_RESOURCE_DATA_ENTRY*)&root[entry->OffsetToData];
 		}
 	pos+=sizeof(IMAGE_RESOURCE_DIRECTORY_ENTRY);
@@ -110,7 +117,7 @@ for(UINT u=0; u<parent->NumberOfIdEntries; u++)
 		{
 		if(!entry->DataIsDirectory)
 			throw(EINVAL);
-		BYTE* root=(BYTE*)pRoot;
+		BYTE* root=(BYTE*)g_Root;
 		return (IMAGE_RESOURCE_DIRECTORY*)&root[entry->OffsetToDirectory];
 		}
 	pos+=sizeof(IMAGE_RESOURCE_DIRECTORY_ENTRY);
@@ -133,7 +140,7 @@ for(UINT u=0; u<parent->NumberOfNamedEntries; u++)
 		{
 		if(!entry->DataIsDirectory)
 			throw(EINVAL);
-		BYTE* root=(BYTE*)pRoot;
+		BYTE* root=(BYTE*)g_Root;
 		return (IMAGE_RESOURCE_DIRECTORY*)&root[entry->OffsetToDirectory];
 		}
 	pos+=sizeof(IMAGE_RESOURCE_DIRECTORY_ENTRY);
@@ -144,15 +151,15 @@ return 0;
 
 IMAGE_RESOURCE_DIRECTORY* GetResourceRoot()
 {
-if(pRoot)
-	return pRoot;
+if(g_Root)
+	return g_Root;
 MEMORY_BASIC_INFORMATION mbi;
-VirtualQuery(&pRoot, &mbi, sizeof(MEMORY_BASIC_INFORMATION));
-pBase=(BYTE*)mbi.AllocationBase;
-IMAGE_DOS_HEADER* dos=(IMAGE_DOS_HEADER*)pBase;
+VirtualQuery(&g_Root, &mbi, sizeof(MEMORY_BASIC_INFORMATION));
+g_Base=(BYTE*)mbi.AllocationBase;
+IMAGE_DOS_HEADER* dos=(IMAGE_DOS_HEADER*)g_Base;
 if(dos->e_magic!=IMAGE_DOS_SIGNATURE)
 	throw(EINVAL);
-IMAGE_NT_HEADERS* nt=(IMAGE_NT_HEADERS*)&pBase[dos->e_lfanew];
+IMAGE_NT_HEADERS* nt=(IMAGE_NT_HEADERS*)&g_Base[dos->e_lfanew];
 if(nt->Signature!=IMAGE_NT_SIGNATURE)
 	throw(EINVAL);
 UINT file=dos->e_lfanew+4;
@@ -161,7 +168,7 @@ UINT section_entry=section_dir;
 IMAGE_SECTION_HEADER* rc_section=nullptr;
 for(UINT u=0; u<nt->FileHeader.NumberOfSections; u++)
 	{
-	IMAGE_SECTION_HEADER* p=(IMAGE_SECTION_HEADER*)&pBase[section_entry];
+	IMAGE_SECTION_HEADER* p=(IMAGE_SECTION_HEADER*)&g_Base[section_entry];
 	if(StringHelper::Compare((LPCSTR)p->Name, ".rsrc", 5)==0)
 		{
 		rc_section=p;
@@ -172,8 +179,8 @@ for(UINT u=0; u<nt->FileHeader.NumberOfSections; u++)
 if(!rc_section)
 	throw(EINVAL);
 UINT root=rc_section->VirtualAddress;
-pRoot=(IMAGE_RESOURCE_DIRECTORY*)&pBase[root];
-return pRoot;
+g_Root=(IMAGE_RESOURCE_DIRECTORY*)&g_Base[root];
+return g_Root;
 }
 
 
@@ -206,7 +213,7 @@ ICONGROUPENTRY Entries[1];
 
 #pragma pack(pop)
 
-BITMAPINFO* GetResourceIcon(UINT id, UINT size)
+BITMAPINFO* ResourceHelper::GetIcon(UINT id, UINT size)
 {
 assert(id);
 IMAGE_RESOURCE_DIRECTORY* root=GetResourceRoot();
@@ -226,7 +233,7 @@ catch(UINT err)
 	lng=0;
 	data=GetResourceData(lng_dir, lng);
 	}
-ICONGROUP* icon_group=(ICONGROUP*)&pBase[data->OffsetToData];
+ICONGROUP* icon_group=(ICONGROUP*)&g_Base[data->OffsetToData];
 ICONGROUPENTRY* icon_entries=icon_group->Entries;
 UINT icon_count=icon_group->Count;
 UINT ico=0;
@@ -241,15 +248,15 @@ root=GetResourceRoot();
 name_dir=GetResourceDirectory(root, RC_TYPE_ICON);
 lng_dir=GetResourceDirectory(name_dir, icon_entries[ico].Id);
 data=GetResourceData(lng_dir, lng);
-return (BITMAPINFO*)&pBase[data->OffsetToData];
+return (BITMAPINFO*)&g_Base[data->OffsetToData];
 }
 
-UINT GetResourceIconCount(UINT id)
+UINT ResourceHelper::GetIconCount(UINT id)
 {
-return GetResourceIconSize(id, nullptr, 0);
+return GetIconSize(id, nullptr, 0);
 }
 
-UINT GetResourceIconSize(UINT id, UINT* size_ptr, UINT count)
+UINT ResourceHelper::GetIconSize(UINT id, UINT* size_ptr, UINT count)
 {
 assert(id);
 IMAGE_RESOURCE_DIRECTORY* root=GetResourceRoot();
@@ -269,7 +276,7 @@ catch(UINT err)
 	lng=0;
 	data=GetResourceData(lng_dir, lng);
 	}
-ICONGROUP* icon_group=(ICONGROUP*)&pBase[data->OffsetToData];
+ICONGROUP* icon_group=(ICONGROUP*)&g_Base[data->OffsetToData];
 ICONGROUPENTRY* icon_entries=icon_group->Entries;
 UINT icon_count=icon_group->Count;
 UINT pos=0;
@@ -285,4 +292,6 @@ for(UINT u=0; u<icon_count; u++)
 	pos++;
 	}
 return pos;
+}
+
 }

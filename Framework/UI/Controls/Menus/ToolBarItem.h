@@ -42,7 +42,10 @@ public:
 	using Sentence=Culture::Sentence;
 
 	// Con-/Destructors
-	ToolBarItem(ToolBarPanel* Parent, Handle<Sentence> ToolTip=nullptr);
+	static inline Handle<ToolBarItem> Create(ToolBarPanel* Parent, Handle<Sentence> ToolTip=nullptr)
+		{
+		return new ToolBarItem(Parent, ToolTip);
+		}
 
 	// Common
 	Event<ToolBarItem> Clicked;
@@ -54,6 +57,9 @@ public:
 	Handle<Menus::ToolTip> ToolTip;
 
 private:
+	// Con-/Destructors
+	ToolBarItem(ToolBarPanel* Parent, Handle<Sentence> ToolTip);
+
 	// Common
 	VOID DoClick();
 	VOID OnClicked();

@@ -20,6 +20,8 @@
 #undef UINT_MAX
 #undef VOID
 
+#undef TEXT
+
 #undef MessageBox
 #ifdef _UNICODE
 #define MessageBoxT MessageBoxW
@@ -59,10 +61,4 @@ constexpr UINT PAGE_SIZE=4096;
 // Common
 //========
 
-#include "Concurrency/Scheduler.h"
-#include "Concurrency/SharedLock.h"
-#include "Concurrency/Signal.h"
-#include "ComPointer.h"
-#include "Convertible.h"
 #include "ErrorHelper.h"
-#include "ResourceHelper.h"

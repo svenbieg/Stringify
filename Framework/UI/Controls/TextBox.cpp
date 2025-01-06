@@ -22,25 +22,6 @@ namespace UI {
 	namespace Controls {
 
 
-//==================
-// Con-/Destructors
-//==================
-
-TextBox::TextBox(Window* parent):
-ScrollBox(parent),
-ReadOnly(this)
-{
-AlignHorizontal=HorizontalAlignment::Stretch;
-AlignVertical=VerticalAlignment::Stretch;
-ReadOnly.Changed.Add(this, &TextBox::OnReadOnlyChanged);
-ZoomMax=10.f;
-m_Input=new Input(Body);
-m_Input->MultiLine=true;
-m_Input->Padding.Set(2, 2, 2, 2);
-m_Input->SelectionChanged.Add(this, &TextBox::OnInputSelectionChanged);
-}
-
-
 //========
 // Common
 //========
@@ -93,6 +74,25 @@ m_Input->SetFocus();
 VOID TextBox::SetText(Handle<String> text)
 {
 m_Input->SetText(text);
+}
+
+
+//==========================
+// Con-/Destructors Private
+//==========================
+
+TextBox::TextBox(Window* parent):
+ScrollBox(parent),
+ReadOnly(this)
+{
+AlignHorizontal=HorizontalAlignment::Stretch;
+AlignVertical=VerticalAlignment::Stretch;
+ReadOnly.Changed.Add(this, &TextBox::OnReadOnlyChanged);
+ZoomMax=10.f;
+m_Input=Input::Create(Body);
+m_Input->MultiLine=true;
+m_Input->Padding.Set(2, 2, 2, 2);
+m_Input->SelectionChanged.Add(this, &TextBox::OnInputSelectionChanged);
 }
 
 

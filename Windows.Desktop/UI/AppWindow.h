@@ -11,7 +11,7 @@
 
 #include "Graphics/Icon.h"
 #include "UI/Controls/StackPanel.h"
-#include "UI/Overlapped.h"
+#include "Overlapped.h"
 
 
 //===========
@@ -33,13 +33,16 @@ public:
 	using Sentence=Culture::Sentence;
 	using StackPanel=UI::Controls::StackPanel;
 
+	// Con-/Destructors
+	~AppWindow();
+	static inline AppWindow* Get() { return s_Current; }
+
 	// Common
 	VOID Activate();
 	Event<AppWindow> Activated;
 	Handle<Panel> Body;
 	VOID Close();
 	Event<AppWindow> Closed;
-	static Handle<AppWindow> Current;
 	Handle<StackPanel> Footer;
 	Handle<StackPanel> Header;
 	DynamicHandle<AppWindow, Graphics::Icon> Icon;
@@ -59,6 +62,7 @@ private:
 	VOID OnClosed();
 	VOID OnIconChanged(Handle<Graphics::Icon> Icon);
 	VOID OnTitleChanged(Handle<Sentence> Title);
+	static AppWindow* s_Current;
 };
 
 }

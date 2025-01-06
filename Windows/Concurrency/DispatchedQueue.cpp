@@ -9,7 +9,7 @@
 // Using
 //=======
 
-#include "Concurrency/Scheduler.h"
+#include "Concurrency/TaskLock.h"
 #include "DispatchedQueue.h"
 
 
@@ -36,11 +36,17 @@ if(!s_Last)
 	}
 s_Last->m_Next=handler;
 s_Last=handler;
+PostThreadMessage(s_ThreadId, WM_DISPATCH, 0, 0);
 }
 
 VOID DispatchedQueue::Exit()
 {
 PostQuitMessage(0);
+}
+
+VOID DispatchedQueue::Initialize()
+{
+s_ThreadId=GetCurrentThreadId();
 }
 
 
@@ -71,5 +77,6 @@ while(s_First)
 DispatchedHandler* DispatchedQueue::s_First=nullptr;
 DispatchedHandler* DispatchedQueue::s_Last=nullptr;
 Mutex DispatchedQueue::s_Mutex;
+DWORD DispatchedQueue::s_ThreadId=0;
 
 }

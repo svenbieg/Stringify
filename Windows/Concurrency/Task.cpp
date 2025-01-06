@@ -28,7 +28,15 @@ namespace Concurrency {
 Task::~Task()
 {
 if(m_Thread!=NULL)
+	{
 	CloseHandle(m_Thread);
+	m_Thread=NULL;
+	}
+if(m_Then)
+	{
+	delete m_Then;
+	m_Then=nullptr;
+	}
 s_Tasks.remove(m_Id);
 }
 
@@ -43,7 +51,13 @@ ScopedLock lock(m_Mutex);
 if(m_Thread==NULL)
 	return;
 Cancelled=true;
-m_Done.Wait(lock);
+}
+
+Handle<Task> Task::Create(VOID (*Procedure)())
+{
+Handle<Task> task=new TaskProcedure(Procedure);
+RunDeferred(task);
+return task;
 }
 
 Handle<Task> Task::Get()
@@ -52,18 +66,39 @@ DWORD id=GetCurrentThreadId();
 return s_Tasks.get(id);
 }
 
-VOID Task::Resume()
+Handle<Object> Task::GetResult()
 {
-m_This=this;
-ResumeThread(m_Thread);
-}
-
-VOID Task::Wait()
-{
+Task::ThrowIfMain();
 ScopedLock lock(m_Mutex);
 if(m_Thread==NULL)
-	return;
+	return Result;
+if(m_Status!=Status::Pending)
+	return Result;
 m_Done.Wait(lock);
+return Result;
+}
+
+VOID Task::Sleep(UINT ms)
+{
+Task::ThrowIfMain();
+::Sleep(ms);
+}
+
+VOID Task::SleepMicroseconds(UINT us)
+{
+Task::ThrowIfMain();
+}
+
+Status Task::Wait()
+{
+Task::ThrowIfMain();
+ScopedLock lock(m_Mutex);
+if(m_Thread==NULL)
+	return m_Status;
+if(m_Status!=Status::Pending)
+	return m_Status;
+m_Done.Wait(lock);
+return m_Status;
 }
 
 
@@ -76,6 +111,7 @@ Cancelled(false),
 m_Id(0),
 m_Status(Status::Pending),
 m_Then(nullptr),
+m_This(this),
 m_Thread(NULL)
 {
 m_Thread=CreateThread(nullptr, 0, TaskProc, this, CREATE_SUSPENDED, &m_Id);
@@ -91,6 +127,17 @@ s_Tasks.add(m_Id, this);
 // Common Private
 //================
 
+VOID Task::RunDeferred(Handle<Task> task)
+{
+DispatchedQueue::Append(task, [task]()
+	{
+	DispatchedQueue::Append(task, [task]()
+		{
+		ResumeThread(task->m_Thread);
+		});
+	});
+}
+
 DWORD WINAPI Task::TaskProc(VOID* param)
 {
 Handle<Task> task=(Task*)param;
@@ -104,13 +151,16 @@ catch(Exception& e)
 	{
 	status=e.GetStatus();
 	}
+ScopedLock lock(task->m_Mutex);
 task->m_Status=status;
 task->m_Done.Trigger();
 if(task->m_Then)
 	{
-	MainTask::Dispatch(task->m_Then);
+	DispatchedQueue::Append(task->m_Then);
 	task->m_Then=nullptr;
 	}
+lock.Unlock();
+task=nullptr;
 return 0;
 }
 

@@ -41,7 +41,10 @@ public:
 	using Sentence=Culture::Sentence;
 
 	// Con-/Destructors
-	MenuBarItem(MenuBar* MenuBar, Handle<Sentence> Label);
+	static inline Handle<MenuBarItem> Create(MenuBar* Parent, Handle<Sentence> Label)
+		{
+		return new MenuBarItem(Parent, Label);
+		}
 
 	// Common
 	Handle<PopupMenuItem> Add(Handle<Sentence> Label);
@@ -52,6 +55,9 @@ public:
 	VOID Render(RenderTarget* Target, RECT& Rect)override;
 
 private:
+	// Con-/Destructors
+	MenuBarItem(MenuBar* Parent, Handle<Sentence> Label);
+
 	// Common
 	VOID OnKeyDown(Handle<KeyEventArgs> Args);
 	VOID OnLabelChanged(Handle<Sentence> Label);

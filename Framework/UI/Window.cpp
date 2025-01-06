@@ -28,9 +28,9 @@ namespace UI {
 
 VOID Window::BringToFront()
 {
-if(!Parent)
+if(!m_Parent)
 	return;
-auto children=Parent->Children;
+auto children=m_Parent->Children;
 children->Remove(this, false);
 children->Append(this, false);
 Invalidate(true);
@@ -50,24 +50,17 @@ Handle<Graphics::Font> Window::GetFont()
 {
 if(Font)
 	return Font;
-if(Parent)
-	return Parent->GetFont();
+if(m_Parent)
+	return m_Parent->GetFont();
 auto theme=GetTheme();
 return theme->DefaultFont;
-}
-
-Frame* Window::GetFrame()
-{
-if(!Parent)
-	return nullptr;
-return Parent->GetFrame();
 }
 
 Graphics::POINT Window::GetFrameOffset()const
 {
 POINT pt(m_Rect.Left, m_Rect.Top);
-if(Parent)
-	pt+=Parent->GetFrameOffset();
+if(m_Parent)
+	pt+=m_Parent->GetFrameOffset();
 return pt;
 }
 
@@ -81,13 +74,13 @@ Graphics::SIZE Window::GetMinSize(RenderTarget* target)
 {
 FLOAT scale=GetScaleFactor();
 SIZE size(0, 0);
-for(auto it=Children->First(); it->HasCurrent(); it->MoveNext())
+for(auto it=Children->Begin(); it->HasCurrent(); it->MoveNext())
 	{
 	auto child=it->GetCurrent();
 	if(!child->Visible)
 		continue;
 	SIZE child_size=child->GetMinSize(target);
-	auto control=Convert<Control>(child);
+	auto control=child.As<Control>();
 	if(control)
 		child_size.AddPadding(control->Margin*scale);
 	size.Width=TypeHelper::Max(size.Width, child_size.Width);
@@ -98,17 +91,17 @@ return size.Max(MinSize*scale);
 
 FLOAT Window::GetScaleFactor()const
 {
-if(!Parent)
+if(!m_Parent)
 	return Scale;
-FLOAT scale=Parent->GetScaleFactor();
+FLOAT scale=m_Parent->GetScaleFactor();
 return Scale*scale;
 }
 
 Graphics::POINT Window::GetScreenOffset()const
 {
 POINT pt(m_Rect.Left, m_Rect.Top);
-if(Parent)
-	pt+=Parent->GetScreenOffset();
+if(m_Parent)
+	pt+=m_Parent->GetScreenOffset();
 return pt;
 }
 
@@ -134,7 +127,7 @@ return frame->GetTheme();
 
 Handle<Window> Window::GetVisibleChild(UINT id)
 {
-for(auto it=Children->First(); it->HasCurrent(); it->MoveNext())
+for(auto it=Children->Begin(); it->HasCurrent(); it->MoveNext())
 	{
 	auto child=it->GetCurrent();
 	if(!child->Visible)
@@ -154,7 +147,7 @@ if(FlagHelper::Get(m_Flags, WindowFlags::Rearrange))
 if(rearrange)
 	FlagHelper::Set(m_Flags, WindowFlags::Rearrange);
 BOOL transparent=false;
-if(Parent)
+if(m_Parent)
 	{
 	transparent=true;
 	auto background=this->GetBackgroundBrush();
@@ -168,7 +161,7 @@ if(Parent)
 	}
 if(transparent)
 	{
-	Parent->Invalidate(rearrange);
+	m_Parent->Invalidate(rearrange);
 	}
 else
 	{
@@ -181,12 +174,12 @@ BOOL Window::IsParentOf(Window* window)
 {
 if(!window)
 	return false;
-Window* parent=window->Parent;
+Window* parent=window->m_Parent;
 while(parent)
 	{
 	if(parent==this)
 		return true;
-	parent=parent->Parent;
+	parent=parent->m_Parent;
 	}
 return false;
 }
@@ -195,9 +188,9 @@ BOOL Window::IsVisible()
 {
 if(!Visible)
 	return false;
-if(!Parent)
+if(!m_Parent)
 	return true;
-return Parent->IsVisible();
+return m_Parent->IsVisible();
 }
 
 VOID Window::Move(RECT const& rc)
@@ -251,22 +244,20 @@ Invalidate(true);
 
 Window::Window(Window* parent):
 MinSize(0, 0),
-Parent(this, parent),
 Scale(1.f),
 Visible(this, true),
 // Protected
 m_Flags(WindowFlags::None),
 m_Rect(0, 0, 0, 0),
 // Private
-m_OldParent(parent)
+m_Parent(parent)
 {
-Children=new ChildList();
-Parent.Changed.Add(this, &Window::OnParentChanged);
+Children=ChildList::Create();
 Visible.Changed.Add(this, &Window::OnVisibleChanged);
-if(Parent)
+if(m_Parent)
 	{
-	Parent->Children->Append(this);
-	Font=Parent->Font;
+	m_Parent->Children->Append(this);
+	Font=m_Parent->Font;
 	}
 }
 
@@ -274,20 +265,6 @@ if(Parent)
 //================
 // Common Private
 //================
-
-VOID Window::OnParentChanged(Window* parent)
-{
-if(m_OldParent)
-	{
-	m_OldParent->Children->Remove(this);
-	m_OldParent->Invalidate(true);
-	}
-m_OldParent=parent;
-if(!parent)
-	return;
-parent->Children->Append(this);
-Invalidate(true);
-}
 
 VOID Window::OnVisibleChanged(BOOL visible)
 {
@@ -305,8 +282,8 @@ else
 		if(!focus->IsVisible())
 			frame->SetFocus(nullptr);
 		}
-	if(Parent)
-		Parent->Invalidate(true);
+	if(m_Parent)
+		m_Parent->Invalidate(true);
 	}
 }
 

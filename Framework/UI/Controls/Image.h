@@ -28,11 +28,11 @@ namespace UI {
 class Image: public Control
 {
 public:
-	// Con-/Destructors
-	Image(Window* Parent=nullptr);
-
 	// Using
 	using Bitmap=Graphics::Bitmap;
+
+	// Con-/Destructors
+	static inline Handle<Image> Create(Window* Parent) { return new Image(Parent); }
 
 	// Common
 	SIZE GetMinSize(RenderTarget* Target)override;
@@ -40,6 +40,9 @@ public:
 	DynamicHandle<Image, Bitmap> Source;
 
 private:
+	// Con-/Destructors
+	Image(Window* Parent);
+
 	// Common
 	VOID OnSourceChanged(Handle<Bitmap> Source);
 };

@@ -26,11 +26,16 @@ namespace Graphics {
 // Common
 //========
 
+Theme::~Theme()
+{
+s_Current=nullptr;
+}
+
 Handle<Theme> Theme::Get()
 {
-if(!m_Current)
-	m_Current=new Theme();
-return m_Current;
+if(!s_Current)
+	s_Current=new Theme();
+return s_Current;
 }
 
 
@@ -41,27 +46,27 @@ return m_Current;
 Theme::Theme()
 {
 // Brushes
-BorderBrush=new Brush(COLOR(0xA0, 0xA0, 0xA0));
-ControlBrush=new Brush(SystemColor(COLOR_BTNFACE));
-FocusBrush=new Brush(SystemColor(COLOR_3DHIGHLIGHT));
-FocusBorderBrush=new Brush(SystemColor(COLOR_3DLIGHT));
-GrayTextBrush=new Brush(SystemColor(COLOR_GRAYTEXT));
-HighlightBrush=new Brush(Colors::Highlight);
-HighlightBorderBrush=new Brush(Colors::HighlightBorder);
-InactiveHighlightBrush=new Brush(Colors::Silver);
-LightBorderBrush=new Brush(COLOR(0xE0, 0xE0, 0xE0));
-LightControlBrush=new Brush(Colors::WhiteGray);
-LightTextBrush=new Brush(COLOR(0xA0, 0xA0, 0xA0));
-TextBrush=new Brush(SystemColor(COLOR_MENUTEXT));
-WindowBrush=new Brush(SystemColor(COLOR_WINDOW));
+BorderBrush=Brush::Create(COLOR(0xA0, 0xA0, 0xA0));
+ControlBrush=Brush::Create(SystemColor(COLOR_BTNFACE));
+FocusBrush=Brush::Create(SystemColor(COLOR_3DHIGHLIGHT));
+FocusBorderBrush=Brush::Create(SystemColor(COLOR_3DLIGHT));
+GrayTextBrush=Brush::Create(SystemColor(COLOR_GRAYTEXT));
+HighlightBrush=Brush::Create(Colors::Highlight);
+HighlightBorderBrush=Brush::Create(Colors::HighlightBorder);
+InactiveHighlightBrush=Brush::Create(Colors::Silver);
+LightBorderBrush=Brush::Create(COLOR(0xE0, 0xE0, 0xE0));
+LightControlBrush=Brush::Create(Colors::WhiteGray);
+LightTextBrush=Brush::Create(COLOR(0xA0, 0xA0, 0xA0));
+TextBrush=Brush::Create(SystemColor(COLOR_MENUTEXT));
+WindowBrush=Brush::Create(SystemColor(COLOR_WINDOW));
 // Fonts
-DefaultFont=new D2DFont();
+DefaultFont=D2DFont::Create();
 // Cursors
-DefaultCursor=new D2DCursor(IDC_ARROW);
-HandPointCursor=new D2DCursor(IDC_HAND);
-SizeHorizontalCursor=new D2DCursor(IDC_SIZEWE);
-SizeVerticalCursor=new D2DCursor(IDC_SIZENS);
-TextCursor=new D2DCursor(IDC_IBEAM);
+DefaultCursor=D2DCursor::Create(IDC_ARROW);
+HandPointCursor=D2DCursor::Create(IDC_HAND);
+SizeHorizontalCursor=D2DCursor::Create(IDC_SIZEWE);
+SizeVerticalCursor=D2DCursor::Create(IDC_SIZENS);
+TextCursor=D2DCursor::Create(IDC_IBEAM);
 }
 
 
@@ -69,6 +74,6 @@ TextCursor=new D2DCursor(IDC_IBEAM);
 // Common Private
 //================
 
-Handle<Theme> Theme::m_Current;
+Theme* Theme::s_Current=nullptr;
 
 }}

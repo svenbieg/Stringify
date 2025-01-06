@@ -22,6 +22,23 @@ namespace Graphics {
 	namespace Direct2D {
 
 
+//==================
+// Con-/Destructors
+//==================
+
+DWriteFactory::~DWriteFactory()
+{
+s_Current=nullptr;
+}
+
+Handle<DWriteFactory> DWriteFactory::Get()
+{
+if(!s_Current)
+	s_Current=new DWriteFactory();
+return s_Current;
+}
+
+
 //========
 // Common
 //========
@@ -50,13 +67,6 @@ m_Factory->CreateTextLayout(str, len, format, 0.f, 0.f, &layout);
 return layout;
 }
 
-Handle<DWriteFactory> DWriteFactory::Open()
-{
-if(!m_Current)
-	m_Current=new DWriteFactory();
-return m_Current;
-}
-
 
 //==========================
 // Con-/Destructors Private
@@ -74,6 +84,6 @@ m_Factory.Initialize(factory);
 // Common Private
 //================
 
-Handle<DWriteFactory> DWriteFactory::m_Current;
+DWriteFactory* DWriteFactory::s_Current=nullptr;
 
 }}

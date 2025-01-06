@@ -9,7 +9,7 @@
 // Using
 //=======
 
-#include "Concurrency/MainTask.h"
+#include "Concurrency/DispatchedQueue.h"
 #include "UI/Controls/TextBlock.h"
 #include "UI/Frame.h"
 #include "ToolTip.h"
@@ -30,18 +30,14 @@ namespace UI {
 // Con-/Destructors
 //==================
 
-ToolTip::ToolTip(Interactive* control, Handle<Sentence> text):
-Text(this, text),
-m_Control(control)
-{
-Text.Changed.Add(this, &ToolTip::OnTextChanged);
-OnTextChanged();
-}
-
 ToolTip::~ToolTip()
 {
-m_Control->PointerEntered.Remove(this);
-m_Control->PointerLeft.Remove(this);
+if(m_Parent)
+	{
+	m_Parent->PointerEntered.Remove(this);
+	m_Parent->PointerLeft.Remove(this);
+	m_Parent=nullptr;
+	}
 }
 
 
@@ -55,8 +51,21 @@ m_Timer=nullptr;
 if(m_Panel)
 	{
 	m_Panel->Visible=false;
-	MainTask::Dispatch(this, &ToolTip::DoClose);
+	DispatchedQueue::Append(this, &ToolTip::DoClose);
 	}
+}
+
+
+//==========================
+// Con-/Destructors Private
+//==========================
+
+ToolTip::ToolTip(Interactive* parent, Handle<Sentence> text):
+Text(this, text),
+m_Parent(parent)
+{
+Text.Changed.Add(this, &ToolTip::OnTextChanged);
+OnTextChanged();
 }
 
 
@@ -66,37 +75,41 @@ if(m_Panel)
 
 VOID ToolTip::DoClose()
 {
-m_Panel->Parent=nullptr;
-m_Panel=nullptr;
+if(m_Panel)
+	{
+	auto frame=m_Parent->GetFrame();
+	frame->Children->Remove(m_Panel);
+	m_Panel=nullptr;
+	}
 }
 
-VOID ToolTip::OnControlClicked()
+VOID ToolTip::OnParentClicked()
 {
 Close();
 }
 
-VOID ToolTip::OnControlPointerEntered()
+VOID ToolTip::OnParentPointerEntered()
 {
-m_Timer=new Timer();
+m_Timer=Timer::Create();
 m_Timer->Triggered.Add(this, &ToolTip::OnTimerTriggered);
 m_Timer->StartOnce(1000);
 }
 
-VOID ToolTip::OnControlPointerLeft()
+VOID ToolTip::OnParentPointerLeft()
 {
 Close();
 }
 
 VOID ToolTip::OnTextChanged()
 {
-m_Control->Clicked.Remove(this);
-m_Control->PointerEntered.Remove(this);
-m_Control->PointerLeft.Remove(this);
+m_Parent->Clicked.Remove(this);
+m_Parent->PointerEntered.Remove(this);
+m_Parent->PointerLeft.Remove(this);
 if(Text)
 	{
-	m_Control->Clicked.Add(this, &ToolTip::OnControlClicked);
-	m_Control->PointerEntered.Add(this, &ToolTip::OnControlPointerEntered);
-	m_Control->PointerLeft.Add(this, &ToolTip::OnControlPointerLeft);
+	m_Parent->Clicked.Add(this, &ToolTip::OnParentClicked);
+	m_Parent->PointerEntered.Add(this, &ToolTip::OnParentPointerEntered);
+	m_Parent->PointerLeft.Add(this, &ToolTip::OnParentPointerLeft);
 	}
 if(m_Panel)
 	OnTimerTriggered();
@@ -107,15 +120,15 @@ VOID ToolTip::OnTimerTriggered()
 if(m_Panel)
 	return;
 m_Timer=nullptr;
-auto frame=m_Control->GetFrame();
+auto frame=m_Parent->GetFrame();
 auto theme=frame->GetTheme();
-m_Panel=new Panel(frame);
+m_Panel=Panel::Create(frame);
 m_Panel->Background=theme->WindowBrush;
 m_Panel->Border=true;
-auto text_block=new TextBlock(m_Panel);
+auto text_block=TextBlock::Create(m_Panel);
 text_block->Margin.Set(4, 2, 4, 2);
 text_block->Text=Text->Begin();
-auto rc_control=m_Control->GetFrameRect();
+auto rc_control=m_Parent->GetFrameRect();
 Graphics::POINT pt(rc_control.Left, rc_control.Bottom);
 m_Panel->SetPosition(pt);
 }

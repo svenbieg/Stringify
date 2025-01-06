@@ -43,9 +43,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\MessageBox.cpp">
       <Filter>Desktop\Dialogs</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\PathEdit.cpp">
-      <Filter>UI\Controls</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Storage\Clipboard.cpp">
       <Filter>Storage</Filter>
     </ClCompile>
@@ -58,17 +55,20 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Devices\ClockHelper.cpp">
       <Filter>Devices</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Popup.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Overlapped.cpp">
       <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\AppWindow.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Popup.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\ToolWindow.cpp">
       <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\PathEdit.cpp">
+      <Filter>UI\Controls</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -117,9 +117,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\MessageBox.h">
       <Filter>Desktop\Dialogs</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\PathEdit.h">
-      <Filter>UI\Controls</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Strings\Files.h">
       <Filter>Resources\Strings</Filter>
     </ClInclude>
@@ -136,17 +133,20 @@
       <Filter>Devices</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Platform.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Popup.h">
+      <Filter>UI</Filter>
+    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Overlapped.h">
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\AppWindow.h">
       <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Popup.h">
-      <Filter>UI</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\ToolWindow.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\PathEdit.h">
+      <Filter>UI\Controls</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -168,12 +168,6 @@
     <Filter Include="Resources\Strings">
       <UniqueIdentifier>{b875c4a6-2169-48b0-9b3f-b0a3f3393c88}</UniqueIdentifier>
     </Filter>
-    <Filter Include="UI">
-      <UniqueIdentifier>{0e05da9c-3f6f-40b4-908d-6821b6eac7d4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UI\Controls">
-      <UniqueIdentifier>{0f3b6cfb-67b1-4356-b599-1a5942b2389f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Storage">
       <UniqueIdentifier>{f8b30e27-2ce5-4ed2-8246-e734ed4c37bf}</UniqueIdentifier>
     </Filter>
@@ -182,6 +176,12 @@
     </Filter>
     <Filter Include="Devices">
       <UniqueIdentifier>{1bd87a5f-bd1d-42e3-a68f-0d7f4714b4b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{30b6e3fa-b728-4123-8798-b28f0a07e0e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Controls">
+      <UniqueIdentifier>{7a820d70-8ad9-4ff3-a42a-fa0560a2aef6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

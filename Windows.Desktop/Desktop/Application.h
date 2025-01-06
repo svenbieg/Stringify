@@ -26,8 +26,10 @@ namespace Desktop {
 class Application: public UI::Application
 {
 public:
+	// Con-/Destructors
+	~Application();
+	static inline Application* Get() { return s_Current; }
 	// Common
-	static Application* Current;
 	INT Run();
 	Event<Application> UnhandledException;
 
@@ -38,7 +40,7 @@ protected:
 private:
 	// Common
 	static LONG WINAPI UnhandledExceptionHandler(EXCEPTION_POINTERS* Info);
-	DWORD m_ThreadId;
+	static Application* s_Current;
 };
 
 }

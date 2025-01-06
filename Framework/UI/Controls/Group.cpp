@@ -20,17 +20,6 @@ namespace UI {
 	namespace Controls {
 
 
-//==================
-// Con-/Destructors
-//==================
-
-Group::Group(Window* parent, Handle<String> title):
-Control(parent),
-Padding(8, 8, 8, 8),
-Title(title)
-{}
-
-
 //========
 // Common
 //========
@@ -49,7 +38,7 @@ auto content=GetVisibleChild(0);
 if(content)
 	{
 	content_size=content->GetMinSize(target);
-	auto control=Convert<Control>(content);
+	auto control=content.As<Control>();
 	if(control)
 		{
 		RECT const& margin=control->Margin;
@@ -80,7 +69,7 @@ if(Title)
 	}
 rc.Top+=title_size.Height;
 rc.SetPadding(Padding*scale);
-auto control=Convert<Control>(content);
+auto control=content.As<Control>();
 if(control)
 	{
 	RECT const& margin=control->Margin;
@@ -123,5 +112,16 @@ else
 	rc.SetPadding(1, 1, 1, 1);
 	}
 }
+
+
+//==========================
+// Con-/Destructors Private
+//==========================
+
+Group::Group(Window* parent, Handle<String> title):
+Control(parent),
+Padding(8, 8, 8, 8),
+Title(title)
+{}
 
 }}

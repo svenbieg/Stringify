@@ -40,7 +40,7 @@ public:
 	using Timer=Timing::Timer;
 
 	// Con-/Destructors
-	Input(Window* Parent);
+	static inline Handle<Input> Create(Window* Parent) { return new Input(Parent); }
 
 	// Common
 	VOID AppendLine(Handle<String> Line);
@@ -85,6 +85,9 @@ private:
 		Pointing=1,
 		Shift=2
 		};
+
+	// Con-/Destructors
+	Input(Window* Parent);
 
 	// Common
 	POINT CharFromPoint(POINT Point, UINT LineHeight);

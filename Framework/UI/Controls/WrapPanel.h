@@ -28,10 +28,14 @@ class WrapPanel: public Panel
 {
 public:
 	// Con-/Destructors
-	WrapPanel(Window* Parent=nullptr);
+	static inline Handle<WrapPanel> Create(Window* Parent) { return new WrapPanel(Parent); }
 
 	// Common
 	VOID Rearrange(RenderTarget* Target, RECT& Rect)override;
+
+protected:
+	// Con-/Destructors
+	WrapPanel(Window* Parent): Panel(Parent) {}
 };
 
 }}

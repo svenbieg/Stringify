@@ -52,11 +52,12 @@ public:
 	virtual Handle<Brush> GetBackgroundBrush();
 	virtual RECT GetClientRect()const;
 	virtual Handle<Graphics::Font> GetFont();
-	virtual Frame* GetFrame();
+	virtual inline Frame* GetFrame() { return m_Parent->GetFrame(); }
 	virtual POINT GetFrameOffset()const;
 	RECT GetFrameRect()const;
 	virtual SIZE GetMinSize(RenderTarget* Target);
 	POINT GetOffset()const { return POINT(m_Rect.Left, m_Rect.Top); }
+	inline Window* GetParent()const { return m_Parent; }
 	inline RECT const& GetRect()const { return m_Rect; }
 	FLOAT GetScaleFactor()const;
 	virtual POINT GetScreenOffset()const;
@@ -71,7 +72,6 @@ public:
 	SIZE MinSize;
 	virtual VOID Move(RECT const& Rect);
 	VOID Move(RenderTarget* Target, RECT const& Rect);
-	DynamicPointer<Window, Window> Parent;
 	virtual VOID Rearrange(RenderTarget* Target, RECT& Rect) {}
 	virtual VOID Render(RenderTarget* Target, RECT& Rect);
 	Event<Window, RenderTarget*, RECT&> Rendered;
@@ -95,13 +95,12 @@ protected:
 
 	// Common
 	WindowFlags m_Flags;
+	Window* m_Parent;
 	RECT m_Rect;
 
 private:
 	// Common
-	VOID OnParentChanged(Window* Parent);
 	VOID OnVisibleChanged(BOOL Visible);
-	Window* m_OldParent;
 };
 
 }

@@ -20,23 +20,6 @@ namespace UI {
 	namespace Controls {
 
 
-//==================
-// Con-/Destructors
-//==================
-
-TextBlock::TextBlock(Handle<String> text):
-TextBlock(nullptr, text)
-{}
-
-TextBlock::TextBlock(Window* parent, Handle<String> text):
-Control(parent),
-Text(this)
-{
-Text.Changed.Add(this, &TextBlock::OnTextChanged);
-Text=text;
-}
-
-
 //========
 // Common
 //========
@@ -72,6 +55,19 @@ target->Font=GetFont();
 target->TextColor=text_color;
 FLOAT scale=GetScaleFactor();
 target->DrawText(rc, scale, Text->Begin());
+}
+
+
+//============================
+// Con-/Destructors Protected
+//============================
+
+TextBlock::TextBlock(Window* parent, Handle<String> text):
+Control(parent),
+Text(this)
+{
+Text.Changed.Add(this, &TextBlock::OnTextChanged);
+Text=text;
 }
 
 

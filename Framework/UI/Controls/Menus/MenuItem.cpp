@@ -48,7 +48,8 @@ if(!SubMenu)
 	}
 Graphics::RECT rc=Window->GetScreenRect();
 Graphics::POINT pt(rc.Left, rc.Bottom);
-auto popup=Convert<PopupMenu>(Window->Parent);
+auto parent=Window->GetParent();
+auto popup=dynamic_cast<PopupMenu*>(parent);
 if(popup)
 	pt.Set(rc.Right, rc.Top);
 SubMenu->Show(pt);

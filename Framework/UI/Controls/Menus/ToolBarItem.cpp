@@ -9,7 +9,7 @@
 // Using
 //=======
 
-#include "Concurrency/MainTask.h"
+#include "Concurrency/DispatchedQueue.h"
 #include "MenuHelper.h"
 #include "ToolBarItem.h"
 #include "ToolBarPanel.h"
@@ -25,24 +25,6 @@ using namespace Graphics;
 namespace UI {
 	namespace Controls {
 		namespace Menus {
-
-
-//==================
-// Con-/Destructors
-//==================
-
-ToolBarItem::ToolBarItem(ToolBarPanel* parent, Handle<Sentence> tool_tip):
-Interactive(parent),
-Padding(3, 3, 3, 3)
-{
-Interactive::Clicked.Add(this, &ToolBarItem::OnClicked);
-Focused.Add(this, &ToolBarItem::OnFocused);
-FocusLost.Add(this, &ToolBarItem::OnFocusLost);
-PointerEntered.Add(this, &ToolBarItem::OnPointerEntered);
-PointerLeft.Add(this, &ToolBarItem::OnPointerLeft);
-if(tool_tip)
-	ToolTip=new Menus::ToolTip(this, tool_tip);
-}
 
 
 //========
@@ -97,6 +79,24 @@ target->DrawBitmap(rc, icon, ico_rc);
 }
 
 
+//==========================
+// Con-/Destructors Private
+//==========================
+
+ToolBarItem::ToolBarItem(ToolBarPanel* parent, Handle<Sentence> tool_tip):
+Interactive(parent),
+Padding(3, 3, 3, 3)
+{
+Interactive::Clicked.Add(this, &ToolBarItem::OnClicked);
+Focused.Add(this, &ToolBarItem::OnFocused);
+FocusLost.Add(this, &ToolBarItem::OnFocusLost);
+PointerEntered.Add(this, &ToolBarItem::OnPointerEntered);
+PointerLeft.Add(this, &ToolBarItem::OnPointerLeft);
+if(tool_tip)
+	ToolTip=Menus::ToolTip::Create(this, tool_tip);
+}
+
+
 //================
 // Common Private
 //================
@@ -108,7 +108,7 @@ Clicked(this);
 
 VOID ToolBarItem::OnClicked()
 {
-MainTask::Dispatch(this, &ToolBarItem::DoClick);
+DispatchedQueue::Append(this, &ToolBarItem::DoClick);
 }
 
 VOID ToolBarItem::OnFocused()

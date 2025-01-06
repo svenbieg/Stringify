@@ -70,7 +70,7 @@ if(!hNamedPipe)
 StreamWriter writer(hNamedPipe);
 auto cmd_line=CommandLine::Get();
 auto args=cmd_line->Arguments;
-for(auto it=args->First(); it->HasCurrent(); it->MoveNext())
+for(auto it=args->Begin(); it->HasCurrent(); it->MoveNext())
 	{
 	auto arg=it->GetCurrent();
 	writer.Print(arg);

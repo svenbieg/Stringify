@@ -135,7 +135,7 @@ while(pos<size)
 	SIZE_T copy=size-pos;
 	SIZE_T write=copy;
 	FILE_SIZE end=offset+copy;
-	FILE_SIZE block_end=MemoryHelper::AlignUp(end, PAGE_SIZE);
+	FILE_SIZE block_end=TypeHelper::AlignUp(end, PAGE_SIZE);
 	if(end<block_end)
 		{
 		FILE_SIZE block_start=block_end-PAGE_SIZE;

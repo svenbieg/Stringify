@@ -31,9 +31,10 @@ BOOL Menu::Accelerate(VirtualKey key)
 if(!FlagHelper::Get(m_MenuFlags, MenuFlags::KeyboardAccess))
 	return false;
 CHAR acc=(CHAR)key;
-for(auto it=m_Panel->Children->First(); it->HasCurrent(); it->MoveNext())
+for(auto it=m_Panel->Children->Begin(); it->HasCurrent(); it->MoveNext())
 	{
-	auto item=Convert<MenuItem>(it->GetCurrent());
+	auto child=(UI::Window*)it->GetCurrent();
+	auto item=dynamic_cast<MenuItem*>(child);
 	if(!item)
 		continue;
 	auto window=item->Window;
@@ -61,7 +62,7 @@ if(m_SelectedItem)
 	m_SelectedItem=nullptr;
 	}
 FlagHelper::Clear(m_MenuFlags, MenuFlags::KeyboardAccess);
-Application::Current->SetCurrentMenu(m_ParentMenu);
+Application::Get()->SetCurrentMenu(m_ParentMenu);
 if(m_ParentMenu)
 	{
 	m_ParentMenu->m_OpenItem=nullptr;
@@ -96,7 +97,7 @@ BOOL Menu::HasAcceleration()
 {
 if(!FlagHelper::Get(m_MenuFlags, MenuFlags::KeyboardAccess))
 	return false;
-return Application::Current->GetCurrentMenu()==this;
+return Application::Get()->GetCurrentMenu()==this;
 }
 
 BOOL Menu::IsOpen()
@@ -145,7 +146,7 @@ auto item=m_SelectedItem;
 if(!item)
 	{
 	auto control=Interactive::GetNextControl(m_Panel, nullptr, 0);
-	item=Convert<MenuItem>(control);
+	item=dynamic_cast<MenuItem*>(control);
 	}
 Select(item);
 }

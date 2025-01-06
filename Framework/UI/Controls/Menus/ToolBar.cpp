@@ -21,24 +21,24 @@ namespace UI {
 		namespace Menus {
 
 
-//==================
-// Con-/Destructors
-//==================
-
-ToolBar::ToolBar(Window* parent):
-WrapPanel(parent)
-{
-Padding.Set(-6, 0, 0, 0);
-}
-
-
 //========
 // Common
 //========
 
 Handle<ToolBarPanel> ToolBar::AddPanel()
 {
-return new ToolBarPanel(this);
+return ToolBarPanel::Create(this);
+}
+
+
+//==========================
+// Con-/Destructors Private
+//==========================
+
+ToolBar::ToolBar(Window* parent):
+WrapPanel(parent)
+{
+Padding.Set(-6, 0, 0, 0);
 }
 
 }}}

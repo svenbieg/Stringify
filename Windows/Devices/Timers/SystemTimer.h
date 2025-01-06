@@ -5,6 +5,16 @@
 #pragma once
 
 
+//======================
+// Forward-Declarations
+//======================
+
+namespace Concurrency
+{
+class Task;
+}
+
+
 //===========
 // Namespace
 //===========
@@ -20,21 +30,26 @@ namespace Devices {
 class SystemTimer: public Object
 {
 public:
+	// Using
+	using Task=Concurrency::Task;
+
 	// Con-/Destructors
-	SystemTimer();
 	~SystemTimer();
 
 	// Common
-	static SIZE_T GetTickCount();
-	static SIZE_T Microseconds();
-	static Handle<SystemTimer> Open();
-	Event<SystemTimer> Tick;
+	static Handle<SystemTimer> Get();
+	static UINT64 GetTickCount();
+	static UINT64 Microseconds();
+	Event<SystemTimer> Triggered;
 
 private:
+	// Con-/Destructors
+	SystemTimer();
+
 	// Common
 	VOID TaskProc();
-	Handle<Concurrency::Task> m_Task;
-	static Handle<SystemTimer> s_Current;
+	Handle<Task> m_Task;
+	static SystemTimer* s_Current;
 };
 
 }}

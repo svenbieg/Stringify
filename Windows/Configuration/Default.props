@@ -16,7 +16,7 @@
 
   <PropertyGroup>
     <IntDir>$(SolutionDir)$(Configuration)\$(ProjectName)\$(Platform)\obj\</IntDir>
-    <OutDir>$(SolutionDir)$(Configuration)\$(ProjectName)\$(Platform)\bin\</OutDir>
+    <OutDir>$(SolutionDir)$(Configuration)\$(ProjectName)\$(Platform)\</OutDir>
   </PropertyGroup>
 
 </Project>

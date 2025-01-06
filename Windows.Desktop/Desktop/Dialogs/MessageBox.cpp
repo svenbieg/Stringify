@@ -56,7 +56,7 @@ return status==IDOK;
 
 INT MessageBox::Show(LPCTSTR title, LPCTSTR msg, UINT type)
 {
-auto app_wnd=AppWindow::Current;
+auto app_wnd=AppWindow::Get();
 HWND hwnd=app_wnd? app_wnd->GetHandle(): NULL;
 return MessageBoxT(hwnd, title, msg, type);
 }

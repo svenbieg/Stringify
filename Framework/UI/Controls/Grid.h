@@ -23,6 +23,13 @@ namespace UI {
 	namespace Controls {
 
 
+//======================
+// Forward-Declarations
+//======================
+
+class Grid;
+
+
 //======
 // Unit
 //======
@@ -40,14 +47,17 @@ Auto, Percent, Pixel, Star
 class GridColumn: public Object
 {
 public:
-	// Con-/Destructors
-	GridColumn(UINT Width, GridUnit Unit, HorizontalAlignment Alignment):
-		Alignment(Alignment), Unit(Unit), Width(Width) {}
+	// Friends
+	friend Grid;
 
 	// Common
 	HorizontalAlignment Alignment;
 	GridUnit Unit;
 	UINT Width;
+
+private:
+	// Con-/Destructors
+	GridColumn(UINT Width, GridUnit Unit, HorizontalAlignment Alignment): Alignment(Alignment), Unit(Unit), Width(Width) {}
 };
 
 
@@ -58,14 +68,17 @@ public:
 class GridRow: public Object
 {
 public:
-	// Con-/Destructors
-	GridRow(UINT Height, GridUnit Unit, VerticalAlignment Alignment):
-		Alignment(Alignment), Height(Height), Unit(Unit) {}
+	// Friends
+	friend Grid;
 
 	// Common
 	VerticalAlignment Alignment;
 	GridUnit Unit;
 	UINT Height;
+
+private:
+	// Con-/Destructors
+	GridRow(UINT Height, GridUnit Unit, VerticalAlignment Alignment): Alignment(Alignment), Height(Height), Unit(Unit) {}
 };
 
 
@@ -81,7 +94,7 @@ public:
 	using RowList=Collections::List<Handle<GridRow>>;
 
 	// Con-/Destructors
-	Grid(Window* Parent=nullptr);
+	static inline Handle<Grid> Create(Window* Parent) { return new Grid(Parent); }
 
 	// Common
 	Handle<GridColumn> AddColumn(UINT Width=0, GridUnit Unit=GridUnit::Pixel, HorizontalAlignment Alignment=HorizontalAlignment::Stretch);
@@ -92,6 +105,10 @@ public:
 	RECT Padding;
 	VOID Rearrange(RenderTarget* Target, RECT& Rect)override;
 	Handle<RowList> Rows;
+
+protected:
+	// Con-/Destructors
+	Grid(Window* Parent);
 
 private:
 	// Grid-Position

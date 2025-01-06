@@ -36,23 +36,29 @@ public:
 	using Timer=Timing::Timer;
 
 	// Con-/Destructors
-	ToolTip(Interactive* Control, Handle<Sentence> Text=nullptr);
 	~ToolTip();
+	static inline Handle<ToolTip> Create(Interactive* Parent, Handle<Sentence> Text=nullptr)
+		{
+		return new ToolTip(Parent, Text);
+		}
 
 	// Common
 	VOID Close();
 	DynamicHandle<ToolTip, Sentence> Text;
 
 private:
+	// Con-/Destructors
+	ToolTip(Interactive* Parent, Handle<Sentence> Text);
+
 	// Common
 	VOID DoClose();
-	VOID OnControlClicked();
-	VOID OnControlPointerEntered();
-	VOID OnControlPointerLeft();
+	VOID OnParentClicked();
+	VOID OnParentPointerEntered();
+	VOID OnParentPointerLeft();
 	VOID OnTextChanged();
 	VOID OnTimerTriggered();
-	Interactive* m_Control;
 	Handle<Panel> m_Panel;
+	Interactive* m_Parent;
 	Handle<Timer> m_Timer;
 };
 

@@ -34,8 +34,8 @@ public:
 	using Sentence=Culture::Sentence;
 
 	// Con-/Destructors
-	MenuBar(UI::Window* Parent);
 	~MenuBar();
+	static inline Handle<MenuBar> Create(Window* Parent) { return new MenuBar(Parent); }
 
 	// Common
 	Handle<MenuBarItem> Add(Handle<Sentence> Label);
@@ -46,13 +46,14 @@ private:
 	using KeyEventArgs=UI::Input::KeyEventArgs;
 	using KeyEventType=UI::Input::KeyEventType;
 
+	// Con-/Destructors
+	MenuBar(Window* Parent);
+
 	// Common
 	VOID OnFrameKeyEvent(KeyEventType Type, Handle<KeyEventArgs> Args);
 	VOID OnFrameKeyDown(Handle<KeyEventArgs> Args);
 	VOID OnFrameKeyUp(Handle<KeyEventArgs> Args);
-	VOID OnParentChanged();
 	BOOL m_Entering;
-	Frame* m_OldFrame;
 };
 
 }}}

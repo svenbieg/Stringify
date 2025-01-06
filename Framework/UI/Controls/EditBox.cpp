@@ -23,29 +23,6 @@ namespace UI {
 	namespace Controls {
 
 
-//==================
-// Con-/Destructors
-//==================
-
-EditBox::EditBox(Window* parent):
-ScrollBox(parent),
-Mask(this, 0),
-Text(this)
-{
-AlignHorizontal=HorizontalAlignment::Stretch;
-AlignVertical=VerticalAlignment::Center;
-HorizontalBar->Visibility=ScrollBarVisibility::Hidden;
-Mask.Changed.Add(this, &EditBox::OnMaskChanged);
-Text.Changed.Add(this, &EditBox::OnTextChanged);
-VerticalBar->Visibility=ScrollBarVisibility::Hidden;
-m_Input=new Input(Body);
-m_Input->Focused.Add(this, &EditBox::OnInputFocused);
-m_Input->Padding.Set(2, 2, 2, 2);
-m_Input->SelectionChanged.Add(this, &EditBox::OnInputSelectionChanged);
-m_Input->TabStop=true;
-}
-
-
 //========
 // Common
 //========
@@ -64,6 +41,29 @@ VOID EditBox::Rearrange(RenderTarget* target, RECT& rc)
 UINT line_height=m_Input->GetLineHeight();
 HorizontalBar->Step=line_height;
 ScrollBox::Rearrange(target, rc);
+}
+
+
+//==========================
+// Con-/Destructors Private
+//==========================
+
+EditBox::EditBox(Window* parent):
+ScrollBox(parent),
+Mask(this, 0),
+Text(this)
+{
+AlignHorizontal=HorizontalAlignment::Stretch;
+AlignVertical=VerticalAlignment::Center;
+HorizontalBar->Visibility=ScrollBarVisibility::Hidden;
+Mask.Changed.Add(this, &EditBox::OnMaskChanged);
+Text.Changed.Add(this, &EditBox::OnTextChanged);
+VerticalBar->Visibility=ScrollBarVisibility::Hidden;
+m_Input=Input::Create(Body);
+m_Input->Focused.Add(this, &EditBox::OnInputFocused);
+m_Input->Padding.Set(2, 2, 2, 2);
+m_Input->SelectionChanged.Add(this, &EditBox::OnInputSelectionChanged);
+m_Input->TabStop=true;
 }
 
 

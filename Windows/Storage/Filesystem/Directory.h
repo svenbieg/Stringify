@@ -9,6 +9,7 @@
 // Using
 //=======
 
+#include "Concurrency/Task.h"
 #include "Storage/Directory.h"
 
 
@@ -41,8 +42,8 @@ public:
 	Directory(Handle<String> Path);
 
 	// Storage.Directory
+	Handle<Storage::DirectoryIterator> Begin()override;
 	Handle<Storage::File> CreateFile(Handle<String> Path, FileCreateMode CreateMode=FileCreateMode::OpenExisting, FileAccessMode AccessMode=FileAccessMode::ReadWrite, FileShareMode ShareMode=FileShareMode::ShareRead)override;
-	Handle<Storage::DirectoryIterator> First()override;
 	static Handle<Directory> Open(Handle<String> Path);
 	Handle<Object> Get(Handle<String> Path)override;
 

@@ -28,7 +28,7 @@ class Panel: public Control
 {
 public:
 	// Con-/Destructors
-	Panel(Window* Parent=nullptr);
+	static inline Handle<Panel> Create(Window* Parent) { return new Panel(Parent); }
 
 	// Common
 	BOOL Border;
@@ -37,6 +37,10 @@ public:
 	RECT Padding;
 	virtual VOID Rearrange(RenderTarget* Target, RECT& Rect)override;
 	virtual VOID Render(RenderTarget* Target, RECT& Rect)override;
+
+protected:
+	// Con-/Destructors
+	Panel(Window* Parent);
 };
 
 }}

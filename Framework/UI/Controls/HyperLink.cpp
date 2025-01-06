@@ -22,17 +22,6 @@ namespace UI {
 	namespace Controls {
 
 
-//==================
-// Con-/Destructors
-//==================
-
-HyperLink::HyperLink(Window* parent):
-Interactive(parent)
-{
-TextColor=new Brush(Colors::Blue);
-}
-
-
 //========
 // Common
 //========
@@ -64,6 +53,17 @@ target->TextColor=TextColor;
 target->Font=GetFont();
 target->DrawText(rc, scale, Text->Begin());
 target->DrawLine(POINT(rc.Left, rc.Bottom), POINT(rc.Right, rc.Bottom), TextColor);
+}
+
+
+//==========================
+// Con-/Destructors Private
+//==========================
+
+HyperLink::HyperLink(Window* parent):
+Interactive(parent)
+{
+TextColor=Brush::Create(Colors::Blue);
 }
 
 }}

@@ -29,8 +29,10 @@ class SplitView: public Interactive
 {
 public:
 	// Con-/Destructors
-	SplitView(Orientation Orientation=Orientation::Vertical);
-	SplitView(Window* Parent, Orientation Orientation=Orientation::Vertical);
+	static inline Handle<SplitView> Create(Window* Parent, Orientation Orientation=Orientation::Vertical)
+		{
+		return new SplitView(Parent, Orientation);
+		}
 
 	// Common
 	UINT Distance;
@@ -39,6 +41,9 @@ public:
 	UINT Size;
 
 private:
+	// Con-/Destructors
+	SplitView(Window* Parent, Orientation Orientation);
+
 	// Common
 	VOID OnPointerDown(Handle<PointerEventArgs> Args);
 	VOID OnPointerMoved(Handle<PointerEventArgs> Args);

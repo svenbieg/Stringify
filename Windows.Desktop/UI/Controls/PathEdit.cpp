@@ -24,9 +24,9 @@ namespace UI {
 	namespace Controls {
 
 
-//==================
-// Con-/Destructors
-//==================
+//==========================
+// Con-/Destructors Private
+//==========================
 
 PathEdit::PathEdit(Window* parent, PathEditMode mode):
 Grid(parent),
@@ -37,12 +37,12 @@ Path.Changed.Add(this, &PathEdit::OnPathChanged);
 AddColumn(1, GridUnit::Star);
 AddColumn(1, GridUnit::Auto);
 AddRow(1, GridUnit::Auto, VerticalAlignment::Center);
-hEditBox=new EditBox(this);
-hButton=new Button(this, "..");
-hButton->Border=true;
-hButton->Clicked.Add(this, &PathEdit::OnButtonClicked);
-hButton->Margin.Set(-1, 0, 0, 0);
-hButton->Padding.Set(4, 2, 4, 2);
+m_EditBox=EditBox::Create(this);
+m_Button=Button::Create(this, "..");
+m_Button->Border=true;
+m_Button->Clicked.Add(this, &PathEdit::OnButtonClicked);
+m_Button->Margin.Set(-1, 0, 0, 0);
+m_Button->Padding.Set(4, 2, 4, 2);
 }
 
 
@@ -74,7 +74,7 @@ if(path)
 
 VOID PathEdit::OnPathChanged(Handle<String> path)
 {
-hEditBox->Text=path;
+m_EditBox->Text=path;
 }
 
 }}

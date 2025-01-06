@@ -25,28 +25,13 @@ namespace UI {
 		namespace Menus {
 
 
-//==================
-// Con-/Destructors
-//==================
-
-PopupMenu::PopupMenu(Window* parent, Menu* parent_menu):
-Popup(parent),
-Menu(parent_menu)
-{
-auto panel=new StackPanel(this, Orientation::Vertical);
-panel->AlignChildren=Alignment::Stretch;
-panel->Padding.Set(4, 4, 4, 4);
-m_Panel=panel;
-}
-
-
 //========
 // Common
 //========
 
 Handle<PopupMenuItem> PopupMenu::Add(Handle<Sentence> label)
 {
-return new PopupMenuItem(this, label);
+return PopupMenuItem::Create(this, label);
 }
 
 VOID PopupMenu::Close()
@@ -72,10 +57,10 @@ bool icon=false;
 bool arrow=false;
 bool separator=true;
 Handle<UI::Window> last_sep;
-for(auto it=m_Panel->Children->First(); it->HasCurrent(); it->MoveNext())
+for(auto it=m_Panel->Children->Begin(); it->HasCurrent(); it->MoveNext())
 	{
 	auto child=it->GetCurrent();
-	auto item=Convert<PopupMenuItem>(child);
+	auto item=child.As<PopupMenuItem>();
 	if(!item)
 		continue;
 	if(item->IsSeparator())
@@ -122,15 +107,15 @@ if(arrow)
 	SIZE arrow_size=target->MeasureText(font, scale, TEXT(">"));
 	shortcut_width+=arrow_size+10*scale;
 	}
-for(auto it=m_Panel->Children->First(); it->HasCurrent(); it->MoveNext())
+for(auto it=m_Panel->Children->Begin(); it->HasCurrent(); it->MoveNext())
 	{
 	auto child=it->GetCurrent();
-	auto item=Convert<PopupMenuItem>(child);
+	auto item=child.As<PopupMenuItem>();
 	if(!item)
 		continue;
 	item->SetColumns(icon_width, label_width, shortcut_width);
 	}
-return Overlapped::GetMinSize(target);
+return Popup::GetMinSize(target);
 }
 
 VOID PopupMenu::KillFocus()
@@ -142,13 +127,14 @@ Close();
 VOID PopupMenu::Show(POINT const& pt)
 {
 Opened(this);
-auto current=Application::Current->GetCurrentMenu();
+auto app=Application::Get();
+auto current=app->GetCurrentMenu();
 if(current)
 	{
 	if(!IsParentMenu(current))
 		current->Close();
 	}
-Application::Current->SetCurrentMenu(this);
+app->SetCurrentMenu(this);
 BOOL keyboard=false;
 if(m_ParentMenu)
 	keyboard|=m_ParentMenu->HasKeyboardAccess();
@@ -156,6 +142,21 @@ FlagHelper::Set(m_MenuFlags, MenuFlags::KeyboardAccess, keyboard);
 RECT rc(pt.Left, pt.Top, pt.Left, pt.Top);
 Move(rc);
 Visible=true;
+}
+
+
+//============================
+// Con-/Destructors Protected
+//============================
+
+PopupMenu::PopupMenu(Window* parent, Menu* parent_menu):
+Popup(parent),
+Menu(parent_menu)
+{
+auto panel=StackPanel::Create(this, Orientation::Vertical);
+panel->AlignChildren=Alignment::Stretch;
+panel->Padding.Set(4, 4, 4, 4);
+m_Panel=panel;
 }
 
 }}}
