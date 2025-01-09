@@ -57,18 +57,83 @@ private:
 //========
 
 template <>
-class Handle<Graphics::Direct2D::Icon>: public HandleBase<Graphics::Direct2D::Icon>
+class Handle<Graphics::Direct2D::Icon>
 {
 public:
+	// Friends
+	template <class _friend_t> friend class Handle;
+
 	// Using
-	using _base_t=HandleBase<Graphics::Direct2D::Icon>;
-	using _base_t::_base_t;
 	using ICON=Resources::Icons::ICON;
 	using Icon=Graphics::Direct2D::Icon;
 
 	// Con-/Destructors
-	Handle(INT Id) { Create(new Icon(Id)); }
-	Handle(ICON const* Resource) { Create(new Icon(Resource)); }
+	Handle(): m_Object(nullptr) {}
+	Handle(nullptr_t): m_Object(nullptr) {}
+	Handle(Icon* Object): m_Object(Object)
+		{
+		if(m_Object)
+			m_Object->m_RefCount++;
+		}
+	Handle(Handle const& Copy): Handle(Copy.m_Object) {}
+	Handle(Handle&& Move)noexcept: m_Object(Move.m_Object)
+		{
+		Move.m_Object=nullptr;
+		}
+	Handle(INT Id): m_Object(nullptr) { operator=(Id); }
+	Handle(ICON const* Resource): m_Object(nullptr) { operator=(Resource); }
+	~Handle()
+		{
+		if(m_Object)
+			{
+			m_Object->Release();
+			m_Object=nullptr;
+			}
+		}
+
+	// Access
+	inline operator BOOL()const { return m_Object!=nullptr; }
+	inline operator Icon*()const { return m_Object; }
+	inline Icon* operator->()const { return m_Object; }
+
+	// Comparison
+	inline BOOL operator==(nullptr_t)const { return m_Object==nullptr; }
+	inline BOOL operator==(Icon* Value)const { return m_Object==Value; }
+	inline BOOL operator!=(nullptr_t)const { return m_Object!=nullptr; }
+	inline BOOL operator!=(Icon* Value)const { return m_Object!=Value; }
+
+	// Assignment
+	inline Handle& operator=(nullptr_t)
+		{
+		this->~Handle();
+		return *this;
+		}
+	Handle& operator=(Icon* Object)
+		{
+		if(m_Object==Object)
+			return *this;
+		if(m_Object)
+			m_Object->Release();
+		m_Object=Object;
+		if(m_Object)
+			m_Object->m_RefCount++;
+		return *this;
+		}
+	inline Handle& operator=(Handle const& Copy) { return operator=(Copy.m_Object); }
+	Handle& operator=(UINT Id)
+		{
+		auto value=Icon::Create(Id);
+		return operator=(value);
+		}
+	Handle& operator=(ICON const* Resource)
+		{
+		auto value=Icon::Create(Resource);
+		return operator=(value);
+		}
+
+private:
+	// Common
+	Icon* m_Object;
 };
 
 

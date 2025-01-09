@@ -26,7 +26,7 @@ namespace UI {
 // Application
 //=============
 
-class Application: public Object
+class Application: public virtual Object
 {
 public:
 	// Using

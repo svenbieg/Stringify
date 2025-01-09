@@ -38,9 +38,9 @@
 //======================
 
 #define __long long
-#define __longlong long long
+#define __long_long long long
 
-typedef unsigned __longlong int FILE_SIZE;
+typedef unsigned __long_long int FILE_SIZE;
 
 constexpr FILE_SIZE FILE_SIZE_MAX=0xFFFFFFFFFFFFFFFF;
 constexpr UINT PAGE_SIZE=4096;

@@ -9,6 +9,7 @@
 // Using
 //=======
 
+#include "Culture/Sentence.h"
 #include "Overlapped.h"
 
 
