@@ -12,6 +12,7 @@
 #include "Storage/Streams/StreamReader.h"
 #include "Storage/Streams/StreamWriter.h"
 #include "CommandLine.h"
+#include "PathHelper.h"
 #include "ProcessClient.h"
 
 using namespace Storage::Streams;

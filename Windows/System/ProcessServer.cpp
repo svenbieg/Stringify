@@ -12,6 +12,7 @@
 #include "Concurrency/DispatchedQueue.h"
 #include "Storage/Streams/StreamReader.h"
 #include "Storage/Streams/StreamWriter.h"
+#include "PathHelper.h"
 #include "ProcessServer.h"
 
 using namespace Concurrency;

@@ -12,6 +12,8 @@
 #include "Collections/List.h"
 #include "Graphics/RenderTarget.h"
 #include "Graphics/Theme.h"
+#include "FlagHelper.h"
+#include "Property.h"
 
 
 //===========

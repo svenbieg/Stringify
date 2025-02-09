@@ -10,6 +10,7 @@
 //=======
 
 #include "Culture/Sentence.h"
+#include "DynamicHandle.h"
 #include "Overlapped.h"
 
 

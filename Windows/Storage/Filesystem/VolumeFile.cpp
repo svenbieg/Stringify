@@ -10,6 +10,7 @@
 //=======
 
 #include "FileHelper.h"
+#include "FlagHelper.h"
 #include "VolumeFile.h"
 
 

@@ -10,6 +10,7 @@
 //=======
 
 #include "Control.h"
+#include "DynamicHandle.h"
 
 
 //===========

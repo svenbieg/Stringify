@@ -12,6 +12,7 @@
 #include "Culture/Sentence.h"
 #include "Graphics/Icon.h"
 #include "UI/Controls/StackPanel.h"
+#include "DynamicHandle.h"
 #include "Overlapped.h"
 
 

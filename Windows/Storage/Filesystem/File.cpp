@@ -10,6 +10,7 @@
 //=======
 
 #include "File.h"
+#include "StatusHelper.h"
 
 
 //===========
@@ -44,7 +45,7 @@ CloseInternal();
 Handle<File> File::Create(Handle<String> path, FileCreateMode create, FileAccessMode access, FileShareMode share)
 {
 Handle<File> file=new File(path);
-if(Failed(file->Create(create, access, share)))
+if(StatusHelper::Failed(file->Create(create, access, share)))
 	return nullptr;
 return file;
 }

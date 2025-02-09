@@ -12,6 +12,7 @@
 #include "Directory.h"
 #include "File.h"
 #include "PathHelper.h"
+#include "StatusHelper.h"
 
 using namespace Concurrency;
 
@@ -47,7 +48,7 @@ Handle<Storage::File> Directory::CreateFile(Handle<String> path, FileCreateMode 
 ScopedLock lock(m_Mutex);
 auto file_path=String::Create("%s\\%s", m_Path, path);
 Handle<File> file=new File(file_path);
-if(Failed(file->Create(create, access, share)))
+if(StatusHelper::Failed(file->Create(create, access, share)))
 	return nullptr;
 return file;
 }

@@ -17,6 +17,7 @@
 #include "Storage/Streams/StreamWriter.h"
 #include "Storage/Buffer.h"
 #include "Application.h"
+#include "PathHelper.h"
 
 using namespace Concurrency;
 using namespace Resources::Strings;

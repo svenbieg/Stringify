@@ -11,6 +11,7 @@
 
 #include "Graphics/Bitmap.h"
 #include "Control.h"
+#include "DynamicHandle.h"
 
 
 //===========

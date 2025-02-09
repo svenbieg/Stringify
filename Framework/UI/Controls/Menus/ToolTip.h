@@ -13,6 +13,7 @@
 #include "Timing/Timer.h"
 #include "UI/Controls/Interactive.h"
 #include "UI/Controls/Panel.h"
+#include "DynamicHandle.h"
 
 
 //===========
