@@ -30,6 +30,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\Task.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\TaskLock.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Devices\Serial\SerialPort.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Devices\System\Cpu.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Devices\Timers\SystemTimer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ErrorHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ExceptionHelper.h" />

@@ -22,15 +22,15 @@
 
 #undef TEXT
 
+#undef InterlockedDecrement
+#undef InterlockedIncrement
+
 #undef MessageBox
 #ifdef _UNICODE
 #define MessageBoxT MessageBoxW
 #else
 #define MessageBoxT MessageBoxA
 #endif
-
-#undef ClearFlag
-#undef SetFlag
 
 
 //======================

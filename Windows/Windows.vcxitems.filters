@@ -158,6 +158,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Network\Tls\TlsCertificate.h">
       <Filter>Network\Tls</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Devices\System\Cpu.h">
+      <Filter>Devices\System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Configuration">
@@ -204,6 +207,9 @@
     </Filter>
     <Filter Include="Network\Udp">
       <UniqueIdentifier>{546787c8-9d5b-4c83-9a6a-33c0cba07558}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Devices\System">
+      <UniqueIdentifier>{a2f85748-258b-4baf-af70-80d04e7c3d07}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
