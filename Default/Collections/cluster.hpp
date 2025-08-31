@@ -5,7 +5,7 @@
 // Implementation of a pyramidal directory
 // Shared classes for list and index
 
-// Copyright 2025, Sven Bieg (svenbieg@web.de)
+// Copyright 2025, Sven Bieg (svenbieg@outlook.de)
 // http://github.com/svenbieg/Clusters
 
 
@@ -573,7 +573,7 @@ public:
 	void copy_from(_cluster_t const& cluster)
 		{
 		clear();
-		auto root=cluster.m_root;
+		auto root=cluster.get_root();
 		if(!root)
 			return;
 		auto level=root->get_level();
