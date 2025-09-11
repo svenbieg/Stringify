@@ -21,21 +21,6 @@ using namespace Concurrency;
 namespace Storage {
 
 
-//==================
-// Con-/Destructors
-//==================
-
-Intermediate::~Intermediate()
-{
-Clear();
-}
-
-Handle<Intermediate> Intermediate::Create(UINT block_size)
-{
-return new Intermediate(block_size);
-}
-
-
 //========
 // Common
 //========
@@ -57,7 +42,7 @@ m_Offset=0;
 
 SIZE_T Intermediate::Available()
 {
-ScopedLock lock(m_Mutex);
+WriteLock lock(m_Mutex);
 if(!m_First)
 	return 0;
 SIZE_T available=m_First->Size-m_Offset;
@@ -72,7 +57,7 @@ return available;
 
 SIZE_T Intermediate::Read(VOID* buf, SIZE_T size)
 {
-ScopedLock lock(m_Mutex);
+WriteLock lock(m_Mutex);
 auto dst=(BYTE*)buf;
 SIZE_T pos=0;
 while(pos<size)
@@ -114,7 +99,7 @@ m_Written.Trigger();
 
 SIZE_T Intermediate::Write(VOID const* buf, SIZE_T size)
 {
-ScopedLock lock(m_Mutex);
+WriteLock lock(m_Mutex);
 if(!m_First)
 	{
 	m_First=(BLOCK*)AllocateBlock();

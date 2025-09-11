@@ -19,18 +19,6 @@
 namespace Storage {
 
 
-//=========
-// Options
-//=========
-
-enum class BufferOptions
-{
-None,
-Move,
-Static
-};
-
-
 //========
 // Buffer
 //========
@@ -39,9 +27,7 @@ class Buffer: public Seekable
 {
 public:
 	// Con-/Destructors
-	~Buffer();
 	static Handle<Buffer> Create(SIZE_T Size);
-	static Handle<Buffer> Create(VOID const* Buffer, SIZE_T Size, BufferOptions Options=BufferOptions::None);
 
 	// Input-Stream
 	SIZE_T Available()override;
@@ -63,12 +49,10 @@ public:
 
 private:
 	// Con-/Destructors
-	Buffer(SIZE_T Size);
-	Buffer(VOID const* Buffer, SIZE_T Size, BufferOptions Options=BufferOptions::None);
+	Buffer(BYTE* Buffer, SIZE_T Size);
 
 	// Common
 	BYTE* m_Buffer;
-	BufferOptions m_Options;
 	SIZE_T m_Position;
 	SIZE_T m_Size;
 };

@@ -30,7 +30,7 @@ namespace Storage {
 //==================
 
 Directory::Directory(Handle<String> path):
-Storage::Directory(path)
+m_Path(path)
 {}
 
 
@@ -45,19 +45,15 @@ return new DirectoryIterator(this);
 
 Handle<Storage::File> Directory::CreateFile(Handle<String> path, FileCreateMode create, FileAccessMode access, FileShareMode share)
 {
-ScopedLock lock(m_Mutex);
 auto file_path=String::Create("%s\\%s", m_Path, path);
-Handle<File> file=new File(file_path);
-if(StatusHelper::Failed(file->Create(create, access, share)))
-	return nullptr;
-return file;
+return File::Create(file_path, create, access, share);
 }
 
 Handle<Object> Directory::Get(Handle<String> path)
 {
 if(!path)
 	return nullptr;
-ScopedLock lock(m_Mutex);
+WriteLock lock(m_Mutex);
 auto item_path=String::Create("%s\\%s", m_Path, path);
 WIN32_FIND_DATA fd={ 0 };
 HANDLE find=FindFirstFileEx(item_path->Begin(), FindExInfoBasic, &fd, FindExSearchNameMatch, nullptr, FIND_FIRST_EX_LARGE_FETCH);
@@ -70,7 +66,18 @@ if(fd.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY)
 	{
 	return new Directory(item_path);
 	}
-return new File(item_path);
+return File::Create(item_path);
+}
+
+Handle<String> Directory::GetName()
+{
+auto path=m_Path->Begin();
+return PathHelper::GetLastComponent(path);
+}
+
+Handle<Storage::Directory> Directory::GetParent()const
+{
+return nullptr;
 }
 
 Handle<Directory> Directory::Open(Handle<String> path)
@@ -133,11 +140,11 @@ while(fd.cFileName[0]=='.')
 auto item_path=String::Create("%s\\%s", path->Begin(), fd.cFileName);
 if(fd.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY)
 	{
-	m_Current=new Directory(item_path);
+	m_Current=Directory::Create(item_path);
 	}
 else
 	{
-	m_Current=new File(item_path);
+	m_Current=File::Create(item_path);
 	}
 return true;
 }
@@ -161,11 +168,11 @@ auto path=m_Directory->GetPath();
 auto item_path=String::Create("%s\\%s", path->Begin(), fd.cFileName);
 if(fd.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY)
 	{
-	m_Current=new Directory(item_path);
+	m_Current=Directory::Create(item_path);
 	}
 else
 	{
-	m_Current=new File(item_path);
+	m_Current=File::Create(item_path);
 	}
 return true;
 }

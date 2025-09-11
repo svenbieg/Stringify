@@ -47,15 +47,15 @@ s_Tasks.remove(m_Id);
 
 VOID Task::Cancel()
 {
-ScopedLock lock(m_Mutex);
+WriteLock lock(m_Mutex);
 if(m_Thread==NULL)
 	return;
 Cancelled=true;
 }
 
-Handle<Task> Task::Create(VOID (*Procedure)())
+Handle<Task> Task::Create(VOID (*proc)(), Handle<String> name, UINT stack_size)
 {
-Handle<Task> task=new TaskProcedure(Procedure);
+Handle<Task> task=new TaskProcedure(proc, name, stack_size);
 RunDeferred(task);
 return task;
 }
@@ -69,7 +69,7 @@ return s_Tasks.get(id);
 Handle<Object> Task::GetResult()
 {
 Task::ThrowIfMain();
-ScopedLock lock(m_Mutex);
+WriteLock lock(m_Mutex);
 if(m_Thread==NULL)
 	return Result;
 if(m_Status!=Status::Pending)
@@ -92,7 +92,7 @@ Task::ThrowIfMain();
 Status Task::Wait()
 {
 Task::ThrowIfMain();
-ScopedLock lock(m_Mutex);
+WriteLock lock(m_Mutex);
 if(m_Thread==NULL)
 	return m_Status;
 if(m_Status!=Status::Pending)
@@ -106,15 +106,16 @@ return m_Status;
 // Con-/Destructors Protected
 //============================
 
-Task::Task():
+Task::Task(Handle<String> name, UINT stack_size):
 Cancelled(false),
 m_Id(0),
+m_Name(name),
 m_Status(Status::Pending),
 m_Then(nullptr),
 m_This(this),
 m_Thread(NULL)
 {
-m_Thread=CreateThread(nullptr, 0, TaskProc, this, CREATE_SUSPENDED, &m_Id);
+m_Thread=CreateThread(nullptr, stack_size, TaskProc, this, CREATE_SUSPENDED, &m_Id);
 if(m_Thread==INVALID_HANDLE_VALUE)
 	m_Thread=NULL;
 if(!m_Thread)
@@ -151,7 +152,7 @@ catch(Exception& e)
 	{
 	status=e.GetStatus();
 	}
-ScopedLock lock(task->m_Mutex);
+WriteLock lock(task->m_Mutex);
 task->m_Status=status;
 task->m_Done.Trigger();
 if(task->m_Then)

@@ -136,8 +136,6 @@ switch(share)
 	{
 	case FileShareMode::Exclusive:
 		return 0;
-	case FileShareMode::None:
-		return 0;
 	case FileShareMode::ShareRead:
 		return FILE_SHARE_READ;
 	case FileShareMode::ShareWrite:

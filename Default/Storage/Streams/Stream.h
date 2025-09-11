@@ -31,16 +31,7 @@ Unicode,
 UTF8
 };
 
-
-//=================
-// Standard-Format
-//=================
-
-#ifdef UNICODE
-constexpr StreamFormat DefaultStreamFormat=StreamFormat::Unicode;
-#else
-constexpr StreamFormat DefaultStreamFormat=StreamFormat::Ansi;
-#endif
+constexpr StreamFormat DefaultStreamFormat=StreamFormat::UTF8;
 
 
 //========
@@ -56,7 +47,7 @@ public:
 
 protected:
 	// Con-/Destructors
-	Stream(): m_Format(DefaultStreamFormat) {}
+	Stream(StreamFormat Format=DefaultStreamFormat): m_Format(Format) {}
 
 	// Common
 	StreamFormat m_Format;

@@ -9,8 +9,7 @@
 // Using
 //=======
 
-#include "Concurrency/TaskLock.h"
-#include "DispatchedQueue.h"
+#include "Concurrency/Task.h"
 
 
 //===========
@@ -26,22 +25,18 @@ namespace Concurrency {
 
 VOID DispatchedQueue::Append(DispatchedHandler* handler)
 {
-assert(handler->m_Next==nullptr);
-TaskLock lock(s_Mutex);
-if(!s_Last)
+WriteLock lock(s_Mutex);
+if(!s_First)
 	{
 	s_First=handler;
 	s_Last=handler;
-	return;
 	}
-s_Last->m_Next=handler;
-s_Last=handler;
+else
+	{
+	s_Last->m_Next=handler;
+	s_Last=handler;
+	}
 PostThreadMessage(s_ThreadId, WM_DISPATCH, 0, 0);
-}
-
-VOID DispatchedQueue::Exit()
-{
-PostQuitMessage(0);
 }
 
 VOID DispatchedQueue::Initialize()
@@ -49,14 +44,9 @@ VOID DispatchedQueue::Initialize()
 s_ThreadId=GetCurrentThreadId();
 }
 
-
-//================
-// Common Private
-//================
-
 VOID DispatchedQueue::Run()
 {
-TaskLock lock(s_Mutex);
+WriteLock lock(s_Mutex);
 while(s_First)
 	{
 	auto handler=s_First;
@@ -73,6 +63,11 @@ while(s_First)
 	lock.Lock();
 	}
 }
+
+
+//================
+// Common Private
+//================
 
 DispatchedHandler* DispatchedQueue::s_First=nullptr;
 DispatchedHandler* DispatchedQueue::s_Last=nullptr;

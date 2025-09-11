@@ -33,12 +33,15 @@ public:
 	using TextBox=UI::Controls::TextBox;
 
 	// Con-/Destructors
-	AppWindow();
+	static inline Handle<AppWindow> Create() { return new AppWindow(); }
 
 	// Common
 	Handle<TextBox> ResultBox;
 
 private:
+	// Con-/Destructors
+	AppWindow();
+
 	// Common
 	VOID OnPathEditPathChanged(Handle<String> Path);
 };

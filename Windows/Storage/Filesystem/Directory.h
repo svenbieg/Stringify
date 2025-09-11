@@ -39,17 +39,24 @@ public:
 	friend DirectoryIterator;
 
 	// Con-/Destructors
-	Directory(Handle<String> Path);
+	static inline Handle<Directory> Create(Handle<String> Path) { return new Directory(Path); }
 
 	// Storage.Directory
 	Handle<Storage::DirectoryIterator> Begin()override;
 	Handle<Storage::File> CreateFile(Handle<String> Path, FileCreateMode CreateMode=FileCreateMode::OpenExisting, FileAccessMode AccessMode=FileAccessMode::ReadWrite, FileShareMode ShareMode=FileShareMode::ShareRead)override;
 	static Handle<Directory> Open(Handle<String> Path);
 	Handle<Object> Get(Handle<String> Path)override;
+	Handle<String> GetName()override;
+	inline Handle<String> GetPath()const { return m_Path; }
+	Handle<Storage::Directory> GetParent()const override;
 
 private:
+	// Con-/Destructors
+	Directory(Handle<String> Path);
+
 	// Common
 	Concurrency::Mutex m_Mutex;
+	Handle<String> m_Path;
 };
 
 

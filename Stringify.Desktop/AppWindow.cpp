@@ -31,9 +31,9 @@ using D2DIcon=Graphics::Direct2D::Icon;
 namespace Stringify {
 
 
-//==================
-// Con-/Destructors
-//==================
+//==========================
+// Con-/Destructors Private
+//==========================
 
 AppWindow::AppWindow()
 {

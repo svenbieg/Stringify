@@ -30,19 +30,21 @@ class Signal;
 // Scoped-Lock
 //=============
 
-class ScopedLock: private std::unique_lock<std::mutex>
+class ScopedLock: protected std::unique_lock<std::mutex>
 {
 public:
 	// Friends
 	friend Signal;
 
-	// Con-/Destructors
-	inline ScopedLock(Mutex& Mutex): unique_lock(Mutex) {}
-
 	// Common
 	inline VOID Lock() { lock(); }
 	inline VOID Release() { release(); }
+	inline BOOL TryLock() { return try_lock(); }
 	inline VOID Unlock() { unlock(); }
+
+protected:
+	// Common
+	ScopedLock(Mutex& Mutex): unique_lock(Mutex) {}
 };
 
 }

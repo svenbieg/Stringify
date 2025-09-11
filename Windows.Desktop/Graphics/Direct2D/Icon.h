@@ -68,28 +68,14 @@ public:
 	using Icon=Graphics::Direct2D::Icon;
 
 	// Con-/Destructors
-	Handle(): m_Object(nullptr) {}
-	Handle(nullptr_t): m_Object(nullptr) {}
-	Handle(Icon* Object): m_Object(Object)
-		{
-		if(m_Object)
-			m_Object->m_RefCount++;
-		}
-	Handle(Handle const& Copy): Handle(Copy.m_Object) {}
-	Handle(Handle&& Move)noexcept: m_Object(Move.m_Object)
-		{
-		Move.m_Object=nullptr;
-		}
-	Handle(INT Id): m_Object(nullptr) { operator=(Id); }
-	Handle(ICON const* Resource): m_Object(nullptr) { operator=(Resource); }
-	~Handle()
-		{
-		if(m_Object)
-			{
-			m_Object->Release();
-			m_Object=nullptr;
-			}
-		}
+	inline Handle(): m_Object(nullptr) {}
+	inline Handle(nullptr_t): m_Object(nullptr) {}
+	inline Handle(Icon* Copy) { Handle<Object>::Create(&m_Object, Copy); }
+	inline Handle(Handle const& Copy) { Handle<Object>::Create(&m_Object, Copy.m_Object); }
+	inline Handle(Handle&& Move)noexcept: m_Object(Move.m_Object) { Move.m_Object=nullptr; }
+	inline Handle(INT Id): m_Object(nullptr) { operator=(Id); }
+	inline Handle(ICON const* Resource): m_Object(nullptr) { operator=(Resource); }
+	inline ~Handle() { Handle<Object>::Clear(&m_Object); }
 
 	// Access
 	inline operator BOOL()const { return m_Object!=nullptr; }
@@ -103,33 +89,11 @@ public:
 	inline BOOL operator!=(Icon* Value)const { return m_Object!=Value; }
 
 	// Assignment
-	inline Handle& operator=(nullptr_t)
-		{
-		this->~Handle();
-		return *this;
-		}
-	Handle& operator=(Icon* Object)
-		{
-		if(m_Object==Object)
-			return *this;
-		if(m_Object)
-			m_Object->Release();
-		m_Object=Object;
-		if(m_Object)
-			m_Object->m_RefCount++;
-		return *this;
-		}
+	inline Handle& operator=(nullptr_t) { Handle<Object>::Clear(&m_Object); return *this; }
+	inline Handle& operator=(Icon* Copy) { Handle<Object>::Set(&m_Object, Copy); return *this; }
 	inline Handle& operator=(Handle const& Copy) { return operator=(Copy.m_Object); }
-	Handle& operator=(UINT Id)
-		{
-		auto value=Icon::Create(Id);
-		return operator=(value);
-		}
-	Handle& operator=(ICON const* Resource)
-		{
-		auto value=Icon::Create(Resource);
-		return operator=(value);
-		}
+	inline Handle& operator=(UINT Id) { return operator=(Icon::Create(Id)); }
+	inline Handle& operator=(ICON const* Resource) { return operator=(Icon::Create(Resource)); }
 
 private:
 	// Common

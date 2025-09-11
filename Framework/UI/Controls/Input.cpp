@@ -12,10 +12,11 @@
 #include "Concurrency/DispatchedQueue.h"
 #include "Storage/Clipboard.h"
 #include "Storage/Streams/StreamReader.h"
-#include "Storage/Buffer.h"
+#include "Storage/StringBuffer.h"
 #include "UI/Controls/Menus/EditMenu.h"
+#include "UI/Controls/Input.h"
 #include "UI/Application.h"
-#include "Input.h"
+#include "StringBuilder.h"
 
 using namespace Concurrency;
 using namespace Graphics;
@@ -128,10 +129,9 @@ Handle<String> Input::GetSelection()
 UINT len=GetTextLength(m_SelectionFirst, m_SelectionLast);
 if(!len)
 	return nullptr;
-auto text=String::Create(len, nullptr);
-auto buf=const_cast<LPTSTR>(text->Begin());
-GetText(m_SelectionFirst, m_SelectionLast, buf, len+1);
-return text;
+StringBuilder builder(len);
+GetText(m_SelectionFirst, m_SelectionLast, builder);
+return builder.ToString();
 }
 
 Handle<String> Input::GetText()
@@ -141,10 +141,9 @@ POINT pt_end=GetEndPoint();
 UINT len=GetTextLength(pt_start, pt_end);
 if(!len)
 	return nullptr;
-auto text=String::Create(len, nullptr);
-auto buf=const_cast<LPTSTR>(text->Begin());
-GetText(pt_start, pt_end, buf, len+1);
-return text;
+StringBuilder builder(len);
+GetText(pt_start, pt_end, builder);
+return builder.ToString();
 }
 
 BOOL Input::KillFocus()
@@ -318,21 +317,20 @@ while(replace[str_pos])
 		}
 	UINT insert_len=str_pos-line_start;
 	UINT line_len=before_len+insert_len;
-	auto text=String::Create(line_len, nullptr);
-	auto str=const_cast<LPTSTR>(text->Begin());
+	StringBuilder builder(line_len);
 	if(before)
 		{
-		StringHelper::Copy(str, line_len+1, before);
-		StringHelper::Copy(&str[before_len], line_len+1-before_len, &replace[line_start], insert_len);
+		builder.Append(before);
+		builder.Append(insert_len, &replace[line_start]);
 		before=nullptr;
 		before_len=0;
 		}
 	else
 		{
-		StringHelper::Copy(str, line_len+1, &replace[line_start], insert_len);
+		builder.Append(insert_len, &replace[line_start]);
 		}
 	INPUT_LINE& line=m_Lines.insert_at(m_SelectionStart.Top);
-	line.Text=text;
+	line.Text=builder.ToString();
 	UpdateLine(line);
 	m_SelectionFirst.Top++;
 	m_SelectionFirst.Left=0;
@@ -344,16 +342,15 @@ UINT line_len=before_len+insert_len+after_len;
 INPUT_LINE& line=m_Lines.insert_at(m_SelectionFirst.Top);
 if(line_len>0)
 	{
-	auto text=String::Create(line_len, nullptr);
-	auto str=const_cast<LPTSTR>(text->Begin());
+	StringBuilder builder(line_len);
 	UINT pos=0;
 	if(before_len)
-		pos+=StringHelper::Copy(&str[pos], line_len+1-pos, before);
+		pos+=builder.Append(before);
 	if(insert_len)
-		pos+=StringHelper::Copy(&str[pos], line_len+1-pos, &replace[line_start], insert_len);
+		pos+=builder.Append(insert_len, &replace[line_start]);
 	if(after_len)
-		pos+=StringHelper::Copy(&str[pos], line_len+1-pos, after);
-	line.Text=text;
+		pos+=builder.Append(after);
+	line.Text=builder.ToString();
 	UpdateLine(line);
 	}
 m_SelectionFirst.Left=before_len+insert_len;
@@ -407,7 +404,9 @@ if(!text)
 	Clear();
 	return;
 	}
-auto buf=Buffer::Create(text->Begin(), 0, BufferOptions::Static);
+UINT len=text->GetLength();
+SIZE_T size=(len+1)*sizeof(TCHAR);
+auto buf=StringBuffer::Create(text);
 ReadFromStream(buf);
 }
 
@@ -507,6 +506,38 @@ if(!count)
 	return 0;
 UINT offset=line.Offsets.get_at(count-1);
 return offset*scale;
+}
+
+UINT Input::GetText(POINT const& pt_start, POINT const& pt_end, StringBuilder& builder)
+{
+UINT line_count=m_Lines.get_count();
+if(!line_count)
+	return 0;
+if(pt_start.Top==pt_end.Top)
+	{
+	INPUT_LINE const& line=m_Lines.get_at(pt_start.Top);
+	UINT copy=pt_end.Left-pt_start.Left;
+	auto text=line.Text->Begin();
+	return builder.Append(copy, &text[pt_start.Left]);
+	}
+UINT line_id=pt_start.Top;
+auto it=m_Lines.cbegin(line_id);
+INPUT_LINE const& first_line=it.get_current();
+auto text=first_line.Text->Begin();
+UINT len=builder.Append(&text[pt_start.Left]);
+it.move_next();
+for(++line_id; line_id<pt_end.Top; it.move_next(), line_id++)
+	{
+	len+=builder.Append(TEXT("\r\n"));
+	INPUT_LINE const& line=it.get_current();
+	text=line.Text->Begin();
+	len+=builder.Append(text);
+	}
+len+=builder.Append(TEXT("\r\n"));
+INPUT_LINE const& last_line=it.get_current();
+text=last_line.Text->Begin();
+len+=builder.Append(pt_end.Left, text);
+return len;
 }
 
 UINT Input::GetText(POINT const& pt_start, POINT const& pt_end, LPTSTR buf, UINT size)

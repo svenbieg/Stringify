@@ -26,6 +26,16 @@ namespace Concurrency {
 class ScopedLock;
 
 
+//=============
+// Access-Mode
+//=============
+
+enum class AccessMode
+{
+ReadOnly
+};
+
+
 //=======
 // Mutex
 //=======
@@ -37,12 +47,15 @@ public:
 	friend ScopedLock;
 
 	// Con-/Destructors
-	inline Mutex() {}
+	Mutex() {}
 
 	// Common
-	virtual inline VOID Lock() { lock(); }
-	virtual inline BOOL TryLock() { return try_lock(); }
-	virtual inline VOID Unlock() { unlock(); }
+	inline VOID Lock() { lock(); }
+	inline VOID Lock(AccessMode Access) { lock(); }
+	inline BOOL TryLock() { return try_lock(); }
+	inline BOOL TryLock(AccessMode Access) { return try_lock(); }
+	inline VOID Unlock() { unlock(); }
+	inline VOID Unlock(AccessMode Access) { unlock(); }
 };
 
 }

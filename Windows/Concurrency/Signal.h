@@ -38,7 +38,7 @@ public:
 	friend DispatchedQueue;
 
 	// Con-/Destructors
-	inline Signal() {}
+	Signal() {}
 
 	// Common
 	inline VOID Cancel() { throw NotImplementedException(); }
@@ -49,7 +49,7 @@ public:
 
 private:
 	// Common
-	BOOL WaitInternal();
+	BOOL WaitInternal(ScopedLock& Lock);
 };
 
 }

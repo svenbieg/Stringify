@@ -39,13 +39,25 @@ while(dst<end)
 	*dst++=*src++;
 }
 
-VOID MemoryHelper::Copy(SIZE_T* dst, SIZE_T const* src, SIZE_T count)
+VOID MemoryHelper::Copy(UINT* dst, UINT const* src, SIZE_T count)
 {
 while(count--)
 	*dst++=*src++;
 }
 
-VOID MemoryHelper::Copy(SIZE_T* dst, SIZE_T* end, SIZE_T const* src)
+VOID MemoryHelper::Copy(UINT* dst, UINT* end, UINT const* src)
+{
+while(dst<end)
+	*dst++=*src++;
+}
+
+VOID MemoryHelper::Copy(UINT64* dst, UINT64 const* src, SIZE_T count)
+{
+while(count--)
+	*dst++=*src++;
+}
+
+VOID MemoryHelper::Copy(UINT64* dst, UINT64* end, UINT64 const* src)
 {
 while(dst<end)
 	*dst++=*src++;
@@ -59,13 +71,25 @@ while(dst<end)
 	*dst++=value;
 }
 
-VOID MemoryHelper::Fill(SIZE_T* dst, SIZE_T count, SIZE_T value)
+VOID MemoryHelper::Fill(UINT* dst, SIZE_T count, UINT value)
 {
 while(count--)
 	*dst++=value;
 }
 
-VOID MemoryHelper::Fill(SIZE_T* dst, SIZE_T* end, SIZE_T value)
+VOID MemoryHelper::Fill(UINT* dst, UINT* end, UINT value)
+{
+while(dst<end)
+	*dst++=value;
+}
+
+VOID MemoryHelper::Fill(UINT64* dst, SIZE_T count, UINT64 value)
+{
+while(count--)
+	*dst++=value;
+}
+
+VOID MemoryHelper::Fill(UINT64* dst, UINT64* end, UINT64 value)
 {
 while(dst<end)
 	*dst++=value;

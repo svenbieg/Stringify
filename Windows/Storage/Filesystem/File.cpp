@@ -9,8 +9,11 @@
 // Using
 //=======
 
-#include "File.h"
+#include "Storage/Filesystem/File.h"
+#include "PathHelper.h"
 #include "StatusHelper.h"
+
+using namespace Concurrency;
 
 
 //===========
@@ -25,23 +28,6 @@ namespace Storage {
 // Con-/Destructors
 //==================
 
-File::File(Handle<String> path):
-Storage::File(path),
-hFile(NULL),
-m_Position(0)
-{}
-
-
-//========
-// Common
-//========
-
-VOID File::Close()
-{
-unique_lock lock(m_Mutex);
-CloseInternal();
-}
-
 Handle<File> File::Create(Handle<String> path, FileCreateMode create, FileAccessMode access, FileShareMode share)
 {
 Handle<File> file=new File(path);
@@ -50,9 +36,20 @@ if(StatusHelper::Failed(file->Create(create, access, share)))
 return file;
 }
 
+
+//========
+// Common
+//========
+
+VOID File::Close()
+{
+WriteLock lock(m_Mutex);
+CloseInternal();
+}
+
 Status File::Create(FileCreateMode create, FileAccessMode access, FileShareMode share)
 {
-unique_lock lock(m_Mutex);
+WriteLock lock(m_Mutex);
 CloseInternal();
 UINT ucreate=FileGetCreateMode(create);
 UINT uacc=FileGetAccessMode(access);
@@ -76,20 +73,8 @@ if(file==NULL)
 		}
 	return Status::Error;
 	}
-hFile=file;
+m_File=file;
 return Status::Success;
-}
-
-BOOL File::SetSize(FILE_SIZE size)
-{
-unique_lock lock(m_Mutex);
-if(!hFile)
-	return false;
-if(!Seek(size))
-	return false;
-if(!SetEndOfFile(hFile))
-	return false;
-return true;
 }
 
 
@@ -99,7 +84,7 @@ return true;
 
 SIZE_T File::Available()
 {
-unique_lock lock(m_Mutex);
+WriteLock lock(m_Mutex);
 return AvailableInternal();
 }
 
@@ -110,8 +95,8 @@ return Read(buf, size, nullptr);
 
 SIZE_T File::Read(VOID* buf, SIZE_T size, BOOL* cancel_ptr)
 {
-unique_lock lock(m_Mutex);
-if(!hFile)
+WriteLock lock(m_Mutex);
+if(!m_File)
 	return 0;
 if(!buf)
 	{
@@ -129,7 +114,7 @@ while(pos<size)
 	DWORD read=0;
 	ov.Offset=(UINT)m_Position;
 	ov.OffsetHigh=(UINT)(m_Position>>32);
-	if(!ReadFile(hFile, &buf_ptr[pos], copy, &read, &ov))
+	if(!ReadFile(m_File, &buf_ptr[pos], copy, &read, &ov))
 		break;
 	pos+=read;
 	m_Position+=read;
@@ -151,10 +136,10 @@ return pos;
 
 VOID File::Flush()
 {
-unique_lock lock(m_Mutex);
-if(!hFile)
+WriteLock lock(m_Mutex);
+if(!m_File)
 	return;
-FlushFileBuffers(hFile);
+FlushFileBuffers(m_File);
 }
 
 SIZE_T File::Write(VOID const* buf, SIZE_T size)
@@ -164,8 +149,8 @@ return Write(buf, size, nullptr);
 
 SIZE_T File::Write(VOID const* buf, SIZE_T size, BOOL* cancel_ptr)
 {
-unique_lock lock(m_Mutex);
-if(!hFile)
+WriteLock lock(m_Mutex);
+if(!m_File)
 	return 0;
 auto buf_ptr=(BYTE const*)buf;
 OVERLAPPED ov={ 0 };
@@ -176,7 +161,7 @@ while(pos<size)
 	DWORD written=0;
 	ov.Offset=(UINT)m_Position;
 	ov.OffsetHigh=(UINT)(m_Position>>32);
-	if(!WriteFile(hFile, &buf_ptr[pos], copy, &written, &ov))
+	if(!WriteFile(m_File, &buf_ptr[pos], copy, &written, &ov))
 		break;
 	pos+=written;
 	m_Position+=written;
@@ -192,30 +177,69 @@ return pos;
 }
 
 
-//===========
-// Container
-//===========
+//==========
+// Seekable
+//==========
 
 FILE_SIZE File::GetSize()
 {
-unique_lock lock(m_Mutex);
-if(!hFile)
+WriteLock lock(m_Mutex);
+if(!m_File)
 	return 0;
-return GetFileSize(hFile);
+return GetFileSize(m_File);
 }
 
-BOOL File::Seek(UINT64 pos)
+BOOL File::Seek(FILE_SIZE pos)
 {
-unique_lock lock(m_Mutex);
-if(!hFile)
+WriteLock lock(m_Mutex);
+if(!m_File)
 	return false;
 LONG lo=(LONG)pos;
 LONG hi=(LONG)(pos>>32);
-if(SetFilePointer(hFile, lo, &hi, FILE_BEGIN)==INVALID_SET_FILE_POINTER)
+if(SetFilePointer(m_File, lo, &hi, FILE_BEGIN)==INVALID_SET_FILE_POINTER)
 	return false;
 m_Position=pos;
 return true;
 }
+
+
+//==============
+// Storage.File
+//==============
+
+Handle<String> File::GetName()
+{
+auto path=m_Path->Begin();
+return PathHelper::GetLastComponent(path);
+}
+
+Handle<String> File::GetPath()
+{
+return m_Path;
+}
+
+BOOL File::SetSize(FILE_SIZE size)
+{
+WriteLock lock(m_Mutex);
+if(!m_File)
+	return false;
+if(!Seek(size))
+	return false;
+if(!SetEndOfFile(m_File))
+	return false;
+return true;
+}
+
+
+//==========================
+// Con-/Destructors Private
+//==========================
+
+File::File(Handle<String> path):
+m_File(NULL),
+m_Path(path),
+m_Position(0)
+{}
 
 
 //================
@@ -224,9 +248,9 @@ return true;
 
 SIZE_T File::AvailableInternal()
 {
-if(!hFile)
+if(!m_File)
 	return 0;
-UINT64 size=GetFileSize(hFile);
+UINT64 size=GetFileSize(m_File);
 UINT64 available=size-m_Position;
 if(available>SIZE_MAX)
 	return SIZE_MAX;
@@ -235,10 +259,10 @@ return (SIZE_T)available;
 
 VOID File::CloseInternal()
 {
-if(hFile!=NULL)
+if(m_File!=NULL)
 	{
-	CloseHandle(hFile);
-	hFile=NULL;
+	CloseHandle(m_File);
+	m_File=NULL;
 	}
 }
 

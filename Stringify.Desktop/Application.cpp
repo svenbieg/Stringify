@@ -32,7 +32,7 @@ using namespace UI::Controls;
 
 INT Main()
 {
-Handle<Stringify::Application> app=new Stringify::Application();
+auto app=Stringify::Application::Create();
 return app->Run();
 }
 
@@ -77,18 +77,6 @@ LPCSTR StringTable[256]=
 	};
 
 
-//==================
-// Con-/Destructors
-//==================
-
-Application::Application():
-Desktop::Application(STR_APP_TITLE)
-{
-Current=this;
-m_Window=new AppWindow();
-}
-
-
 //========
 // Common
 //========
@@ -108,6 +96,18 @@ if(StringHelper::Compare(ext, "ico", 0, false)==0)
 	return;
 	}
 OpenBinary(path);
+}
+
+
+//==========================
+// Con-/Destructors Private
+//==========================
+
+Application::Application():
+Desktop::Application(STR_APP_TITLE)
+{
+Current=this;
+m_Window=AppWindow::Create();
 }
 
 
@@ -160,7 +160,7 @@ dst->Flush();
 
 VOID Application::DoParse(Handle<Intermediate> stream)
 {
-ScopedLock lock(m_Mutex);
+WriteLock lock(m_Mutex);
 auto task=Task::Get();
 auto result_box=m_Window->ResultBox;
 StreamReader reader(stream);
@@ -195,7 +195,7 @@ result_box->SelectAll();
 
 VOID Application::OpenBinary(Handle<String> path)
 {
-Handle<Filesystem::File> file=new Filesystem::File(path);
+auto file=Filesystem::File::Create(path);
 if(file->Create()!=Status::Success)
 	return;
 Convert(file);

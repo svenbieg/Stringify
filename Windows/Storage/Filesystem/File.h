@@ -9,7 +9,7 @@
 // Using
 //=======
 
-#include <shared_mutex>
+#include "Concurrency/Task.h"
 #include "Storage/File.h"
 #include "FileHelper.h"
 
@@ -30,13 +30,12 @@ class File: public Storage::File
 {
 public:
 	// Con-/Destructors
-	File(Handle<String> Path);
+	static inline Handle<File> Create(Handle<String> Path) { return new File(Path); }
+	static Handle<File> Create(Handle<String> Path, FileCreateMode Create, FileAccessMode Access=FileAccessMode::ReadOnly, FileShareMode Share=FileShareMode::ShareRead);
 
 	// Common
-	VOID Close()override;
-	static Handle<File> Create(Handle<String> Path, FileCreateMode Create=FileCreateMode::OpenExisting, FileAccessMode Access=FileAccessMode::ReadOnly, FileShareMode Share=FileShareMode::ShareRead);
-	Status Create(FileCreateMode Create=FileCreateMode::OpenExisting, FileAccessMode Access=FileAccessMode::ReadOnly, FileShareMode Share=FileShareMode::ShareRead)override;
-	BOOL SetSize(FILE_SIZE Size)override;
+	VOID Close();
+	Status Create(FileCreateMode Create=FileCreateMode::OpenExisting, FileAccessMode Access=FileAccessMode::ReadOnly, FileShareMode Share=FileShareMode::ShareRead);
 
 	// Input-Stream
 	SIZE_T Available()override;
@@ -48,19 +47,25 @@ public:
 	SIZE_T Write(VOID const* Buffer, SIZE_T Size)override;
 	SIZE_T Write(VOID const* Buffer, SIZE_T Size, BOOL* Cancel);
 
-	// Container
+	// Seekable
 	FILE_SIZE GetSize()override;
-	BOOL Seek(UINT64 Position)override;
+	BOOL Seek(FILE_SIZE Position)override;
+
+	// Storage.File
+	Handle<String> GetName()override;
+	Handle<String> GetPath()override;
+	BOOL SetSize(FILE_SIZE Size)override;
 
 private:
-	// Using
-	using unique_lock=std::unique_lock<std::shared_mutex>;
+	// Con-/Destructors
+	File(Handle<String> Path);
 
 	// Common
 	SIZE_T AvailableInternal();
 	VOID CloseInternal();
-	std::shared_mutex m_Mutex;
-	HANDLE hFile;
+	HANDLE m_File;
+	Concurrency::Mutex m_Mutex;
+	Handle<String> m_Path;
 	UINT64 m_Position;
 };
 

@@ -35,8 +35,8 @@
     <AppxPackageSigningEnabled>false</AppxPackageSigningEnabled>
     <DefaultLanguage>de-DE</DefaultLanguage>
     <ProjectGuid>{BC25E830-8E96-48DD-92C4-066CC06662CD}</ProjectGuid>
-    <TargetPlatformVersion>10.0.22621.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.22621.0</TargetPlatformMinVersion>
+    <TargetPlatformVersion>10.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0</TargetPlatformMinVersion>
     <NoWarn>$(NoWarn);NU1702</NoWarn>
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>

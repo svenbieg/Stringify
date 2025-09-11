@@ -24,11 +24,11 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\DispatchedHandler.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\DispatchedQueue.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\Mutex.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\ReadLock.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\ScopedLock.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\SharedLock.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\Signal.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\Task.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\TaskLock.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\WriteLock.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Devices\Serial\SerialPort.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Devices\System\Cpu.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Devices\Timers\SystemTimer.h" />

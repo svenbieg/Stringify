@@ -28,22 +28,22 @@ BOOL Signal::Wait()
 {
 Task::ThrowIfMain();
 Mutex mutex;
-ScopedLock lock(mutex);
+WriteLock lock(mutex);
 wait(lock);
 return true;
 }
 
-BOOL Signal::Wait(ScopedLock& Lock)
+BOOL Signal::Wait(ScopedLock& lock)
 {
 Task::ThrowIfMain();
-wait(Lock);
+wait(lock);
 return true;
 }
 
-BOOL Signal::Wait(ScopedLock& Lock, UINT Timeout)
+BOOL Signal::Wait(ScopedLock& lock, UINT timeout)
 {
 Task::ThrowIfMain();
-auto status=wait_for(Lock, std::chrono::milliseconds(Timeout));
+auto status=wait_for(lock, std::chrono::milliseconds(timeout));
 return (status==std::cv_status::no_timeout);
 }
 
@@ -52,10 +52,8 @@ return (status==std::cv_status::no_timeout);
 // Common Private
 //================
 
-BOOL Signal::WaitInternal()
+BOOL Signal::WaitInternal(ScopedLock& lock)
 {
-Mutex mutex;
-ScopedLock lock(mutex);
 wait(lock);
 return true;
 }

@@ -36,13 +36,16 @@ public:
 	using Task=Concurrency::Task;
 
 	// Con-/Destructors
-	Application();
+	static inline Handle<Application> Create() { return new Application(); }
 
 	// Common
 	static Application* Current;
 	VOID Open(Handle<String> Path);
 
 private:
+	// Con-/Destructors
+	Application();
+
 	// Common
 	VOID Convert(Handle<InputStream> Stream);
 	VOID DoConvert(Handle<Intermediate> Destination, Handle<InputStream> Source);

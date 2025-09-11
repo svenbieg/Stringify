@@ -12,6 +12,7 @@
 #include <random>
 #include "Devices/Timers/SystemTimer.h"
 #include "RandomHelper.h"
+#include "StringBuilder.h"
 
 using namespace Devices::Timers;
 
@@ -24,14 +25,12 @@ constexpr CHAR g_RandomChars[]="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijkl
 
 Handle<String> RandomHelper::GetString(UINT len)
 {
-auto str=String::Create(len+1, nullptr);
-auto ptr=const_cast<LPTSTR>(str->Begin());
+StringBuilder builder(len);
 std::mt19937 rng(SystemTimer::GetTickCount());
 for(UINT u=0; u<len; u++)
 	{
 	UINT rnd=rng()%TypeHelper::ArraySize(g_RandomChars);
-	ptr[u]=CharHelper::ToChar(g_RandomChars[rnd]);
+	builder.Append(CharHelper::ToChar(g_RandomChars[rnd]));
 	}
-ptr[len]=0;
-return str;
+return builder.ToString();
 }

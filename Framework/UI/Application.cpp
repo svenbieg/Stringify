@@ -53,7 +53,7 @@ if(m_CurrentMenu)
 
 VOID Application::Quit()
 {
-DispatchedQueue::Exit();
+PostQuitMessage(0);
 }
 
 VOID Application::SetCurrentInput(Input* input)
