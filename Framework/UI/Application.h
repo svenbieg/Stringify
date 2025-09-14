@@ -11,6 +11,7 @@
 
 #include "Collections/Map.h"
 #include "Culture/Sentence.h"
+#include "Graphics/Theme.h"
 #include "UI/Controls/Menus/Menu.h"
 #include "UI/Controls/Input.h"
 
@@ -36,6 +37,7 @@ public:
 	using Menu=UI::Controls::Menus::Menu;
 	using Sentence=Culture::Sentence;
 	using ShortcutMap=Collections::Map<UINT, Interactive*>;
+	using Theme=Graphics::Theme;
 
 	// Con-/Destructors
 	~Application();
@@ -47,6 +49,7 @@ public:
 	inline Menu* GetCurrentMenu()const { return m_CurrentMenu; }
 	inline Handle<Sentence> GetName()const { return m_Name; }
 	inline Interactive* GetPointerFocus()const { return m_PointerFocus; }
+	virtual Handle<Theme> GetTheme()=0;
 	VOID Quit();
 	VOID SetCurrentInput(Input* Input);
 	inline VOID SetCurrentMenu(Menu* Menu) { m_CurrentMenu=Menu; }

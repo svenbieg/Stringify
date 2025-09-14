@@ -9,15 +9,20 @@
 // Using
 //=======
 
+#pragma comment(lib, "dwmapi")
+
+#include <dwmapi.h>
 #include <windowsx.h>
 #include "Concurrency/DispatchedQueue.h"
-#include "Graphics/Direct2D/Theme.h"
+#include "Desktop/Application.h"
+#include "Graphics/Direct2D/Cursor.h"
 #include "Overlapped.h"
 
 using namespace Concurrency;
+using namespace Desktop;
+using namespace Graphics;
 
 using D2DCursor=Graphics::Direct2D::Cursor;
-using D2DTheme=Graphics::Direct2D::Theme;
 
 
 //===========
@@ -25,6 +30,16 @@ using D2DTheme=Graphics::Direct2D::Theme;
 //===========
 
 namespace UI {
+
+
+//==================
+// Con-/Destructors
+//==================
+
+Overlapped::~Overlapped()
+{
+DestroyWindow(m_Handle);
+}
 
 
 //========
@@ -72,11 +87,6 @@ RECT border=GetBorderWidth();
 pt.Left+=border.Left;
 pt.Top+=border.Top;
 return pt;
-}
-
-Handle<Graphics::Theme> Overlapped::GetTheme()
-{
-return D2DTheme::Get();
 }
 
 VOID Overlapped::Move(RECT const& rc)
@@ -198,6 +208,7 @@ switch(msg)
 		::RECT rc;
 		::GetWindowRect(m_Handle, &rc);
 		m_Rect.Set(rc.left, rc.top, rc.right, rc.bottom);
+		UpdateTheme();
 		break;
 		}
 	case WM_DESTROY:
@@ -355,6 +366,11 @@ switch(msg)
 		handled=args->Handled;
 		break;
 		}
+	case WM_SETTINGCHANGE:
+		{
+		UpdateSetting((LPCTSTR)lparam);
+		return 0;
+		}
 	case WM_SHOWWINDOW:
 		{
 		handled=false;
@@ -404,6 +420,26 @@ DispatchedQueue::Append(this, &Overlapped::Repaint);
 VOID Overlapped::OnVisibleChanged(BOOL visible)
 {
 Show(visible? SW_SHOW: SW_HIDE);
+}
+
+VOID Overlapped::UpdateSetting(LPCTSTR setting)
+{
+if(StringHelper::Compare(setting, "ImmersiveColorSet")==0)
+	{
+	UpdateTheme();
+	return;
+	}
+}
+
+VOID Overlapped::UpdateTheme()
+{
+auto app=Desktop::Application::Get();
+BOOL dark=app->DarkMode();
+auto scheme=(dark? ColorScheme::Dark: ColorScheme::Light);
+auto theme=GetTheme();
+theme->SetColorScheme(scheme);
+DwmSetWindowAttribute(m_Handle, DWMWA_USE_IMMERSIVE_DARK_MODE, &dark, sizeof(BOOL));
+Invalidate(true);
 }
 
 LRESULT CALLBACK Overlapped::WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)

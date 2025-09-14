@@ -52,6 +52,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Filesystem\FileHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Filesystem\VolumeFile.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Storage\NamedPipe.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Registry.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)System\ProcessClient.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)System\ProcessServer.h" />
   </ItemGroup>
@@ -81,6 +82,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Storage\Filesystem\FileHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Storage\Filesystem\VolumeFile.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Storage\NamedPipe.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Storage\Registry.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)System\ProcessClient.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)System\ProcessServer.cpp" />
   </ItemGroup>

@@ -36,16 +36,11 @@ public:
 	using D2DFont=Graphics::Direct2D::Font;
 
 	// Con-/Destructors
-	~Theme();
-	static Handle<Theme> Get();
+	static inline Handle<Theme> Create(ColorScheme Scheme=ColorScheme::Light) { return new Theme(Scheme); }
 
 private:
 	// Con-/Destructors
-	Theme();
-
-	// Common
-	inline COLOR SystemColor(INT Index) { return GetSysColor(Index)|0xFF000000; }
-	static Theme* s_Current;
+	Theme(ColorScheme Scheme);
 };
 
 }}

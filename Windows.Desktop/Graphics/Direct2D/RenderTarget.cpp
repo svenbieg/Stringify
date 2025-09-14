@@ -99,10 +99,13 @@ auto d2d_brush=Brush::Get(m_Target, TextColor);
 #ifdef _UNICODE
 LPCWSTR str=text;
 #else
-WCHAR str[128];
-StringHelper::Copy(str, 128, text);
+LPWSTR str=new WCHAR[len+1];
+StringHelper::Copy(str, len+1, text);
 #endif
 m_Target->DrawText(str, len, d2d_format, d2d_rc, d2d_brush);
+#ifndef _UNICODE
+delete str;
+#endif
 m_Target->SetTransform(mx_transform);
 }
 

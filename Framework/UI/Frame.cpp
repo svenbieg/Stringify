@@ -15,6 +15,7 @@
 #include "UI/Application.h"
 #include "Frame.h"
 
+using namespace Graphics;
 using namespace UI::Controls;
 using namespace UI::Controls::Menus;
 using namespace UI::Input;
@@ -39,6 +40,12 @@ if(content)
 	size=content->GetMinSize(target);
 FLOAT scale=GetScaleFactor();
 return size.Max(MinSize*scale);
+}
+
+Handle<Theme> Frame::GetTheme()
+{
+auto app=Application::Get();
+return app->GetTheme();
 }
 
 VOID Frame::Invalidate(BOOL rearrange)

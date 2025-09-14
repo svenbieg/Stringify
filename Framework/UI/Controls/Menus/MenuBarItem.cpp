@@ -65,7 +65,7 @@ auto font=GetFont();
 auto theme=GetTheme();
 auto text_color=theme->TextBrush;
 if(!Enabled)
-	text_color=theme->LightTextBrush;
+	text_color=theme->TextInactiveBrush;
 FLOAT scale=GetScaleFactor();
 RECT rc_text=rc;
 rc_text.SetPadding(Padding*scale);

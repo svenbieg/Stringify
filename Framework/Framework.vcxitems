@@ -26,6 +26,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Point.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Rect.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Size.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Theme.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Application.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Button.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Canvas.cpp" />

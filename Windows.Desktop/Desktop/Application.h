@@ -29,7 +29,11 @@ public:
 	// Con-/Destructors
 	~Application();
 	static inline Application* Get() { return s_Current; }
+
 	// Common
+	BOOL DarkMode();
+	Handle<Theme> GetTheme()override;
+
 	INT Run();
 	Event<Application> UnhandledException;
 
@@ -40,6 +44,7 @@ protected:
 private:
 	// Common
 	static LONG WINAPI UnhandledExceptionHandler(EXCEPTION_POINTERS* Info);
+	Handle<Theme> m_Theme;
 	static Application* s_Current;
 };
 

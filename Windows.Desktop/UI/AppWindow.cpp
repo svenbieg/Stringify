@@ -72,6 +72,7 @@ SetWindowLong(m_Handle, GWL_STYLE, WS_OVERLAPPEDWINDOW);
 SetWindowLong(m_Handle, GWL_EXSTYLE, WS_EX_APPWINDOW);
 Closed.Add(this, &AppWindow::OnClosed);
 Icon.Changed.Add(this, &AppWindow::OnIconChanged);
+Icon=D2DIcon::Create(ICO_APP);
 Title.Changed.Add(this, &AppWindow::OnTitleChanged);
 Title=Application::Get()->GetName();
 auto grid=Grid::Create(this);

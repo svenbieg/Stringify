@@ -194,7 +194,7 @@ if(show_sel)
 	{
 	auto highlight=theme->HighlightBrush;
 	if(!HasFocus())
-		highlight=theme->InactiveHighlightBrush;
+		highlight=theme->HighlightInactiveBrush;
 	POINT pt_first=PointFromChar(m_SelectionFirst, scale);
 	POINT pt_last=PointFromChar(m_SelectionLast, scale);
 	if(m_SelectionFirst.Top==m_SelectionLast.Top)
@@ -257,6 +257,7 @@ if(show_cursor)
 
 VOID Input::ReplaceSelection(LPCTSTR replace)
 {
+
 if(ReadOnly)
 	return;
 if(!replace)

@@ -48,7 +48,7 @@ if(path)
 if(!title)
 	title=STR_FILE_OPEN;
 if(!filter)
-	filter=STR_FILTER_ALL;
+	filter=STR_FILE_FILTER_ALL;
 Handle<String> title_str=title->Begin();
 Handle<String> filter_str=FilterFromSentence(filter);
 OPENFILENAME ofn={ 0 };

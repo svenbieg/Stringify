@@ -11,15 +11,21 @@
 
 #include "Concurrency/DispatchedQueue.h"
 #include "Culture/LanguageHelper.h"
+#include "Graphics/Direct2D/Theme.h"
 #include "Resources/Strings/Exception.h"
+#include "Storage/Registry.h"
 #include "UI/AppWindow.h"
 #include "Application.h"
 #include "ExceptionHelper.h"
 
 using namespace Concurrency;
 using namespace Culture;
+using namespace Graphics;
 using namespace Resources::Strings;
+using namespace Storage;
 using namespace UI;
+
+using D2DTheme=Graphics::Direct2D::Theme;
 
 extern INT Main();
 
@@ -64,6 +70,21 @@ s_Current=nullptr;
 //========
 // Common
 //========
+
+BOOL Application::DarkMode()
+{
+INT light=Registry::GetValue(HKEY_CURRENT_USER, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "AppsUseLightTheme", 1);
+return light==0;
+}
+
+Handle<Theme> Application::GetTheme()
+{
+if(m_Theme)
+	return m_Theme;
+BOOL dark=DarkMode();
+m_Theme=D2DTheme::Create(dark? ColorScheme::Dark: ColorScheme::Light);
+return m_Theme;
+}
 
 INT Application::Run()
 {

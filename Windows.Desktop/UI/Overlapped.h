@@ -30,6 +30,9 @@ public:
 	// Using
 	using D2DRenderTarget=Graphics::Direct2D::RenderTarget;
 
+	// Con-/Destructors
+	~Overlapped();
+
 	// Common
 	VOID BringToFront()override;
 	RECT GetBorderWidth()const;
@@ -38,7 +41,6 @@ public:
 	SIZE GetMinSize(RenderTarget* Target)override;
 	POINT GetScreenOffset()const override;
 	inline Handle<RenderTarget> GetTarget()override { return m_RenderTarget; }
-	Handle<Theme> GetTheme()override;
 	VOID Move(RECT const& Rect)override;
 	VOID Repaint();
 	VOID SetCursor(Handle<Cursor> Cursor)override;
@@ -59,6 +61,8 @@ private:
 	// Common
 	VOID OnInvalidated();
 	VOID OnVisibleChanged(BOOL Visible);
+	VOID UpdateSetting(LPCTSTR Setting);
+	VOID UpdateTheme();
 	static LRESULT CALLBACK WndProc(HWND Window, UINT Message, WPARAM WParam, LPARAM LParam);
 	HCURSOR m_Cursor;
 };

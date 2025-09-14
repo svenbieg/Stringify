@@ -21,6 +21,17 @@
 namespace Graphics {
 
 
+//==============
+// Color-Scheme
+//==============
+
+enum class ColorScheme
+{
+Dark,
+Light
+};
+
+
 //=======
 // Theme
 //=======
@@ -33,19 +44,22 @@ public:
 	using Font=Graphics::Font;
 	using Cursor=Graphics::Cursor;
 
+	// Common
+	inline ColorScheme GetColorScheme()const { return m_ColorScheme; }
+	VOID SetColorScheme(ColorScheme Scheme);
+
 	// Brushes
+	Handle<Brush> BackgroundBrush;
 	Handle<Brush> BorderBrush;
+	Handle<Brush> BorderInactiveBrush;
 	Handle<Brush> ControlBrush;
 	Handle<Brush> FocusBrush;
 	Handle<Brush> FocusBorderBrush;
-	Handle<Brush> GrayTextBrush;
-	Handle<Brush> InactiveHighlightBrush;
 	Handle<Brush> HighlightBrush;
 	Handle<Brush> HighlightBorderBrush;
-	Handle<Brush> LightBorderBrush;
-	Handle<Brush> LightControlBrush;
-	Handle<Brush> LightTextBrush;
+	Handle<Brush> HighlightInactiveBrush;
 	Handle<Brush> TextBrush;
+	Handle<Brush> TextInactiveBrush;
 	Handle<Brush> WindowBrush;
 
 	// Fonts
@@ -60,7 +74,10 @@ public:
 
 protected:
 	// Con-/Destructors
-	Theme() {}
+	Theme(ColorScheme Scheme=ColorScheme::Light);
+
+	// Common
+	ColorScheme m_ColorScheme;
 };
 
 }

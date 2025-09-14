@@ -68,6 +68,9 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Concurrency\Task.cpp">
       <Filter>Concurrency</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Storage\Registry.cpp">
+      <Filter>Storage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)ComPointer.h" />
@@ -160,6 +163,9 @@
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\WriteLock.h">
       <Filter>Concurrency</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Registry.h">
+      <Filter>Storage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

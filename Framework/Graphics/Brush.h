@@ -31,6 +31,7 @@ public:
 
 	// Common
 	inline COLOR GetColor()const { return m_Color; }
+	inline VOID SetColor(COLOR Color) { m_Color=Color; }
 
 private:
 	// Con-/Destructors
