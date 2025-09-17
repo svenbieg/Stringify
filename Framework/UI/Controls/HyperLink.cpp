@@ -29,8 +29,8 @@ namespace UI {
 Graphics::SIZE HyperLink::GetMinSize(RenderTarget* target)
 {
 SIZE size(0, 0);
-auto font=GetFont();
 FLOAT scale=GetScaleFactor();
+auto font=m_Theme->DefaultFont;
 if(Text)
 	{
 	size=target->MeasureText(font, scale, Text->Begin());
@@ -47,12 +47,10 @@ VOID HyperLink::Render(RenderTarget* target, RECT& rc)
 Interactive::Render(target, rc);
 if(!Text)
 	return;
-auto theme=GetTheme();
 FLOAT scale=GetScaleFactor();
-target->TextColor=TextColor;
-target->Font=GetFont();
-target->DrawText(rc, scale, Text->Begin());
-target->DrawLine(POINT(rc.Left, rc.Bottom), POINT(rc.Right, rc.Bottom), TextColor);
+auto font=m_Theme->DefaultFont;
+target->DrawText(rc, scale, font, Color, Text->Begin());
+target->DrawLine(POINT(rc.Left, rc.Bottom), POINT(rc.Right, rc.Bottom), Color);
 }
 
 
@@ -63,7 +61,7 @@ target->DrawLine(POINT(rc.Left, rc.Bottom), POINT(rc.Right, rc.Bottom), TextColo
 HyperLink::HyperLink(Window* parent):
 Interactive(parent)
 {
-TextColor=Brush::Create(Colors::Blue);
+Color=Brush::Create(Colors::Blue);
 }
 
 }}

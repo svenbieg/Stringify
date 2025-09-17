@@ -38,7 +38,6 @@ public:
 	SIZE GetMinSize(RenderTarget* Target)override;
 	VOID Render(RenderTarget* Target, RECT& Rect)override;
 	DynamicHandle<TextBlock, String> Text;
-	Handle<Brush> TextColor;
 
 protected:
 	// Con-/Destructors

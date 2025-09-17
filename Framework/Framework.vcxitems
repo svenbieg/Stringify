@@ -20,13 +20,13 @@
     <ProjectCapability Include="SourceItemsFromImports" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Brush.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Bitmap.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Color.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Icon.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Point.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Rect.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Size.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Theme.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Application.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Button.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Canvas.cpp" />
@@ -73,19 +73,17 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Bitmap.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Brush.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Color.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Cursor.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Font.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Icon.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Point.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Rect.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\RenderTarget.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Size.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Theme.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Bitmaps\Edit.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Bitmaps\File.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Icons\Edit.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Icons\File.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Icons\Icon.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Strings\Edit.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Strings\String.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Alignment.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Application.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Button.h" />

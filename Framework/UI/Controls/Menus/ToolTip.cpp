@@ -119,11 +119,9 @@ VOID ToolTip::OnTimerTriggered()
 {
 if(m_Panel)
 	return;
-m_Timer=nullptr;
 auto frame=m_Parent->GetFrame();
-auto theme=frame->GetTheme();
+m_Timer=nullptr;
 m_Panel=Panel::Create(frame);
-m_Panel->Background=theme->WindowBrush;
 m_Panel->Border=true;
 auto text_block=TextBlock::Create(m_Panel);
 text_block->Margin.Set(4, 2, 4, 2);

@@ -28,8 +28,7 @@ namespace UI {
 
 Handle<Brush> ProgressBar::GetBorderBrush()
 {
-auto theme=GetTheme();
-return theme->BorderBrush;
+return m_Theme->BorderBrush;
 }
 
 

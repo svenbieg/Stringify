@@ -39,14 +39,16 @@ Light
 class Theme: public Object
 {
 public:
-	// Using
-	using Brush=Graphics::Brush;
-	using Font=Graphics::Font;
-	using Cursor=Graphics::Cursor;
+	// Con-/Destructors
+	~Theme();
+	static inline Handle<Theme> Create() { return new Theme(); }
 
 	// Common
+	Event<Theme> Changed;
+	static Handle<Theme> Get();
 	inline ColorScheme GetColorScheme()const { return m_ColorScheme; }
 	VOID SetColorScheme(ColorScheme Scheme);
+	VOID Update();
 
 	// Brushes
 	Handle<Brush> BackgroundBrush;
@@ -74,10 +76,14 @@ public:
 
 protected:
 	// Con-/Destructors
-	Theme(ColorScheme Scheme=ColorScheme::Light);
+	Theme();
 
 	// Common
 	ColorScheme m_ColorScheme;
+
+private:
+	// Common
+	static Theme* s_Current;
 };
 
 }

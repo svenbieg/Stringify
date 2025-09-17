@@ -46,12 +46,6 @@ Handle<MenuBarItem> MenuBar::Add(Handle<Sentence> label)
 return MenuBarItem::Create(this, label);
 }
 
-Handle<Brush> MenuBar::GetBackgroundBrush()
-{
-auto theme=GetTheme();
-return theme->ControlBrush;
-}
-
 
 //==========================
 // Con-/Destructors Private

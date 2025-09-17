@@ -54,7 +54,6 @@ public:
 	// Common
 	Handle<PopupMenuItem> Add(Handle<Sentence> Label);
 	VOID Close()override;
-	Handle<Brush> GetBackgroundBrush()override;
 	SIZE GetMinSize(RenderTarget* Target)override;
 	VOID KillFocus()override;
 	Event<PopupMenu> Opened;

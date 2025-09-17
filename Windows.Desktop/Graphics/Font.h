@@ -10,8 +10,7 @@
 //=======
 
 #include <dwrite.h>
-#include "Graphics/Font.h"
-#include "DWriteFactory.h"
+#include "Graphics/Direct2D/DWriteFactory.h"
 #include "ComPointer.h"
 
 
@@ -20,16 +19,18 @@
 //===========
 
 namespace Graphics {
-	namespace Direct2D {
 
 
 //======
 // Font
 //======
 
-class Font: public Graphics::Font
+class Font: public Object
 {
 public:
+	// Using
+	using DWriteFactory=Graphics::Direct2D::DWriteFactory;
+
 	// Con-/Destructors
 	static inline Handle<Font> Create(LPCSTR Family="Segoe UI", UINT Size=14, UINT Weight=400)
 		{
@@ -38,7 +39,7 @@ public:
 
 	// Common
 	IDWriteTextFormat* GetFormat();
-	UINT GetSize()const override;
+	UINT GetSize()const;
 
 private:
 	// Con-/Destructors
@@ -50,4 +51,4 @@ private:
 	LOGFONT m_Info;
 };
 
-}}
+}

@@ -42,12 +42,6 @@ FLOAT scale=GetScaleFactor();
 return size.Max(MinSize*scale);
 }
 
-Handle<Theme> Frame::GetTheme()
-{
-auto app=Application::Get();
-return app->GetTheme();
-}
-
 VOID Frame::Invalidate(BOOL rearrange)
 {
 if(rearrange)
@@ -111,6 +105,7 @@ m_PointerCapture(nullptr),
 // Private
 m_Focus(nullptr)
 {
+m_Frame=this;
 MemoryHelper::Fill(m_Keys, sizeof(m_Keys), 0);
 }
 

@@ -30,7 +30,7 @@ FLOAT scale=GetScaleFactor();
 SIZE title_size(0, 0);
 if(Title)
 	{
-	auto font=GetFont();
+	auto font=m_Theme->DefaultFont;
 	title_size=target->MeasureText(font, scale, Title->Begin());
 	}
 SIZE content_size(0, 0);
@@ -63,8 +63,7 @@ FLOAT scale=GetScaleFactor();
 SIZE title_size(0, 0);
 if(Title)
 	{
-	auto theme=GetTheme();
-	auto font=theme->DefaultFont;
+	auto font=m_Theme->DefaultFont;
 	title_size=target->MeasureText(font, scale, Title->Begin());
 	}
 rc.Top+=title_size.Height;
@@ -81,12 +80,12 @@ content->Move(target, rc);
 VOID Group::Render(RenderTarget* target, RECT& rc)
 {
 Control::Render(target, rc);
-auto theme=GetTheme();
-auto border=theme->BorderBrush;
+auto border=m_Theme->BorderBrush;
 RECT rc_client=GetClientRect();
 if(Title)
 	{
-	auto font=GetFont();
+	auto font=m_Theme->DefaultFont;
+	auto brush=m_Theme->TextBrush;
 	FLOAT scale=GetScaleFactor();
 	SIZE title_size=target->MeasureText(font, scale, Title->Begin());
 	RECT rc_title;
@@ -101,9 +100,7 @@ if(Title)
 	target->DrawLine(POINT(rc_client.Left, top), POINT(rc_client.Left, rc_client.Bottom), border);
 	target->DrawLine(POINT(rc_client.Right, top), POINT(rc_client.Right, rc_client.Bottom), border);
 	target->DrawLine(POINT(rc_client.Left, rc_client.Bottom), POINT(rc_client.Right, rc_client.Bottom), border);
-	target->TextColor=theme->TextBrush;
-	target->Font=font;
-	target->DrawText(rc_title, scale, Title->Begin());
+	target->DrawText(rc_title, scale, font, brush, Title->Begin());
 	rc.SetPadding(1, title_size.Height, 1, 1);
 	}
 else

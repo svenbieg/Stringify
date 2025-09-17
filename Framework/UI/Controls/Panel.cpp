@@ -26,12 +26,16 @@ namespace UI {
 // Common
 //========
 
+Handle<Brush> Panel::GetBackground()
+{
+return Background;
+}
+
 Handle<Brush> Panel::GetBorderBrush()
 {
 if(!Border)
 	return nullptr;
-auto theme=GetTheme();
-return theme->BorderBrush;
+return m_Theme->BorderBrush;
 }
 
 Graphics::SIZE Panel::GetMinSize(RenderTarget* target)

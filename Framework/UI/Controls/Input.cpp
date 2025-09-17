@@ -74,18 +74,9 @@ if(changed)
 	UpdateSelection();
 }
 
-Handle<Brush> Input::GetBackgroundBrush()
-{
-auto theme=GetTheme();
-if(!IsEnabled())
-	return theme->ControlBrush;
-return theme->WindowBrush;
-}
-
 Handle<Cursor> Input::GetCursor()
 {
-auto theme=GetTheme();
-return theme->TextCursor;
+return m_Theme->TextCursor;
 }
 
 Graphics::RECT Input::GetCursorRect()
@@ -173,14 +164,17 @@ while(1)
 
 VOID Input::Render(RenderTarget* target, RECT& rc)
 {
-Interactive::Render(target, rc);
-auto theme=GetTheme();
-target->Font=GetFont();
-target->TextColor=theme->TextBrush;
+auto background=GetBackground();
+BOOL enabled=IsEnabled();
+if(!enabled)
+	background=m_Theme->ControlBrush;
+RECT rc_fill(rc);
+auto offset=target->GetOffset();
+rc_fill.Move(offset);
+target->FillRect(rc_fill, background);
 FLOAT scale=GetScaleFactor();
 rc.SetPadding(Padding*scale);
 UINT client_height=rc.GetHeight();
-POINT offset=target->GetOffset();
 UINT line_height=m_LineHeight*scale;
 UINT first_line=offset.Top/line_height;
 UINT line_count=client_height/line_height+2;
@@ -192,9 +186,9 @@ if(Application::Get()->GetCurrentInput()!=this)
 	show_sel=false;
 if(show_sel)
 	{
-	auto highlight=theme->HighlightBrush;
+	auto highlight=m_Theme->HighlightBrush;
 	if(!HasFocus())
-		highlight=theme->HighlightInactiveBrush;
+		highlight=m_Theme->HighlightInactiveBrush;
 	POINT pt_first=PointFromChar(m_SelectionFirst, scale);
 	POINT pt_last=PointFromChar(m_SelectionLast, scale);
 	if(m_SelectionFirst.Top==m_SelectionLast.Top)
@@ -224,6 +218,8 @@ if(show_sel)
 		target->FillRect(rc_last, highlight);
 		}
 	}
+auto font=m_Theme->DefaultFont;
+auto brush=m_Theme->TextBrush;
 UINT top=rc.Top+first_line*line_height;
 UINT line=0;
 for(auto it=m_Lines.cbegin(first_line); it.has_current(); it.move_next(), line++)
@@ -234,7 +230,7 @@ for(auto it=m_Lines.cbegin(first_line); it.has_current(); it.move_next(), line++
 	if(text)
 		{
 		RECT rc_text(rc.Left, top, rc.Right, top+line_height);
-		target->DrawText(rc_text, scale, text->Begin());
+		target->DrawText(rc_text, scale, font, brush, text->Begin());
 		}
 	top+=line_height;
 	}
@@ -250,7 +246,6 @@ if(show_cursor)
 	{
 	POINT pt_cursor=PointFromChar(m_CursorPos, scale);
 	POINT pt_to(pt_cursor.Left, pt_cursor.Top+line_height);
-	auto brush=theme->TextBrush;
 	target->DrawLine(pt_cursor, pt_to, brush);
 	}
 }
@@ -494,8 +489,7 @@ return pt_end;
 
 UINT Input::GetLineHeight(RenderTarget* target, FLOAT scale)
 {
-auto theme=GetTheme();
-auto font=theme->DefaultFont;
+auto font=m_Theme->DefaultFont;
 SIZE size=target->MeasureText(font, scale, TEXT("Ag"), 2);
 return size.Height;
 }
@@ -938,7 +932,6 @@ else
 VOID Input::UpdateLine(INPUT_LINE& line)
 {
 auto target=GetTarget();
-auto font=GetFont();
 UINT char_count=line.Offsets.get_count();
 if(char_count>0)
 	{
@@ -955,6 +948,7 @@ auto str=line.Text->Begin();
 SIZE size;
 for(UINT pos=0; str[pos]; pos++)
 	{
+	auto font=m_Theme->DefaultFont;
 	size=target->MeasureText(font, 1.0, str, pos+1);
 	line.Offsets.append(size.Width);
 	}

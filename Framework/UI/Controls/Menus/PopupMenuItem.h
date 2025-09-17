@@ -54,7 +54,6 @@ public:
 
 	// Common
 	Event<PopupMenuItem> Clicked;
-	Handle<Brush> GetBackgroundBrush()override;
 	SIZE GetMinSize(RenderTarget* Target)override;
 	Handle<Graphics::Icon> Icon;
 	BOOL IsSeparator() { return Text==nullptr; }

@@ -36,22 +36,9 @@ if(!SubMenu)
 return SubMenu->Add(label);
 }
 
-Handle<Brush> MenuBarItem::GetBackgroundBrush()
-{
-auto theme=GetTheme();
-auto background=theme->ControlBrush;
-BOOL focus=HasFocus();
-focus|=HasPointerFocus();
-if(!Enabled)
-	focus=false;
-if(focus)
-	background=theme->HighlightBrush;
-return background;
-}
-
 Graphics::SIZE MenuBarItem::GetMinSize(RenderTarget* target)
 {
-auto font=GetFont();
+auto font=m_Theme->DefaultFont;
 FLOAT scale=GetScaleFactor();
 SIZE size=target->MeasureText(font, scale, m_Label->Begin());
 size.AddPadding(Padding*scale);
@@ -61,18 +48,15 @@ return size.Max(MinSize*scale);
 VOID MenuBarItem::Render(RenderTarget* target, RECT& rc)
 {
 Interactive::Render(target, rc);
-auto font=GetFont();
-auto theme=GetTheme();
-auto text_color=theme->TextBrush;
+auto font=m_Theme->DefaultFont;
+auto text_brush=m_Theme->TextBrush;
 if(!Enabled)
-	text_color=theme->TextInactiveBrush;
+	text_brush=m_Theme->TextInactiveBrush;
 FLOAT scale=GetScaleFactor();
 RECT rc_text=rc;
 rc_text.SetPadding(Padding*scale);
 auto label=m_Label->Begin();
-target->TextColor=text_color;
-target->Font=font;
-target->DrawText(rc_text, scale, label);
+target->DrawText(rc_text, scale, font, text_brush, label);
 BOOL accelerate=Accelerator;
 if(!Enabled)
 	accelerate=false;
@@ -89,7 +73,7 @@ if(accelerate)
 		SIZE size_to=target->MeasureText(font, scale, label, pos+1);
 		POINT from(rc_text.Left+size_from.Width, rc_text.Bottom);
 		POINT to(rc_text.Left+size_to.Width, rc_text.Bottom);
-		target->DrawLine(from, to, text_color, 1);
+		target->DrawLine(from, to, text_brush, 1);
 		}
 	}
 }

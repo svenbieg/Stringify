@@ -9,7 +9,7 @@
 // Using
 //=======
 
-#include "Cursor.h"
+#include "Graphics/Cursor.h"
 
 
 //===========
@@ -17,7 +17,6 @@
 //===========
 
 namespace Graphics {
-	namespace Direct2D {
 
 
 //==================
@@ -26,11 +25,8 @@ namespace Graphics {
 
 Cursor::~Cursor()
 {
-if(m_Cursor)
-	{
-	DeleteObject(m_Cursor);
-	m_Cursor=NULL;
-	}
+DeleteObject(m_Cursor);
+m_Cursor=NULL;
 }
 
 
@@ -53,7 +49,9 @@ m_Cursor(NULL)
 {
 m_Cursor=LoadCursor(NULL, id);
 if(m_Cursor==INVALID_HANDLE_VALUE)
+	m_Cursor=NULL;
+if(m_Cursor==NULL)
 	throw InvalidArgumentException();
 }
 
-}}
+}

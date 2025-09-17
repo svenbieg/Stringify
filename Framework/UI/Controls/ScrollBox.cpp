@@ -88,8 +88,7 @@ VerticalBar->Visible=scroll_v;
 VOID ScrollBox::Render(RenderTarget* target, RECT& rc)
 {
 Control::Render(target, rc);
-auto theme=GetTheme();
-auto border=theme->BorderBrush;
+auto border=m_Theme->BorderBrush;
 target->DrawRect(rc, border);
 rc.SetPadding(1, 1, 1, 1);
 }

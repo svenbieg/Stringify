@@ -12,8 +12,8 @@
 #include "Culture/Sentence.h"
 #include "Graphics/Icon.h"
 #include "UI/Controls/StackPanel.h"
+#include "UI/Overlapped.h"
 #include "DynamicHandle.h"
-#include "Overlapped.h"
 
 
 //===========
@@ -47,7 +47,6 @@ public:
 	Event<AppWindow> Closed;
 	Handle<StackPanel> Footer;
 	Handle<StackPanel> Header;
-	DynamicHandle<AppWindow, Graphics::Icon> Icon;
 	Event<AppWindow> Maximized;
 	Event<AppWindow> Minimized;
 	DynamicHandle<AppWindow, Sentence> Title;
@@ -62,7 +61,7 @@ protected:
 private:
 	// Common
 	VOID OnClosed();
-	VOID OnIconChanged(Handle<Graphics::Icon> Icon);
+	VOID OnSettingChanged(LPCTSTR Setting);
 	VOID OnTitleChanged(Handle<Sentence> Title);
 	static AppWindow* s_Current;
 };

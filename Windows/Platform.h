@@ -22,6 +22,7 @@
 
 #undef TEXT
 
+#undef DrawText
 #undef InterlockedDecrement
 #undef InterlockedIncrement
 

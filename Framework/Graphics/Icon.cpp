@@ -25,13 +25,18 @@ namespace Graphics {
 // Common
 //========
 
-Handle<Graphics::Bitmap> Icon::GetBitmap(UINT size)
+Handle<Bitmap> Icon::GetBitmap(UINT size)
 {
 auto icon=GetIcon(size);
 if(!icon)
 	return nullptr;
 size=icon->Size;
-return Bitmap::Create(size, size, size*size*4, icon->Buffer);
+auto bmp=m_Bitmaps.get(size);
+if(bmp)
+	return bmp;
+bmp=Bitmap::Create(size, size, 32, icon->Buffer);
+m_Bitmaps.add(size, bmp);
+return bmp;
 }
 
 

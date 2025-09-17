@@ -25,7 +25,7 @@ namespace Graphics {
 
 Bitmap::~Bitmap()
 {
-if(m_Buffer)
+if(!m_Resource)
 	delete m_Buffer;
 }
 
@@ -34,17 +34,10 @@ if(m_Buffer)
 // Common
 //========
 
-BYTE const* Bitmap::Begin()const
-{
-if(m_Resource)
-	return (BYTE const*)m_Resource;
-return m_Buffer;
-}
-
 VOID Bitmap::Clear(COLOR color)
 {
-if(!m_Buffer)
-	return;
+if(m_Resource)
+	throw InvalidContextException();
 UINT* buf=(UINT*)m_Buffer;
 UINT size=m_Size/sizeof(UINT);
 switch(m_BitsPerPixel)
@@ -84,6 +77,7 @@ switch(m_BitsPerPixel)
 	default:
 		break;
 	}
+Changed(this);
 }
 
 Handle<Bitmap> Bitmap::Copy()const
@@ -97,6 +91,8 @@ return bmp;
 
 VOID Bitmap::FillRect(RECT const& rc, COLOR c)
 {
+if(m_Resource)
+	throw InvalidContextException();
 if(c.GetAlpha()==0)
 	return;
 RECT rc_fill(rc);
@@ -109,6 +105,7 @@ for(INT y=(INT)rc_fill.Top; y<rc_fill.Bottom; y++)
 	for(INT x=(INT)rc_fill.Left; x<rc_fill.Right; x++)
 		SetPixel(x, y, c);
 	}
+Changed(this);
 }
 
 COLOR Bitmap::GetPixel(UINT left, UINT top)const
@@ -145,8 +142,8 @@ return c;
 
 VOID Bitmap::SetPixel(UINT left, UINT top, COLOR c)
 {
-if(!m_Buffer)
-	return;
+if(m_Resource)
+	throw InvalidContextException();
 switch(m_BitsPerPixel)
 	{
 	case 1:
@@ -181,7 +178,21 @@ switch(m_BitsPerPixel)
 	default:
 		break;
 	}
+Changed(this);
 }
+
+
+//==================
+// Common Protected
+//==================
+
+UINT Bitmap::Release()
+{
+if(m_ReferenceCount==1)
+	Destroyed(this);
+return Object::Release();
+}
+
 
 //==========================
 // Con-/Destructors Private
@@ -201,17 +212,17 @@ m_Size=m_Height*m_Pitch;
 m_Buffer=new BYTE[m_Size];
 }
 
-Bitmap::Bitmap(UINT width, UINT height, UINT size, LPCSTR resource):
-m_Buffer(nullptr),
-m_Resource(resource),
-m_BitsPerPixel(0),
+Bitmap::Bitmap(UINT width, UINT height, WORD bpp, LPCSTR resource):
+m_BitsPerPixel(bpp),
+m_Buffer((BYTE*)resource),
 m_Height(height),
-m_Pitch(size/height),
-m_Size(size),
+m_Pitch(0),
+m_Resource(resource),
+m_Size(0),
 m_Width(width)
 {
-UINT pixel_size=m_Pitch/width;
-m_BitsPerPixel=pixel_size*8;
+m_Pitch=width*bpp/8;
+m_Size=m_Height*m_Pitch;
 }
 
 }

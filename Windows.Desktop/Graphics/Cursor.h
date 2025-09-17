@@ -5,26 +5,18 @@
 #pragma once
 
 
-//=======
-// Using
-//=======
-
-#include "Graphics/Cursor.h"
-
-
 //===========
 // Namespace
 //===========
 
 namespace Graphics {
-	namespace Direct2D {
 
 
 //========
 // Cursor
 //========
 
-class Cursor: public Graphics::Cursor
+class Cursor: public Object
 {
 public:
 	// Con-/Destructors
@@ -33,7 +25,7 @@ public:
 
 	// Common
 	inline HCURSOR GetHandle()const { return m_Cursor; }
-	VOID Set()override;
+	VOID Set();
 
 private:
 	// Con-/Destructors
@@ -43,4 +35,4 @@ private:
 	HCURSOR m_Cursor;
 };
 
-}}
+}

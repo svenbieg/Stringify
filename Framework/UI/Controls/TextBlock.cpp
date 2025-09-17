@@ -26,9 +26,9 @@ namespace UI {
 
 Graphics::SIZE TextBlock::GetMinSize(RenderTarget* target)
 {
-auto font=GetFont();
 FLOAT scale=GetScaleFactor();
 SIZE size(0, 0);
+auto font=m_Theme->DefaultFont;
 if(Text)
 	{
 	size=target->MeasureText(font, scale, Text->Begin());
@@ -45,16 +45,10 @@ VOID TextBlock::Render(RenderTarget* target, RECT& rc)
 Control::Render(target, rc);
 if(!Text)
 	return;
-auto text_color=TextColor;
-if(!text_color)
-	{
-	auto theme=GetTheme();
-	text_color=theme->TextBrush;
-	}
-target->Font=GetFont();
-target->TextColor=text_color;
+auto font=m_Theme->DefaultFont;
+auto brush=m_Theme->TextBrush;
 FLOAT scale=GetScaleFactor();
-target->DrawText(rc, scale, Text->Begin());
+target->DrawText(rc, scale, font, brush, Text->Begin());
 }
 
 

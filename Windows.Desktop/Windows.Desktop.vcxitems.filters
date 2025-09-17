@@ -1,31 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\Bitmap.cpp">
-      <Filter>Graphics\Direct2D</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\Brush.cpp">
-      <Filter>Graphics\Direct2D</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\Cursor.cpp">
-      <Filter>Graphics\Direct2D</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\D2DFactory.cpp">
       <Filter>Graphics\Direct2D</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\DWriteFactory.cpp">
       <Filter>Graphics\Direct2D</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\Font.cpp">
-      <Filter>Graphics\Direct2D</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\ImagingFactory.cpp">
-      <Filter>Graphics\Direct2D</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\RenderTarget.cpp">
-      <Filter>Graphics\Direct2D</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\Theme.cpp">
       <Filter>Graphics\Direct2D</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Application.cpp">
@@ -36,9 +18,6 @@
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\SaveFileDialog.cpp">
       <Filter>Desktop\Dialogs</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\Icon.cpp">
-      <Filter>Graphics\Direct2D</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\MessageBox.cpp">
       <Filter>Desktop\Dialogs</Filter>
@@ -70,33 +49,27 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\PathEdit.cpp">
       <Filter>UI\Controls</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Theme.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\RenderTarget.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Cursor.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Font.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\Bitmap.h">
-      <Filter>Graphics\Direct2D</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\Brush.h">
-      <Filter>Graphics\Direct2D</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\Cursor.h">
-      <Filter>Graphics\Direct2D</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\D2DFactory.h">
       <Filter>Graphics\Direct2D</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\DWriteFactory.h">
       <Filter>Graphics\Direct2D</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\Font.h">
-      <Filter>Graphics\Direct2D</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\ImagingFactory.h">
-      <Filter>Graphics\Direct2D</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\RenderTarget.h">
-      <Filter>Graphics\Direct2D</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\Theme.h">
       <Filter>Graphics\Direct2D</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Application.h">
@@ -107,9 +80,6 @@
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\SaveFileDialog.h">
       <Filter>Desktop\Dialogs</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\Icon.h">
-      <Filter>Graphics\Direct2D</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Strings\Exception.h">
       <Filter>Resources\Strings</Filter>
@@ -147,6 +117,18 @@
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\PathEdit.h">
       <Filter>UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Cursor.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Font.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\RenderTarget.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Theme.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

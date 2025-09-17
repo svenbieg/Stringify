@@ -30,10 +30,6 @@ public:
 	~Application();
 	static inline Application* Get() { return s_Current; }
 
-	// Common
-	BOOL DarkMode();
-	Handle<Theme> GetTheme()override;
-
 	INT Run();
 	Event<Application> UnhandledException;
 

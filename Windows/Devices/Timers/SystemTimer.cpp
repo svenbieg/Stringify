@@ -27,11 +27,7 @@ namespace Devices {
 
 SystemTimer::~SystemTimer()
 {
-if(m_Task)
-	{
-	m_Task->Cancel();
-	m_Task=nullptr;
-	}
+m_Task->Cancel();
 s_Current=nullptr;
 }
 
@@ -69,7 +65,6 @@ return time.QuadPart/ticks.QuadPart;
 
 SystemTimer::SystemTimer()
 {
-s_Current=this;
 m_Task=Task::Create(this, &SystemTimer::TaskProc);
 }
 

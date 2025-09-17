@@ -15,14 +15,11 @@
 #include <windowsx.h>
 #include "Concurrency/DispatchedQueue.h"
 #include "Desktop/Application.h"
-#include "Graphics/Direct2D/Cursor.h"
 #include "Overlapped.h"
 
 using namespace Concurrency;
 using namespace Desktop;
 using namespace Graphics;
-
-using D2DCursor=Graphics::Direct2D::Cursor;
 
 
 //===========
@@ -50,6 +47,11 @@ VOID Overlapped::BringToFront()
 {
 SetWindowPos(m_Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOACTIVATE|SWP_NOMOVE|SWP_NOSIZE);
 Frame::BringToFront();
+}
+
+Handle<Brush> Overlapped::GetBackground()
+{
+return m_Theme->ControlBrush;
 }
 
 Graphics::RECT Overlapped::GetBorderWidth()const
@@ -107,12 +109,11 @@ if(m_Handle)
 	}
 }
 
-VOID Overlapped::SetCursor(Handle<Cursor> cursor)
+VOID Overlapped::SetCursor(Cursor* cursor)
 {
-HCURSOR hcursor=m_Cursor;
-auto d2d_cursor=cursor.As<D2DCursor>();
-if(d2d_cursor)
-	hcursor=d2d_cursor->GetHandle();
+if(!cursor)
+	return;
+HCURSOR hcursor=cursor->GetHandle();
 SetClassLongPtr(m_Handle, GCLP_HCURSOR, (LONG_PTR)hcursor);
 }
 
@@ -157,12 +158,11 @@ m_Cursor(NULL),
 m_Handle(NULL)
 {
 m_Cursor=LoadCursor(NULL, IDC_ARROW);
-auto theme=GetTheme();
-Background=theme->ControlBrush;
+m_Theme=Theme::Get();
 Invalidated.Add(this, &Overlapped::OnInvalidated);
 Visible.Changed.Add(this, &Overlapped::OnVisibleChanged);
 Visible.Set(false, false);
-m_RenderTarget=D2DRenderTarget::Create();
+m_RenderTarget=RenderTarget::Create();
 LPCTSTR class_name=TEXT("Overlapped");
 HINSTANCE inst=GetModuleHandle(nullptr);
 WNDCLASSEX wc={ 0 };
@@ -179,6 +179,8 @@ HWND hwnd_parent=parent? parent->m_Handle: HWND_DESKTOP;
 m_Handle=CreateWindowEx(0, class_name, nullptr, style, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, hwnd_parent, NULL, inst, this);
 if(m_Handle==INVALID_HANDLE_VALUE)
 	m_Handle=NULL;
+m_Theme->Changed.Add(this, &Overlapped::OnThemeChanged);
+OnThemeChanged();
 }
 
 
@@ -208,7 +210,6 @@ switch(msg)
 		::RECT rc;
 		::GetWindowRect(m_Handle, &rc);
 		m_Rect.Set(rc.left, rc.top, rc.right, rc.bottom);
-		UpdateTheme();
 		break;
 		}
 	case WM_DESTROY:
@@ -337,12 +338,11 @@ switch(msg)
 		:: RECT rc_client;
 		::GetClientRect(m_Handle, &rc_client);
 		rc.Set(0, 0, rc_client.right, rc_client.bottom);
-		auto target=m_RenderTarget.As<D2DRenderTarget>();
 		PAINTSTRUCT ps;
 		BeginPaint(m_Handle, &ps);
-		target->BeginDraw(ps.hdc, rc);
-		RenderWindow(this, target, rc, false);
-		target->EndDraw();
+		m_RenderTarget->BeginDraw(ps.hdc, rc);
+		RenderWindow(this, m_RenderTarget, rc, false);
+		m_RenderTarget->EndDraw();
 		EndPaint(m_Handle, &ps);
 		break;
 		}
@@ -365,11 +365,6 @@ switch(msg)
 		DoPointer(PointerEventType::ButtonUp, args);
 		handled=args->Handled;
 		break;
-		}
-	case WM_SETTINGCHANGE:
-		{
-		UpdateSetting((LPCTSTR)lparam);
-		return 0;
 		}
 	case WM_SHOWWINDOW:
 		{
@@ -417,29 +412,17 @@ VOID Overlapped::OnInvalidated()
 DispatchedQueue::Append(this, &Overlapped::Repaint);
 }
 
+VOID Overlapped::OnThemeChanged()
+{
+auto scheme=m_Theme->GetColorScheme();
+BOOL dark=(scheme==ColorScheme::Dark);
+DwmSetWindowAttribute(m_Handle, DWMWA_USE_IMMERSIVE_DARK_MODE, &dark, sizeof(BOOL));
+Invalidate(true);
+}
+
 VOID Overlapped::OnVisibleChanged(BOOL visible)
 {
 Show(visible? SW_SHOW: SW_HIDE);
-}
-
-VOID Overlapped::UpdateSetting(LPCTSTR setting)
-{
-if(StringHelper::Compare(setting, "ImmersiveColorSet")==0)
-	{
-	UpdateTheme();
-	return;
-	}
-}
-
-VOID Overlapped::UpdateTheme()
-{
-auto app=Desktop::Application::Get();
-BOOL dark=app->DarkMode();
-auto scheme=(dark? ColorScheme::Dark: ColorScheme::Light);
-auto theme=GetTheme();
-theme->SetColorScheme(scheme);
-DwmSetWindowAttribute(m_Handle, DWMWA_USE_IMMERSIVE_DARK_MODE, &dark, sizeof(BOOL));
-Invalidate(true);
 }
 
 LRESULT CALLBACK Overlapped::WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)

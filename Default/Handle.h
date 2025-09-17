@@ -92,10 +92,10 @@ private:
 		}
 	template <class _create_t, class _convert_t> static VOID Create(_create_t** Create, _convert_t* Init)
 		{
-		auto init=static_cast<Object*>(Init);
+		auto init=static_cast<_create_t*>(Init);
 		if(init)
 			init->Refer();
-		*Create=static_cast<_create_t*>(Init);
+		*Create=init;
 		}
 	template <class _set_t, class _convert_t> static VOID Set(_set_t** Set, _convert_t* To)
 		{

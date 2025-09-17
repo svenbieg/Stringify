@@ -47,11 +47,9 @@ public:
 
 	// Common
 	Handle<Interactive> GetFocus()const { return m_Focus; }
-	inline Frame* GetFrame()override { return this; }
 	POINT GetFrameOffset()const override { return POINT(0, 0); }
 	SIZE GetMinSize(RenderTarget* Target)override;
 	Interactive* GetPointerCapture()const { return m_PointerCapture; }
-	virtual Handle<Theme> GetTheme()override;
 	VOID Invalidate(BOOL Rearrange)override;
 	Event<Frame> Invalidated;
 	BOOL IsKeyDown(VirtualKey Key);
@@ -60,7 +58,7 @@ public:
 	Event<Frame> PointerCaptured;
 	Event<Frame> PointerReleased;
 	VOID Rearrange(RenderTarget* Target, RECT& Rect)override;
-	virtual VOID SetCursor(Handle<Cursor> Cursor) {}
+	virtual VOID SetCursor(Cursor* Cursor) {}
 	VOID SetFocus(Interactive* Focus, FocusReason Reason=FocusReason::None);
 	virtual VOID SetPointerCapture(Interactive* Capture) { m_PointerCapture=Capture; }
 

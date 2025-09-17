@@ -48,7 +48,6 @@ public:
 
 	// Common
 	Handle<PopupMenuItem> Add(Handle<Sentence> Label);
-	Handle<Brush> GetBackgroundBrush()override;
 	SIZE GetMinSize(RenderTarget* Target)override;
 	DynamicHandle<MenuBarItem, Sentence> Label;
 	RECT Padding;

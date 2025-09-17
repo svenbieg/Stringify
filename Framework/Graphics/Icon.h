@@ -9,8 +9,9 @@
 // Using
 //=======
 
+#include "Collections/map.hpp"
 #include "Resources/Icons/Icon.h"
-#include "Bitmap.h"
+#include "Graphics/Bitmap.h"
 
 
 //===========
@@ -31,7 +32,7 @@ public:
 	using ICON=Resources::Icons::ICON;
 
 	// Con-/Destructors
-	static inline Handle<Icon> Create(ICON const* Resource=nullptr) { return new Icon(Resource); }
+	static inline Handle<Icon> Create(ICON const* Resource) { return new Icon(Resource); }
 
 	// Common
 	Handle<Bitmap> GetBitmap(UINT Size);
@@ -42,6 +43,7 @@ protected:
 
 	// Common
 	ICON const* GetIcon(UINT Size);
+	Collections::map<UINT, Handle<Bitmap>> m_Bitmaps;
 	ICON const* m_Icons;
 };
 

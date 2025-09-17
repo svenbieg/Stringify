@@ -10,6 +10,9 @@
 //=======
 
 #include "Graphics/Theme.h"
+#include "Storage/Registry.h"
+
+using namespace Storage;
 
 
 //===========
@@ -19,9 +22,27 @@
 namespace Graphics {
 
 
+//==================
+// Con-/Destructors
+//==================
+
+Theme::~Theme()
+{
+if(s_Current==this)
+	s_Current=nullptr;
+}
+
+
 //========
 // Common
 //========
+
+Handle<Theme> Theme::Get()
+{
+if(!s_Current)
+	s_Current=new Theme();
+return s_Current;
+}
 
 VOID Theme::SetColorScheme(ColorScheme scheme)
 {
@@ -63,6 +84,13 @@ switch(scheme)
 		}
 	}
 m_ColorScheme=scheme;
+Changed(this);
+}
+
+VOID Theme::Update()
+{
+INT light=Registry::GetValue(HKEY_CURRENT_USER, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "AppsUseLightTheme", 1);
+SetColorScheme(light? ColorScheme::Light: ColorScheme::Dark);
 }
 
 
@@ -70,9 +98,10 @@ m_ColorScheme=scheme;
 // Con-/Destructors Protected
 //============================
 
-Theme::Theme(ColorScheme scheme):
+Theme::Theme():
 m_ColorScheme(ColorScheme::Light)
 {
+// Colors
 BackgroundBrush=Brush::Create(Colors::LightBackground);
 BorderBrush=Brush::Create(Colors::LightBorder);
 BorderInactiveBrush=Brush::Create(Colors::LightBorderInactive);
@@ -85,7 +114,22 @@ HighlightInactiveBrush=Brush::Create(Colors::LightHighlightInactive);
 TextBrush=Brush::Create(Colors::LightText);
 TextInactiveBrush=Brush::Create(Colors::LightTextInactive);
 WindowBrush=Brush::Create(Colors::LightWindow);
-SetColorScheme(scheme);
+// Fonts
+DefaultFont=Font::Create();
+// Cursors
+DefaultCursor=Cursor::Create(IDC_ARROW);
+HandPointCursor=Cursor::Create(IDC_HAND);
+SizeHorizontalCursor=Cursor::Create(IDC_SIZEWE);
+SizeVerticalCursor=Cursor::Create(IDC_SIZENS);
+TextCursor=Cursor::Create(IDC_IBEAM);
+Update();
 }
+
+
+//================
+// Common Private
+//================
+
+Theme* Theme::s_Current=nullptr;
 
 }

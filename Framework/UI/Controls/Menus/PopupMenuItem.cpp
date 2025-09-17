@@ -34,19 +34,6 @@ namespace UI {
 // Common
 //========
 
-Handle<Brush> PopupMenuItem::GetBackgroundBrush()
-{
-auto theme=GetTheme();
-auto background=theme->ControlBrush;
-BOOL focus=HasFocus();
-focus|=HasPointerFocus();
-if(!Enabled)
-	focus=false;
-if(focus)
-	background=theme->HighlightBrush;
-return background;
-}
-
 Graphics::SIZE PopupMenuItem::GetMinSize(RenderTarget* target)
 {
 SIZE size(0, 0);
@@ -56,9 +43,9 @@ size.Width+=m_LabelWidth;
 size.Width+=m_ShortcutWidth;
 if(Text)
 	{
+	auto font=m_Theme->DefaultFont;
 	if(Icon)
 		size.Height=16*scale;
-	auto font=GetFont();
 	SIZE label_size=target->MeasureText(font, scale, Text->Begin());
 	size.Height=TypeHelper::Max(size.Height, label_size.Height);
 	if(Shortcut)
@@ -78,13 +65,13 @@ return size.Max(MinSize*scale);
 VOID PopupMenuItem::Render(RenderTarget* target, RECT& rc)
 {
 Interactive::Render(target, rc);
-auto theme=GetTheme();
 FLOAT scale=GetScaleFactor();
 if(!Text)
 	{
+	auto brush=m_Theme->BorderBrush;
 	POINT from(0, Padding.Top*scale);
 	POINT to(rc.Right, Padding.Top*scale);
-	target->DrawLine(from, to, theme->BorderBrush);
+	target->DrawLine(from, to, brush);
 	return;
 	}
 rc.SetPadding(Padding*scale);
@@ -114,17 +101,15 @@ if(Icon)
 	target->DrawBitmap(dst_rc, icon, ico_rc);
 	}
 left+=m_IconWidth;
-auto font=GetFont();
-auto text_color=theme->TextBrush;
+auto font=m_Theme->DefaultFont;
+auto text_brush=m_Theme->TextBrush;
 if(!Enabled)
-	text_color=theme->TextInactiveBrush;
+	text_brush=m_Theme->TextInactiveBrush;
 auto label=Text->Begin();
 SIZE label_size=target->MeasureText(font, scale, label);
 UINT top=rc.Top+(height-label_size.Height)/2;
 RECT label_rc(left, top, left+label_size.Width, top+label_size.Height);
-target->Font=font;
-target->TextColor=text_color;
-target->DrawText(label_rc, scale, label);
+target->DrawText(label_rc, scale, font, text_brush, label);
 BOOL accelerate=Accelerator;
 if(!Enabled)
 	accelerate=false;
@@ -141,7 +126,7 @@ if(accelerate)
 		SIZE size_to=target->MeasureText(font, scale, label, pos+1);
 		POINT from(left+size_from.Width, rc.Bottom);
 		POINT to(left+size_to.Width, rc.Bottom);
-		target->DrawLine(from, to, text_color, 1);
+		target->DrawLine(from, to, text_brush, 1);
 		}
 	}
 left+=m_LabelWidth;
@@ -151,22 +136,20 @@ if(Shortcut)
 	SIZE shortcut_size=target->MeasureText(font, scale, shortcut);
 	UINT top=rc.Top+(height-shortcut_size.Height)/2;
 	RECT shortcut_rc(left, top, left+shortcut_size.Width, top+shortcut_size.Height);
-	auto shortcut_color=theme->TextBrush;
+	auto shortcut_brush=m_Theme->TextBrush;
 	if(!Enabled)
-		shortcut_color=theme->TextInactiveBrush;
-	target->TextColor=shortcut_color;
-	target->DrawText(shortcut_rc, scale, shortcut);
+		shortcut_brush=m_Theme->TextInactiveBrush;
+	target->DrawText(shortcut_rc, scale, font, shortcut_brush, shortcut);
 	}
 if(SubMenu)
 	{
 	SIZE arrow_size=target->MeasureText(font, scale, TEXT(">"));
 	UINT top=rc.Top+(height-arrow_size.Height)/2;
 	RECT arrow_rc(rc.Right-arrow_size.Width, top, rc.Right, top+arrow_size.Height);
-	auto arrow_color=theme->TextBrush;
+	auto arrow_brush=m_Theme->TextBrush;
 	if(!Enabled)
-		arrow_color=theme->TextInactiveBrush;
-	target->TextColor=arrow_color;
-	target->DrawText(arrow_rc, scale, TEXT(">"));
+		arrow_brush=m_Theme->TextInactiveBrush;
+	target->DrawText(arrow_rc, scale, font, arrow_brush, TEXT(">"));
 	}
 }
 

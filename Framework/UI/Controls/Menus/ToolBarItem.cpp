@@ -31,19 +31,6 @@ namespace UI {
 // Common
 //========
 
-Handle<Brush> ToolBarItem::GetBackgroundBrush()
-{
-auto theme=GetTheme();
-auto background=theme->ControlBrush;
-BOOL focus=HasFocus();
-focus|=HasPointerFocus();
-if(!Enabled)
-	focus=false;
-if(focus)
-	background=theme->HighlightBrush;
-return background;
-}
-
 Graphics::SIZE ToolBarItem::GetMinSize(RenderTarget* target)
 {
 FLOAT scale=GetScaleFactor();
@@ -58,7 +45,6 @@ VOID ToolBarItem::Render(RenderTarget* target, RECT& rc)
 Interactive::Render(target, rc);
 if(!Icon)
 	return;
-auto theme=GetTheme();
 FLOAT scale=GetScaleFactor();
 rc.SetPadding(Padding*scale);
 if(!m_Icon)

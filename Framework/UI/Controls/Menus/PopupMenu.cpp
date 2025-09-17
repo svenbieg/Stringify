@@ -40,17 +40,10 @@ Menu::Close();
 Visible=false;
 }
 
-Handle<Brush> PopupMenu::GetBackgroundBrush()
-{
-auto theme=GetTheme();
-return theme->ControlBrush;
-}
-
 Graphics::SIZE PopupMenu::GetMinSize(RenderTarget* target)
 {
 FLOAT scale=GetScaleFactor();
-auto theme=GetTheme();
-auto font=theme->DefaultFont;
+auto font=m_Theme->DefaultFont;
 UINT label_width=0;
 UINT shortcut_width=0;
 bool icon=false;

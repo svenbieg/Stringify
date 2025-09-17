@@ -39,7 +39,6 @@ public:
 
 	// Common
 	Handle<MenuBarItem> Add(Handle<Sentence> Label);
-	Handle<Brush> GetBackgroundBrush()override;
 
 private:
 	// Using

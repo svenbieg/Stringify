@@ -9,7 +9,6 @@
 // Using
 //=======
 
-#include "Graphics/Direct2D/RenderTarget.h"
 #include "UI/Frame.h"
 
 
@@ -27,14 +26,12 @@ namespace UI {
 class Overlapped: public Frame
 {
 public:
-	// Using
-	using D2DRenderTarget=Graphics::Direct2D::RenderTarget;
-
 	// Con-/Destructors
 	~Overlapped();
 
 	// Common
 	VOID BringToFront()override;
+	Handle<Brush> GetBackground()override;
 	RECT GetBorderWidth()const;
 	RECT GetClientRect()const override;
 	inline HWND GetHandle()const { return m_Handle; }
@@ -43,7 +40,7 @@ public:
 	inline Handle<RenderTarget> GetTarget()override { return m_RenderTarget; }
 	VOID Move(RECT const& Rect)override;
 	VOID Repaint();
-	VOID SetCursor(Handle<Cursor> Cursor)override;
+	VOID SetCursor(Cursor* Cursor)override;
 	VOID SetPointerCapture(Interactive* Capture)override;
 	VOID Show(INT Show);
 	VOID Shrink();
@@ -60,9 +57,8 @@ protected:
 private:
 	// Common
 	VOID OnInvalidated();
+	VOID OnThemeChanged();
 	VOID OnVisibleChanged(BOOL Visible);
-	VOID UpdateSetting(LPCTSTR Setting);
-	VOID UpdateTheme();
 	static LRESULT CALLBACK WndProc(HWND Window, UINT Message, WPARAM WParam, LPARAM LParam);
 	HCURSOR m_Cursor;
 };

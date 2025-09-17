@@ -65,7 +65,6 @@ public:
 	~ScrollBar();
 
 	// Common
-	Handle<Brush> GetBackgroundBrush()override;
 	SIZE GetMinSize(RenderTarget* Target)override;
 	UINT GetWidth();
 	FLOAT Fraction;

@@ -31,7 +31,9 @@ public:
 	static inline Handle<Panel> Create(Window* Parent) { return new Panel(Parent); }
 
 	// Common
+	Handle<Brush> Background;
 	BOOL Border;
+	Handle<Brush> GetBackground()override;
 	virtual Handle<Brush> GetBorderBrush();
 	virtual SIZE GetMinSize(RenderTarget* Target)override;
 	RECT Padding;

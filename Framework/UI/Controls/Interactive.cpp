@@ -12,6 +12,8 @@
 #include "UI/Application.h"
 #include "Interactive.h"
 
+using namespace Graphics;
+
 
 //===========
 // Namespace
@@ -29,6 +31,11 @@ VOID Interactive::CapturePointer()
 {
 auto frame=GetFrame();
 frame->SetPointerCapture(this);
+}
+
+Handle<Cursor> Interactive::GetCursor()
+{
+return nullptr;
 }
 
 Interactive* Interactive::GetNextControl(Window* window, Interactive* control, INT relative)
@@ -94,6 +101,21 @@ VOID Interactive::ReleasePointer()
 auto frame=GetFrame();
 if(frame->GetPointerCapture()==this)
 	frame->SetPointerCapture(nullptr);
+}
+
+VOID Interactive::Render(RenderTarget* target, RECT& rc)
+{
+auto background=GetBackground();
+if(!background)
+	return;
+BOOL focus=HasFocus();
+focus|=HasPointerFocus();
+if(focus)
+	background=m_Theme->HighlightBrush;
+RECT rc_fill(rc);
+auto offset=target->GetOffset();
+rc_fill.Move(offset);
+target->FillRect(rc_fill, background);
 }
 
 VOID Interactive::SetFocus(FocusReason reason)

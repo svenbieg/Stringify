@@ -9,14 +9,11 @@
 // Using
 //=======
 
-#include "Graphics/Direct2D/Icon.h"
 #include "UI/Controls/Grid.h"
 #include "UI/Application.h"
 #include "UI/AppWindow.h"
 
 using namespace UI::Controls;
-
-using D2DIcon=Graphics::Direct2D::Icon;
 
 
 //===========
@@ -64,15 +61,19 @@ if(m_Handle)
 //============================
 
 AppWindow::AppWindow():
-Icon(this),
 Title(this)
 {
 s_Current=this;
 SetWindowLong(m_Handle, GWL_STYLE, WS_OVERLAPPEDWINDOW);
 SetWindowLong(m_Handle, GWL_EXSTYLE, WS_EX_APPWINDOW);
+UINT size_small=GetSystemMetrics(SM_CXSMICON);
+UINT size_big=GetSystemMetrics(SM_CXICON);
+HINSTANCE hinst=GetModuleHandle(nullptr);
+HICON ico_small=(HICON)LoadImage(hinst, MAKEINTRESOURCE(ICO_APP), IMAGE_ICON, size_small, size_small, 0);
+HICON ico_big=(HICON)LoadImage(hinst, MAKEINTRESOURCE(ICO_APP), IMAGE_ICON, size_big, size_big, 0);
+SendMessage(m_Handle, WM_SETICON, ICON_SMALL, (LPARAM)ico_small);
+SendMessage(m_Handle, WM_SETICON, ICON_BIG, (LPARAM)ico_big);
 Closed.Add(this, &AppWindow::OnClosed);
-Icon.Changed.Add(this, &AppWindow::OnIconChanged);
-Icon=D2DIcon::Create(ICO_APP);
 Title.Changed.Add(this, &AppWindow::OnTitleChanged);
 Title=Application::Get()->GetName();
 auto grid=Grid::Create(this);
@@ -112,6 +113,11 @@ switch(msg)
 			}
 		return 0;
 		}
+	case WM_SETTINGCHANGE:
+		{
+		OnSettingChanged((LPCTSTR)lparam);
+		return 0;
+		}
 	case WM_SIZE:
 		{
 		switch(wparam)
@@ -143,15 +149,13 @@ VOID AppWindow::OnClosed()
 Application::Get()->Quit();
 }
 
-VOID AppWindow::OnIconChanged(Handle<Graphics::Icon> icon)
+VOID AppWindow::OnSettingChanged(LPCTSTR setting)
 {
-auto d2d_icon=icon.As<D2DIcon>();
-UINT size_small=GetSystemMetrics(SM_CXSMICON);
-UINT size_big=GetSystemMetrics(SM_CXICON);
-HICON ico_small=d2d_icon->GetHandle(size_small);
-HICON ico_big=d2d_icon->GetHandle(size_big);
-SendMessage(m_Handle, WM_SETICON, ICON_SMALL, (LPARAM)ico_small);
-SendMessage(m_Handle, WM_SETICON, ICON_BIG, (LPARAM)ico_big);
+if(StringHelper::Compare(setting, "ImmersiveColorSet")==0)
+	{
+	m_Theme->Update();
+	return;
+	}
 }
 
 VOID AppWindow::OnTitleChanged(Handle<Sentence> title)

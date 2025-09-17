@@ -17,7 +17,6 @@
 //===========
 
 namespace Graphics {
-	namespace Direct2D {
 
 
 //========
@@ -57,4 +56,4 @@ m_Info.lfHeight=size;
 m_Info.lfWeight=weight;
 }
 
-}}
+}

@@ -38,12 +38,6 @@ StopScrolling();
 // Common
 //========
 
-Handle<Brush> ScrollBar::GetBackgroundBrush()
-{
-auto theme=GetTheme();
-return theme->BackgroundBrush;
-}
-
 Graphics::SIZE ScrollBar::GetMinSize(RenderTarget* target)
 {
 FLOAT scale=GetScaleFactor();
@@ -74,9 +68,8 @@ return Width*scale;
 VOID ScrollBar::Render(RenderTarget* target, RECT& rc)
 {
 Interactive::Render(target, rc);
-auto theme=GetTheme();
-auto br_control=theme->ControlBrush;
-auto br_highlight=theme->HighlightBrush;
+auto br_control=m_Theme->ControlBrush;
+auto br_highlight=m_Theme->HighlightBrush;
 FLOAT scale=GetScaleFactor();
 UINT width=Width*scale;
 UINT padding=width*0.2f;

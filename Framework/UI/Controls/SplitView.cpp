@@ -28,13 +28,12 @@ namespace UI {
 
 Handle<Cursor> SplitView::GetCursor()
 {
-auto theme=GetTheme();
 switch(m_Orientation)
 	{
 	case Orientation::Horizontal:
-		return theme->SizeVerticalCursor;
+		return m_Theme->SizeVerticalCursor;
 	case Orientation::Vertical:
-		return theme->SizeHorizontalCursor;
+		return m_Theme->SizeHorizontalCursor;
 	}
 return nullptr;
 }

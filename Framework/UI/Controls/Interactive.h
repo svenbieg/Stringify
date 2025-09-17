@@ -59,7 +59,7 @@ public:
 	Property<Interactive, BOOL> Enabled;
 	Event<Interactive, FocusReason> Focused;
 	Event<Interactive> FocusLost;
-	virtual Handle<Cursor> GetCursor() { return nullptr; }
+	virtual Handle<Cursor> GetCursor();
 	BOOL HasFocus();
 	BOOL HasPointerFocus();
 	static Interactive* GetNextControl(Window* Window, Interactive* Control, INT Relative);
@@ -75,6 +75,7 @@ public:
 	Event<Interactive, Handle<PointerEventArgs>> PointerUp;
 	Event<Interactive, Handle<PointerEventArgs>> PointerWheel;
 	VOID ReleasePointer();
+	virtual VOID Render(RenderTarget* Target, RECT& Rect)override;
 	virtual VOID SetFocus(FocusReason Reason=FocusReason::None);
 	BOOL TabStop;
 
