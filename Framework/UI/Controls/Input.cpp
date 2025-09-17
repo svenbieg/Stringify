@@ -171,7 +171,8 @@ if(!enabled)
 RECT rc_fill(rc);
 auto offset=target->GetOffset();
 rc_fill.Move(offset);
-target->FillRect(rc_fill, background);
+if(background)
+	target->FillRect(rc_fill, background);
 FLOAT scale=GetScaleFactor();
 rc.SetPadding(Padding*scale);
 UINT client_height=rc.GetHeight();

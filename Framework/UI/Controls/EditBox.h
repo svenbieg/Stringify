@@ -32,6 +32,7 @@ public:
 	static inline Handle<EditBox> Create(Window* Parent) { return new EditBox(Parent); }
 
 	// Common
+	Handle<Brush> GetBackground()override;
 	SIZE GetMinSize(RenderTarget* Target)override;
 	Property<EditBox, TCHAR> Mask;
 	VOID Rearrange(RenderTarget* Target, RECT& Rect)override;

@@ -11,6 +11,8 @@
 
 #include "Control.h"
 
+using namespace Graphics;
+
 
 //===========
 // Namespace

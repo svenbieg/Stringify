@@ -27,6 +27,11 @@ namespace UI {
 // Common
 //========
 
+Handle<Brush> EditBox::GetBackground()
+{
+return m_Theme->WindowBrush;
+}
+
 Graphics::SIZE EditBox::GetMinSize(RenderTarget* target)
 {
 SIZE size(1, 1);

@@ -120,8 +120,10 @@ VOID ToolTip::OnTimerTriggered()
 if(m_Panel)
 	return;
 auto frame=m_Parent->GetFrame();
+auto theme=m_Parent->GetTheme();
 m_Timer=nullptr;
 m_Panel=Panel::Create(frame);
+m_Panel->Background=theme->WindowBrush;
 m_Panel->Border=true;
 auto text_block=TextBlock::Create(m_Panel);
 text_block->Margin.Set(4, 2, 4, 2);

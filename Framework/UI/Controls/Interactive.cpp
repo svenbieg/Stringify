@@ -35,7 +35,7 @@ frame->SetPointerCapture(this);
 
 Handle<Cursor> Interactive::GetCursor()
 {
-return nullptr;
+return m_Theme->DefaultCursor;
 }
 
 Interactive* Interactive::GetNextControl(Window* window, Interactive* control, INT relative)
@@ -106,12 +106,12 @@ if(frame->GetPointerCapture()==this)
 VOID Interactive::Render(RenderTarget* target, RECT& rc)
 {
 auto background=GetBackground();
-if(!background)
-	return;
 BOOL focus=HasFocus();
 focus|=HasPointerFocus();
 if(focus)
 	background=m_Theme->HighlightBrush;
+if(!background)
+	return;
 RECT rc_fill(rc);
 auto offset=target->GetOffset();
 rc_fill.Move(offset);
@@ -252,15 +252,16 @@ if(args->Button==PointerButton::Left)
 
 VOID Interactive::OnPointerEntered()
 {
-auto cursor=this->GetCursor();
 auto frame=GetFrame();
+auto cursor=GetCursor();
 frame->SetCursor(cursor);
 }
 
 VOID Interactive::OnPointerLeft()
 {
 auto frame=GetFrame();
-frame->SetCursor(nullptr);
+auto cursor=m_Theme->DefaultCursor;
+frame->SetCursor(cursor);
 }
 
 VOID Interactive::OnPointerUp(Handle<PointerEventArgs> args)

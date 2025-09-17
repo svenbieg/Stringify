@@ -30,6 +30,11 @@ namespace UI {
 // Common
 //========
 
+Handle<Brush> Button::GetBackground()
+{
+return m_Theme->ControlBrush;
+}
+
 Graphics::SIZE Button::GetMinSize(RenderTarget* target)
 {
 SIZE size(0, 0);

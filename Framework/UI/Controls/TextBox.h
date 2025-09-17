@@ -39,6 +39,7 @@ public:
 	VOID AppendLine(Handle<String> Line);
 	VOID AppendLines(Handle<StringList> Lines);
 	VOID Clear();
+	Handle<Brush> GetBackground()override;
 	VOID ReadFromStream(Handle<InputStream> Stream);
 	Property<TextBox, BOOL> ReadOnly;
 	VOID Rearrange(RenderTarget* Target, RECT& Rect)override;

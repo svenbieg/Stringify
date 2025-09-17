@@ -67,7 +67,6 @@ return Width*scale;
 
 VOID ScrollBar::Render(RenderTarget* target, RECT& rc)
 {
-Interactive::Render(target, rc);
 auto br_control=m_Theme->ControlBrush;
 auto br_highlight=m_Theme->HighlightBrush;
 FLOAT scale=GetScaleFactor();

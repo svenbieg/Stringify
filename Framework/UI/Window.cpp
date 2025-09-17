@@ -38,7 +38,7 @@ Invalidate(true);
 
 Handle<Brush> Window::GetBackground()
 {
-return m_Theme->WindowBrush;
+return nullptr;
 }
 
 Graphics::RECT Window::GetClientRect()const
