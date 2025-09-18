@@ -47,7 +47,7 @@ public:
 
 protected:
 	// Con-/Destructors
-	Overlapped(Overlapped* Parent=nullptr);
+	Overlapped(Window* Parent=nullptr);
 
 	// Common
 	virtual LRESULT HandleMessage(UINT Message, WPARAM WParam, LPARAM LParam, BOOL& Handled);

@@ -153,7 +153,7 @@ Move(rc);
 // Con-/Destructors Protected
 //============================
 
-Overlapped::Overlapped(Overlapped* parent):
+Overlapped::Overlapped(Window* parent):
 m_Cursor(NULL),
 m_Handle(NULL)
 {
@@ -174,8 +174,13 @@ wc.lpszClassName=class_name;
 wc.style=CS_HREDRAW|CS_VREDRAW;
 SetLastError(0);
 RegisterClassEx(&wc);
+HWND hwnd_parent=HWND_DESKTOP;
+if(parent)
+	{
+	auto frame=dynamic_cast<Overlapped*>(parent->GetFrame());
+	hwnd_parent=frame->m_Handle;
+	}
 UINT style=WS_OVERLAPPED;
-HWND hwnd_parent=parent? parent->m_Handle: HWND_DESKTOP;
 m_Handle=CreateWindowEx(0, class_name, nullptr, style, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, hwnd_parent, NULL, inst, this);
 if(m_Handle==INVALID_HANDLE_VALUE)
 	m_Handle=NULL;

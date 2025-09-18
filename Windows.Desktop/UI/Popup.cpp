@@ -24,7 +24,7 @@ namespace UI {
 //============================
 
 Popup::Popup(Window* parent):
-Overlapped(dynamic_cast<Overlapped*>(parent->GetFrame()))
+Overlapped(parent)
 {
 SetWindowLong(m_Handle, GWL_STYLE, WS_DLGFRAME);
 SetWindowLong(m_Handle, GWL_EXSTYLE, WS_EX_TOOLWINDOW);
