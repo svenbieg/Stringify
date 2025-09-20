@@ -158,11 +158,13 @@ m_Cursor(NULL),
 m_Handle(NULL)
 {
 m_Cursor=LoadCursor(NULL, IDC_ARROW);
+m_RenderTarget=RenderTarget::Create();
+Window::m_RenderTarget=m_RenderTarget;
 m_Theme=Theme::Get();
+Window::m_Theme=m_Theme;
 Invalidated.Add(this, &Overlapped::OnInvalidated);
 Visible.Changed.Add(this, &Overlapped::OnVisibleChanged);
 Visible.Set(false, false);
-m_RenderTarget=RenderTarget::Create();
 LPCTSTR class_name=TEXT("Overlapped");
 HINSTANCE inst=GetModuleHandle(nullptr);
 WNDCLASSEX wc={ 0 };

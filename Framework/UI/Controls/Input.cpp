@@ -932,7 +932,6 @@ else
 
 VOID Input::UpdateLine(INPUT_LINE& line)
 {
-auto target=GetTarget();
 UINT char_count=line.Offsets.get_count();
 if(char_count>0)
 	{
@@ -950,7 +949,7 @@ SIZE size;
 for(UINT pos=0; str[pos]; pos++)
 	{
 	auto font=m_Theme->DefaultFont;
-	size=target->MeasureText(font, 1.0, str, pos+1);
+	size=m_RenderTarget->MeasureText(font, 1.f, str, pos+1);
 	line.Offsets.append(size.Width);
 	}
 UINT line_width=size.Width;

@@ -101,14 +101,6 @@ POINT offset=GetScreenOffset();
 return m_Rect.SetPosition(offset);
 }
 
-Handle<RenderTarget> Window::GetTarget()
-{
-auto frame=this->GetFrame();
-if(!frame)
-	return nullptr;
-return frame->GetTarget();
-}
-
 Handle<Window> Window::GetVisibleChild(UINT id)
 {
 for(auto it=Children->Begin(); it->HasCurrent(); it->MoveNext())
@@ -242,6 +234,7 @@ if(m_Parent)
 	{
 	m_Parent->Children->Append(this);
 	m_Frame=m_Parent->m_Frame;
+	m_RenderTarget=m_Parent->m_RenderTarget;
 	m_Theme=m_Parent->m_Theme;
 	}
 }

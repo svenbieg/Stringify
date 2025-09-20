@@ -58,11 +58,11 @@ public:
 	POINT GetOffset()const { return POINT(m_Rect.Left, m_Rect.Top); }
 	inline Window* GetParent()const { return m_Parent; }
 	inline RECT const& GetRect()const { return m_Rect; }
+	inline RenderTarget* GetRenderTarget()const { return m_RenderTarget; }
 	FLOAT GetScaleFactor()const;
 	virtual POINT GetScreenOffset()const;
 	RECT GetScreenRect()const;
-	virtual Handle<RenderTarget> GetTarget();
-	inline Handle<Theme> GetTheme()const { return m_Theme; }
+	inline Theme* GetTheme()const { return m_Theme; }
 	Handle<Window> GetVisibleChild(UINT Id);
 	virtual VOID Invalidate(BOOL Rearrange=false);
 	BOOL IsInvalidated() { return FlagHelper::Get(m_Flags, WindowFlags::Repaint); }
@@ -97,7 +97,8 @@ protected:
 	Frame* m_Frame;
 	Window* m_Parent;
 	RECT m_Rect;
-	Handle<Theme> m_Theme;
+	RenderTarget* m_RenderTarget;
+	Theme* m_Theme;
 
 private:
 	// Common
