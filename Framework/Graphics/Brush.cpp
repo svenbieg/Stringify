@@ -24,12 +24,12 @@ namespace Graphics {
 //========
 
 VOID Brush::SetColor(COLOR c)
-{
-if(m_Color==c)
-	return;
-m_Color=c;
-Changed(this);
-}
+	{
+	if(m_Color==c)
+		return;
+	m_Color=c;
+	Changed(this);
+	}
 
 
 //==================
@@ -37,10 +37,10 @@ Changed(this);
 //==================
 
 UINT Brush::Release()
-{
-if(m_ReferenceCount==1)
-	Destroyed(this);
-return Object::Release();
-}
+	{
+	if(m_ReferenceCount==1)
+		Destroyed(this);
+	return Object::Release();
+	}
 
 }

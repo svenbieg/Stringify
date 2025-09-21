@@ -171,7 +171,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Application.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Brush.cpp">
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Brush.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>

@@ -20,8 +20,8 @@
     <ProjectCapability Include="SourceItemsFromImports" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Brush.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Bitmap.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Brush.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Color.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Icon.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Point.cpp" />
