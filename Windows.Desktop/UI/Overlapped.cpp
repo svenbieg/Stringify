@@ -85,6 +85,11 @@ min_size.Height+=border.Top+border.Bottom;
 return min_size;
 }
 
+RenderTarget* Overlapped::GetRenderTarget()const
+{
+return m_RenderTarget;
+}
+
 Graphics::POINT Overlapped::GetScreenOffset()const
 {
 POINT pt=Frame::GetScreenOffset();
@@ -162,7 +167,6 @@ m_Handle(NULL)
 {
 m_Cursor=LoadCursor(NULL, IDC_ARROW);
 m_RenderTarget=RenderTarget::Create();
-Window::m_RenderTarget=m_RenderTarget;
 m_Theme=Theme::Get();
 Window::m_Theme=m_Theme;
 Invalidated.Add(this, &Overlapped::OnInvalidated);

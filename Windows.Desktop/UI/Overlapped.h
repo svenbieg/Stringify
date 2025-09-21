@@ -37,6 +37,7 @@ public:
 	RECT GetClientRect()const override;
 	inline HWND GetHandle()const { return m_Handle; }
 	SIZE GetMinSize(RenderTarget* Target)override;
+	RenderTarget* GetRenderTarget()const override;
 	POINT GetScreenOffset()const override;
 	VOID Move(RECT const& Rect)override;
 	VOID Repaint();

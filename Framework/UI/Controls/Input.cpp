@@ -949,7 +949,7 @@ SIZE size;
 for(UINT pos=0; str[pos]; pos++)
 	{
 	auto font=m_Theme->DefaultFont;
-	size=m_RenderTarget->MeasureText(font, 1.f, str, pos+1);
+	size=GetRenderTarget()->MeasureText(font, 1.f, str, pos+1);
 	line.Offsets.append(size.Width);
 	}
 UINT line_width=size.Width;

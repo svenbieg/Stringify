@@ -58,7 +58,7 @@ public:
 	POINT GetOffset()const { return POINT(m_Rect.Left, m_Rect.Top); }
 	inline Window* GetParent()const { return m_Parent; }
 	inline RECT const& GetRect()const { return m_Rect; }
-	inline RenderTarget* GetRenderTarget()const { return m_RenderTarget; }
+	virtual RenderTarget* GetRenderTarget()const;
 	FLOAT GetScaleFactor()const;
 	virtual POINT GetScreenOffset()const;
 	RECT GetScreenRect()const;
@@ -98,7 +98,6 @@ protected:
 	Frame* m_Frame;
 	Window* m_Parent;
 	RECT m_Rect;
-	RenderTarget* m_RenderTarget;
 	Theme* m_Theme;
 
 private:

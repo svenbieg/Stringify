@@ -79,6 +79,11 @@ for(auto it=Children->Begin(); it->HasCurrent(); it->MoveNext())
 return size.Max(MinSize*scale);
 }
 
+RenderTarget* Window::GetRenderTarget()const
+{
+return m_Frame->GetRenderTarget();
+}
+
 FLOAT Window::GetScaleFactor()const
 {
 if(!m_Parent)
@@ -215,7 +220,6 @@ if(!parent)
 	m_Parent->Invalidate(true);
 	m_Parent=nullptr;
 	m_Frame=nullptr;
-	m_RenderTarget=nullptr;
 	m_Theme=nullptr;
 	for(auto it=Children->Begin(); it->HasCurrent(); it->MoveNext())
 		{
@@ -235,7 +239,6 @@ if(m_Parent!=parent)
 	m_Parent->Children->Append(this);
 	}
 m_Frame=m_Parent->m_Frame;
-m_RenderTarget=m_Parent->m_RenderTarget;
 m_Theme=m_Parent->m_Theme;
 for(auto it=Children->Begin(); it->HasCurrent(); it->MoveNext())
 	{
@@ -267,7 +270,6 @@ m_Flags(WindowFlags::None),
 m_Frame(nullptr),
 m_Parent(parent),
 m_Rect(0, 0, 0, 0),
-m_RenderTarget(nullptr),
 m_Theme(nullptr)
 {
 Children=ChildList::Create();
@@ -277,7 +279,6 @@ if(m_Parent)
 	m_Parent->Children->Append(this);
 	m_Parent->Invalidate(true);
 	m_Frame=m_Parent->m_Frame;
-	m_RenderTarget=m_Parent->m_RenderTarget;
 	m_Theme=m_Parent->m_Theme;
 	}
 }
