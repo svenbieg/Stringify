@@ -30,7 +30,7 @@ VOID Clipboard::Copy(Handle<String> text)
 {
 if(!text)
 	return;
-auto app_wnd=AppWindow::Get();
+auto app_wnd=AppWindow::GetCurrent();
 if(!app_wnd)
 	return;
 if(!OpenClipboard(app_wnd->GetHandle()))
@@ -51,7 +51,9 @@ CloseClipboard();
 
 Handle<String> Clipboard::GetText()
 {
-auto app_wnd=AppWindow::Get();
+auto app_wnd=AppWindow::GetCurrent();
+if(!app_wnd)
+	return nullptr;
 if(!OpenClipboard(app_wnd->GetHandle()))
 	return nullptr;
 Handle<String> text;

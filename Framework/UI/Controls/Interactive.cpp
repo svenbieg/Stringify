@@ -60,7 +60,7 @@ return frame->GetFocus()==this;
 
 BOOL Interactive::HasPointerFocus()
 {
-return Application::Get()->GetPointerFocus()==this;
+return Application::GetCurrent()->GetPointerFocus()==this;
 }
 
 BOOL Interactive::IsCapturingPointer()

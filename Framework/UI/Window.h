@@ -75,6 +75,7 @@ public:
 	virtual VOID Render(RenderTarget* Target, RECT& Rect);
 	Event<Window, RenderTarget*, RECT&> Rendered;
 	FLOAT Scale;
+	VOID SetParent(Window* Parent);
 	VOID SetPosition(POINT const& Position);
 	VOID Validate() { FlagHelper::Clear(m_Flags, WindowFlags::Repaint); }
 	Property<Window, BOOL> Visible;

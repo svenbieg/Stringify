@@ -37,7 +37,6 @@ public:
 
 	// Con-/Destructors
 	~AppWindow();
-	static inline AppWindow* Get() { return s_Current; }
 
 	// Common
 	VOID Activate();
@@ -46,6 +45,7 @@ public:
 	VOID Close();
 	Event<AppWindow> Closed;
 	Handle<StackPanel> Footer;
+	static inline AppWindow* GetCurrent() { return s_Current; }
 	Handle<StackPanel> Header;
 	Event<AppWindow> Maximized;
 	Event<AppWindow> Minimized;

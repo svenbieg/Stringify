@@ -32,10 +32,10 @@ namespace UI {
 // Con-/Destructors Private
 //==========================
 
-EditMenu::EditMenu(Window* parent):
-PopupMenu(parent, nullptr)
+EditMenu::EditMenu():
+PopupMenu(nullptr)
 {
-auto app=Application::Get();
+auto app=Application::GetCurrent();
 SelectAll=Add(STR_MM_EDIT_SELECT_ALL);
 SelectAll->Clicked.Add(app, &Application::EditSelectAll);
 SelectAll->Icon=Icon::Create(ICO_EDIT_SELECT_ALL);

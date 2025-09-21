@@ -65,9 +65,9 @@ MemoryHelper::Fill(m_Keys, sizeof(m_Keys), 0);
 VOID Frame::Rearrange(RenderTarget* target, RECT& rc)
 {
 auto it=Children->Begin();
-auto content=it->GetCurrent();
-if(!content)
+if(!it->HasCurrent())
 	return;
+auto content=it->GetCurrent();
 content->Move(target, rc);
 for(it->MoveNext(); it->HasCurrent(); it->MoveNext())
 	{
@@ -122,7 +122,7 @@ FlagHelper::Set(args->Flags, KeyEventFlags::Ctrl, IsKeyDown(VirtualKey::Control)
 FlagHelper::Set(args->Flags, KeyEventFlags::Shift, IsKeyDown(VirtualKey::Shift));
 if(type==KeyEventType::KeyDown)
 	{
-	if(Application::Get()->Shortcut(args))
+	if(Application::GetCurrent()->Shortcut(args))
 		return true;
 	}
 KeyEvent(this, type, args);
@@ -177,7 +177,7 @@ for(auto it=Children->End(); it->HasCurrent(); it->MovePrevious())
 	if(args->Handled)
 		break;
 	}
-Application::Get()->SetPointerFocus(focus);
+Application::GetCurrent()->SetPointerFocus(focus);
 }
 
 VOID Frame::RenderWindow(Window* window, RenderTarget* target, RECT const& rc, BOOL override)

@@ -87,7 +87,8 @@ if(ctrl|alt)
 	FlagHelper::Set(shortcut, ShortcutFlags::Alt, alt);
 	FlagHelper::Set(shortcut, ShortcutFlags::Ctrl, ctrl);
 	FlagHelper::Set(shortcut, ShortcutFlags::Shift, shift);
-	auto control=Shortcuts->Get((UINT)shortcut);
+	Interactive* control=nullptr;
+	Shortcuts->TryGet((UINT)shortcut, &control);
 	if(control)
 		{
 		control->Clicked(control, nullptr);

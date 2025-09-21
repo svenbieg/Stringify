@@ -37,7 +37,8 @@ return PopupMenuItem::Create(this, label);
 VOID PopupMenu::Close()
 {
 Menu::Close();
-Visible=false;
+SetParent(nullptr);
+m_Popup=nullptr;
 }
 
 Graphics::SIZE PopupMenu::GetMinSize(RenderTarget* target)
@@ -108,19 +109,13 @@ for(auto it=m_Panel->Children->Begin(); it->HasCurrent(); it->MoveNext())
 		continue;
 	item->SetColumns(icon_width, label_width, shortcut_width);
 	}
-return Popup::GetMinSize(target);
-}
-
-VOID PopupMenu::KillFocus()
-{
-Popup::KillFocus();
-Close();
+return StackPanel::GetMinSize(target);
 }
 
 VOID PopupMenu::Show(POINT const& pt)
 {
 Opened(this);
-auto app=Application::Get();
+auto app=Application::GetCurrent();
 auto current=app->GetCurrentMenu();
 if(current)
 	{
@@ -133,8 +128,10 @@ if(m_ParentMenu)
 	keyboard|=m_ParentMenu->HasKeyboardAccess();
 FlagHelper::Set(m_MenuFlags, MenuFlags::KeyboardAccess, keyboard);
 RECT rc(pt.Left, pt.Top, pt.Left, pt.Top);
-Move(rc);
-Visible=true;
+m_Popup=Popup::Create(this);
+m_Popup->FocusLost.Add(this, &PopupMenu::OnPopupLostFocus);
+m_Popup->Move(rc);
+m_Popup->Visible=true;
 }
 
 
@@ -142,14 +139,23 @@ Visible=true;
 // Con-/Destructors Protected
 //============================
 
-PopupMenu::PopupMenu(Window* parent, Menu* parent_menu):
-Popup(parent),
-Menu(parent_menu)
+PopupMenu::PopupMenu(Menu* parent):
+StackPanel(nullptr, Orientation::Vertical),
+Menu(parent)
 {
-auto panel=StackPanel::Create(this, Orientation::Vertical);
-panel->AlignChildren=Alignment::Stretch;
-panel->Padding.Set(4, 4, 4, 4);
-m_Panel=panel;
+AlignChildren=Alignment::Stretch;
+Padding.Set(4, 4, 4, 4);
+m_Panel=this;
+}
+
+
+//================
+// Common Private
+//================
+
+VOID PopupMenu::OnPopupLostFocus()
+{
+Close();
 }
 
 }}}

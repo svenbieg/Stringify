@@ -68,7 +68,7 @@ s_Current=nullptr;
 
 INT Application::Run()
 {
-auto app_wnd=UI::AppWindow::Get();
+auto app_wnd=UI::AppWindow::GetCurrent();
 if(app_wnd)
 	app_wnd->Show(g_ShowCommand);
 INT status=0;
@@ -124,8 +124,8 @@ else
 	StringHelper::Print(msg, 256, "%s", caption);
 	}
 auto app=Application::Get();
-auto app_wnd=AppWindow::Get();
-HWND hwnd=app_wnd? app_wnd->GetHandle(): NULL;
+auto app_wnd=AppWindow::GetCurrent();
+HWND hwnd=app_wnd? app_wnd->GetHandle(): HWND_DESKTOP;
 auto name=app->GetName();
 MessageBoxT(hwnd, msg, name->Begin(), MB_ICONERROR|MB_OK);
 app->UnhandledException(app);

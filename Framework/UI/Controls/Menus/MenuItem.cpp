@@ -29,26 +29,26 @@ namespace UI {
 
 VOID MenuItem::Close()
 {
-Window->KillFocus();
+m_Control->KillFocus();
 if(SubMenu)
 	SubMenu->Close();
 }
 
 VOID MenuItem::KillFocus()
 {
-Window->KillFocus();
+m_Control->KillFocus();
 }
 
 VOID MenuItem::Open()
 {
 if(!SubMenu)
 	{
-	Window->Clicked(Window, nullptr);
+	m_Control->Clicked(m_Control, nullptr);
 	return;
 	}
-Graphics::RECT rc=Window->GetScreenRect();
+Graphics::RECT rc=m_Control->GetScreenRect();
 Graphics::POINT pt(rc.Left, rc.Bottom);
-auto parent=Window->GetParent();
+auto parent=m_Control->GetParent();
 auto popup=dynamic_cast<PopupMenu*>(parent);
 if(popup)
 	pt.Set(rc.Right, rc.Top);
@@ -59,7 +59,7 @@ if(m_Menu->HasKeyboardAccess())
 
 VOID MenuItem::SetFocus()
 {
-Window->SetFocus();
+m_Control->SetFocus();
 }
 
 
@@ -67,9 +67,9 @@ Window->SetFocus();
 // Con-/Destructors Protected
 //============================
 
-MenuItem::MenuItem(Interactive* window, Menu* menu):
+MenuItem::MenuItem(Interactive* control, Menu* menu):
 Accelerator(0),
-Window(window),
+m_Control(control),
 m_Menu(menu)
 {}
 

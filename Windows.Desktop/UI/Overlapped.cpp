@@ -15,6 +15,7 @@
 #include <windowsx.h>
 #include "Concurrency/DispatchedQueue.h"
 #include "Desktop/Application.h"
+#include "UI/AppWindow.h"
 #include "Overlapped.h"
 
 using namespace Concurrency;
@@ -35,6 +36,7 @@ namespace UI {
 
 Overlapped::~Overlapped()
 {
+m_Theme->Changed.Remove(this);
 DestroyWindow(m_Handle);
 }
 
@@ -61,7 +63,8 @@ if(!m_Handle)
 ::RECT rc({ 0, 0, 0, 0});
 UINT style=GetWindowLongA(m_Handle, GWL_STYLE);
 UINT style_ex=GetWindowLongA(m_Handle, GWL_EXSTYLE);
-AdjustWindowRectEx(&rc, style, false, style_ex);
+UINT dpi=GetDpiForWindow(m_Handle);
+AdjustWindowRectExForDpi(&rc, style, false, style_ex, dpi);
 return RECT(-rc.left, -rc.top, rc.right, rc.bottom);
 }
 
@@ -153,7 +156,7 @@ Move(rc);
 // Con-/Destructors Protected
 //============================
 
-Overlapped::Overlapped(Window* parent):
+Overlapped::Overlapped():
 m_Cursor(NULL),
 m_Handle(NULL)
 {
@@ -176,14 +179,10 @@ wc.lpszClassName=class_name;
 wc.style=CS_HREDRAW|CS_VREDRAW;
 SetLastError(0);
 RegisterClassEx(&wc);
-HWND hwnd_parent=HWND_DESKTOP;
-if(parent)
-	{
-	auto frame=dynamic_cast<Overlapped*>(parent->GetFrame());
-	hwnd_parent=frame->m_Handle;
-	}
+auto app_wnd=AppWindow::GetCurrent();
+HWND hwnd=app_wnd? app_wnd->GetHandle(): HWND_DESKTOP;
 UINT style=WS_OVERLAPPED;
-m_Handle=CreateWindowEx(0, class_name, nullptr, style, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, hwnd_parent, NULL, inst, this);
+m_Handle=CreateWindowEx(0, class_name, nullptr, style, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, hwnd, NULL, inst, this);
 if(m_Handle==INVALID_HANDLE_VALUE)
 	m_Handle=NULL;
 m_Theme->Changed.Add(this, &Overlapped::OnThemeChanged);
@@ -263,7 +262,8 @@ switch(msg)
 		}
 	case WM_KILLFOCUS:
 		{
-		this->KillFocus();
+		KillFocus();
+		FocusLost(this);
 		break;
 		}
 	case WM_LBUTTONDOWN:

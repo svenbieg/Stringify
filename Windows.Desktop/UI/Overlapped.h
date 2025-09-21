@@ -31,6 +31,7 @@ public:
 
 	// Common
 	VOID BringToFront()override;
+	Event<Overlapped> FocusLost;
 	Handle<Brush> GetBackground()override;
 	RECT GetBorderWidth()const;
 	RECT GetClientRect()const override;
@@ -46,7 +47,7 @@ public:
 
 protected:
 	// Con-/Destructors
-	Overlapped(Window* Parent=nullptr);
+	Overlapped();
 
 	// Common
 	virtual LRESULT HandleMessage(UINT Message, WPARAM WParam, LPARAM LParam, BOOL& Handled);

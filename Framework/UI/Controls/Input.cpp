@@ -139,7 +139,7 @@ return builder.ToString();
 
 BOOL Input::KillFocus()
 {
-auto app=Application::Get();
+auto app=Application::GetCurrent();
 if(app->GetCurrentInput()==this)
 	app->SetCurrentInput(nullptr);
 return Interactive::KillFocus();
@@ -183,7 +183,7 @@ UINT last_line=first_line+line_count-1;
 BOOL show_sel=true;
 if(m_SelectionFirst==m_SelectionLast)
 	show_sel=false;
-if(Application::Get()->GetCurrentInput()!=this)
+if(Application::GetCurrent()->GetCurrentInput()!=this)
 	show_sel=false;
 if(show_sel)
 	{
@@ -374,7 +374,7 @@ SetSelection(m_SelectionEnd, m_SelectionEnd);
 VOID Input::SetFocus(FocusReason reason)
 {
 Interactive::SetFocus(reason);
-Application::Get()->SetCurrentInput(this);
+Application::GetCurrent()->SetCurrentInput(this);
 }
 
 VOID Input::SetSelection(POINT const& pt_start, POINT const& pt_end)
@@ -427,7 +427,7 @@ m_SelectionFirst(-1, -1),
 m_SelectionLast(-1, -1),
 m_SelectionStart(-1, -1)
 {
-ContextMenu=EditMenu::Create(this);
+ContextMenu=EditMenu::Create();
 Focused.Add(this, &Input::OnFocused);
 FocusLost.Add(this, &Input::OnFocusLost);
 KeyDown.Add(this, &Input::OnKeyDown);

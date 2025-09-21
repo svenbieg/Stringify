@@ -42,19 +42,20 @@ public:
 	// Common
 	CHAR Accelerator;
 	VOID Close();
+	inline Interactive* GetControl()const { return m_Control; }
 	VOID KillFocus();
 	VOID Open();
 	VOID SetFocus();
 	Handle<PopupMenu> SubMenu;
-	Interactive* Window;
 
 protected:
 	// Con-/Destructors
-	MenuItem(Interactive* Window, Menu* Menu);
+	MenuItem(Interactive* Control, Menu* Menu);
 
 	// Common
 	VOID OnKeyDown(Handle<KeyEventArgs> Args);
+	Interactive* m_Control;
 	Menu* m_Menu;
-};
+	};
 
 }}}

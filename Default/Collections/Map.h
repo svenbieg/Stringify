@@ -66,9 +66,7 @@ public:
 		}
 	inline _value_t Get(_key_t const& Key)const
 		{
-		_value_t value;
-		m_Map.try_get(Key, &value);
-		return value;
+		return m_Map.get(Key);
 		}
 	inline _size_t GetCount()const { return m_Map.get_count(); }
 	inline BOOL TryGet(_key_t const& Key, _value_t* Value)const { return m_Map.try_get(Key, Value); }

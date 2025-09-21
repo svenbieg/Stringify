@@ -37,8 +37,8 @@ for(auto it=m_Panel->Children->Begin(); it->HasCurrent(); it->MoveNext())
 	auto item=dynamic_cast<MenuItem*>(child);
 	if(!item)
 		continue;
-	auto window=item->Window;
-	if(!window->Visible||!window->Enabled)
+	auto control=item->GetControl();
+	if(!control->Visible||!control->Enabled)
 		continue;
 	if(item->Accelerator==acc)
 		{
@@ -62,7 +62,7 @@ if(m_SelectedItem)
 	m_SelectedItem=nullptr;
 	}
 FlagHelper::Clear(m_MenuFlags, MenuFlags::KeyboardAccess);
-Application::Get()->SetCurrentMenu(m_ParentMenu);
+Application::GetCurrent()->SetCurrentMenu(m_ParentMenu);
 if(m_ParentMenu)
 	{
 	m_ParentMenu->m_OpenItem=nullptr;
@@ -97,7 +97,7 @@ BOOL Menu::HasAcceleration()
 {
 if(!FlagHelper::Get(m_MenuFlags, MenuFlags::KeyboardAccess))
 	return false;
-return Application::Get()->GetCurrentMenu()==this;
+return Application::GetCurrent()->GetCurrentMenu()==this;
 }
 
 BOOL Menu::IsOpen()

@@ -25,9 +25,13 @@ namespace UI {
 
 class Popup: public Overlapped
 {
+public:
+	// Con-/Destructors
+	static inline Handle<Popup> Create(Window* Content) { return new Popup(Content); }
+
 protected:
 	// Con-/Destructors
-	Popup(Window* Parent);
+	Popup(Window* Content);
 };
 
 }

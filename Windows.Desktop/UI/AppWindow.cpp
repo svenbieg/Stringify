@@ -75,7 +75,7 @@ SendMessage(m_Handle, WM_SETICON, ICON_SMALL, (LPARAM)ico_small);
 SendMessage(m_Handle, WM_SETICON, ICON_BIG, (LPARAM)ico_big);
 Closed.Add(this, &AppWindow::OnClosed);
 Title.Changed.Add(this, &AppWindow::OnTitleChanged);
-Title=Application::Get()->GetName();
+Title=Application::GetCurrent()->GetName();
 auto grid=Grid::Create(this);
 grid->AddRow(1, GridUnit::Auto);
 grid->AddRow(1, GridUnit::Star);
@@ -146,7 +146,7 @@ return Overlapped::HandleMessage(msg, wparam, lparam, handled);
 
 VOID AppWindow::OnClosed()
 {
-Application::Get()->Quit();
+Application::GetCurrent()->Quit();
 }
 
 VOID AppWindow::OnSettingChanged(LPCTSTR setting)

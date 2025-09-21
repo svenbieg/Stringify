@@ -32,7 +32,7 @@ namespace UI {
 Handle<PopupMenuItem> MenuBarItem::Add(Handle<Sentence> label)
 {
 if(!SubMenu)
-	SubMenu=PopupMenu::Create(this, m_Menu);
+	SubMenu=PopupMenu::Create(m_Menu);
 return SubMenu->Add(label);
 }
 

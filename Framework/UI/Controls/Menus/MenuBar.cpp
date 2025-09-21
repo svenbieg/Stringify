@@ -86,7 +86,7 @@ if(FlagHelper::Get(m_MenuFlags, MenuFlags::KeyboardAccess))
 	}
 Exit();
 FlagHelper::Set(m_MenuFlags, MenuFlags::KeyboardAccess);
-Application::Get()->SetCurrentMenu(this);
+Application::GetCurrent()->SetCurrentMenu(this);
 m_Entering=true;
 Invalidate();
 args->Handled=true;

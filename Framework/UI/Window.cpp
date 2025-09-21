@@ -141,8 +141,8 @@ if(transparent)
 	}
 else
 	{
-	auto frame=this->GetFrame();
-	frame->Invalidate(rearrange);
+	if(m_Frame)
+		m_Frame->Invalidate(rearrange);
 	}
 }
 
@@ -204,6 +204,47 @@ rc_fill.Move(offset);
 target->FillRect(rc_fill, background);
 }
 
+VOID Window::SetParent(Window* parent)
+{
+Handle<Window> self=this;
+if(!parent)
+	{
+	if(!m_Parent)
+		return;
+	m_Parent->Children->Remove(this);
+	m_Parent->Invalidate(true);
+	m_Parent=nullptr;
+	m_Frame=nullptr;
+	m_RenderTarget=nullptr;
+	m_Theme=nullptr;
+	for(auto it=Children->Begin(); it->HasCurrent(); it->MoveNext())
+		{
+		auto child=it->GetCurrent();
+		child->SetParent(this);
+		}
+	return;
+	}
+if(m_Parent!=parent)
+	{
+	if(m_Parent)
+		{
+		m_Parent->Children->Remove(this);
+		m_Parent->Invalidate(true);
+		}
+	m_Parent=parent;
+	m_Parent->Children->Append(this);
+	}
+m_Frame=m_Parent->m_Frame;
+m_RenderTarget=m_Parent->m_RenderTarget;
+m_Theme=m_Parent->m_Theme;
+for(auto it=Children->Begin(); it->HasCurrent(); it->MoveNext())
+	{
+	auto child=it->GetCurrent();
+	child->SetParent(this);
+	}
+Invalidate(true);
+}
+
 VOID Window::SetPosition(POINT const& pt)
 {
 UINT width=m_Rect.GetWidth();
@@ -224,15 +265,17 @@ Visible(this, true),
 // Protected
 m_Flags(WindowFlags::None),
 m_Frame(nullptr),
+m_Parent(parent),
 m_Rect(0, 0, 0, 0),
-// Private
-m_Parent(parent)
+m_RenderTarget(nullptr),
+m_Theme(nullptr)
 {
 Children=ChildList::Create();
 Visible.Changed.Add(this, &Window::OnVisibleChanged);
 if(m_Parent)
 	{
 	m_Parent->Children->Append(this);
+	m_Parent->Invalidate(true);
 	m_Frame=m_Parent->m_Frame;
 	m_RenderTarget=m_Parent->m_RenderTarget;
 	m_Theme=m_Parent->m_Theme;

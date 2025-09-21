@@ -210,7 +210,7 @@ if(label)
 	Text=MenuHelper::GetLabel(label->Begin());
 	auto shortcut=ShortcutFromString(Shortcut);
 	if(shortcut)
-		Application::Get()->Shortcuts->Set(shortcut, this, false);
+		Application::GetCurrent()->Shortcuts->Set(shortcut, this, false);
 	Enabled=true;
 	}
 else
@@ -291,7 +291,7 @@ VOID PopupMenuItem::OnPointerEntered()
 {
 Invalidate();
 m_Menu->KillKeyboardAccess();
-auto app=Application::Get();
+auto app=Application::GetCurrent();
 auto current=app->GetCurrentMenu();
 if(current==SubMenu)
 	return;

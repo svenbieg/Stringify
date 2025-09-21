@@ -41,10 +41,10 @@ public:
 
 	// Con-/Destructors
 	~Application();
-	static inline Application* Get() { return s_Current; }
 
 	// Common
 	VOID ExitMenu();
+	static inline Application* GetCurrent() { return s_Current; }
 	inline Input* GetCurrentInput()const { return m_CurrentInput; }
 	inline Menu* GetCurrentMenu()const { return m_CurrentMenu; }
 	inline Handle<Sentence> GetName()const { return m_Name; }

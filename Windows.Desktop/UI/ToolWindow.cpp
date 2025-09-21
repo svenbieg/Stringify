@@ -23,8 +23,7 @@ namespace UI {
 // Con-/Destructors Protected
 //============================
 
-ToolWindow::ToolWindow(Overlapped* parent):
-Overlapped(parent),
+ToolWindow::ToolWindow():
 Title(this)
 {
 Title.Changed.Add(this, &ToolWindow::OnTitleChanged);
