@@ -268,6 +268,8 @@ switch(args->Key)
 			}
 		return;
 		}
+	default:
+		break;
 	}
 args->Handled=false;
 }

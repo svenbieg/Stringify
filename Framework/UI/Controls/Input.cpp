@@ -10,6 +10,7 @@
 //=======
 
 #include "Concurrency/DispatchedQueue.h"
+#include "Devices/Timers/SystemTimer.h"
 #include "Storage/Clipboard.h"
 #include "Storage/Streams/StreamReader.h"
 #include "Storage/StringBuffer.h"
@@ -19,6 +20,7 @@
 #include "StringBuilder.h"
 
 using namespace Concurrency;
+using namespace Devices::Timers;
 using namespace Graphics;
 using namespace Storage;
 using namespace Storage::Streams;
@@ -238,7 +240,7 @@ for(auto it=m_Lines.cbegin(first_line); it.has_current(); it.move_next(), line++
 BOOL show_cursor=false;
 if(m_CursorTime!=0)
 	{
-	UINT cursor_time=GetTickCount()-m_CursorTime;
+	UINT cursor_time=SystemTimer::GetTickCount()-m_CursorTime;
 	show_cursor=(cursor_time%1000)<500;
 	}
 if(m_CursorPos.Left<0)
@@ -340,13 +342,12 @@ INPUT_LINE& line=m_Lines.insert_at(m_SelectionFirst.Top);
 if(line_len>0)
 	{
 	StringBuilder builder(line_len);
-	UINT pos=0;
 	if(before_len)
-		pos+=builder.Append(before);
+		builder.Append(before);
 	if(insert_len)
-		pos+=builder.Append(insert_len, &replace[line_start]);
+		builder.Append(insert_len, &replace[line_start]);
 	if(after_len)
-		pos+=builder.Append(after);
+		builder.Append(after);
 	line.Text=builder.ToString();
 	UpdateLine(line);
 	}
@@ -401,8 +402,6 @@ if(!text)
 	Clear();
 	return;
 	}
-UINT len=text->GetLength();
-SIZE_T size=(len+1)*sizeof(TCHAR);
 auto buf=StringBuffer::Create(text);
 ReadFromStream(buf);
 }
@@ -767,6 +766,8 @@ switch(key)
 		OnKey(args);
 		break;
 		}
+	default:
+		break;
 	}
 }
 
@@ -780,6 +781,8 @@ switch(args->Key)
 		args->Handled=true;
 		break;
 		}
+	default:
+		break;
 	}
 }
 
@@ -832,6 +835,8 @@ switch(args->Button)
 		ShowContextMenu(args->Point);
 		break;
 		}
+	default:
+		break;
 	}
 args->Handled=true;
 }
@@ -909,7 +914,7 @@ return true;
 
 VOID Input::ShowCursor(BOOL show)
 {
-m_CursorTime=(show? GetTickCount(): 0);
+m_CursorTime=(show? SystemTimer::GetTickCount(): 0);
 Invalidate();
 if(show)
 	{
@@ -980,7 +985,8 @@ else
 		changed=true;
 		}
 	}
-UpdateSelection();
+if(changed)
+	UpdateSelection();
 }
 
 VOID Input::UpdateSelection()

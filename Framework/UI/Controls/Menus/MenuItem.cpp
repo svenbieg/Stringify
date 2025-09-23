@@ -88,6 +88,8 @@ switch(args->Key)
 		m_Menu->Close();
 		return;
 		}
+	default:
+		break;
 	}
 args->Handled=m_Menu->Accelerate(args->Key);
 }

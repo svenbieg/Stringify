@@ -10,7 +10,7 @@
 //=======
 
 #include "Timing/Clock.h"
-#include "ScrollBar.h"
+#include "UI/Controls/ScrollBar.h"
 
 using namespace Devices::Timers;
 using namespace Graphics;
@@ -153,9 +153,9 @@ Visibility(ScrollBarVisibility::Auto),
 Width(12),
 m_Highlight(ScrollBarButton::None),
 m_Orientation(orientation),
-m_Step(0),
 m_Start(0),
-m_StartPoint(-1, -1)
+m_StartPoint(-1, -1),
+m_Step(0)
 {
 PointerDown.Add(this, &ScrollBar::OnPointerDown);
 PointerLeft.Add(this, &ScrollBar::OnPointerLeft);

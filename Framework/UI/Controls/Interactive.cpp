@@ -9,8 +9,9 @@
 // Using
 //=======
 
+#include "UI/Controls/Interactive.h"
 #include "UI/Application.h"
-#include "Interactive.h"
+#include "UI/Frame.h"
 
 using namespace Graphics;
 

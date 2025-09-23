@@ -51,11 +51,6 @@ if(m_CurrentMenu)
 	}
 }
 
-VOID Application::Quit()
-{
-PostQuitMessage(0);
-}
-
 VOID Application::SetCurrentInput(Input* input)
 {
 if(m_CurrentInput==input)
@@ -135,7 +130,6 @@ VOID Application::EditPaste()
 if(!m_CurrentInput)
 	return;
 auto clipboard=Clipboard::Open();
-BOOL has=clipboard->HasText();
 auto text=clipboard->GetText();
 if(!text)
 	return;

@@ -73,8 +73,8 @@ public:
 
 	// Common
 	VerticalAlignment Alignment;
-	GridUnit Unit;
 	UINT Height;
+	GridUnit Unit;
 
 private:
 	// Con-/Destructors

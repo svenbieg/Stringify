@@ -10,6 +10,7 @@
 //=======
 
 #include "UI/Application.h"
+#include "UI/Frame.h"
 #include "MenuBar.h"
 #include "PopupMenu.h"
 

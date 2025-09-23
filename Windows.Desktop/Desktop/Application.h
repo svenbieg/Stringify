@@ -30,6 +30,7 @@ public:
 	~Application();
 	static inline Application* Get() { return s_Current; }
 
+	VOID Quit()override;
 	INT Run();
 	Event<Application> UnhandledException;
 

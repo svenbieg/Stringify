@@ -40,21 +40,21 @@ constexpr STRING STR_MM_EDIT_CUT[]=
 
 constexpr STRING STR_MM_EDIT_DELETE[]=
 	{
-	{ LNG::DE, L"&Löschen|Entf" },
+	{ LNG::DE, L"&LÃ¶schen|Entf" },
 	{ LNG::EN, L"&Delete|Del" },
 	{ LNG::None, nullptr }
 	};
 
 constexpr STRING STR_MM_EDIT_PASTE[]=
 	{
-	{ LNG::DE, L"&Einfügen|Strg+V" },
+	{ LNG::DE, L"&EinfÃ¼gen|Strg+V" },
 	{ LNG::EN, L"&Paste|Ctrl+V" },
 	{ LNG::None, nullptr }
 	};
 
 constexpr STRING STR_MM_EDIT_SELECT_ALL[]=
 	{
-	{ LNG::DE, L"&Alles Auswählen|Strg+A" },
+	{ LNG::DE, L"&Alles AuswÃ¤hlen|Strg+A" },
 	{ LNG::EN, L"Select &all|Ctrl+A" },
 	{ LNG::None, nullptr }
 	};

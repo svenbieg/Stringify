@@ -1225,7 +1225,7 @@ if(!str)
 UINT pos=0;
 UINT len=0;
 while(str[len])
-	key[pos++%ENCRYPT_BLOCK]^=ENCRYPT_FWD[str[len++]];
+	key[pos++%ENCRYPT_BLOCK]^=ENCRYPT_FWD[(SIZE_T)str[len++]];
 while(pos<ENCRYPT_BLOCK)
 	key[pos++]=ENCRYPT_FWD[key[pos-len]];
 }

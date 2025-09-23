@@ -82,6 +82,8 @@ switch(args->Key)
 		Close();
 		break;
 		}
+	default:
+		break;
 	}
 args->Handled=true;
 }

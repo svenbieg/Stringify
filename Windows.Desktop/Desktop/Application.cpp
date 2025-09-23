@@ -66,6 +66,11 @@ s_Current=nullptr;
 // Common
 //========
 
+VOID Application::Quit()
+{
+PostQuitMessage(0);
+}
+
 INT Application::Run()
 {
 auto app_wnd=UI::AppWindow::GetCurrent();

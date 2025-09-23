@@ -145,6 +145,8 @@ switch(args->Key)
 		Close();
 		return;
 		}
+	default:
+		break;
 	}
 args->Handled=false;
 }

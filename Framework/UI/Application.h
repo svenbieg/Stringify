@@ -49,7 +49,7 @@ public:
 	inline Menu* GetCurrentMenu()const { return m_CurrentMenu; }
 	inline Handle<Sentence> GetName()const { return m_Name; }
 	inline Interactive* GetPointerFocus()const { return m_PointerFocus; }
-	VOID Quit();
+	virtual VOID Quit()=0;
 	VOID SetCurrentInput(Input* Input);
 	inline VOID SetCurrentMenu(Menu* Menu) { m_CurrentMenu=Menu; }
 	VOID SetPointerFocus(Interactive* Focus);

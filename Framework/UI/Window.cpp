@@ -294,19 +294,20 @@ FlagHelper::Clear(m_Flags, WindowFlags::Rearrange);
 if(visible)
 	{
 	Invalidate(true);
+	return;
 	}
-else
+auto frame=GetFrame();
+if(frame)
 	{
-	auto frame=GetFrame();
 	auto focus=frame->GetFocus();
 	if(focus)
 		{
 		if(!focus->IsVisible())
 			frame->SetFocus(nullptr);
 		}
-	if(m_Parent)
-		m_Parent->Invalidate(true);
 	}
+if(m_Parent)
+	m_Parent->Invalidate(true);
 }
 
 }
