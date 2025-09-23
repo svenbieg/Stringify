@@ -59,16 +59,16 @@ LPCSTR StringTable[256]=
 	{
 	//   0        1        2        3        4        5        6        7        8        9        A        B        C        D        E        F
 	  "\\0",     "",     "",     "",     "",     "",     "",   "\\a",   "\\b",   "\\t",   "\\n",   "\\v",   "\\f",   "\\r",     "",     "", // 0x00
-	    "",     "",     "",     "",     "",     "",     "",     "",     "",     "", "\\x1A",     "",     "",     "",     "",     "", // 0x10
+	    "",     "",     "",     "",     "",     "",     "",     "",     "",     "",  "\\32",     "",     "",     "",     "",     "", // 0x10
 	    " ",     "!",  "\\\"",     "#",     "$",     "%",     "&",     "'",     "(",     ")",     "*",     "+",     ",",     "-",     ".",     "/", // 0x20
 	    "0",     "1",     "2",     "3",     "4",     "5",     "6",     "7",     "8",     "9",     ":",     ";",     "<",     "=",     ">",     "?", // 0x30
 	    "@",     "A",     "B",     "C",     "D",     "E",     "F",     "G",     "H",     "I",     "J",     "K",     "L",     "M",     "N",     "O", // 0x40
-	    "P",     "Q",     "R",     "S",     "T",     "U",     "V",     "W",     "X",     "Y",     "Z",     "[",  "\\\\",     "]",     "^",     "_", // 0x50
+	    "P",     "Q",     "R",     "S",     "T",     "U",     "V",     "W",     "X",     "Y",     "Z",     "[",    "\\",     "]",     "^",     "_", // 0x50
 	    "`",     "a",     "b",     "c",     "d",     "e",     "f",     "g",     "h",     "i",     "j",     "k",     "l",     "m",     "n",     "o", // 0x60
-	    "p",     "q",     "r",     "s",     "t",     "u",     "v",     "w",     "x",     "y",     "z",     "{",     "|",     "}",     "~", "\\x7F", // 0x70
-	    "€", "\\x81",     "‚",     "ƒ",     "„",     "…",     "†",     "‡",     "ˆ",     "‰",     "Š",     "‹",     "Œ", "\\x8D",     "Ž", "\\x8F", // 0x80
-	"\\x90",     "‘",     "’",     "“",     "”",     "•",     "–",     "—",     "˜",     "™",     "š",     "›",     "œ", "\\x9D",     "ž",     "Ÿ", // 0x90
-	"\\xA0",     "¡",     "¢",     "£",     "¤",     "¥",     "¦",     "§",     "¨",     "©",     "ª",     "«",     "¬", "\\xAD",     "®",     "¯", // 0xA0
+	    "p",     "q",     "r",     "s",     "t",     "u",     "v",     "w",     "x",     "y",     "z",     "{",     "|",     "}",     "~", "\\177", // 0x70
+	    "€", "\\201",     "‚",     "ƒ",     "„",     "…",     "†",     "‡",     "ˆ",     "‰",     "Š",     "‹",     "Œ", "\\215",     "Ž", "\\217", // 0x80
+	"\\220",     "‘",     "’",     "“",     "”",     "•",     "–",     "—",     "˜",     "™",     "š",     "›",     "œ", "\\235",     "ž",     "Ÿ", // 0x90
+	"\\240",     "¡",     "¢",     "£",     "¤",     "¥",     "¦",     "§",     "¨",     "©",     "ª",     "«",     "¬", "\\255",     "®",     "¯", // 0xA0
 	    "°",     "±",     "²",     "³",     "´",     "µ",     "¶",     "·",     "¸",     "¹",     "º",     "»",     "¼",     "½",     "¾",     "¿", // 0xB0
 	    "À",     "Á",     "Â",     "Ã",     "Ä",     "Å",     "Æ",     "Ç",     "È",     "É",     "Ê",     "Ë",     "Ì",     "Í",     "Î",     "Ï", // 0xC0
 	    "Ð",     "Ñ",     "Ò",     "Ó",     "Ô",     "Õ",     "Ö",     "×",     "Ø",     "Ù",     "Ú",     "Û",     "Ü",     "Ý",     "Þ",     "ß", // 0xD0
@@ -121,7 +121,7 @@ auto result_box=m_Window->ResultBox;
 result_box->Clear();
 result_box->Enabled=true;
 result_box->ReadOnly=true;
-Handle<Intermediate> buf=Intermediate::Create(PAGE_SIZE);
+auto buf=Intermediate::Create(PAGE_SIZE);
 buf->SetFormat(StreamFormat::Ansi);
 m_ConvertTask=Task::Create(this, [this, buf, stream](){ DoConvert(buf, stream); });
 m_ParseTask=Task::Create(this, [this, buf](){ DoParse(buf); });
@@ -132,26 +132,54 @@ VOID Application::DoConvert(Handle<Intermediate> dst, Handle<InputStream> src)
 auto task=Task::Get();
 StreamWriter writer(dst);
 writer.PrintChar('\"');
+BYTE byte=0;
+SIZE_T read=src->Read(&byte, 1);
+if(!read)
+	throw DeviceNotReadyException();
 SIZE_T line_len=0;
-BYTE buf[PAGE_SIZE];
 while(!task->Cancelled)
 	{
-	SIZE_T read=src->Read(buf, PAGE_SIZE);
+	if(line_len>=LINE_LEN)
+		{
+		writer.Print("\"\r\n\"");
+		dst->Flush();
+		line_len=0;
+		}
+	LPCSTR write=StringTable[byte];
+	if(CharHelper::IsDigit(write[1], 8))
+		{
+		BYTE next_byte=0;
+		read=src->Read(&next_byte, 1);
+		if(read)
+			{
+			CHAR c=(CHAR)next_byte;
+			if(CharHelper::IsDigit(c, 8))
+				{
+				CHAR stretch[5];
+				StretchOctal(stretch, write);
+				SIZE_T written=writer.Print(write);
+				if(written!=4)
+					throw DeviceNotReadyException();
+				line_len+=written;
+				}
+			else
+				{
+				SIZE_T written=writer.Print(write);
+				if(!written)
+					throw DeviceNotReadyException();
+				line_len+=written;
+				}
+			byte=next_byte;
+			continue;
+			}
+		}
+	SIZE_T written=writer.Print(write);
+	if(!written)
+		throw DeviceNotReadyException();
+	line_len+=written;
+	read=src->Read(&byte, 1);
 	if(!read||task->Cancelled)
 		break;
-	for(UINT u=0; u<read; u++)
-		{
-		if(line_len>=LINE_LEN)
-			{
-			writer.Print("\"\r\n\"");
-			dst->Flush();
-			line_len=0;
-			}
-		SIZE_T written=writer.Print(StringTable[buf[u]]);
-		if(!written)
-			break;
-		line_len+=written;
-		}
 	}
 writer.PrintChar('\"');
 writer.PrintChar('\0');
@@ -224,6 +252,19 @@ ICONINFO info;
 GetIconInfo(icon, &info);
 OpenBitmap(info.hbmColor);
 DestroyIcon(icon);
+}
+
+VOID Application::StretchOctal(LPSTR dst, LPCSTR src)
+{
+UINT len=StringHelper::Length(&src[1]);
+UINT pos=0;
+dst[pos++]='\\';
+UINT stretch=3-len;
+for(UINT u=0; u<stretch; u++)
+	dst[pos++]='0';
+for(UINT u=0; u<len; u++)
+	dst[pos++]=src[u];
+dst[4]=0;
 }
 
 }

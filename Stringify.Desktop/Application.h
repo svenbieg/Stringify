@@ -54,6 +54,7 @@ private:
 	VOID OpenBinary(Handle<String> Path);
 	VOID OpenBitmap(HBITMAP Bitmap);
 	VOID OpenIcon(Handle<String> Path);
+	VOID StretchOctal(LPSTR Destination, LPCSTR Source);
 	Handle<Task> m_ConvertTask;
 	Concurrency::Mutex m_Mutex;
 	Handle<Task> m_ParseTask;
