@@ -98,7 +98,7 @@ UINT len=StringHelper::Length(str);
 if(!len)
 	return VirtualKey::None;
 if(len==1)
-	return (VirtualKey)CharHelper::ToCapital(str[0]);
+	return (VirtualKey)CharHelper::ToCapitalAnsi(str[0]);
 if(StringHelper::Compare(str, "alt", 0, false)==0)
 	return VirtualKey::Alt;
 if(StringHelper::Compare(str, "ctrl", 0, false)==0)

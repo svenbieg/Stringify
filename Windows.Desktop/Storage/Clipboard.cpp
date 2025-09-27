@@ -37,12 +37,12 @@ if(!OpenClipboard(app_wnd->GetHandle()))
 	return;
 EmptyClipboard();
 UINT len=text->GetLength();
-UINT size=(len+1)*sizeof(TCHAR);
+UINT size=(len+1)*sizeof(WCHAR);
 HGLOBAL hglobal=GlobalAlloc(GMEM_MOVEABLE, size);
 if(hglobal)
 	{
-	auto buf=GlobalLock(hglobal);
-	MemoryHelper::Copy(buf, text->Begin(), size);
+	auto buf=(LPWSTR)GlobalLock(hglobal);
+	StringHelper::Copy(buf, len+1, text->Begin());
 	GlobalUnlock(hglobal);
 	SetClipboardData(CF_UNICODETEXT, hglobal);
 	}

@@ -3,12 +3,18 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="AppWindow.cpp" />
+    <ClCompile Include="Storage\Icon.cpp">
+      <Filter>Storage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
     <ClInclude Include="AppWindow.h" />
     <ClInclude Include="Resources\Strings\Application.h">
       <Filter>Resources\Strings</Filter>
+    </ClInclude>
+    <ClInclude Include="Storage\Icon.h">
+      <Filter>Storage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -20,6 +26,9 @@
     </Filter>
     <Filter Include="Resources\Strings">
       <UniqueIdentifier>{9d7917bf-655e-40b2-9edb-0dfc6c3c0a3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Storage">
+      <UniqueIdentifier>{93134c32-d52c-4796-9ad2-5a00857ddffa}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

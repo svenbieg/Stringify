@@ -30,7 +30,7 @@ std::mt19937 rng(SystemTimer::GetTickCount());
 for(UINT u=0; u<len; u++)
 	{
 	UINT rnd=rng()%TypeHelper::ArraySize(g_RandomChars);
-	builder.Append(CharHelper::ToChar(g_RandomChars[rnd]));
+	builder.Append(CharHelper::ToChar<TCHAR>(g_RandomChars[rnd]));
 	}
 return builder.ToString();
 }

@@ -99,6 +99,23 @@ pt.Top+=border.Top;
 return pt;
 }
 
+VOID Overlapped::Minimize()
+{
+if(!m_Handle)
+	return;
+ShowWindow(m_Handle, SW_MINIMIZE);
+}
+
+VOID Overlapped::Minimize(Minimization)
+{
+if(!m_Handle)
+	return;
+SIZE size=GetMinSize(m_RenderTarget);
+RECT rc(m_Rect);
+rc.SetSize(size);
+Move(rc);
+}
+
 VOID Overlapped::Move(RECT const& rc)
 {
 if(!m_Handle)
@@ -144,16 +161,6 @@ VOID Overlapped::Show(INT show)
 BOOL visible=!(show==SW_HIDE);
 Visible.Set(visible, false);
 ShowWindow(m_Handle, show);
-}
-
-VOID Overlapped::Shrink()
-{
-if(!m_Handle)
-	return;
-SIZE size=GetMinSize(m_RenderTarget);
-RECT rc(m_Rect);
-rc.SetSize(size);
-Move(rc);
 }
 
 

@@ -34,11 +34,13 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="AppWindow.cpp" />
+    <ClCompile Include="Storage\Icon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
     <ClInclude Include="AppWindow.h" />
     <ClInclude Include="Resources\Strings\Application.h" />
+    <ClInclude Include="Storage\Icon.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources\Icons\Icons.rc" />

@@ -19,6 +19,16 @@
 namespace UI {
 
 
+//==============
+// Minimization
+//==============
+
+enum class Minimization: UINT
+{
+Size
+};
+
+
 //============
 // Overlapped
 //============
@@ -39,12 +49,13 @@ public:
 	SIZE GetMinSize(RenderTarget* Target)override;
 	RenderTarget* GetRenderTarget()const override;
 	POINT GetScreenOffset()const override;
+	VOID Minimize();
+	VOID Minimize(Minimization);
 	VOID Move(RECT const& Rect)override;
 	VOID Repaint();
 	VOID SetCursor(Cursor* Cursor)override;
 	VOID SetPointerCapture(Interactive* Capture)override;
 	VOID Show(INT Show);
-	VOID Shrink();
 
 protected:
 	// Con-/Destructors

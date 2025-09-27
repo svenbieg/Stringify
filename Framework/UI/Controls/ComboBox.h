@@ -9,7 +9,9 @@
 // Using
 //=======
 
-#include "Grid.h"
+#include "UI/Controls/Button.h"
+#include "UI/Controls/Grid.h"
+#include "UI/Controls/TextBox.h"
 
 
 //===========
@@ -33,6 +35,11 @@ public:
 private:
 	// Con-/Destructors
 	ComboBox(Window* Parent);
+
+	// Common
+	VOID OnButtonClick();
+	Handle<Button> m_Button;
+	Handle<TextBox> m_TextBox;
 };
 
 }}

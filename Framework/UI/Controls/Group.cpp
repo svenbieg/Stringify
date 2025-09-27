@@ -115,10 +115,22 @@ else
 // Con-/Destructors Private
 //==========================
 
-Group::Group(Window* parent, Handle<String> title):
+Group::Group(Window* parent, Handle<Sentence> title):
 Control(parent),
 Padding(8, 8, 8, 8),
-Title(title)
-{}
+Title(this, title)
+{
+Title.Changed.Add(this, &Group::OnTitleChanged);
+}
+
+
+//================
+// Common Private
+//================
+
+VOID Group::OnTitleChanged()
+{
+Invalidate(true);
+}
 
 }}
