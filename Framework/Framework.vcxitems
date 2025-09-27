@@ -81,9 +81,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Bitmaps\File.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Icons\Edit.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Icons\File.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Icons\Icon.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Strings\Edit.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Strings\String.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Alignment.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Application.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Button.h" />
