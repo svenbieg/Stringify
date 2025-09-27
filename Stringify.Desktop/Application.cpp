@@ -87,25 +87,32 @@ Application* Application::Current=nullptr;
 
 VOID Application::Open(Handle<String> path)
 {
+if(!path)
+	return;
 auto result_box=m_Window->ResultBox;
 result_box->ReadOnly=true;
 result_box->Clear();
-if(!path)
-	return;
-LPCTSTR ext=PathHelper::GetExtension(path->Begin());
-if(!ext)
-	return;
-if(StringHelper::Compare(ext, "ico", 0, false)==0)
+auto task=Task::Create(this, [this, path]()
 	{
-	OpenIcon(path);
-	}
-else
+	LPCTSTR ext=PathHelper::GetExtension(path->Begin());
+	if(!ext)
+		return;
+	if(StringHelper::Compare(ext, "ico")==0)
+		{
+		OpenIcon(path);
+		}
+	else
+		{
+		OpenBinary(path);
+		}
+	});
+task->Then(this, [this]()
 	{
-	OpenBinary(path);
-	}
-result_box->ReadOnly=false;
-result_box->SetFocus();
-result_box->SelectAll();
+	auto result_box=m_Window->ResultBox;
+	result_box->ReadOnly=false;
+	result_box->SetFocus();
+	result_box->SelectAll();
+	});
 }
 
 
@@ -124,29 +131,6 @@ m_Window=AppWindow::Create();
 //================
 // Common Private
 //================
-
-VOID Application::DoParse(Handle<Intermediate> stream)
-{
-WriteLock lock(m_Mutex);
-auto task=Task::Get();
-auto result_box=m_Window->ResultBox;
-StreamReader reader(stream);
-CHAR buf[LINE_LEN+8];
-while(!task->Cancelled)
-	{
-	lock.Unlock();
-	UINT len=reader.ReadString(buf, LINE_LEN+8, '\r');
-	lock.Lock();
-	if(!len||task->Cancelled)
-		break;
-	if(reader.LastChar=='\r')
-		reader.Skip();
-	auto line=String::Create(buf);
-	DispatchedQueue::Append(result_box, [result_box, line]() { result_box->AppendLine(line); });
-	if(reader.LastChar==0)
-		break;
-	}
-}
 
 VOID Application::OpenBinary(Handle<String> path)
 {
