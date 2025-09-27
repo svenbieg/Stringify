@@ -254,6 +254,8 @@ if(args->Button==PointerButton::Left)
 VOID Interactive::OnPointerEntered()
 {
 auto frame=GetFrame();
+if(!frame)
+	return;
 auto cursor=GetCursor();
 frame->SetCursor(cursor);
 }
@@ -261,6 +263,8 @@ frame->SetCursor(cursor);
 VOID Interactive::OnPointerLeft()
 {
 auto frame=GetFrame();
+if(!frame)
+	return;
 auto cursor=m_Theme->DefaultCursor;
 frame->SetCursor(cursor);
 }
