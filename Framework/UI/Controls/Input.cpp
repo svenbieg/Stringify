@@ -13,11 +13,9 @@
 #include "Devices/Timers/SystemTimer.h"
 #include "Storage/Clipboard.h"
 #include "Storage/Streams/StreamReader.h"
-#include "Storage/StringBuffer.h"
 #include "UI/Controls/Menus/EditMenu.h"
 #include "UI/Controls/Input.h"
 #include "UI/Application.h"
-#include "StringBuilder.h"
 
 using namespace Concurrency;
 using namespace Devices::Timers;
@@ -397,13 +395,31 @@ if(changed)
 
 VOID Input::SetText(Handle<String> text)
 {
+Clear();
 if(!text)
-	{
-	Clear();
 	return;
+auto str=text->Begin();
+while(str[0])
+	{
+	UINT line_len=0;
+	StringHelper::FindChars(str, "\r\n", &line_len);
+	if(line_len>0)
+		{
+		auto line=String::Create(line_len, str);
+		AppendLine(line);
+		str+=line_len;
+		}
+	else
+		{
+		AppendLine("");
+		}
+	if(CharHelper::Equal(str[0], '\r'))
+		str++;
+	if(CharHelper::Equal(str[0], '\n'))
+		str++;
+	if(!MultiLine)
+		break;
 	}
-auto buf=StringBuffer::Create(text);
-ReadFromStream(buf);
 }
 
 
@@ -892,8 +908,7 @@ BOOL Input::ShowContextMenu(POINT pt)
 {
 if(!ContextMenu)
 	return false;
-auto edit_menu=ContextMenu.As<EditMenu>();
-if(edit_menu)
+if(ContextMenu)
 	{
 	auto clipboard=Clipboard::Open();
 	BOOL content=m_Lines.get_count()>0;
@@ -901,11 +916,11 @@ if(edit_menu)
 	BOOL selection=m_SelectionFirst!=m_SelectionLast;
 	if(!content&&!paste)
 		return false;
-	edit_menu->SelectAll->Visible=(content&&!selection);
-	edit_menu->Copy->Visible=selection;
-	edit_menu->Cut->Visible=(!ReadOnly&&selection);
-	edit_menu->Delete->Visible=(!ReadOnly&&selection);
-	edit_menu->Paste->Visible=(!ReadOnly&&paste);
+	ContextMenu->SelectAll->Visible=(content&&!selection);
+	ContextMenu->Copy->Visible=selection;
+	ContextMenu->Cut->Visible=(!ReadOnly&&selection);
+	ContextMenu->Delete->Visible=(!ReadOnly&&selection);
+	ContextMenu->Paste->Visible=(!ReadOnly&&paste);
 	}
 pt+=GetScreenOffset();
 ContextMenu->Show(pt);

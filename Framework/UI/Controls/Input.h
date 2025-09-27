@@ -14,7 +14,7 @@
 #include "Collections/StringList.h"
 #include "Storage/Streams/InputStream.h"
 #include "Timing/Timer.h"
-#include "UI/Controls/Menus/PopupMenu.h"
+#include "UI/Controls/Menus/EditMenu.h"
 #include "UI/Controls/Interactive.h"
 #include "StringBuilder.h"
 
@@ -35,8 +35,8 @@ class Input: public Interactive
 {
 public:
 	// Using
+	using EditMenu=UI::Controls::Menus::EditMenu;
 	using InputStream=Storage::Streams::InputStream;
-	using PopupMenu=UI::Controls::Menus::PopupMenu;
 	using StringList=Collections::StringList;
 	using Timer=Timing::Timer;
 
@@ -48,7 +48,7 @@ public:
 	VOID AppendLines(Handle<StringList> Lines);
 	VOID Clear();
 	VOID ClearSelection();
-	Handle<PopupMenu> ContextMenu;
+	Handle<EditMenu> ContextMenu;
 	Handle<Cursor> GetCursor()override;
 	RECT GetCursorRect();
 	UINT GetLineHeight()const;

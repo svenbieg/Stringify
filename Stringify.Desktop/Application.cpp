@@ -90,7 +90,7 @@ VOID Application::Open(Handle<String> path)
 if(!path)
 	return;
 auto result_box=m_Window->ResultBox;
-result_box->ReadOnly=true;
+result_box->Enabled=false;
 result_box->Clear();
 auto task=Task::Create(this, [this, path]()
 	{
@@ -109,7 +109,7 @@ auto task=Task::Create(this, [this, path]()
 task->Then(this, [this]()
 	{
 	auto result_box=m_Window->ResultBox;
-	result_box->ReadOnly=false;
+	result_box->Enabled=true;
 	result_box->SetFocus();
 	result_box->SelectAll();
 	});

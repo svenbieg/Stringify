@@ -49,6 +49,7 @@ group=Group::Create(grid, STR_STRING);
 group->Margin.Set(0, 8, 0, 0);
 ResultBox=TextBox::Create(group);
 ResultBox->Enabled=false;
+ResultBox->ReadOnly=true;
 Minimize(Minimization::Size);
 }
 
