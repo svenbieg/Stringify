@@ -16,6 +16,8 @@
 #include "Storage/Streams/StreamReader.h"
 #include "Storage/Streams/StreamWriter.h"
 #include "Storage/Buffer.h"
+#include "Storage/Icon.h"
+#include "Storage/StaticBuffer.h"
 #include "Application.h"
 #include "PathHelper.h"
 
@@ -85,6 +87,9 @@ Application* Application::Current=nullptr;
 
 VOID Application::Open(Handle<String> path)
 {
+auto result_box=m_Window->ResultBox;
+result_box->ReadOnly=true;
+result_box->Clear();
 if(!path)
 	return;
 LPCTSTR ext=PathHelper::GetExtension(path->Begin());
@@ -93,9 +98,14 @@ if(!ext)
 if(StringHelper::Compare(ext, "ico", 0, false)==0)
 	{
 	OpenIcon(path);
-	return;
 	}
-OpenBinary(path);
+else
+	{
+	OpenBinary(path);
+	}
+result_box->ReadOnly=false;
+result_box->SetFocus();
+result_box->SelectAll();
 }
 
 
@@ -114,77 +124,6 @@ m_Window=AppWindow::Create();
 //================
 // Common Private
 //================
-
-VOID Application::Convert(Handle<InputStream> stream)
-{
-auto result_box=m_Window->ResultBox;
-result_box->Clear();
-result_box->Enabled=true;
-result_box->ReadOnly=true;
-auto buf=Intermediate::Create(PAGE_SIZE);
-buf->SetFormat(StreamFormat::Ansi);
-m_ConvertTask=Task::Create(this, [this, buf, stream](){ DoConvert(buf, stream); });
-m_ParseTask=Task::Create(this, [this, buf](){ DoParse(buf); });
-}
-
-VOID Application::DoConvert(Handle<Intermediate> dst, Handle<InputStream> src)
-{
-auto task=Task::Get();
-StreamWriter writer(dst);
-writer.PrintChar('\"');
-BYTE byte=0;
-SIZE_T read=src->Read(&byte, 1);
-if(!read)
-	throw DeviceNotReadyException();
-SIZE_T line_len=0;
-while(!task->Cancelled)
-	{
-	if(line_len>=LINE_LEN)
-		{
-		writer.Print("\"\r\n\"");
-		dst->Flush();
-		line_len=0;
-		}
-	LPCSTR write=StringTable[byte];
-	if(CharHelper::IsDigit(write[1], 8))
-		{
-		BYTE next_byte=0;
-		read=src->Read(&next_byte, 1);
-		if(read)
-			{
-			CHAR c=(CHAR)next_byte;
-			if(CharHelper::IsDigit(c, 8))
-				{
-				CHAR stretch[5];
-				StretchOctal(stretch, write);
-				SIZE_T written=writer.Print(write);
-				if(written!=4)
-					throw DeviceNotReadyException();
-				line_len+=written;
-				}
-			else
-				{
-				SIZE_T written=writer.Print(write);
-				if(!written)
-					throw DeviceNotReadyException();
-				line_len+=written;
-				}
-			byte=next_byte;
-			continue;
-			}
-		}
-	SIZE_T written=writer.Print(write);
-	if(!written)
-		throw DeviceNotReadyException();
-	line_len+=written;
-	read=src->Read(&byte, 1);
-	if(!read||task->Cancelled)
-		break;
-	}
-writer.PrintChar('\"');
-writer.PrintChar('\0');
-dst->Flush();
-}
 
 VOID Application::DoParse(Handle<Intermediate> stream)
 {
@@ -207,18 +146,6 @@ while(!task->Cancelled)
 	if(reader.LastChar==0)
 		break;
 	}
-if(!task->Cancelled)
-	DispatchedQueue::Append(this, &Application::OnComplete);
-}
-
-VOID Application::OnComplete()
-{
-m_ConvertTask=nullptr;
-m_ParseTask=nullptr;
-auto result_box=m_Window->ResultBox;
-result_box->ReadOnly=false;
-result_box->SetFocus();
-result_box->SelectAll();
 }
 
 VOID Application::OpenBinary(Handle<String> path)
@@ -226,32 +153,21 @@ VOID Application::OpenBinary(Handle<String> path)
 auto file=Filesystem::File::Create(path);
 if(file->Create()!=Status::Success)
 	return;
-Convert(file);
-}
-
-VOID Application::OpenBitmap(HBITMAP hbmp)
-{
-BITMAP bmp;
-INT status=GetObject(hbmp, sizeof(BITMAP), &bmp);
-if(status==0)
-	return;
-UINT size=bmp.bmWidthBytes*bmp.bmHeight;
-auto buf=Buffer::Create(size);
-GetBitmapBits(hbmp, size, buf->Begin());
-Convert(buf);
+auto name=PathHelper::GetName(path->Begin());
+auto var=String::Create("BIN_%S", name->Begin());
+Stringify(var, file);
 }
 
 VOID Application::OpenIcon(Handle<String> path)
 {
-HICON icon=(HICON)LoadImage(NULL, path->Begin(), IMAGE_ICON, 0, 0, LR_LOADFROMFILE|LR_LOADTRANSPARENT);
-if(icon==INVALID_HANDLE_VALUE)
-	icon=NULL;
-if(icon==NULL)
-	return;
-ICONINFO info;
-GetIconInfo(icon, &info);
-OpenBitmap(info.hbmColor);
-DestroyIcon(icon);
+auto icon=Icon::Create(path);
+auto name=PathHelper::GetName(path);
+for(auto it=icon->cbegin(); it.has_current(); it.move_next())
+	{
+	auto ico=it.get_current();
+	auto var=String::Create("BMP_%S_%u", name, ico.Width);
+	Stringify(var, ico.Buffer);
+	}
 }
 
 VOID Application::StretchOctal(LPSTR dst, LPCSTR src)
@@ -263,8 +179,82 @@ UINT stretch=3-len;
 for(UINT u=0; u<stretch; u++)
 	dst[pos++]='0';
 for(UINT u=0; u<len; u++)
-	dst[pos++]=src[u];
+	dst[pos++]=src[u+1];
 dst[4]=0;
+}
+
+VOID Application::Stringify(Handle<String> name, InputStream* src)
+{
+auto str=String::Create("constexpr char %s[]=", name);
+DispatchedQueue::Append(this, [this, str]()
+	{
+	m_Window->ResultBox->AppendLine(str);
+	});
+CHAR buf[LINE_LEN+8];
+auto dst=StaticBuffer::Create(buf, LINE_LEN+8);
+dst->SetFormat(StreamFormat::Ansi);
+StreamWriter writer(dst);
+SIZE_T line_len=writer.Print("\"");
+BYTE byte=0;
+SIZE_T read=src->Read(&byte, 1);
+while(1)
+	{
+	if(line_len>=LINE_LEN)
+		{
+		writer.Print("\"");
+		writer.PrintChar('\0');
+		auto str=String::Create(buf);
+		DispatchedQueue::Append(this, [this, str]()
+			{
+			m_Window->ResultBox->AppendLine(str);
+			});
+		dst->Reset();
+		line_len=writer.Print("\"");
+		}
+	LPCSTR write=StringTable[byte];
+	if(CharHelper::IsDigit(write[1], 8))
+		{
+		BYTE next_byte=0;
+		read=src->Read(&next_byte, 1);
+		if(read)
+			{
+			CHAR c=(CHAR)next_byte;
+			if(CharHelper::IsDigit(c, 8))
+				{
+				CHAR stretch[5];
+				StretchOctal(stretch, write);
+				SIZE_T written=writer.Print(stretch);
+				if(written!=4)
+					throw DeviceNotReadyException();
+				line_len+=written;
+				}
+			else
+				{
+				SIZE_T written=writer.Print(write);
+				if(!written)
+					throw DeviceNotReadyException();
+				line_len+=written;
+				}
+			byte=next_byte;
+			continue;
+			}
+		}
+	SIZE_T written=writer.Print(write);
+	if(!written)
+		throw DeviceNotReadyException();
+	line_len+=written;
+	read=src->Read(&byte, 1);
+	if(!read)
+		break;
+	}
+writer.Print("\";");
+writer.PrintChar('\0');
+str=String::Create(buf);
+DispatchedQueue::Append(this, [this, str]()
+	{
+	m_Window->ResultBox->AppendLine(str);
+	m_Window->ResultBox->AppendLine("");
+	});
 }
 
 }

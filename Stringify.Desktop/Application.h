@@ -32,6 +32,7 @@ public:
 	// Using
 	using InputStream=Storage::Streams::InputStream;
 	using Intermediate=Storage::Intermediate;
+	using OutputStream=Storage::Streams::OutputStream;
 	using StringList=Collections::StringList;
 	using Task=Concurrency::Task;
 
@@ -47,14 +48,11 @@ private:
 	Application();
 
 	// Common
-	VOID Convert(Handle<InputStream> Stream);
-	VOID DoConvert(Handle<Intermediate> Destination, Handle<InputStream> Source);
 	VOID DoParse(Handle<Intermediate> Stream);
-	VOID OnComplete();
 	VOID OpenBinary(Handle<String> Path);
-	VOID OpenBitmap(HBITMAP Bitmap);
 	VOID OpenIcon(Handle<String> Path);
 	VOID StretchOctal(LPSTR Destination, LPCSTR Source);
+	VOID Stringify(Handle<String> Name, InputStream* Source);
 	Handle<Task> m_ConvertTask;
 	Concurrency::Mutex m_Mutex;
 	Handle<Task> m_ParseTask;
