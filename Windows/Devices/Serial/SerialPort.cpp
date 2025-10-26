@@ -24,15 +24,6 @@ namespace Devices {
 // Con-/Destructors
 //==================
 
-SerialPort::SerialPort(UINT id):
-hFile(NULL)
-{
-auto path=String::Create("\\\\.\\COM%u", id);
-hFile=CreateFile(path->Begin(), GENERIC_READ|GENERIC_WRITE, 0, nullptr, OPEN_EXISTING, 0, NULL);
-if(hFile==INVALID_HANDLE_VALUE)
-	hFile=NULL;
-}
-
 SerialPort::~SerialPort()
 {
 Close();
@@ -45,21 +36,21 @@ Close();
 
 VOID SerialPort::Close()
 {
-if(hFile!=NULL)
-	CloseHandle(hFile);
-hFile=NULL;
+if(m_File!=NULL)
+	CloseHandle(m_File);
+m_File=NULL;
 }
 
 VOID SerialPort::SetBaudRate(BaudRate baud)
 {
-if(hFile==NULL)
+if(m_File==NULL)
 	return;
 DCB params={ 0 };
 params.BaudRate=(DWORD)baud;
 params.ByteSize=8;
 params.StopBits=ONESTOPBIT;
 params.Parity=NOPARITY;
-SetCommState(hFile, &params);
+SetCommState(m_File, &params);
 }
 
 
@@ -91,8 +82,24 @@ SIZE_T SerialPort::Write(VOID const* buf, SIZE_T size)
 if(!buf||!size)
 	return 0;
 DWORD written=0;
-WriteFile(hFile, buf, (UINT)size, &written, nullptr);
+WriteFile(m_File, buf, (UINT)size, &written, nullptr);
 return written;
+}
+
+
+//==========================
+// Con-/Destructors Private
+//==========================
+
+SerialPort::SerialPort(UINT id):
+m_File(NULL)
+{
+auto path=String::Create("\\\\.\\COM%u", id);
+m_File=CreateFile(path->Begin(), GENERIC_READ|GENERIC_WRITE, 0, nullptr, OPEN_EXISTING, 0, NULL);
+if(m_File==INVALID_HANDLE_VALUE)
+	m_File=NULL;
+if(m_File==NULL)
+	throw DeviceNotReadyException();
 }
 
 }}

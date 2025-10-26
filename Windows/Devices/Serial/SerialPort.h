@@ -47,8 +47,8 @@ class SerialPort: public Storage::Streams::RandomAccessStream
 {
 public:
 	// Con-/Destructors
-	SerialPort(UINT Id);
 	~SerialPort();
+	static Handle<SerialPort> Create(UINT Id=0) { return new SerialPort(Id); }
 
 	// Common
 	VOID Close();
@@ -63,8 +63,11 @@ public:
 	SIZE_T Write(VOID const* Buffer, SIZE_T Size)override;
 
 private:
+	// Con-/Destructors
+	SerialPort(UINT Id);
+
 	// Common
-	HANDLE hFile;
+	HANDLE m_File;
 };
 
 }}

@@ -67,7 +67,7 @@ if(file==NULL)
 		case ERROR_ACCESS_DENIED:
 			return Status::AccessDenied;
 		case ERROR_FILE_NOT_FOUND:
-			return Status::FileNotFound;
+			return Status::NotFound;
 		default:
 			break;
 		}
