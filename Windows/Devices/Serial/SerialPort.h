@@ -52,6 +52,7 @@ public:
 
 	// Common
 	VOID Close();
+	Event<SerialPort> DataReceived;
 	VOID SetBaudRate(BaudRate BaudRate);
 
 	// Input-Stream
