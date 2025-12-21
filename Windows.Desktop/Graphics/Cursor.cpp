@@ -2,7 +2,7 @@
 // Cursor.cpp
 //============
 
-#include "Graphics/Cursor.h"
+#include "Cursor.h"
 
 
 //===========

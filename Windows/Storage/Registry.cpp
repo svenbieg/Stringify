@@ -2,7 +2,7 @@
 // Registry.cpp
 //==============
 
-#include "Storage/Registry.h"
+#include "Registry.h"
 
 
 //=======

@@ -2,7 +2,7 @@
 // OpenFileDialog.cpp
 //====================
 
-#include "Desktop/Dialogs/OpenFileDialog.h"
+#include "OpenFileDialog.h"
 
 
 //=======

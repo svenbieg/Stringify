@@ -2,7 +2,7 @@
 // PathEdit.cpp
 //==============
 
-#include "UI/Controls/PathEdit.h"
+#include "PathEdit.h"
 
 
 //=======

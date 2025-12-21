@@ -2,7 +2,7 @@
 // Panel.cpp
 //===========
 
-#include "UI/Controls/Panel.h"
+#include "Panel.h"
 
 
 //=======

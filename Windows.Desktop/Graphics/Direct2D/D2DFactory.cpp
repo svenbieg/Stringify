@@ -2,7 +2,7 @@
 // D2DFactory.cpp
 //================
 
-#include "Graphics/Direct2D/D2DFactory.h"
+#include "D2DFactory.h"
 
 
 //=======

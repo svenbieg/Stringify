@@ -2,7 +2,7 @@
 // Shortcut.cpp
 //==============
 
-#include "UI/Input/Shortcut.h"
+#include "Shortcut.h"
 
 
 //=======

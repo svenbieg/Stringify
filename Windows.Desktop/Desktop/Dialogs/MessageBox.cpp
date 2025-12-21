@@ -2,7 +2,7 @@
 // MessageBox.cpp
 //================
 
-#include "Desktop/Dialogs/MessageBox.h"
+#include "MessageBox.h"
 
 
 //=======

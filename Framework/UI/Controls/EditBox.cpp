@@ -2,7 +2,7 @@
 // EditBox.cpp
 //=============
 
-#include "UI/Controls/EditBox.h"
+#include "EditBox.h"
 
 
 //=======

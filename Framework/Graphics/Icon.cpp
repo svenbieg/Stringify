@@ -2,7 +2,7 @@
 // Icon.cpp
 //==========
 
-#include "Graphics/Icon.h"
+#include "Icon.h"
 
 
 //=======

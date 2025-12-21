@@ -2,7 +2,7 @@
 // Point.cpp
 //===========
 
-#include "Graphics/Point.h"
+#include "Point.h"
 
 
 //=======

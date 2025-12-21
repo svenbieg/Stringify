@@ -2,7 +2,7 @@
 // ImagingFactory.cpp
 //====================
 
-#include "Graphics/Direct2D/ImagingFactory.h"
+#include "ImagingFactory.h"
 
 
 //=======

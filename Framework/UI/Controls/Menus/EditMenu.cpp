@@ -2,7 +2,7 @@
 // EditMenu.cpp
 //==============
 
-#include "UI/Controls/Menus/EditMenu.h"
+#include "EditMenu.h"
 
 
 //=======

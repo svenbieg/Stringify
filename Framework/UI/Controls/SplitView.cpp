@@ -2,7 +2,7 @@
 // SplitView.cpp
 //===============
 
-#include "UI/Controls/SplitView.h"
+#include "SplitView.h"
 
 
 //=======

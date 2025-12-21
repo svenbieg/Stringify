@@ -2,7 +2,7 @@
 // DialogHelper.cpp
 //==================
 
-#include "Desktop/Dialogs/DialogHelper.h"
+#include "DialogHelper.h"
 
 
 //=======

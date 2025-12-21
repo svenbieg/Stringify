@@ -2,7 +2,7 @@
 // DWriteFactory.cpp
 //===================
 
-#include "Graphics/Direct2D/DWriteFactory.h"
+#include "DWriteFactory.h"
 
 
 //=======

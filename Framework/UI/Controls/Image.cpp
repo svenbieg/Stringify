@@ -2,7 +2,7 @@
 // Image.cpp
 //===========
 
-#include "UI/Controls/Image.h"
+#include "Image.h"
 
 
 //===========

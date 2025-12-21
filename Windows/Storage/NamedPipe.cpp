@@ -2,7 +2,7 @@
 // NamedPipe.cpp
 //===============
 
-#include "Storage/NamedPipe.h"
+#include "NamedPipe.h"
 
 
 //===========

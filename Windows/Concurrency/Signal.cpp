@@ -2,7 +2,7 @@
 // Signal.cpp
 //============
 
-#include "Concurrency/Signal.h"
+#include "Signal.h"
 
 
 //=======

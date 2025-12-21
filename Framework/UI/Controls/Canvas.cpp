@@ -2,7 +2,7 @@
 // Canvas.cpp
 //============
 
-#include "UI/Controls/Canvas.h"
+#include "Canvas.h"
 
 
 //===========

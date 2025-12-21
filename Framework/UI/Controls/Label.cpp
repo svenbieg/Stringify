@@ -2,7 +2,7 @@
 // Label.cpp
 //===========
 
-#include "UI/Controls/Label.h"
+#include "Label.h"
 
 
 //===========

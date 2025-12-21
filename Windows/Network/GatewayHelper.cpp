@@ -2,7 +2,7 @@
 // GatewayHelper.cpp
 //===================
 
-#include "Network/GatewayHelper.h"
+#include "GatewayHelper.h"
 
 
 //=======

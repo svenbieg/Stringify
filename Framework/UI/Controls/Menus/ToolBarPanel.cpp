@@ -2,7 +2,7 @@
 // ToolBarPanel.cpp
 //==================
 
-#include "UI/Controls/Menus/ToolBarPanel.h"
+#include "ToolBarPanel.h"
 
 
 //=======

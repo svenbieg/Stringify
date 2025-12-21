@@ -2,7 +2,7 @@
 // ResourceHelper.cpp
 //====================
 
-#include "Resources/ResourceHelper.h"
+#include "ResourceHelper.h"
 
 
 //=======
