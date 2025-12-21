@@ -29,7 +29,7 @@ class TextBox: public ScrollBox
 {
 public:
 	// Using
-	using InputStream=Storage::Streams::InputStream;
+	using IInputStream=Storage::Streams::IInputStream;
 	using StringList=Collections::StringList;
 
 	// Con-/Destructors
@@ -40,7 +40,7 @@ public:
 	VOID AppendLines(Handle<StringList> Lines);
 	VOID Clear();
 	Handle<Brush> GetBackground()override;
-	VOID ReadFromStream(Handle<InputStream> Stream);
+	VOID ReadFromStream(IInputStream* Stream);
 	Property<TextBox, BOOL> ReadOnly;
 	VOID Rearrange(RenderTarget* Target, RECT& Rect)override;
 	VOID SelectAll();

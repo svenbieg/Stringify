@@ -12,7 +12,7 @@
 #include "Collections/list.hpp"
 #include "Collections/map.hpp"
 #include "Collections/StringList.h"
-#include "Storage/Streams/InputStream.h"
+#include "Storage/Streams/Stream.h"
 #include "Timing/Timer.h"
 #include "UI/Controls/Menus/EditMenu.h"
 #include "UI/Controls/Interactive.h"
@@ -36,7 +36,7 @@ class Input: public Interactive
 public:
 	// Using
 	using EditMenu=UI::Controls::Menus::EditMenu;
-	using InputStream=Storage::Streams::InputStream;
+	using IInputStream=Storage::Streams::IInputStream;
 	using StringList=Collections::StringList;
 	using Timer=Timing::Timer;
 
@@ -59,7 +59,7 @@ public:
 	TCHAR Mask;
 	BOOL MultiLine;
 	RECT Padding;
-	VOID ReadFromStream(InputStream* Stream);
+	VOID ReadFromStream(IInputStream* Stream);
 	BOOL ReadOnly;
 	VOID Render(RenderTarget* Target, RECT& Rect)override;
 	VOID ReplaceSelection(LPCTSTR Value);

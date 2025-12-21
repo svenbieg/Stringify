@@ -9,7 +9,6 @@
 // Using
 //=======
 
-#include "Storage/Streams/InputStream.h"
 #include "UI/Controls/TextBox.h"
 #include "UI/AppWindow.h"
 
@@ -29,7 +28,6 @@ class AppWindow: public UI::AppWindow
 {
 public:
 	// Using
-	using InputStream=Storage::Streams::InputStream;
 	using TextBox=UI::Controls::TextBox;
 
 	// Con-/Destructors

@@ -71,6 +71,7 @@
       <Filter>Storage</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Timing\ClockHelper.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)MemoryHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)ComPointer.h" />

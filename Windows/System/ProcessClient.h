@@ -40,8 +40,8 @@ private:
 
 	// Common
 	DWORD GetServerProcessId();
-	Handle<NamedPipe> hNamedPipe;
-	DWORD uServerProcessId;
+	Handle<NamedPipe> m_NamedPipe;
+	DWORD m_ServerProcessId;
 };
 
 }

@@ -144,7 +144,7 @@ if(app->GetCurrentInput()==this)
 return Interactive::KillFocus();
 }
 
-VOID Input::ReadFromStream(InputStream* stream)
+VOID Input::ReadFromStream(IInputStream* stream)
 {
 Clear();
 StreamReader reader(stream);

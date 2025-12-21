@@ -9,7 +9,7 @@
 // Using
 //=======
 
-#include "Storage/Streams/InputStream.h"
+#include "Storage/Streams/Stream.h"
 #include "Desktop/Application.h"
 #include "AppWindow.h"
 
@@ -29,7 +29,7 @@ class Application: public Desktop::Application
 {
 public:
 	// Using
-	using InputStream=Storage::Streams::InputStream;
+	using IInputStream=Storage::Streams::IInputStream;
 
 	// Con-/Destructors
 	static inline Handle<Application> Create() { return new Application(); }
@@ -46,7 +46,7 @@ private:
 	VOID OpenBinary(Handle<String> Path);
 	VOID OpenIcon(Handle<String> Path);
 	VOID StretchOctal(LPSTR Destination, LPCSTR Source);
-	VOID Stringify(Handle<String> Name, InputStream* Source);
+	VOID Stringify(Handle<String> Name, IInputStream* Source);
 	Handle<AppWindow> m_Window;
 };
 

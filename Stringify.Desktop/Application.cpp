@@ -166,7 +166,7 @@ for(UINT u=0; u<len; u++)
 dst[4]=0;
 }
 
-VOID Application::Stringify(Handle<String> name, InputStream* src)
+VOID Application::Stringify(Handle<String> name, IInputStream* src)
 {
 auto str=String::Create("constexpr char %s[]=", name);
 DispatchedQueue::Append(this, [this, str]()
@@ -175,7 +175,7 @@ DispatchedQueue::Append(this, [this, str]()
 	});
 CHAR buf[LINE_LEN+8];
 auto dst=StaticBuffer::Create(buf, LINE_LEN+8);
-dst->SetFormat(StreamFormat::Ansi);
+dst->SetStreamFormat(StreamFormat::Ansi);
 StreamWriter writer(dst);
 SIZE_T line_len=writer.Print("\"");
 BYTE byte=0;

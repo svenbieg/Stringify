@@ -10,7 +10,7 @@
 //=======
 
 #include "Network/Ip/IpAddress.h"
-#include "Storage/Streams/RandomAccessStream.h"
+#include "Storage/Streams/Stream.h"
 #include <security.h>
 #include <WinSock2.h>
 

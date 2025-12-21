@@ -29,18 +29,18 @@ class RsaKey: public Object
 public:
 	// Using
 	using Buffer=Storage::Buffer;
-	using Seekable=Storage::Seekable;
+	using ISeekable=Storage::Streams::ISeekable;
 
 	// Con-/Destructors
-	RsaKey(Handle<Seekable> Exponent, Handle<Seekable> Module);
+	RsaKey(ISeekable* Exponent, ISeekable* Module);
 	~RsaKey();
 
 	// Common
-	BOOL Verify(Handle<Buffer> Data, Handle<Buffer> Signature);
+	BOOL Verify(Buffer* Data, Buffer* Signature);
 
 private:
 	// Common
-	BCRYPT_KEY_HANDLE hKey;
+	BCRYPT_KEY_HANDLE m_Key;
 };
 
 }}

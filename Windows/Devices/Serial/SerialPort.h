@@ -9,7 +9,7 @@
 // Using
 //=======
 
-#include "Storage/Streams/RandomAccessStream.h"
+#include "Storage/Streams/Stream.h"
 #include "Event.h"
 
 

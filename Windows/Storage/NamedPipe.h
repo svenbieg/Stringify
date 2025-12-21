@@ -10,7 +10,7 @@
 //=======
 
 #include "Concurrency/Task.h"
-#include "Storage/Streams/RandomAccessStream.h"
+#include "Storage/Streams/Stream.h"
 #include "Event.h"
 #include <namedpipeapi.h>
 
@@ -26,7 +26,7 @@ namespace Storage {
 // Named-Pipe
 //============
 
-class NamedPipe: public Storage::Streams::RandomAccessStream
+class NamedPipe: public Streams::RandomAccessStream
 {
 public:
 	// Using

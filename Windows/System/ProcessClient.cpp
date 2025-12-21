@@ -29,7 +29,7 @@ namespace System {
 //==================
 
 ProcessClient::ProcessClient():
-uServerProcessId(0)
+m_ServerProcessId(0)
 {}
 
 
@@ -39,12 +39,12 @@ uServerProcessId(0)
 
 VOID ProcessClient::ActivateServerApplication()
 {
-if(!hNamedPipe)
+if(!m_NamedPipe)
 	return;
-AllowSetForegroundWindow(uServerProcessId);
-StreamWriter writer(hNamedPipe);
+AllowSetForegroundWindow(m_ServerProcessId);
+StreamWriter writer(m_NamedPipe);
 writer.Print("ActivateApp\n");
-hNamedPipe->Flush();
+m_NamedPipe->Flush();
 }
 
 BOOL ProcessClient::Connect()
@@ -52,22 +52,22 @@ BOOL ProcessClient::Connect()
 CHAR exe_path[MAX_PATH];
 GetModuleFileNameA(NULL, exe_path, MAX_PATH);
 auto exe_name=PathHelper::GetLastComponent(exe_path);
-hNamedPipe=new NamedPipe(exe_name);
-if(hNamedPipe->Connect())
+m_NamedPipe=new NamedPipe(exe_name);
+if(m_NamedPipe->Connect())
 	{
-	uServerProcessId=GetServerProcessId();
-	if(uServerProcessId!=0)
+	m_ServerProcessId=GetServerProcessId();
+	if(m_ServerProcessId!=0)
 		return true;
 	}
-hNamedPipe=nullptr;
+m_NamedPipe=nullptr;
 return false;
 }
 
 VOID ProcessClient::SendCommandLine()
 {
-if(!hNamedPipe)
+if(!m_NamedPipe)
 	return;
-StreamWriter writer(hNamedPipe);
+StreamWriter writer(m_NamedPipe);
 auto cmd_line=CommandLine::Get();
 auto args=cmd_line->Arguments;
 for(auto it=args->Begin(); it->HasCurrent(); it->MoveNext())
@@ -76,7 +76,7 @@ for(auto it=args->Begin(); it->HasCurrent(); it->MoveNext())
 	writer.Print(arg);
 	writer.PrintChar('\n');
 	}
-hNamedPipe->Flush();
+m_NamedPipe->Flush();
 }
 
 
@@ -86,10 +86,10 @@ hNamedPipe->Flush();
 
 DWORD ProcessClient::GetServerProcessId()
 {
-StreamWriter writer(hNamedPipe);
+StreamWriter writer(m_NamedPipe);
 writer.Print("GetProcessId\n");
-hNamedPipe->Flush();
-StreamReader reader(hNamedPipe);
+m_NamedPipe->Flush();
+StreamReader reader(m_NamedPipe);
 TCHAR id_str[32];
 reader.ReadString(id_str, 32, '\n');
 UINT id=0;

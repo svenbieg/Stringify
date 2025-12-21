@@ -26,8 +26,8 @@ namespace Security {
 // Con-/Destructors
 //==================
 
-RsaKey::RsaKey(Handle<Seekable> exp, Handle<Seekable> mod):
-hKey(NULL)
+RsaKey::RsaKey(ISeekable* exp, ISeekable* mod):
+m_Key(NULL)
 {
 BCRYPT_ALG_HANDLE provider=NULL;
 auto status=BCryptOpenAlgorithmProvider(&provider, BCRYPT_RSA_ALGORITHM, MS_PRIMITIVE_PROVIDER, 0);
@@ -47,15 +47,15 @@ auto exp_ptr=blob_ptr+sizeof(BCRYPT_RSAKEY_BLOB);
 exp->Read(exp_ptr, exp_len);
 auto mod_ptr=exp_ptr+exp_len;
 mod->Read(mod_ptr, mod_len);
-status=BCryptImportKeyPair(provider, NULL, BCRYPT_PUBLIC_KEY_BLOB, &hKey, blob_ptr, blob_len, 0);
+status=BCryptImportKeyPair(provider, NULL, BCRYPT_PUBLIC_KEY_BLOB, &m_Key, blob_ptr, blob_len, 0);
 BCryptCloseAlgorithmProvider(provider, 0);
 ErrorHelper::ThrowIfFailed(status);
 }
 
 RsaKey::~RsaKey()
 {
-if(hKey!=NULL)
-	BCryptDestroyKey(hKey);
+if(m_Key!=NULL)
+	BCryptDestroyKey(m_Key);
 }
 
 
@@ -63,7 +63,7 @@ if(hKey!=NULL)
 // Common
 //========
 
-BOOL RsaKey::Verify(Handle<Buffer> data, Handle<Buffer> sig)
+BOOL RsaKey::Verify(Buffer* data, Buffer* sig)
 {
 if(!data||!sig)
 	return false;
@@ -88,11 +88,12 @@ auto data_len=(DWORD)data->GetSize();
 status=BCryptHashData(hash, data_ptr, data_len, 0);
 ErrorHelper::ThrowIfFailed(status);
 status=BCryptFinishHash(hash, hash_buf->Begin(), hash_len, 0);
+ErrorHelper::ThrowIfFailed(status);
 auto sig_ptr=sig->Begin();
 auto sig_len=(DWORD)sig->GetSize();
 BCRYPT_PKCS1_PADDING_INFO padding={ 0 };
 padding.pszAlgId=BCRYPT_SHA256_ALGORITHM;
-status=BCryptVerifySignature(hKey, &padding, hash_buf->Begin(), hash_len, sig_ptr, sig_len, BCRYPT_PAD_PKCS1);
+status=BCryptVerifySignature(m_Key, &padding, hash_buf->Begin(), hash_len, sig_ptr, sig_len, BCRYPT_PAD_PKCS1);
 BCryptDestroyHash(hash);
 return BCRYPT_SUCCESS(status);
 }
