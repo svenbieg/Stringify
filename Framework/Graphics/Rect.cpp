@@ -2,14 +2,7 @@
 // Rect.cpp
 //==========
 
-#include "pch.h"
-
-
-//=======
-// Using
-//=======
-
-#include "Rect.h"
+#include "Graphics/Rect.h"
 
 
 //===========

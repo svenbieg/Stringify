@@ -10,6 +10,7 @@
 //=======
 
 #include "Storage/Streams/RandomAccessStream.h"
+#include "Event.h"
 
 
 //===========

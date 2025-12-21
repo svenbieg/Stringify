@@ -16,6 +16,7 @@
 #include "Graphics/Brush.h"
 #include "Graphics/Font.h"
 #include "ComPointer.h"
+#include "Handle.h"
 
 
 //===========

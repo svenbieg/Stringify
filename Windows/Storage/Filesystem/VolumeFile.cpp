@@ -2,16 +2,15 @@
 // VolumeFile.cpp
 //================
 
-#include "pch.h"
+#include "Storage/Filesystem/VolumeFile.h"
 
 
 //=======
 // Using
 //=======
 
-#include "FileHelper.h"
+#include "Storage/Filesystem/FileHelper.h"
 #include "FlagHelper.h"
-#include "VolumeFile.h"
 
 
 //===========
@@ -20,6 +19,13 @@
 
 namespace Storage {
 	namespace Filesystem {
+
+
+//==========
+// Settings
+//==========
+
+constexpr UINT BLOCK_SIZE=4096;
 
 
 //==================
@@ -91,7 +97,7 @@ return FlagHelper::Get(m_Flags, VolumeFileFlags::Temporary);
 
 UINT VolumeFile::GetBlockSize()
 {
-return PAGE_SIZE;
+return BLOCK_SIZE;
 }
 
 FILE_SIZE VolumeFile::GetSize()
@@ -128,7 +134,7 @@ SIZE_T VolumeFile::Write(FILE_SIZE offset, VOID const* bufv, SIZE_T size)
 if(!hFile)
 	return 0;
 auto buf=(BYTE const*)bufv;
-BYTE tmp[PAGE_SIZE];
+BYTE tmp[BLOCK_SIZE];
 SIZE_T pos=0;
 while(pos<size)
 	{
@@ -136,16 +142,16 @@ while(pos<size)
 	SIZE_T copy=size-pos;
 	SIZE_T write=copy;
 	FILE_SIZE end=offset+copy;
-	FILE_SIZE block_end=TypeHelper::AlignUp(end, PAGE_SIZE);
+	FILE_SIZE block_end=TypeHelper::AlignUp(end, BLOCK_SIZE);
 	if(end<block_end)
 		{
-		FILE_SIZE block_start=block_end-PAGE_SIZE;
+		FILE_SIZE block_start=block_end-BLOCK_SIZE;
 		if(offset==block_start)
 			{
-			MemoryHelper::Fill(tmp, PAGE_SIZE, 0xFF);
+			MemoryHelper::Fill(tmp, BLOCK_SIZE, 0xFF);
 			MemoryHelper::Copy(tmp, buf, copy);
 			src=tmp;
-			write=PAGE_SIZE;
+			write=BLOCK_SIZE;
 			}
 		else if(offset<block_start)
 			{

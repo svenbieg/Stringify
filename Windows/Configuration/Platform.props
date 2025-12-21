@@ -20,8 +20,4 @@
     </ProjectConfiguration>
   </ItemGroup>
 
-  <PropertyGroup Condition="'$(Platform)'=='Win32'">
-    <NMakePreprocessorDefinitions>_WIN32</NMakePreprocessorDefinitions>
-  </PropertyGroup>
-
 </Project>

@@ -39,7 +39,6 @@
       <Filter>Devices\Serial</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)CommandLine.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Devices\Timers\SystemTimer.cpp">
       <Filter>Devices\Timers</Filter>
     </ClCompile>
@@ -71,6 +70,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Storage\Registry.cpp">
       <Filter>Storage</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Timing\ClockHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)ComPointer.h" />
@@ -114,7 +114,6 @@
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)CommandLine.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Platform.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Devices\Timers\SystemTimer.h">
       <Filter>Devices\Timers</Filter>
     </ClInclude>
@@ -167,6 +166,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Registry.h">
       <Filter>Storage</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Timing\ClockHelper.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Configuration">

@@ -2,7 +2,7 @@
 // Input.cpp
 //===========
 
-#include "pch.h"
+#include "UI/Controls/Input.h"
 
 
 //=======
@@ -14,7 +14,6 @@
 #include "Storage/Clipboard.h"
 #include "Storage/Streams/StreamReader.h"
 #include "UI/Controls/Menus/EditMenu.h"
-#include "UI/Controls/Input.h"
 #include "UI/Application.h"
 
 using namespace Concurrency;

@@ -2,16 +2,16 @@
 // MenuBarItem.cpp
 //=================
 
-#include "pch.h"
+#include "UI/Controls/Menus/MenuBarItem.h"
 
 
 //=======
 // Using
 //=======
 
-#include "MenuBar.h"
-#include "MenuHelper.h"
-#include "PopupMenu.h"
+#include "UI/Controls/Menus/MenuBar.h"
+#include "UI/Controls/Menus/MenuHelper.h"
+#include "UI/Controls/Menus/PopupMenu.h"
 
 using namespace Graphics;
 

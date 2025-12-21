@@ -2,7 +2,7 @@
 // PathEdit.cpp
 //==============
 
-#include "pch.h"
+#include "UI/Controls/PathEdit.h"
 
 
 //=======
@@ -11,7 +11,6 @@
 
 #include "Desktop/Dialogs/OpenFileDialog.h"
 #include "Desktop/Dialogs/SaveFileDialog.h"
-#include "PathEdit.h"
 
 using namespace Desktop::Dialogs;
 

@@ -2,7 +2,7 @@
 // Application.cpp
 //=================
 
-#include "pch.h"
+#include "UI/Application.h"
 
 
 //=======
@@ -13,8 +13,7 @@
 #include "Storage/Clipboard.h"
 #include "UI/Controls/Input.h"
 #include "UI/Input/Shortcut.h"
-#include "Application.h"
-#include "Frame.h"
+#include "UI/Frame.h"
 
 using namespace Concurrency;
 using namespace Storage;

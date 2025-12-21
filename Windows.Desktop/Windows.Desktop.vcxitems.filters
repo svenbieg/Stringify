@@ -31,9 +31,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Culture\LanguageHelper.cpp">
       <Filter>Culture</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Devices\ClockHelper.cpp">
-      <Filter>Devices</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Popup.cpp">
       <Filter>UI</Filter>
     </ClCompile>
@@ -99,10 +96,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Culture\LanguageHelper.h">
       <Filter>Culture</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Devices\ClockHelper.h">
-      <Filter>Devices</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Platform.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Popup.h">
       <Filter>UI</Filter>
     </ClInclude>
@@ -155,9 +148,6 @@
     </Filter>
     <Filter Include="Culture">
       <UniqueIdentifier>{ec9990a8-de7b-40bc-9025-c43f89716a41}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Devices">
-      <UniqueIdentifier>{1bd87a5f-bd1d-42e3-a68f-0d7f4714b4b5}</UniqueIdentifier>
     </Filter>
     <Filter Include="UI">
       <UniqueIdentifier>{30b6e3fa-b728-4123-8798-b28f0a07e0e7}</UniqueIdentifier>

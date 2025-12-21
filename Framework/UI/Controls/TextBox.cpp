@@ -2,14 +2,12 @@
 // TextBox.cpp
 //=============
 
-#include "pch.h"
+#include "UI/Controls/TextBox.h"
 
 
 //=======
 // Using
 //=======
-
-#include "TextBox.h"
 
 using namespace Graphics;
 

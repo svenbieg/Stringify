@@ -2,7 +2,7 @@
 // ScrollBox.cpp
 //===============
 
-#include "pch.h"
+#include "UI/Controls/ScrollBox.h"
 
 
 //=======
@@ -10,7 +10,6 @@
 //=======
 
 #include "UI/Frame.h"
-#include "ScrollBox.h"
 
 using namespace Graphics;
 using namespace UI::Controls;

@@ -9,29 +9,27 @@
 // Using
 //=======
 
-#include <assert.h>
 #include "MemoryHelper.h"
 #include "StringClass.h"
 
 
-//========
-// Common
-//========
+//==============
+// Error-Helper
+//==============
 
-#ifdef _DEBUG
-
-inline VOID DebugPrint(LPCSTR Text) { OutputDebugStringA(Text); }
-
-template <class... _args_t> VOID DebugPrint(LPCSTR Format, _args_t... Arguments)
+class ErrorHelper
 {
-auto text=String::Create(Format, Arguments...);
-OutputDebugString(text->Begin());
-}
-
-#else
-
-#define DebugPrint(...)
-
-#endif
-
-inline VOID ThrowIfFailed(HRESULT Status) { if(FAILED(Status))throw AbortException(); }
+public:
+	// Common
+	#ifdef _DEBUG
+	static inline VOID DebugPrint(LPCSTR Text) { OutputDebugStringA(Text); }
+	template <class... _args_t> static inline VOID DebugPrint(LPCSTR Format, _args_t... Arguments)
+		{
+		auto text=String::Create(Format, Arguments...);
+		OutputDebugString(text->Begin());
+		}
+	#else
+	#define DebugPrint(...)
+	#endif
+	static inline VOID ThrowIfFailed(HRESULT Status) { if(FAILED(Status))throw AbortException(); }
+};

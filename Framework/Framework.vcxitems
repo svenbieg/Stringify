@@ -31,7 +31,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Button.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Canvas.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\ComboBox.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Control.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\EditBox.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Grid.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Group.cpp" />

@@ -2,7 +2,7 @@
 // RandomHelper.cpp
 //==================
 
-#include "pch.h"
+#include "RandomHelper.h"
 
 
 //=======
@@ -11,7 +11,6 @@
 
 #include <random>
 #include "Devices/Timers/SystemTimer.h"
-#include "RandomHelper.h"
 #include "StringBuilder.h"
 
 using namespace Devices::Timers;

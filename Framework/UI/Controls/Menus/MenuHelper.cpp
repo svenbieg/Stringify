@@ -2,14 +2,12 @@
 // MenuHelper.cpp
 //================
 
-#include "pch.h"
+#include "UI/Controls/Menus/MenuHelper.h"
 
 
 //=======
 // Using
 //=======
-
-#include "MenuHelper.h"
 
 using namespace Graphics;
 

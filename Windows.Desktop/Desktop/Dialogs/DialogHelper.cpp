@@ -2,14 +2,13 @@
 // DialogHelper.cpp
 //==================
 
-#include "pch.h"
+#include "Desktop/Dialogs/DialogHelper.h"
 
 
 //=======
 // Using
 //=======
 
-#include "Desktop/Dialogs/DialogHelper.h"
 #include "StringBuilder.h"
 
 using namespace Culture;

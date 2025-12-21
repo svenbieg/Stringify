@@ -11,6 +11,7 @@
 
 #include <dwrite.h>
 #include "ComPointer.h"
+#include "Handle.h"
 
 
 //===========

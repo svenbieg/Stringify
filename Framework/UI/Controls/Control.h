@@ -32,7 +32,7 @@ public:
 
 protected:
 	// Con-/Destructors
-	Control(Window* Parent);
+	Control(Window* Parent): Window(Parent), Margin(0, 0, 0, 0) {}
 };
 
 }}

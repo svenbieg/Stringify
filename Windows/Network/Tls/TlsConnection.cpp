@@ -2,7 +2,7 @@
 // TlsConnection.cpp
 //===================
 
-#include "pch.h"
+#include "Network/Tls/TlsConnection.h"
 
 
 //=======
@@ -13,7 +13,7 @@
 #pragma comment(lib, "Secur32.lib")
 
 #include <schannel.h>
-#include "TlsConnection.h"
+#include "ErrorHelper.h"
 
 
 //===========
@@ -54,7 +54,7 @@ cred.dwVersion=SCHANNEL_CRED_VERSION;
 cred.paCred=&m_Context;
 cred.cCreds=1;
 HRESULT status=AcquireCredentialsHandle(nullptr, package, SECPKG_CRED_INBOUND, nullptr, &cred, nullptr, nullptr, &m_Credential, nullptr);
-ThrowIfFailed(status);
+ErrorHelper::ThrowIfFailed(status);
 CtxtHandle* context_in=nullptr;
 CtxtHandle* context_out=&m_SecurityContext;
 m_MissingSize=TLS_BUF_SIZE;
@@ -93,7 +93,7 @@ while(1)
 	DWORD flags=ASC_REQ_ALLOCATE_MEMORY|ASC_REQ_REPLAY_DETECT|ASC_REQ_SEQUENCE_DETECT|ASC_REQ_STREAM;
 	DWORD flags_out=0;
 	status=AcceptSecurityContext(&m_Credential, context_in, &in_buf_desc, flags, SECURITY_NATIVE_DREP, context_out, &out_buf_desc, &flags_out, nullptr);
-	ThrowIfFailed(status);
+	ErrorHelper::ThrowIfFailed(status);
 	context_in=&m_SecurityContext;
 	context_out=nullptr;
 	if(out_buf[0].cbBuffer&&out_buf[0].pvBuffer)
@@ -109,7 +109,7 @@ while(1)
 		break;
 	}
 status=QueryContextAttributes(&m_SecurityContext, SECPKG_ATTR_STREAM_SIZES, &m_StreamSizes);
-ThrowIfFailed(status);
+ErrorHelper::ThrowIfFailed(status);
 /*SCHANNEL_CRED cred={ 0 };
 cred.dwVersion=SCH_CREDENTIALS_VERSION;
 HRESULT status=AcquireCredentialsHandle(nullptr, SCHANNEL_NAME, SECPKG_CRED_OUTBOUND, nullptr, &cred, nullptr, nullptr, &m_Credential, nullptr);
@@ -258,7 +258,7 @@ while(1)
 			m_InputSize+=copy;
 			break;
 			}
-		ThrowIfFailed(status);
+		ErrorHelper::ThrowIfFailed(status);
 		}
 	}
 return read;
@@ -291,7 +291,7 @@ msg_desc.ulVersion=SECBUFFER_VERSION;
 msg_desc.cBuffers=4;
 msg_desc.pBuffers=msg;
 HRESULT status=EncryptMessage(&m_SecurityContext, 0, &msg_desc, 0);
-ThrowIfFailed(status);
+ErrorHelper::ThrowIfFailed(status);
 INT copy=msg[0].cbBuffer+msg[1].cbBuffer+msg[2].cbBuffer;
 INT written=send(m_Socket, m_Output, copy, 0);
 if(written!=copy)

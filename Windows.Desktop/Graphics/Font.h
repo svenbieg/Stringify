@@ -12,6 +12,7 @@
 #include <dwrite.h>
 #include "Graphics/Direct2D/DWriteFactory.h"
 #include "ComPointer.h"
+#include "Handle.h"
 
 
 //===========

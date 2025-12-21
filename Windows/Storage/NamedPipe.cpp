@@ -2,14 +2,7 @@
 // NamedPipe.cpp
 //===============
 
-#include "pch.h"
-
-
-//=======
-// Using
-//=======
-
-#include "NamedPipe.h"
+#include "Storage/NamedPipe.h"
 
 
 //===========
@@ -68,7 +61,7 @@ VOID NamedPipe::Listen()
 {
 assert(m_NamedPipe==NULL);
 DWORD open_mode=PIPE_ACCESS_DUPLEX|FILE_FLAG_FIRST_PIPE_INSTANCE|FILE_FLAG_WRITE_THROUGH;
-m_NamedPipe=CreateNamedPipe(m_Path->Begin(), open_mode, 0, 1, PAGE_SIZE, PAGE_SIZE, 0, nullptr);
+m_NamedPipe=CreateNamedPipe(m_Path->Begin(), open_mode, 0, 1, MemoryHelper::PAGE_SIZE, MemoryHelper::PAGE_SIZE, 0, nullptr);
 if(m_NamedPipe==INVALID_HANDLE_VALUE)
 	m_NamedPipe=NULL;
 if(m_NamedPipe==NULL)

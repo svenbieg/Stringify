@@ -9,8 +9,8 @@
 // Using
 //=======
 
-#include "Point.h"
-#include "Size.h"
+#include "Graphics/Point.h"
+#include "Graphics/Size.h"
 
 
 //===========

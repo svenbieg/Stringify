@@ -11,10 +11,11 @@
 
 #include <utility>
 #include "Collections/shared_map.hpp"
-#include "DispatchedQueue.h"
-#include "ReadLock.h"
-#include "Signal.h"
-#include "WriteLock.h"
+#include "Concurrency/DispatchedQueue.h"
+#include "Concurrency/ReadLock.h"
+#include "Concurrency/Signal.h"
+#include "Concurrency/WriteLock.h"
+#include "StringClass.h"
 
 
 //===========
@@ -37,11 +38,11 @@ public:
 	// Common
 	VOID Cancel();
 	volatile BOOL Cancelled;
-	static Handle<Task> Create(VOID (*Procedure)(), Handle<String> Name="task", UINT StackSize=PAGE_SIZE);
-	template <class _owner_t> static Handle<Task> Create(_owner_t* Owner, VOID (_owner_t::*Procedure)(), Handle<String> Name="task", UINT StackSize=PAGE_SIZE);
-	template <class _owner_t> static Handle<Task> Create(Handle<_owner_t> Owner, VOID (_owner_t::*Procedure)(), Handle<String> Name="task", UINT StackSize=PAGE_SIZE);
-	template <class _lambda_t> static Handle<Task> Create(nullptr_t Owner, _lambda_t&& Lambda, Handle<String> Name="task", UINT StackSize=PAGE_SIZE);
-	template <class _owner_t, class _lambda_t> static Handle<Task> Create(_owner_t* Owner, _lambda_t&& Lambda, Handle<String> Name="task", UINT StackSize=PAGE_SIZE);
+	static Handle<Task> Create(VOID (*Procedure)(), Handle<String> Name="task", UINT StackSize=MemoryHelper::PAGE_SIZE);
+	template <class _owner_t> static Handle<Task> Create(_owner_t* Owner, VOID (_owner_t::*Procedure)(), Handle<String> Name="task", UINT StackSize=MemoryHelper::PAGE_SIZE);
+	template <class _owner_t> static Handle<Task> Create(Handle<_owner_t> Owner, VOID (_owner_t::*Procedure)(), Handle<String> Name="task", UINT StackSize=MemoryHelper::PAGE_SIZE);
+	template <class _lambda_t> static Handle<Task> Create(nullptr_t Owner, _lambda_t&& Lambda, Handle<String> Name="task", UINT StackSize=MemoryHelper::PAGE_SIZE);
+	template <class _owner_t, class _lambda_t> static Handle<Task> Create(_owner_t* Owner, _lambda_t&& Lambda, Handle<String> Name="task", UINT StackSize=MemoryHelper::PAGE_SIZE);
 	static Handle<Task> Get();
 	inline HANDLE GetHandle()const { return m_Thread; }
 	Handle<Object> GetResult();

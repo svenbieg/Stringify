@@ -2,7 +2,7 @@
 // FileHelper.cpp
 //================
 
-#include "pch.h"
+#include "Storage/Filesystem/FileHelper.h"
 
 
 //=======
@@ -13,7 +13,6 @@
 
 #include <fileapi.h>
 #include <Shlwapi.h>
-#include "FileHelper.h"
 #include "PathHelper.h"
 
 

@@ -2,7 +2,7 @@
 // EditMenu.cpp
 //==============
 
-#include "pch.h"
+#include "UI/Controls/Menus/EditMenu.h"
 
 
 //=======
@@ -12,7 +12,6 @@
 #include "Resources/Icons/Edit.h"
 #include "Resources/Strings/Edit.h"
 #include "UI/Application.h"
-#include "EditMenu.h"
 
 using namespace Graphics;
 using namespace Resources::Icons;

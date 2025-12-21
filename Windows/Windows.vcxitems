@@ -42,7 +42,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Network\Tls\TlsSocket.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Network\Udp\UdpMessage.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Network\Udp\UdpSocket.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Platform.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)RandomHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\ResourceHelper.h" />
@@ -55,6 +54,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Registry.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)System\ProcessClient.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)System\ProcessServer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Timing\ClockHelper.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)CommandLine.cpp" />
@@ -64,6 +64,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Devices\Serial\SerialPort.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Devices\Timers\SystemTimer.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ExceptionHelper.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)MemoryHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Network\GatewayHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Network\Tcp\TcpConnection.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Network\Tcp\TcpSocket.cpp" />
@@ -71,9 +72,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Network\Tls\TlsSocket.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Network\Udp\UdpMessage.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Network\Udp\UdpSocket.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp">
-      <PrecompiledHeader>Create</PrecompiledHeader>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)RandomHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Resources\ResourceHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Security\Rsa\RsaKey.cpp" />
@@ -85,6 +83,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Storage\Registry.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)System\ProcessClient.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)System\ProcessServer.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Timing\ClockHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)Configuration\Compiler.props" />

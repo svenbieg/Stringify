@@ -2,7 +2,7 @@
 // ExceptionHelper.cpp
 //=====================
 
-#include "pch.h"
+#include "ExceptionHelper.h"
 
 
 //=======
@@ -13,7 +13,7 @@
 
 #include <DbgHelp.h>
 #include <TlHelp32.h>
-#include "ExceptionHelper.h"
+#include "StringHelper.h"
 
 constexpr UINT MAX_SYM_NAME_LEN=128;
 

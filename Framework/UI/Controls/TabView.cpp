@@ -2,14 +2,7 @@
 // TabView.cpp
 //=============
 
-#include "pch.h"
-
-
-//=======
-// Using
-//=======
-
-#include "TabView.h"
+#include "UI/Controls/TabView.h"
 
 
 //===========

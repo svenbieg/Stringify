@@ -10,7 +10,7 @@
 //=======
 
 #include "Culture/Sentence.h"
-#include "Control.h"
+#include "UI/Controls/Control.h"
 #include "DynamicHandle.h"
 
 

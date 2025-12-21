@@ -2,7 +2,7 @@
 // Application.cpp
 //=================
 
-#include "pch.h"
+#include "Application.h"
 
 
 //=======
@@ -18,7 +18,6 @@
 #include "Storage/Buffer.h"
 #include "Storage/Icon.h"
 #include "Storage/StaticBuffer.h"
-#include "Application.h"
 #include "PathHelper.h"
 
 using namespace Concurrency;

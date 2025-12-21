@@ -48,9 +48,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Canvas.cpp">
       <Filter>UI\Controls</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Control.cpp">
-      <Filter>UI\Controls</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Grid.cpp">
       <Filter>UI\Controls</Filter>
     </ClCompile>

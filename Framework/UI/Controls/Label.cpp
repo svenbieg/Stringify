@@ -2,14 +2,7 @@
 // Label.cpp
 //===========
 
-#include "pch.h"
-
-
-//=======
-// Using
-//=======
-
-#include "Label.h"
+#include "UI/Controls/Label.h"
 
 
 //===========

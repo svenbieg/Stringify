@@ -11,6 +11,8 @@
 
 #include "Concurrency/Mutex.h"
 #include "Handle.h"
+#include "MemoryHelper.h"
+#include <new>
 
 
 //========
@@ -26,7 +28,7 @@ public:
 	using WriteLock=Concurrency::WriteLock;
 
 	// Con-/Destructors
-	Global() {}
+	Global()=default;
 
 	// Access
 	operator Handle<_obj_t>()
@@ -34,7 +36,7 @@ public:
 		WriteLock lock(m_Mutex);
 		if(m_Object)
 			return m_Object;
-		auto obj=(_obj_t*)operator new(sizeof(_obj_t));
+		auto obj=(_obj_t*)MemoryHelper::Allocate(sizeof(_obj_t));
 		try
 			{
 			new (obj) _obj_t();

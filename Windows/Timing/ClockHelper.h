@@ -16,13 +16,17 @@
 // Namespace
 //===========
 
-namespace Devices {
+namespace Timing {
 
 
-//========
-// Common
-//========
+//==============
+// Clock-Helper
+//==============
 
-BOOL ClockGetTime(Timing::TIMEPOINT& TimePoint, UINT Delta=0);
+class ClockHelper
+{
+public:
+	static BOOL ClockGetTime(Timing::TIMEPOINT& TimePoint, UINT Delta=0);
+};
 
 }

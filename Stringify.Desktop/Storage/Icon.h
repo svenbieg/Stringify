@@ -11,6 +11,7 @@
 
 #include "Collections/list.hpp"
 #include "Storage/Buffer.h"
+#include "StringClass.h"
 
 
 //===========

@@ -2,7 +2,7 @@
 // Button.cpp
 //============
 
-#include "pch.h"
+#include "UI/Controls/Button.h"
 
 
 //=======
@@ -10,9 +10,8 @@
 //=======
 
 #include "Concurrency/DispatchedQueue.h"
-#include "Button.h"
-#include "Grid.h"
-#include "TextBlock.h"
+#include "UI/Controls/Grid.h"
+#include "UI/Controls/TextBlock.h"
 
 using namespace Concurrency;
 using namespace Graphics;

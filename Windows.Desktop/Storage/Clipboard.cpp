@@ -2,7 +2,7 @@
 // Clipboard.cpp
 //===============
 
-#include "pch.h"
+#include "Storage/Clipboard.h"
 
 
 //=======
@@ -10,7 +10,6 @@
 //=======
 
 #include "UI/AppWindow.h"
-#include "Clipboard.h"
 
 using namespace UI;
 

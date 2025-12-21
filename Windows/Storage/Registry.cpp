@@ -2,14 +2,13 @@
 // Registry.cpp
 //==============
 
-#include "pch.h"
+#include "Storage/Registry.h"
 
 
 //=======
 // Using
 //=======
 
-#include "Storage/Registry.h"
 #include "PathHelper.h"
 
 

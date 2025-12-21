@@ -2,15 +2,14 @@
 // ToolBarPanel.cpp
 //==================
 
-#include "pch.h"
+#include "UI/Controls/Menus/ToolBarPanel.h"
 
 
 //=======
 // Using
 //=======
 
-#include "ToolBar.h"
-#include "ToolBarPanel.h"
+#include "UI/Controls/Menus/ToolBar.h"
 
 using namespace Culture;
 

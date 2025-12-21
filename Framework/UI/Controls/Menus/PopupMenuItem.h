@@ -12,9 +12,9 @@
 #include "Culture/Sentence.h"
 #include "Graphics/Icon.h"
 #include "Timing/Timer.h"
+#include "UI/Controls/Menus/MenuItem.h"
 #include "UI/Controls/Interactive.h"
 #include "UI/Controls/TextBlock.h"
-#include "MenuItem.h"
 
 
 //===========

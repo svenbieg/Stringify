@@ -2,7 +2,7 @@
 // GatewayHelper.cpp
 //===================
 
-#include "pch.h"
+#include "Network/GatewayHelper.h"
 
 
 //=======
@@ -13,7 +13,6 @@
 
 #include <winsock2.h>
 #include <iphlpapi.h>
-#include "GatewayHelper.h"
 
 
 //===========

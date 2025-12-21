@@ -2,13 +2,6 @@
 // RenderTarget.cpp
 //==================
 
-#include "pch.h"
-
-
-//=======
-// Using
-//=======
-
 #include "Graphics/RenderTarget.h"
 
 
@@ -126,7 +119,7 @@ if(len>255)
 WCHAR str[256];
 StringHelper::Copy(str, 256, text);
 #endif
-m_Target->DrawText(str, len, d2d_format, d2d_rc, d2d_brush);
+m_Target->DrawTextW(str, len, d2d_format, d2d_rc, d2d_brush);
 m_Target->SetTransform(mx_transform);
 }
 

@@ -6,6 +6,13 @@
 
 
 //=======
+// Using
+//=======
+
+#include "Platform.h"
+
+
+//=======
 // Types
 //=======
 
@@ -16,10 +23,16 @@ typedef decltype(nullptr) nullptr_t;
 typedef unsigned char BYTE;
 
 typedef unsigned short int WORD;
-constexpr WORD WORD_MAX=0xFFFF;
+constexpr WORD WORD_MAX=(WORD)-1;
 
 typedef unsigned __LONG int DWORD;
 typedef unsigned __LONG_LONG int QWORD;
+
+typedef __SIZE_T SIZE_T;
+constexpr SIZE_T SIZE_MAX=(SIZE_T)-1;
+
+typedef __FILE_SIZE_T FILE_SIZE;
+constexpr FILE_SIZE FILE_MAX=(FILE_SIZE)-1;
 
 typedef int BOOL;
 
@@ -31,12 +44,12 @@ constexpr INT INT_MAX=0x7FFFFFFF;
 constexpr INT INT_MIN=-0x7FFFFFFF;
 
 typedef unsigned int UINT;
-constexpr UINT UINT_MAX=0xFFFFFFFF;
+constexpr UINT UINT_MAX=(UINT)-1;
 
 typedef __LONG_LONG int INT64;
 
 typedef unsigned __LONG_LONG int UINT64;
-constexpr UINT64 UINT64_MAX=0xFFFFFFFFFFFFFFFFULL;
+constexpr UINT64 UINT64_MAX=(UINT64)-1;
 
 typedef float FLOAT;
 typedef double DOUBLE;

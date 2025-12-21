@@ -10,6 +10,7 @@
 //=======
 
 #include "Graphics/Point.h"
+#include "Object.h"
 
 
 //===========

@@ -2,14 +2,12 @@
 // Task.cpp
 //==========
 
-#include "pch.h"
+#include "Concurrency/Task.h"
 
 
 //=======
 // Using
 //=======
-
-#include "Task.h"
 
 using namespace Collections;
 

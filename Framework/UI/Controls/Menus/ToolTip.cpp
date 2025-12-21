@@ -2,7 +2,7 @@
 // ToolTip.cpp
 //=============
 
-#include "pch.h"
+#include "UI/Controls/Menus/ToolTip.h"
 
 
 //=======
@@ -12,7 +12,6 @@
 #include "Concurrency/DispatchedQueue.h"
 #include "UI/Controls/TextBlock.h"
 #include "UI/Frame.h"
-#include "ToolTip.h"
 
 using namespace Concurrency;
 

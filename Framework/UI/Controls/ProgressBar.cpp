@@ -2,14 +2,12 @@
 // ProgressBar.cpp
 //=================
 
-#include "pch.h"
+#include "UI/Controls/ProgressBar.h"
 
 
 //=======
 // Using
 //=======
-
-#include "ProgressBar.h"
 
 using namespace Graphics;
 

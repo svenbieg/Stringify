@@ -2,14 +2,12 @@
 // Panel.cpp
 //===========
 
-#include "pch.h"
+#include "UI/Controls/Panel.h"
 
 
 //=======
 // Using
 //=======
-
-#include "Panel.h"
 
 using namespace Graphics;
 

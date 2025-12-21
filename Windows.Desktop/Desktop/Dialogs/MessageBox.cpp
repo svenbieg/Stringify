@@ -2,7 +2,7 @@
 // MessageBox.cpp
 //================
 
-#include "pch.h"
+#include "Desktop/Dialogs/MessageBox.h"
 
 
 //=======
@@ -10,7 +10,6 @@
 //=======
 
 #include "UI/AppWindow.h"
-#include "MessageBox.h"
 
 using namespace UI;
 

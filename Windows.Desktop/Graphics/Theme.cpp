@@ -2,14 +2,13 @@
 // Theme.cpp
 //===========
 
-#include "pch.h"
+#include "Graphics/Theme.h"
 
 
 //=======
 // Using
 //=======
 
-#include "Graphics/Theme.h"
 #include "Storage/Registry.h"
 
 using namespace Storage;

@@ -10,8 +10,8 @@
 //=======
 
 #include "Graphics/Icon.h"
+#include "UI/Controls/Menus/ToolTip.h"
 #include "UI/Controls/Interactive.h"
-#include "ToolTip.h"
 
 
 //===========

@@ -2,14 +2,12 @@
 // HyperLink.cpp
 //===============
 
-#include "pch.h"
+#include "UI/Controls/HyperLink.h"
 
 
 //=======
 // Using
 //=======
-
-#include "HyperLink.h"
 
 using namespace Graphics;
 

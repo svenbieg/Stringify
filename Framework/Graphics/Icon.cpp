@@ -2,14 +2,12 @@
 // Icon.cpp
 //==========
 
-#include "pch.h"
+#include "Graphics/Icon.h"
 
 
 //=======
 // Using
 //=======
-
-#include "Icon.h"
 
 using namespace Resources::Icons;
 

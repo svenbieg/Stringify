@@ -2,15 +2,14 @@
 // Point.cpp
 //===========
 
-#include "pch.h"
+#include "Graphics/Point.h"
 
 
 //=======
 // Using
 //=======
 
-#include "Point.h"
-#include "Rect.h"
+#include "Graphics/Rect.h"
 
 
 //===========

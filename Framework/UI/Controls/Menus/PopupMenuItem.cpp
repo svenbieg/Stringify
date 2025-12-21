@@ -2,7 +2,7 @@
 // PopupMenuItem.cpp
 //===================
 
-#include "pch.h"
+#include "UI/Controls/Menus/PopupMenuItem.h"
 
 
 //=======
@@ -10,11 +10,11 @@
 //=======
 
 #include "Concurrency/DispatchedQueue.h"
+#include "UI/Controls/Menus/MenuBar.h"
+#include "UI/Controls/Menus/MenuHelper.h"
+#include "UI/Controls/Menus/PopupMenu.h"
 #include "UI/Input/Shortcut.h"
 #include "UI/Application.h"
-#include "MenuBar.h"
-#include "MenuHelper.h"
-#include "PopupMenu.h"
 
 using namespace Concurrency;
 using namespace Graphics;

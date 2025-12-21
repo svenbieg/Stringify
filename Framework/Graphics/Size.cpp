@@ -2,15 +2,14 @@
 // Size.cpp
 //==========
 
-#include "pch.h"
+#include "Graphics/Size.h"
 
 
 //=======
 // Using
 //=======
 
-#include "Rect.h"
-#include "Size.h"
+#include "Graphics/Rect.h"
 
 
 //===========

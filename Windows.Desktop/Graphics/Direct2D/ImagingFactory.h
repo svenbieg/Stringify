@@ -11,6 +11,7 @@
 
 #include <wincodec.h>
 #include "ComPointer.h"
+#include "StringClass.h"
 
 
 //===========

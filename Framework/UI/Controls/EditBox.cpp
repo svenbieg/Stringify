@@ -2,7 +2,7 @@
 // EditBox.cpp
 //=============
 
-#include "pch.h"
+#include "UI/Controls/EditBox.h"
 
 
 //=======
@@ -10,7 +10,6 @@
 //=======
 
 #include "UI/Frame.h"
-#include "EditBox.h"
 
 using namespace Graphics;
 

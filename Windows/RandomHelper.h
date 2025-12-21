@@ -5,6 +5,13 @@
 #pragma once
 
 
+//=======
+// Using
+//=======
+
+#include "StringClass.h"
+
+
 //===============
 // Random-Helper
 //===============

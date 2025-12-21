@@ -10,9 +10,9 @@
 //=======
 
 #include "Graphics/Cursor.h"
+#include "UI/Controls/Control.h"
 #include "UI/Input/KeyEvent.h"
 #include "UI/Input/PointerEvent.h"
-#include "Control.h"
 
 
 //===========

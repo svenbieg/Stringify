@@ -2,7 +2,7 @@
 // D2DFactory.cpp
 //================
 
-#include "pch.h"
+#include "Graphics/Direct2D/D2DFactory.h"
 
 
 //=======
@@ -11,7 +11,7 @@
 
 #pragma comment(lib, "d2d1.lib")
 
-#include "D2DFactory.h"
+#include "MemoryHelper.h"
 
 
 //===========

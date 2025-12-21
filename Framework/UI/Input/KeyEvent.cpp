@@ -2,14 +2,7 @@
 // KeyEvent.cpp
 //==============
 
-#include "pch.h"
-
-
-//========
-// Common
-//========
-
-#include "KeyEvent.h"
+#include "UI/Input/KeyEvent.h"
 
 
 //===========

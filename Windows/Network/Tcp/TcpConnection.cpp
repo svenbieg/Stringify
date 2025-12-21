@@ -2,7 +2,7 @@
 // TcpConnection.cpp
 //===================
 
-#include "pch.h"
+#include "Network/Tcp/TcpConnection.h"
 
 
 //=======
@@ -12,7 +12,6 @@
 #pragma comment (lib, "Ws2_32.lib")
 
 #include <ws2tcpip.h>
-#include "TcpConnection.h"
 
 
 //===========

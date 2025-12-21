@@ -2,13 +2,6 @@
 // Cursor.cpp
 //============
 
-#include "pch.h"
-
-
-//=======
-// Using
-//=======
-
 #include "Graphics/Cursor.h"
 
 

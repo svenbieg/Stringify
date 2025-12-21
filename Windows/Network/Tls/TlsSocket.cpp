@@ -2,7 +2,7 @@
 // TlsSocket.cpp
 //===============
 
-#include "pch.h"
+#include "Network/Tls/TlsSocket.h"
 
 
 //=======
@@ -12,8 +12,8 @@
 #pragma comment(lib, "Crypt32.lib")
 #pragma comment(lib, "Secur32.lib")
 
+#include <assert.h>
 #include <schannel.h>
-#include "TlsSocket.h"
 
 
 //===========

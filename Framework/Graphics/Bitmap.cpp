@@ -2,14 +2,14 @@
 // Bitmap.cpp
 //============
 
-#include "pch.h"
+#include "Bitmap.h"
 
 
 //=======
 // Using
 //=======
 
-#include "Bitmap.h"
+#include "MemoryHelper.h"
 
 
 //===========

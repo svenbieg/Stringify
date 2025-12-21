@@ -2,7 +2,7 @@
 // ToolBarItem.cpp
 //=================
 
-#include "pch.h"
+#include "UI/Controls/Menus/ToolBarItem.h"
 
 
 //=======
@@ -10,9 +10,8 @@
 //=======
 
 #include "Concurrency/DispatchedQueue.h"
-#include "MenuHelper.h"
-#include "ToolBarItem.h"
-#include "ToolBarPanel.h"
+#include "UI/Controls/Menus/MenuHelper.h"
+#include "UI/Controls/Menus/ToolBarPanel.h"
 
 using namespace Concurrency;
 using namespace Graphics;

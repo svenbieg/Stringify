@@ -5,11 +5,10 @@
 #pragma once
 
 
-//========
-// System
-//========
+//=========
+// Windows
+//=========
 
-#define _WINDOWS
 #define _WINSOCKAPI_
 #define SECURITY_WIN32
 
@@ -17,8 +16,11 @@
 
 #undef INT_MAX
 #undef INT_MIN
+#undef SIZE_MAX
 #undef UINT_MAX
+#undef UINT64_MAX
 #undef VOID
+#undef WORD_MAX
 
 #undef TEXT
 
@@ -33,33 +35,22 @@
 #define MessageBoxT MessageBoxA
 #endif
 
-
-//======================
-// Forward-Declarations
-//======================
-
-#define __LONG long
-#define __LONG_LONG long long
-
-typedef unsigned __LONG_LONG int FILE_SIZE;
-
-constexpr FILE_SIZE FILE_SIZE_MAX=0xFFFFFFFFFFFFFFFF;
-constexpr UINT PAGE_SIZE=4096;
-
 #define WM_DISPATCH (WM_USER+1)
 
 #define ICO_APP 1
 
 
-//=======
-// Using
-//=======
+//======================
+// Forward-Declarations
+//======================
 
-#include "Default/Platform.h"
+#define __COPY_MAX 2
+#define __FILE_SIZE_T unsigned long long int
+#define __LONG long
+#define __LONG_LONG long long
 
-
-//========
-// Common
-//========
-
-#include "ErrorHelper.h"
+#ifdef _X86_
+#define __SIZE_T unsigned long
+#else
+#define __SIZE_T unsigned long long
+#endif

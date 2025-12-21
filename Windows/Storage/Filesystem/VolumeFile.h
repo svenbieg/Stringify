@@ -11,6 +11,8 @@
 
 #include "Storage/File.h"
 #include "Storage/Volume.h"
+#include "Status.h"
+#include "StringClass.h"
 
 
 //===========

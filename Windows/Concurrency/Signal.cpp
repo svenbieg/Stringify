@@ -2,15 +2,14 @@
 // Signal.cpp
 //============
 
-#include "pch.h"
+#include "Concurrency/Signal.h"
 
 
 //=======
 // Using
 //=======
 
-#include "Signal.h"
-#include "Task.h"
+#include "Concurrency/Task.h"
 
 
 //===========

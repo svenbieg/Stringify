@@ -10,7 +10,7 @@
 //=======
 
 #include "Graphics/Bitmap.h"
-#include "Control.h"
+#include "UI/Controls/Control.h"
 #include "DynamicHandle.h"
 
 

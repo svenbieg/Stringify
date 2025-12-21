@@ -2,7 +2,7 @@
 // DWriteFactory.cpp
 //===================
 
-#include "pch.h"
+#include "Graphics/Direct2D/DWriteFactory.h"
 
 
 //=======
@@ -11,7 +11,7 @@
 
 #pragma comment(lib, "dwrite.lib")
 
-#include "DWriteFactory.h"
+#include "StringHelper.h"
 
 
 //===========

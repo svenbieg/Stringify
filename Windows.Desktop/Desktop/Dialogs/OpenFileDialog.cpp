@@ -2,7 +2,7 @@
 // OpenFileDialog.cpp
 //====================
 
-#include "pch.h"
+#include "Desktop/Dialogs/OpenFileDialog.h"
 
 
 //=======
@@ -12,8 +12,7 @@
 #include <commdlg.h>
 #include "Resources/Strings/Files.h"
 #include "UI/AppWindow.h"
-#include "DialogHelper.h"
-#include "OpenFileDialog.h"
+#include "Desktop/Dialogs/DialogHelper.h"
 #include "PathHelper.h"
 
 using namespace Resources::Strings;

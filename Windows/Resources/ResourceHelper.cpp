@@ -2,14 +2,15 @@
 // ResourceHelper.cpp
 //====================
 
-#include "pch.h"
+#include "Resources/ResourceHelper.h"
 
 
 //=======
 // Using
 //=======
 
-#include "ResourceHelper.h"
+#include <assert.h>
+#include "StringHelper.h"
 
 
 //=======

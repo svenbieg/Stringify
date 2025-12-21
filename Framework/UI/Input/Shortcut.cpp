@@ -2,7 +2,7 @@
 // Shortcut.cpp
 //==============
 
-#include "pch.h"
+#include "UI/Input/Shortcut.h"
 
 
 //=======
@@ -11,7 +11,6 @@
 
 #include "UI/Input/VirtualKey.h"
 #include "FlagHelper.h"
-#include "Shortcut.h"
 
 using namespace UI::Input;
 

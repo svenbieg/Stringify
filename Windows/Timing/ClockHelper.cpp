@@ -2,7 +2,7 @@
 // ClockHelper.cpp
 //=================
 
-#include "pch.h"
+#include "Timing/ClockHelper.h"
 
 
 //=======
@@ -10,7 +10,6 @@
 //=======
 
 #include <time.h>
-#include "ClockHelper.h"
 
 using namespace Timing;
 

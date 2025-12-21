@@ -2,7 +2,7 @@
 // ProcessServer.cpp
 //===================
 
-#include "pch.h"
+#include "System/ProcessServer.h"
 
 
 //=======
@@ -13,7 +13,6 @@
 #include "Storage/Streams/StreamReader.h"
 #include "Storage/Streams/StreamWriter.h"
 #include "PathHelper.h"
-#include "ProcessServer.h"
 
 using namespace Concurrency;
 using namespace Storage::Streams;

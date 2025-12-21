@@ -2,7 +2,7 @@
 // Icon.cpp
 //==========
 
-#include "pch.h"
+#include "Storage/Icon.h"
 
 
 //=======
@@ -11,7 +11,6 @@
 
 #include "Storage/Filesystem/File.h"
 #include "Storage/Streams/StreamReader.h"
-#include "Storage/Icon.h"
 
 using namespace Storage::Streams;
 

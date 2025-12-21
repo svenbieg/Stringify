@@ -2,7 +2,7 @@
 // Application.cpp
 //=================
 
-#include "pch.h"
+#include "Desktop/Application.h"
 
 
 //=======
@@ -13,7 +13,6 @@
 #include "Culture/LanguageHelper.h"
 #include "Resources/Strings/Exception.h"
 #include "UI/AppWindow.h"
-#include "Application.h"
 #include "ExceptionHelper.h"
 
 using namespace Concurrency;

@@ -7,13 +7,13 @@
   IgnorableNamespaces="uap rescap">
 
   <Identity
-    Name="7D8E5DE4-4EE9-4DC5-B063-C17160C0E2C9"
-    Publisher="CN=unknown"
+    Name="1C6571FF-F1F2-455C-9A13-9B182F5859A8"
+    Publisher="CN=svenb"
     Version="0.0.0.0" />
 
   <Properties>
     <DisplayName>Stringify</DisplayName>
-    <PublisherDisplayName>Unbekannt</PublisherDisplayName>
+    <PublisherDisplayName>Sven Bieg</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 

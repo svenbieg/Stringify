@@ -2,7 +2,7 @@
 // AppWindow.cpp
 //===============
 
-#include "pch.h"
+#include "UI/AppWindow.h"
 
 
 //=======
@@ -11,7 +11,6 @@
 
 #include "UI/Controls/Grid.h"
 #include "UI/Application.h"
-#include "UI/AppWindow.h"
 
 using namespace UI::Controls;
 

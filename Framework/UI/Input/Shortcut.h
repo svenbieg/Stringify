@@ -9,7 +9,8 @@
 // Using
 //=======
 
-#include "VirtualKey.h"
+#include "UI/Input/VirtualKey.h"
+#include "StringClass.h"
 
 
 //===========

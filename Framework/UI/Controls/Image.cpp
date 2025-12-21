@@ -2,14 +2,7 @@
 // Image.cpp
 //===========
 
-#include "pch.h"
-
-
-//=======
-// Using
-//=======
-
-#include "Image.h"
+#include "UI/Controls/Image.h"
 
 
 //===========

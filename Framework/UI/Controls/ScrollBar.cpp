@@ -2,7 +2,7 @@
 // ScrollBar.cpp
 //===============
 
-#include "pch.h"
+#include "UI/Controls/ScrollBar.h"
 
 
 //=======
@@ -10,7 +10,6 @@
 //=======
 
 #include "Timing/Clock.h"
-#include "UI/Controls/ScrollBar.h"
 
 using namespace Devices::Timers;
 using namespace Graphics;

@@ -2,14 +2,12 @@
 // SplitView.cpp
 //===============
 
-#include "pch.h"
+#include "UI/Controls/SplitView.h"
 
 
 //=======
 // Using
 //=======
-
-#include "SplitView.h"
 
 using namespace Graphics;
 

@@ -2,14 +2,14 @@
 // ImagingFactory.cpp
 //====================
 
-#include "pch.h"
+#include "Graphics/Direct2D/ImagingFactory.h"
 
 
 //=======
 // Using
 //=======
 
-#include "ImagingFactory.h"
+#include <assert.h>
 
 
 //===========

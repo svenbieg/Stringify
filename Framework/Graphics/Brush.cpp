@@ -2,13 +2,6 @@
 // Brush.cpp
 //===========
 
-#include "pch.h"
-
-
-//=======
-// Using
-//=======
-
 #include "Graphics/Brush.h"
 
 

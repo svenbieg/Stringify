@@ -12,6 +12,7 @@
 #include "Graphics/Color.h"
 #include "Graphics/Rect.h"
 #include "Graphics/Size.h"
+#include "Event.h"
 
 
 //===========

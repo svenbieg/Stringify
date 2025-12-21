@@ -2,7 +2,7 @@
 // Overlapped.cpp
 //================
 
-#include "pch.h"
+#include "UI/Overlapped.h"
 
 
 //=======
@@ -16,7 +16,6 @@
 #include "Concurrency/DispatchedQueue.h"
 #include "Desktop/Application.h"
 #include "UI/AppWindow.h"
-#include "Overlapped.h"
 
 using namespace Concurrency;
 using namespace Desktop;

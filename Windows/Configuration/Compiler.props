@@ -3,13 +3,12 @@
   <ItemDefinitionGroup>
     <ClCompile>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(SolutionDir);$(ProjectDir)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /MP</AdditionalOptions>
       <ConformanceMode>true</ConformanceMode>
       <DisableSpecificWarnings>4172</DisableSpecificWarnings>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <ObjectFileName>$(IntDir)%(Directory)</ObjectFileName>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <ResourceCompile>

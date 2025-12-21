@@ -26,7 +26,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\MessageBox.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\OpenFileDialog.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\SaveFileDialog.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Devices\ClockHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Cursor.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\D2DFactory.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\DWriteFactory.h" />
@@ -34,7 +33,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Font.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\RenderTarget.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Theme.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Platform.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Strings\Exception.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Strings\Files.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Clipboard.h" />
@@ -51,7 +49,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\MessageBox.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\OpenFileDialog.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\SaveFileDialog.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Devices\ClockHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Cursor.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\D2DFactory.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\DWriteFactory.cpp" />
