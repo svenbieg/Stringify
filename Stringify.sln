@@ -64,31 +64,4 @@ Global
 		Windows\Windows.vcxitems*{d3561ca0-0f75-4b37-b166-d8bea51d7a9e}*SharedItemsImports = 9
 		Default\Default.vcxitems*{e356bd3b-d09b-4fda-acd2-403372fceac1}*SharedItemsImports = 9
 	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 8
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://svenbieg.visualstudio.com/
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = Default\\Default.vcxitems
-		SccProjectName1 = ../../Shared/Default
-		SccLocalPath1 = Default
-		SccProjectUniqueName2 = Common\\Common.vcxitems
-		SccProjectName2 = ../../Shared/Common
-		SccLocalPath2 = Common
-		SccProjectUniqueName3 = Framework\\Framework.vcxitems
-		SccProjectName3 = ../../Shared/Framework
-		SccLocalPath3 = Framework
-		SccProjectUniqueName4 = Windows\\Windows.vcxitems
-		SccProjectName4 = ../../Shared/Windows
-		SccLocalPath4 = Windows
-		SccProjectUniqueName5 = Windows.Desktop\\Windows.Desktop.vcxitems
-		SccProjectName5 = ../../Shared/Windows.Desktop
-		SccLocalPath5 = Windows.Desktop
-		SccProjectUniqueName6 = Stringify\\Stringify.wapproj
-		SccProjectName6 = Stringify
-		SccLocalPath6 = Stringify
-		SccProjectUniqueName7 = Stringify.Desktop\\Stringify.Desktop.vcxproj
-		SccProjectName7 = Stringify.Desktop
-		SccLocalPath7 = Stringify.Desktop
-	EndGlobalSection
 EndGlobal

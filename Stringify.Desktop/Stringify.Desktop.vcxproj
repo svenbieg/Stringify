@@ -4,10 +4,6 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{3A0E30D6-4D73-4EEE-94E2-6E0FE7507EFB}</ProjectGuid>
     <RootNamespace>Stringify</RootNamespace>
-    <SccProjectName>$/Tools/Stringify/Stringify.Desktop</SccProjectName>
-    <SccAuxPath>https://svenbieg.visualstudio.com</SccAuxPath>
-    <SccLocalPath>.</SccLocalPath>
-    <SccProvider>{4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}</SccProvider>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
