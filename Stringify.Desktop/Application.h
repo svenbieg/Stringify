@@ -29,7 +29,7 @@ class Application: public Desktop::Application
 {
 public:
 	// Using
-	using IInputStream=Storage::Streams::IInputStream;
+	using InputStream=Storage::Streams::InputStream;
 
 	// Con-/Destructors
 	static inline Handle<Application> Create() { return new Application(); }
@@ -46,7 +46,7 @@ private:
 	VOID OpenBinary(Handle<String> Path);
 	VOID OpenIcon(Handle<String> Path);
 	VOID StretchOctal(LPSTR Destination, LPCSTR Source);
-	VOID Stringify(Handle<String> Name, IInputStream* Source);
+	VOID Stringify(Handle<String> Name, InputStream* Source);
 	Handle<AppWindow> m_Window;
 };
 

@@ -29,10 +29,10 @@ class RsaKey: public Object
 public:
 	// Using
 	using Buffer=Storage::Buffer;
-	using ISeekable=Storage::Streams::ISeekable;
+	using Seekable=Storage::Streams::Seekable;
 
 	// Con-/Destructors
-	RsaKey(ISeekable* Exponent, ISeekable* Module);
+	RsaKey(Seekable* Exponent, Seekable* Module);
 	~RsaKey();
 
 	// Common

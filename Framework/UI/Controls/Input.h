@@ -36,7 +36,7 @@ class Input: public Interactive
 public:
 	// Using
 	using EditMenu=UI::Controls::Menus::EditMenu;
-	using IInputStream=Storage::Streams::IInputStream;
+	using InputStream=Storage::Streams::InputStream;
 	using StringList=Collections::StringList;
 	using Timer=Timing::Timer;
 
@@ -59,7 +59,7 @@ public:
 	TCHAR Mask;
 	BOOL MultiLine;
 	RECT Padding;
-	VOID ReadFromStream(IInputStream* Stream);
+	VOID ReadFromStream(InputStream* Stream);
 	BOOL ReadOnly;
 	VOID Render(RenderTarget* Target, RECT& Rect)override;
 	VOID ReplaceSelection(LPCTSTR Value);

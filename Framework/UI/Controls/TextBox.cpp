@@ -45,7 +45,7 @@ Handle<Brush> TextBox::GetBackground()
 return m_Theme->WindowBrush;
 }
 
-VOID TextBox::ReadFromStream(IInputStream* stream)
+VOID TextBox::ReadFromStream(InputStream* stream)
 {
 m_Input->ReadFromStream(stream);
 }

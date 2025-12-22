@@ -166,7 +166,7 @@ for(UINT u=0; u<len; u++)
 dst[4]=0;
 }
 
-VOID Application::Stringify(Handle<String> name, IInputStream* src)
+VOID Application::Stringify(Handle<String> name, InputStream* src)
 {
 auto str=String::Create("constexpr char %s[]=", name);
 DispatchedQueue::Append(this, [this, str]()

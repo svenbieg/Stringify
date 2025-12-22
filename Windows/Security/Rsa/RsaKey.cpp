@@ -26,7 +26,7 @@ namespace Security {
 // Con-/Destructors
 //==================
 
-RsaKey::RsaKey(ISeekable* exp, ISeekable* mod):
+RsaKey::RsaKey(Seekable* exp, Seekable* mod):
 m_Key(NULL)
 {
 BCRYPT_ALG_HANDLE provider=NULL;
