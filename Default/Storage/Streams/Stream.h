@@ -32,54 +32,27 @@ UTF8
 };
 
 
-//=========
-// IStream
-//=========
-
-class IStream
-{
-public:
-	// Common
-	virtual StreamFormat GetStreamFormat()const=0;
-	virtual VOID SetStreamFormat(StreamFormat Format)=0;
-};
-
-
 //========
 // Stream
 //========
 
-class Stream: public Object, public virtual IStream
+class Stream
 {
 public:
 	// Using
 	using StreamFormat=Storage::Streams::StreamFormat;
 
 	// Common
-	StreamFormat GetStreamFormat()const override { return m_StreamFormat; }
-	VOID SetStreamFormat(StreamFormat Format)override { m_StreamFormat=Format; }
-
-protected:
-	// Using
-	#ifdef _UNICODE
-	static constexpr StreamFormat DefaultStreamFormat=StreamFormat::Unicode;
-	#else
-	static constexpr StreamFormat DefaultStreamFormat=StreamFormat::Ansi;
-	#endif
-
-	// Con-/Destructors
-	Stream(StreamFormat Format=DefaultStreamFormat): m_StreamFormat(Format) {}
-
-	// Common
-	StreamFormat m_StreamFormat;
+	virtual StreamFormat GetStreamFormat()const=0;
+	virtual VOID SetStreamFormat(StreamFormat Format)=0;
 };
 
 
 //==============
-// IInputStream
+// Input-Stream
 //==============
 
-class IInputStream: public virtual IStream
+class InputStream: public Stream
 {
 public:
 	// Common
@@ -89,10 +62,10 @@ public:
 
 
 //===============
-// IOutputStream
+// Output-Stream
 //===============
 
-class IOutputStream: public virtual IStream
+class OutputStream: public Stream
 {
 public:
 	// Common
@@ -105,25 +78,19 @@ public:
 // Random-Access-Stream
 //======================
 
-class RandomAccessStream: public Stream, public IInputStream, public IOutputStream
-{
-protected:
-	// Con-/Destructors
-	RandomAccessStream(StreamFormat Format=DefaultStreamFormat): Stream(Format) {}
-
-};
-
-
-//===========
-// ISeekable
-//===========
-
-class ISeekable: public IInputStream, public IOutputStream
+class RandomAccessStream: public Object, public InputStream, public OutputStream
 {
 public:
 	// Common
-	virtual FILE_SIZE GetSize()=0;
-	virtual BOOL Seek(FILE_SIZE Position)=0;
+	StreamFormat GetStreamFormat()const override { return m_StreamFormat; }
+	VOID SetStreamFormat(StreamFormat Format)override { m_StreamFormat=Format; }
+
+protected:
+	// Con-/Destructors
+	RandomAccessStream(StreamFormat Format=StreamFormat::UTF8): m_StreamFormat(Format) {}
+
+	// Common
+	StreamFormat m_StreamFormat;
 };
 
 
@@ -131,12 +98,16 @@ public:
 // Seekable
 //==========
 
-class Seekable: public Stream, public ISeekable
+class Seekable: public RandomAccessStream
 {
+public:
+	// Common
+	virtual SIZE_T GetSize()=0;
+	virtual BOOL Seek(SIZE_T Position)=0;
+
 protected:
 	// Con-/Destructors
-	Seekable(StreamFormat Format=DefaultStreamFormat): Stream(Format) {}
-
+	Seekable(StreamFormat Format=StreamFormat::UTF8): RandomAccessStream(Format) {}
 };
 
 }}

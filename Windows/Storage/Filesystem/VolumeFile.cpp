@@ -100,12 +100,12 @@ UINT VolumeFile::GetBlockSize()
 return BLOCK_SIZE;
 }
 
-FILE_SIZE VolumeFile::GetSize()
+UINT64 VolumeFile::GetSize()
 {
 return 0;
 }
 
-SIZE_T VolumeFile::Read(FILE_SIZE offset, VOID* buf, SIZE_T size)
+SIZE_T VolumeFile::Read(UINT64 offset, VOID* buf, SIZE_T size)
 {
 if(!hFile)
 	return 0;
@@ -117,7 +117,7 @@ if(!ReadFile(hFile, buf, (DWORD)size, &read, &cOverlapped))
 return read;
 }
 
-BOOL VolumeFile::SetSize(FILE_SIZE size)
+BOOL VolumeFile::SetSize(UINT64 size)
 {
 if(!hFile)
 	return false;
@@ -129,7 +129,7 @@ if(status==INVALID_SET_FILE_POINTER)
 return SetEndOfFile(hFile);
 }
 
-SIZE_T VolumeFile::Write(FILE_SIZE offset, VOID const* bufv, SIZE_T size)
+SIZE_T VolumeFile::Write(UINT64 offset, VOID const* bufv, SIZE_T size)
 {
 if(!hFile)
 	return 0;
@@ -141,11 +141,11 @@ while(pos<size)
 	BYTE const* src=buf;
 	SIZE_T copy=size-pos;
 	SIZE_T write=copy;
-	FILE_SIZE end=offset+copy;
-	FILE_SIZE block_end=TypeHelper::AlignUp(end, BLOCK_SIZE);
+	SIZE_T end=offset+copy;
+	SIZE_T block_end=TypeHelper::AlignUp(end, BLOCK_SIZE);
 	if(end<block_end)
 		{
-		FILE_SIZE block_start=block_end-BLOCK_SIZE;
+		SIZE_T block_start=block_end-BLOCK_SIZE;
 		if(offset==block_start)
 			{
 			MemoryHelper::Fill(tmp, BLOCK_SIZE, 0xFF);

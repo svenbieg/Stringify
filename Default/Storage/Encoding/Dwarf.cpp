@@ -160,7 +160,7 @@ do
 	}
 while(byte&0x80);
 if(byte&0x40)
-	value|=(UINT64_MAX)<<shift;
+	value|=~0ULL<<shift;
 return (INT64)value;
 }
 
@@ -179,7 +179,7 @@ while(byte&0x80);
 return value;
 }
 
-UINT Dwarf::WriteSigned(IOutputStream* dwarf, INT64 ivalue)
+UINT Dwarf::WriteSigned(OutputStream* dwarf, INT64 ivalue)
 {
 BOOL neg=false;
 if(ivalue<0)

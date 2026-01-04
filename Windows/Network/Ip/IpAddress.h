@@ -46,24 +46,21 @@ public:
 	static Handle<IpAddress> Create(BYTE A0, BYTE A1, BYTE A2, BYTE A3);
 	static Handle<IpAddress> Create(Handle<String> Name, IP_ADDR Value=0);
 	static Handle<IpAddress> Create(Handle<String> Name, BYTE A0, BYTE A1, BYTE A2, BYTE A3);
+	static IP_ADDR From(BYTE A0, BYTE A1, BYTE A2, BYTE A3);
 
 	// Access
-	IP_ADDR Get();
+	inline IP_ADDR Get()const { return m_Value; }
 	static inline IP_ADDR Get(IpAddress* Value) { return Value? Value->Get(): 0; }
-	inline Handle<String> GetName()const override { return m_Name; }
-	Event<Variable, IP_ADDR&> Reading;
+	Handle<String> GetName()const override;
 	Handle<String> ToString(LanguageCode Language=LanguageCode::None)override;
 	static Handle<String> ToString(IP_ADDR Address);
-	SIZE_T WriteToStream(IOutputStream* Stream)override;
+	SIZE_T WriteToStream(OutputStream* Stream)override;
 
 	// Modification
 	BOOL FromString(Handle<String> Address, BOOL Notify=true)override;
 	static BOOL FromString(Handle<String> Address, IP_ADDR* Ip);
-	SIZE_T ReadFromStream(IInputStream* Stream, BOOL Notify=true)override;
+	SIZE_T ReadFromStream(InputStream* Stream, BOOL Notify=true)override;
 	BOOL Set(IP_ADDR Value, BOOL Notify=true);
-
-	// Common
-	static IP_ADDR From(BYTE A0, BYTE A1, BYTE A2, BYTE A3);
 
 private:
 	// Con-/Destrucotrs
@@ -144,35 +141,3 @@ private:
 	// Common
 	IpAddress* m_Object;
 };
-
-
-//==================
-// Con-/Destructors
-//==================
-
-namespace Network {
-	namespace Ip {
-
-inline Handle<IpAddress> IpAddress::Create(IP_ADDR Address)
-{
-return new IpAddress(nullptr, Address);
-}
-
-inline Handle<IpAddress> IpAddress::Create(BYTE A0, BYTE A1, BYTE A2, BYTE A3)
-{
-auto ip=IpAddress::From(A0, A1, A2, A3);
-return new IpAddress(nullptr, ip);
-}
-
-inline Handle<IpAddress> IpAddress::Create(Handle<String> Name, IP_ADDR Address)
-{
-return new IpAddress(Name, Address);
-}
-
-inline Handle<IpAddress> IpAddress::Create(Handle<String> Name, BYTE A0, BYTE A1, BYTE A2, BYTE A3)
-{
-auto ip=IpAddress::From(A0, A1, A2, A3);
-return new IpAddress(Name, ip);
-}
-
-}}

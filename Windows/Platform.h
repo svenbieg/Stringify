@@ -14,8 +14,12 @@
 
 #include <Windows.h>
 
+#undef BYTE_MAX
+#undef DWORD_MAX
 #undef INT_MAX
 #undef INT_MIN
+#undef SHORT_MAX
+#undef SHORT_MIN
 #undef SIZE_MAX
 #undef UINT_MAX
 #undef UINT64_MAX
@@ -45,12 +49,11 @@
 //======================
 
 #define __COPY_MAX 2
-#define __FILE_SIZE_T unsigned long long int
 #define __LONG long
 #define __LONG_LONG long long
 
 #ifdef _X86_
-#define __SIZE_T unsigned long
+#define __ADDR_T unsigned long
 #else
-#define __SIZE_T unsigned long long
+#define __ADDR_T unsigned long long
 #endif

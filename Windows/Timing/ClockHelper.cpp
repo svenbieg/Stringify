@@ -25,7 +25,7 @@ namespace Devices {
 // Common
 //========
 
-BOOL ClockGetTime(TIMEPOINT& tp, UINT delta)
+BOOL ClockGetTime(TIME_POINT& tp, UINT delta)
 {
 time_t tnow;
 time(&tnow);

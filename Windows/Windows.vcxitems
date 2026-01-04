@@ -31,6 +31,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)ErrorHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ExceptionHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Network\GatewayHelper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Network\Ip\IpAddress.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Network\Tcp\TcpConnection.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Network\Tcp\TcpSocket.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Network\Tls\TlsCertificate.h" />
@@ -62,6 +63,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)ExceptionHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)MemoryHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Network\GatewayHelper.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Network\Ip\IpAddress.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Network\Tcp\TcpConnection.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Network\Tcp\TcpSocket.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Network\Tls\TlsConnection.cpp" />

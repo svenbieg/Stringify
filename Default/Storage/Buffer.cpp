@@ -9,7 +9,6 @@
 // Using
 //=======
 
-#include <new>
 #include "MemoryHelper.h"
 
 
@@ -18,20 +17,6 @@
 //===========
 
 namespace Storage {
-
-
-//==================
-// Con-/Destructors
-//==================
-
-Handle<Buffer> Buffer::Create(SIZE_T size)
-{
-UINT buf_size=sizeof(Buffer)+size;
-auto buf=(Buffer*)MemoryHelper::Allocate(buf_size);
-auto buf_ptr=(BYTE*)((SIZE_T)buf+sizeof(Buffer));
-new (buf) Buffer(buf_ptr, size);
-return buf;
-}
 
 
 //==============
@@ -62,6 +47,10 @@ return copy;
 // Output-Stream
 //===============
 
+VOID Buffer::Flush()
+{
+}
+
 SIZE_T Buffer::Write(VOID const* buf, SIZE_T size)
 {
 if(m_Size==0)
@@ -78,7 +67,12 @@ return copy;
 // Seekable
 //==========
 
-BOOL Buffer::Seek(FILE_SIZE pos)
+SIZE_T Buffer::GetSize()
+{
+return m_Size;
+}
+
+BOOL Buffer::Seek(SIZE_T pos)
 {
 if(m_Size&&pos>m_Size-1)
 	return false;
@@ -109,8 +103,8 @@ return copy;
 // Con-/Destructors Private
 //==========================
 
-Buffer::Buffer(BYTE* buf_ptr, SIZE_T size):
-m_Buffer(buf_ptr),
+Buffer::Buffer(VOID* buf_ptr, SIZE_T size):
+m_Buffer((BYTE*)buf_ptr),
 m_Position(0),
 m_Size(size)
 {}

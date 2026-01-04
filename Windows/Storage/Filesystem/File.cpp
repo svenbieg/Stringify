@@ -180,7 +180,7 @@ return pos;
 // Seekable
 //==========
 
-FILE_SIZE File::GetSize()
+SIZE_T File::GetSize()
 {
 WriteLock lock(m_Mutex);
 if(!m_File)
@@ -188,13 +188,17 @@ if(!m_File)
 return GetFileSize(m_File);
 }
 
-BOOL File::Seek(FILE_SIZE pos)
+BOOL File::Seek(SIZE_T pos)
 {
 WriteLock lock(m_Mutex);
 if(!m_File)
 	return false;
 LONG lo=(LONG)pos;
+#ifdef _WIN64
 LONG hi=(LONG)(pos>>32);
+#else
+LONG hi=0;
+#endif
 if(SetFilePointer(m_File, lo, &hi, FILE_BEGIN)==INVALID_SET_FILE_POINTER)
 	return false;
 m_Position=pos;
@@ -217,7 +221,7 @@ Handle<String> File::GetPath()
 return m_Path;
 }
 
-BOOL File::SetSize(FILE_SIZE size)
+BOOL File::SetSize(SIZE_T size)
 {
 WriteLock lock(m_Mutex);
 if(!m_File)

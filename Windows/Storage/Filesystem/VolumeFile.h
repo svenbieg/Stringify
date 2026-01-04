@@ -42,10 +42,10 @@ public:
 
 	// Volume
 	UINT GetBlockSize()override;
-	FILE_SIZE GetSize()override;
-	SIZE_T Read(FILE_SIZE Offset, VOID* Buffer, SIZE_T Size)override;
-	BOOL SetSize(FILE_SIZE Size)override;
-	SIZE_T Write(FILE_SIZE Offset, VOID const* Buffer, SIZE_T Size)override;
+	UINT64 GetSize()override;
+	SIZE_T Read(UINT64 Offset, VOID* Buffer, SIZE_T Size)override;
+	BOOL SetSize(UINT64 Size)override;
+	SIZE_T Write(UINT64 Offset, VOID const* Buffer, SIZE_T Size)override;
 
 private:
 	// Flags

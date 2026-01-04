@@ -48,9 +48,9 @@ constexpr UINT SecondsPerMinute=60;
 // Access
 //========
 
-TIMEPOINT TimePoint::Get()
+TIME_POINT TimePoint::Get()
 {
-TIMEPOINT tp=m_Value;
+TIME_POINT tp=m_Value;
 Reading(this, tp);
 return tp;
 }
@@ -67,7 +67,7 @@ for(UINT u=0; u<7; u++)
 return 0;
 }
 
-UINT TimePoint::GetDayOfYear(TIMEPOINT const& tp)
+UINT TimePoint::GetDayOfYear(TIME_POINT const& tp)
 {
 if(tp.Year==0)
 	return 0;
@@ -88,7 +88,7 @@ for(UINT u=0; u<12; u++)
 return 0;
 }
 
-UINT64 TimePoint::ToSeconds(TIMEPOINT const& tp)
+UINT64 TimePoint::ToSeconds(TIME_POINT const& tp)
 {
 if(tp.Year==0)
 	return 0;
@@ -119,14 +119,14 @@ ToString(m_Value, str, 64, fmt, lng);
 return str;
 }
 
-Handle<String> TimePoint::ToString(TIMEPOINT const& tp, TimeFormat fmt, LanguageCode lng)
+Handle<String> TimePoint::ToString(TIME_POINT const& tp, TimeFormat fmt, LanguageCode lng)
 {
 CHAR str[64];
 ToString(tp, str, 64, fmt, lng);
 return str;
 }
 
-UINT TimePoint::ToString(TIMEPOINT const& tp, LPSTR str, UINT size, TimeFormat fmt, LanguageCode lng)
+UINT TimePoint::ToString(TIME_POINT const& tp, LPSTR str, UINT size, TimeFormat fmt, LanguageCode lng)
 {
 if(!str||!size)
 	return 0;
@@ -152,15 +152,15 @@ switch(fmt)
 return 0;
 }
 
-SIZE_T TimePoint::WriteToStream(IOutputStream* stream)
+SIZE_T TimePoint::WriteToStream(OutputStream* stream)
 {
 if(!stream)
-	return sizeof(TIMEPOINT);
-TIMEPOINT tp(m_Value);
+	return sizeof(TIME_POINT);
+TIME_POINT tp(m_Value);
 Reading(this, tp);
 if(tp.Year==0)
-	MemoryHelper::Fill(&tp, sizeof(TIMEPOINT), 0);
-return stream->Write(&tp, sizeof(TIMEPOINT));
+	MemoryHelper::Fill(&tp, sizeof(TIME_POINT), 0);
+return stream->Write(&tp, sizeof(TIME_POINT));
 }
 
 
@@ -170,11 +170,11 @@ return stream->Write(&tp, sizeof(TIMEPOINT));
 
 VOID TimePoint::Clear(BOOL notify)
 {
-TIMEPOINT tp={ 0 };
+TIME_POINT tp={ 0 };
 Set(tp, notify);
 }
 
-VOID TimePoint::FromSeconds(TIMEPOINT* tp, UINT64 seconds)
+VOID TimePoint::FromSeconds(TIME_POINT* tp, UINT64 seconds)
 {
 constexpr UINT sec_per_year4=126'230'400;
 UINT year4=(UINT)(seconds/sec_per_year4);
@@ -222,7 +222,7 @@ tp->Second=sec;
 tp->Year=year;
 }
 
-BOOL TimePoint::FromTimeStamp(TIMEPOINT* tp, LPCSTR str)
+BOOL TimePoint::FromTimeStamp(TIME_POINT* tp, LPCSTR str)
 {
 CHAR day_str[4];
 CHAR mon_str[4];
@@ -250,18 +250,18 @@ tp->Year=(WORD)year;
 return true;
 }
 
-SIZE_T TimePoint::ReadFromStream(IInputStream* stream, BOOL notify)
+SIZE_T TimePoint::ReadFromStream(InputStream* stream, BOOL notify)
 {
 if(!stream)
-	return sizeof(TIMEPOINT);
-TIMEPOINT value;
-SIZE_T size=stream->Read(&value, sizeof(TIMEPOINT));
-if(size==sizeof(TIMEPOINT))
+	return sizeof(TIME_POINT);
+TIME_POINT value;
+SIZE_T size=stream->Read(&value, sizeof(TIME_POINT));
+if(size==sizeof(TIME_POINT))
 	Set(value, notify);
 return size;
 }
 
-BOOL TimePoint::Set(TIMEPOINT const& value, BOOL notify)
+BOOL TimePoint::Set(TIME_POINT const& value, BOOL notify)
 {
 if(m_Value==value)
 	return false;
@@ -276,7 +276,7 @@ return true;
 // Con-/Destructors Private
 //==========================
 
-TimePoint::TimePoint(Handle<String> name, TIMEPOINT const& value):
+TimePoint::TimePoint(Handle<String> name, TIME_POINT const& value):
 m_Name(name),
 m_Value(value)
 {
@@ -288,7 +288,7 @@ UpdateClock();
 // Common Private
 //================
 
-UINT64 TimePoint::GetTickCount(TIMEPOINT const& tp)
+UINT64 TimePoint::GetTickCount(TIME_POINT const& tp)
 {
 if(tp.Year!=0)
 	return 0;
@@ -305,7 +305,7 @@ clock->Second.Remove(this);
 Changed(this);
 }
 
-UINT TimePoint::ToStringDateTime(TIMEPOINT const& tp, LPSTR str, UINT size, LanguageCode lng)
+UINT TimePoint::ToStringDateTime(TIME_POINT const& tp, LPSTR str, UINT size, LanguageCode lng)
 {
 if(!str||!size)
 	return 0;
@@ -327,7 +327,7 @@ switch(lng)
 return 0;
 }
 
-UINT TimePoint::ToStringFull(TIMEPOINT const& tp, LPSTR str, UINT size, LanguageCode lng)
+UINT TimePoint::ToStringFull(TIME_POINT const& tp, LPSTR str, UINT size, LanguageCode lng)
 {
 if(!str||!size)
 	return 0;
@@ -375,7 +375,7 @@ switch(lng)
 return 0;
 }
 
-UINT TimePoint::ToStringTime(TIMEPOINT const& tp, LPSTR str, UINT size, LanguageCode lng)
+UINT TimePoint::ToStringTime(TIME_POINT const& tp, LPSTR str, UINT size, LanguageCode lng)
 {
 UINT hour=tp.Hour;
 UINT min=tp.Minute;

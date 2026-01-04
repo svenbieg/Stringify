@@ -25,7 +25,7 @@ namespace Storage {
 // Con-/Destructors
 //==================
 
-StreamWriter::StreamWriter(IOutputStream* stream):
+StreamWriter::StreamWriter(OutputStream* stream):
 m_Stream(nullptr),
 m_WriteAnsi(nullptr),
 m_WriteUnicode(nullptr)
@@ -179,6 +179,14 @@ while(str[pos])
 				written+=DoPrint(pw, flags, width);
 				continue;
 				}
+			Handle<String>* ph=nullptr;
+			if(args.GetAt(arg, ph))
+				{
+				auto pt=(*ph)? (*ph)->Begin(): nullptr;
+				arg++;
+				written+=DoPrint(pt, flags, width);
+				continue;
+				}
 			return written;
 			}
 		default:
@@ -254,7 +262,7 @@ StringHelper::PrintUInt(buf, 64, value, flags, width);
 return DoPrint(m_WriteAnsi, 0, buf);
 }
 
-VOID StreamWriter::SetStream(IOutputStream* stream)
+VOID StreamWriter::SetStream(OutputStream* stream)
 {
 if(!stream)
 	throw InvalidArgumentException();

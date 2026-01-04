@@ -48,13 +48,13 @@ public:
 	SIZE_T Write(VOID const* Buffer, SIZE_T Size, BOOL* Cancel);
 
 	// Seekable
-	FILE_SIZE GetSize()override;
-	BOOL Seek(FILE_SIZE Position)override;
+	SIZE_T GetSize()override;
+	BOOL Seek(SIZE_T Position)override;
 
 	// Storage.File
 	Handle<String> GetName()override;
 	Handle<String> GetPath()override;
-	BOOL SetSize(FILE_SIZE Size)override;
+	BOOL SetSize(SIZE_T Size)override;
 
 private:
 	// Con-/Destructors
