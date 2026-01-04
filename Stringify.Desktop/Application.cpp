@@ -168,11 +168,9 @@ dst[4]=0;
 
 VOID Application::Stringify(Handle<String> name, InputStream* src)
 {
+auto result_box=m_Window->ResultBox;
 auto str=String::Create("constexpr char %s[]=", name);
-DispatchedQueue::Append(this, [this, str]()
-	{
-	m_Window->ResultBox->AppendLine(str);
-	});
+result_box->AppendLine(str);
 CHAR buf[LINE_LEN+8];
 auto dst=StaticBuffer::Create(buf, LINE_LEN+8);
 dst->SetStreamFormat(StreamFormat::Ansi);
@@ -187,10 +185,7 @@ while(1)
 		writer.Print("\"");
 		writer.PrintChar('\0');
 		auto str=String::Create(buf);
-		DispatchedQueue::Append(this, [this, str]()
-			{
-			m_Window->ResultBox->AppendLine(str);
-			});
+		result_box->AppendLine(str);
 		dst->Reset();
 		line_len=writer.Print("\"");
 		}
@@ -233,11 +228,8 @@ while(1)
 writer.Print("\";");
 writer.PrintChar('\0');
 str=String::Create(buf);
-DispatchedQueue::Append(this, [this, str]()
-	{
-	m_Window->ResultBox->AppendLine(str);
-	m_Window->ResultBox->AppendLine("");
-	});
+result_box->AppendLine(str);
+result_box->AppendLine("");
 }
 
 }
