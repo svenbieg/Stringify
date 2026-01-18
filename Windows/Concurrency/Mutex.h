@@ -48,15 +48,16 @@ public:
 	friend ScopedLock;
 
 	// Con-/Destructors
-	Mutex() {}
+	Mutex()=default;
+	Mutex(Mutex const&)=delete;
 
 	// Common
-	inline VOID Lock() { lock(); }
-	inline VOID Lock(AccessMode Access) { lock(); }
-	inline BOOL TryLock() { return try_lock(); }
-	inline BOOL TryLock(AccessMode Access) { return try_lock(); }
-	inline VOID Unlock() { unlock(); }
-	inline VOID Unlock(AccessMode Access) { unlock(); }
+	virtual inline VOID Lock() { lock(); }
+	virtual inline VOID Lock(AccessMode Access) { lock(); }
+	virtual inline BOOL TryLock() { return try_lock(); }
+	virtual inline BOOL TryLock(AccessMode Access) { return try_lock(); }
+	virtual inline VOID Unlock() { unlock(); }
+	virtual inline VOID Unlock(AccessMode Access) { unlock(); }
 };
 
 }
