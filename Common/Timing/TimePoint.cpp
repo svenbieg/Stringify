@@ -31,7 +31,7 @@ namespace Timing {
 // Globals
 //=========
 
-constexpr WORD DaysInMonth[4][12]=
+const WORD DaysInMonth[4][12]=
 	{
 	{ 0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335 },
 	{ 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334 },
@@ -39,9 +39,9 @@ constexpr WORD DaysInMonth[4][12]=
 	{ 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334 }
 	};
 
-constexpr UINT SecondsPerDay=86'400;
-constexpr UINT SecondsPerHour=3'600;
-constexpr UINT SecondsPerMinute=60;
+const UINT SecondsPerDay=86'400;
+const UINT SecondsPerHour=3'600;
+const UINT SecondsPerMinute=60;
 
 
 //========
@@ -95,7 +95,7 @@ if(tp.Year==0)
 UINT year4=tp.Year%4;
 UINT year=tp.Year-year4;
 UINT days=year*365+year/4;
-constexpr WORD days_per_year[]={ 0, 366, 365, 365 };
+const WORD days_per_year[]={ 0, 366, 365, 365 };
 days+=days_per_year[year4];
 days+=DaysInMonth[year4][tp.Month-1];
 UINT64 sec=days*24*60*60;
@@ -176,11 +176,11 @@ Set(tp, notify);
 
 VOID TimePoint::FromSeconds(TIME_POINT* tp, UINT64 seconds)
 {
-constexpr UINT sec_per_year4=126'230'400;
+const UINT sec_per_year4=126'230'400;
 UINT year4=(UINT)(seconds/sec_per_year4);
 seconds-=year4*sec_per_year4;
 UINT year=year4*4;
-constexpr UINT sec_per_year[4]={ 31'622'400, 31'536'000, 31'536'000, 31'536'000 };
+const UINT sec_per_year[4]={ 31'622'400, 31'536'000, 31'536'000, 31'536'000 };
 for(year4=0; seconds>=sec_per_year[year4]; year4++)
 	seconds-=sec_per_year[year4];
 year+=year4;
@@ -190,7 +190,7 @@ BYTE hour=(BYTE)(seconds/SecondsPerHour);
 seconds-=hour*SecondsPerHour;
 BYTE min=(BYTE)(seconds/SecondsPerMinute);
 BYTE sec=(BYTE)(seconds%SecondsPerMinute);
-constexpr BYTE days_per_month[4][12]=
+const BYTE days_per_month[4][12]=
 	{
 	{ 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 },
 	{ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 },
@@ -201,7 +201,7 @@ UINT day=day_of_year;
 UINT month=0;
 for(; day>=days_per_month[year4][month]; month++)
 	day-=days_per_month[year4][month];
-constexpr BYTE days_of_week[28]=
+const BYTE days_of_week[28]=
 	{
 	0, 2, 3, 4,
 	5, 7, 8, 9,

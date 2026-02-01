@@ -14,23 +14,10 @@
 
 #include <Windows.h>
 
-#undef BYTE_MAX
-#undef CHAR_MAX
-#undef DWORD_MAX
-#undef INT_MAX
-#undef INT_MIN
-#undef SHORT_MAX
-#undef SHORT_MIN
-#undef SIZE_MAX
-#undef UINT_MAX
-#undef UINT64_MAX
-#undef VOID
-#undef WCHAR_MAX
-#undef WORD_MAX
-
 #undef min
 #undef max
 
+#undef VOID
 #undef TEXT
 
 #undef DrawText
