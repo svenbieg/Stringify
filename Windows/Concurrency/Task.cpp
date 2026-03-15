@@ -9,6 +9,9 @@
 // Using
 //=======
 
+#include "Concurrency/DispatchedQueue.h"
+#include "Concurrency/WriteLock.h"
+
 using namespace Collections;
 
 

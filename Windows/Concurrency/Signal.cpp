@@ -10,6 +10,7 @@
 //=======
 
 #include "Concurrency/Task.h"
+#include "Concurrency/WriteLock.h"
 
 
 //===========

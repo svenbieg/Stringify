@@ -11,10 +11,8 @@
 
 #include <utility>
 #include "Collections/shared_map.hpp"
-#include "Concurrency/DispatchedQueue.h"
-#include "Concurrency/ReadLock.h"
+#include "Concurrency/DispatchedHandler.h"
 #include "Concurrency/Signal.h"
-#include "Concurrency/WriteLock.h"
 #include "StringClass.h"
 
 

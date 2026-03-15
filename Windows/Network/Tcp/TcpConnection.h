@@ -11,7 +11,7 @@
 
 #include <WinSock2.h>
 #include "Network/Ip/IpAddress.h"
-#include "Storage/Streams/Stream.h"
+#include "Storage/Streams/RandomAccessStream.h"
 
 
 //===========
