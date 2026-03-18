@@ -33,7 +33,7 @@ class TcpSocket;
 // TCP-Connection
 //================
 
-class TcpConnection: public Storage::Streams::RandomAccessStream
+class TcpConnection: public Object, public Storage::Streams::RandomAccessStream
 {
 public:
 	// Friends

@@ -44,7 +44,7 @@ Baud256000=CBR_256000
 // Serial-Port
 //=============
 
-class SerialPort: public Storage::Streams::RandomAccessStream
+class SerialPort: public Object, public Storage::Streams::RandomAccessStream
 {
 public:
 	// Con-/Destructors

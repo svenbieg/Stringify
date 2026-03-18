@@ -26,7 +26,7 @@ namespace Storage {
 // Named-Pipe
 //============
 
-class NamedPipe: public Streams::RandomAccessStream
+class NamedPipe: public Object, public Streams::RandomAccessStream
 {
 public:
 	// Using

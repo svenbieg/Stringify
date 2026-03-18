@@ -34,7 +34,7 @@ class TlsSocket;
 // TLS-Connection
 //================
 
-class TlsConnection: public Storage::Streams::RandomAccessStream
+class TlsConnection: public Object, public Storage::Streams::RandomAccessStream
 {
 public:
 	// Friends
