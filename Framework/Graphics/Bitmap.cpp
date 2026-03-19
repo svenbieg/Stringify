@@ -186,7 +186,7 @@ Changed(this);
 // Common Protected
 //==================
 
-UINT Bitmap::Release()
+UINT Bitmap::Release()noexcept
 {
 if(m_ReferenceCount==1)
 	Destroyed(this);

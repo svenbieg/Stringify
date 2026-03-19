@@ -57,7 +57,7 @@ public:
 
 protected:
 	// Common
-	UINT Release()override;
+	UINT Release()noexcept override;
 	WORD m_BitsPerPixel;
 	BYTE* m_Buffer;
 	UINT m_Height;

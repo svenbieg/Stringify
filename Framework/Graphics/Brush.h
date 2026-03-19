@@ -38,7 +38,7 @@ public:
 
 protected:
 	// Common
-	UINT Release()override;
+	UINT Release()noexcept override;
 
 private:
 	// Con-/Destructors

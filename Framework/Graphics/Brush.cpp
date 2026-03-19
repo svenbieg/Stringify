@@ -29,7 +29,7 @@ VOID Brush::SetColor(COLOR c)
 // Common Protected
 //==================
 
-UINT Brush::Release()
+UINT Brush::Release()noexcept
 	{
 	if(m_ReferenceCount==1)
 		Destroyed(this);
