@@ -32,9 +32,6 @@
       <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)ExceptionHelper.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Storage\Filesystem\VolumeFile.cpp">
-      <Filter>Storage\Filesystem</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Devices\Serial\SerialPort.cpp">
       <Filter>Devices\Serial</Filter>
     </ClCompile>
@@ -110,9 +107,6 @@
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)ExceptionHelper.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Filesystem\VolumeFile.h">
-      <Filter>Storage\Filesystem</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Devices\Serial\SerialPort.h">
       <Filter>Devices\Serial</Filter>
     </ClInclude>

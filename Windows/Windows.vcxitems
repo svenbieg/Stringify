@@ -47,7 +47,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Filesystem\Directory.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Filesystem\File.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Filesystem\FileHelper.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Filesystem\VolumeFile.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Storage\NamedPipe.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Registry.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)System\ProcessClient.h" />
@@ -77,7 +76,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Storage\Filesystem\Directory.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Storage\Filesystem\File.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Storage\Filesystem\FileHelper.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Storage\Filesystem\VolumeFile.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Storage\NamedPipe.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Storage\Registry.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)System\ProcessClient.cpp" />
