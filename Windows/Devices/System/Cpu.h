@@ -10,6 +10,7 @@
 //=======
 
 #include "TypeHelper.h"
+#include <bit>
 
 
 //===========
@@ -28,6 +29,10 @@ class Cpu
 {
 public:
 	// Common
+	static inline UINT CountTrailingZeros(UINT Value)
+		{
+		return std::countr_zero(Value);
+		}
 	static inline UINT InterlockedDecrement(volatile UINT* Value)
 		{
 		return _InterlockedDecrement(Value);
