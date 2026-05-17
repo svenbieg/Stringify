@@ -99,7 +99,7 @@ auto d2d_brush=GetBrush(brush);
 m_Target->DrawRectangle(d2d_rc, d2d_brush, width);
 }
 
-VOID RenderTarget::DrawText(RECT const& rc, FLOAT scale, Font* font, Brush* brush, LPCTSTR text, UINT len)
+VOID RenderTarget::DrawText(RECT const& rc, FLOAT scale, Font* font, Brush* brush, LPCWSTR text, UINT len)
 {
 if(len==0)
 	len=StringHelper::Length(text);
@@ -111,15 +111,7 @@ m_Target->SetTransform(mx_scale*mx_transform*mx_translate);
 auto d2d_format=font->GetFormat();
 auto d2d_rc=D2D1::RectF(0, 0, rc.GetWidth(), rc.GetHeight());
 auto d2d_brush=GetBrush(brush);
-#ifdef _UNICODE
-LPCWSTR str=text;
-#else
-if(len>255)
-	throw BufferOverrunException();
-WCHAR str[256];
-StringHelper::Copy(str, 256, text);
-#endif
-m_Target->DrawTextW(str, len, d2d_format, d2d_rc, d2d_brush);
+m_Target->DrawTextW(text, len, d2d_format, d2d_rc, d2d_brush);
 m_Target->SetTransform(mx_transform);
 }
 
@@ -153,20 +145,14 @@ auto d2d_brush=GetBrush(brush);
 m_Target->FillRectangle(d2d_rc, d2d_brush);
 }
 
-SIZE RenderTarget::MeasureText(Font* font, FLOAT scale, LPCTSTR text, UINT len)
+SIZE RenderTarget::MeasureText(Font* font, FLOAT scale, LPCWSTR text, UINT len)
 {
 if(!len)
 	len=StringHelper::Length(text);
-#ifdef _UNICODE
-LPCWSTR str=text;
-#else
-WCHAR str[128];
-StringHelper::Copy(str, 128, text, len);
-#endif
 if(!m_DWriteFactory)
 	m_DWriteFactory=DWriteFactory::Get();
 auto d2d_format=font->GetFormat();
-auto layout=m_DWriteFactory->CreateTextLayout(str, len, d2d_format);
+auto layout=m_DWriteFactory->CreateTextLayout(text, len, d2d_format);
 DWRITE_TEXT_METRICS metrics={ 0 };
 layout->GetMetrics(&metrics);
 return SIZE (metrics.widthIncludingTrailingWhitespace*scale+1, metrics.height*scale+1);

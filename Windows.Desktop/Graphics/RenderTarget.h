@@ -48,12 +48,12 @@ public:
 	VOID DrawLine(POINT const& From, POINT const& To, Brush* Brush, UINT Width=1);
 	VOID DrawPolygon(POINT const* Points, UINT Count, Brush* Brush, UINT Width=1);
 	VOID DrawRect(RECT const& Rect, Brush* Brush, UINT Width=1);
-	VOID DrawText(RECT const& Rect, FLOAT Scale, Font* Font, Brush* Brush, LPCTSTR Text, UINT Length=0);
+	VOID DrawText(RECT const& Rect, FLOAT Scale, Font* Font, Brush* Brush, LPCWSTR Text, UINT Length=0);
 	VOID EndDraw();
 	VOID FillPolygon(POINT const* Points, UINT Count, Brush* Brush);
 	VOID FillRect(RECT const& Rect, Brush* Brush);
 	POINT GetOffset() { return m_Offset; }
-	SIZE MeasureText(Font* Font, FLOAT Scale, LPCTSTR Text, UINT Length=0);
+	SIZE MeasureText(Font* Font, FLOAT Scale, LPCWSTR Text, UINT Length=0);
 	VOID Unclip();
 
 private:
