@@ -31,8 +31,8 @@ if(!text)
 	return 0;
 for(UINT pos=0; text[pos]; pos++)
 	{
-	if(CharHelper::Compare(text[pos], '&')==0)
-		return CharHelper::ToCapitalAnsi(text[pos+1]);
+	if(CharHelper::Equal(text[pos], '&'))
+		return CharHelper::ToCapital(text[pos+1]);
 	}
 return 0;
 }

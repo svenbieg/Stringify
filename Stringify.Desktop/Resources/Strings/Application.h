@@ -26,13 +26,6 @@ namespace Resources {
 
 constexpr LPCSTR STR_APP_TITLE="Stringify";
 
-constexpr STRING STR_SETTINGS[]=
-	{
-	{ LNG::DE, L"Einstellungen" },
-	{ LNG::EN, L"Settings" },
-	{ LNG::None, nullptr }
-	};
-
 constexpr STRING STR_SOURCE[]=
 	{
 	{ LNG::DE, L"Quelle" },

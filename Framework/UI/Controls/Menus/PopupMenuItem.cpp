@@ -118,7 +118,7 @@ if(!m_Menu->HasAcceleration())
 if(accelerate)
 	{
 	UINT pos=0;
-	if(StringHelper::FindChar(label, Accelerator, &pos, false))
+	if(StringHelper::FindChar(label, Accelerator, &pos, CompareMode::IgnoreCase))
 		{
 		SIZE size_from(0, 0);
 		if(pos>0)
@@ -295,7 +295,7 @@ Invalidate();
 m_Menu->KillKeyboardAccess();
 auto app=Application::GetCurrent();
 auto current=app->GetCurrentMenu();
-if(current==SubMenu)
+if(SubMenu==current)
 	return;
 auto menu=m_Menu;
 while(current!=menu)

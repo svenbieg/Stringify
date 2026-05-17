@@ -98,22 +98,22 @@ UINT len=StringHelper::Length(str);
 if(!len)
 	return VirtualKey::None;
 if(len==1)
-	return (VirtualKey)CharHelper::ToCapitalAnsi(str[0]);
-if(StringHelper::Compare(str, "alt", 0, false)==0)
+	return (VirtualKey)CharHelper::ToCapital(str[0]);
+if(StringHelper::Compare(str, "alt", 0, CompareMode::IgnoreCase)==0)
 	return VirtualKey::Alt;
-if(StringHelper::Compare(str, "ctrl", 0, false)==0)
+if(StringHelper::Compare(str, "ctrl", 0, CompareMode::IgnoreCase)==0)
 	return VirtualKey::Control;
-if(StringHelper::Compare(str, "del", 0, false)==0)
+if(StringHelper::Compare(str, "del", 0, CompareMode::IgnoreCase)==0)
 	return VirtualKey::Delete;
-if(StringHelper::Compare(str, "entf", 0, false)==0)
+if(StringHelper::Compare(str, "entf", 0, CompareMode::IgnoreCase)==0)
 	return VirtualKey::Delete;
-if(StringHelper::Compare(str, "strg", 0, false)==0)
+if(StringHelper::Compare(str, "strg", 0, CompareMode::IgnoreCase)==0)
 	return VirtualKey::Control;
 CHAR c=0;
 UINT func=0;
 if(StringHelper::Scan(str, "%c%u", &c, &func)==2)
 	{
-	if(CharHelper::Compare(c, 'F', false)!=0)
+	if(!CharHelper::Equal(c, 'F', CompareMode::IgnoreCase))
 		return VirtualKey::None;
 	return (VirtualKey)(111+func);
 	}
