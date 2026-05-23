@@ -44,7 +44,6 @@ private:
 	// Common
 	VOID OpenBinary(Handle<String> Path);
 	VOID OpenIcon(Handle<String> Path);
-	VOID StretchOctal(LPSTR Destination, LPCSTR Source);
 	VOID Stringify(Handle<String> Name, InputStream* Source);
 	Handle<AppWindow> m_Window;
 };

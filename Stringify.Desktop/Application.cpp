@@ -59,7 +59,7 @@ constexpr UINT LINE_LEN=128;
 
 const LPCSTR STR_TABLE[256]=
 	{
-	  "\\0","\\x01","\\x02","\\x03","\\x04","\\x05","\\x06",  "\\a",  "\\b",  "\\t",  "\\n",  "\\v",  "\\f",  "\\r","\\x0E","\\x0F",
+	"\\x00","\\x01","\\x02","\\x03","\\x04","\\x05","\\x06",  "\\a",  "\\b",  "\\t",  "\\n",  "\\v",  "\\f",  "\\r","\\x0E","\\x0F",
 	"\\x10","\\x11","\\x12","\\x13","\\x14","\\x15","\\x16","\\x17","\\x18","\\x19","\\x1A","\\x1B","\\x1C","\\x1D","\\x1E","\\x1F",
 	    " ",    "!", "\\\"",    "#",    "$",    "%",    "&",    "'",    "(",    ")",    "*",    "+",    ",",    "-",    ".",    "/",
 	    "0",    "1",    "2",    "3",    "4",    "5",    "6",    "7",    "8",    "9",    ":",    ";",    "<",    "=",    ">",    "?",
@@ -153,19 +153,6 @@ for(auto it=icon->cbegin(); it.has_current(); it.move_next())
 	}
 }
 
-VOID Application::StretchOctal(LPSTR dst, LPCSTR src)
-{
-UINT len=StringHelper::Length(&src[1]);
-UINT pos=0;
-dst[pos++]='\\';
-UINT stretch=3-len;
-for(UINT u=0; u<stretch; u++)
-	dst[pos++]='0';
-for(UINT u=0; u<len; u++)
-	dst[pos++]=src[u+1];
-dst[4]=0;
-}
-
 VOID Application::Stringify(Handle<String> name, InputStream* src)
 {
 auto result_box=m_Window->ResultBox;
@@ -189,33 +176,6 @@ while(1)
 		line_len=writer.Print("\"");
 		}
 	LPCSTR write=STR_TABLE[byte];
-	if(CharHelper::IsDigit(write[1], 8))
-		{
-		BYTE next_byte=0;
-		read=src->Read(&next_byte, 1);
-		if(read)
-			{
-			CHAR c=(CHAR)next_byte;
-			if(CharHelper::IsDigit(c, 8))
-				{
-				CHAR stretch[5];
-				StretchOctal(stretch, write);
-				SIZE_T written=writer.Print(stretch);
-				if(written!=4)
-					throw DeviceNotReadyException();
-				line_len+=written;
-				}
-			else
-				{
-				SIZE_T written=writer.Print(write);
-				if(!written)
-					throw DeviceNotReadyException();
-				line_len+=written;
-				}
-			byte=next_byte;
-			continue;
-			}
-		}
 	SIZE_T written=writer.Print(write);
 	if(!written)
 		throw DeviceNotReadyException();
