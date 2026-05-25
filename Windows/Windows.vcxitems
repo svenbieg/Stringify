@@ -28,6 +28,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\WriteLock.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Devices\Serial\SerialPort.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Devices\System\Cpu.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Devices\System\Memory.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Devices\Timers\SystemTimer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ErrorHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ExceptionHelper.h" />
@@ -61,7 +62,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Devices\Serial\SerialPort.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Devices\Timers\SystemTimer.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ExceptionHelper.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)MemoryHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Network\GatewayHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Network\Ip\IpAddress.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Network\Tcp\TcpConnection.cpp" />
