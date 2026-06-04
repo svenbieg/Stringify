@@ -55,7 +55,6 @@ private:
 	ToolTip(Interactive* Parent, Handle<Sentence> Text);
 
 	// Common
-	VOID DoClose();
 	VOID OnParentClicked();
 	VOID OnParentPointerEntered();
 	VOID OnParentPointerLeft();

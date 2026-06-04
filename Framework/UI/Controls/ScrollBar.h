@@ -9,7 +9,7 @@
 // Using
 //=======
 
-#include "Devices/Timers/SystemTimer.h"
+#include "Timing/Clock.h"
 #include "UI/Controls/Interactive.h"
 #include "UI/Orientation.h"
 
@@ -55,7 +55,7 @@ class ScrollBar: public Interactive
 {
 public:
 	// Using
-	using SystemTimer=Devices::Timers::SystemTimer;
+	using Clock=Timing::Clock;
 
 	// Friends
 	friend Object;
@@ -85,19 +85,19 @@ private:
 
 	// Common
 	ScrollBarButton GetButton(POINT const& Point);
+	VOID OnClockTick();
 	VOID OnPointerDown(Handle<PointerEventArgs> Args);
 	VOID OnPointerLeft();
 	VOID OnPointerMoved(Handle<PointerEventArgs> Args);
 	VOID OnPointerUp(Handle<PointerEventArgs> Args);
-	VOID OnSystemTimer();
 	VOID StartScrolling(INT Step);
 	VOID StopScrolling();
+	Handle<Clock> m_Clock;
 	ScrollBarButton m_Highlight;
 	Orientation m_Orientation;
 	UINT m_Start;
 	POINT m_StartPoint;
 	INT m_Step;
-	Handle<SystemTimer> m_Timer;
 };
 
 }}

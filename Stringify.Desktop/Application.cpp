@@ -91,27 +91,20 @@ if(!path)
 auto result_box=m_Window->ResultBox;
 result_box->Enabled=false;
 result_box->Clear();
-auto task=Task::Create(this, [this, path]()
+LPCTSTR ext=PathHelper::GetExtension(path->Begin());
+if(!ext)
+	return;
+if(StringHelper::Compare(ext, "ico")==0)
 	{
-	LPCTSTR ext=PathHelper::GetExtension(path->Begin());
-	if(!ext)
-		return;
-	if(StringHelper::Compare(ext, "ico")==0)
-		{
-		OpenIcon(path);
-		}
-	else
-		{
-		OpenBinary(path);
-		}
-	});
-task->Then(this, [this]()
+	OpenIcon(path);
+	}
+else
 	{
-	auto result_box=m_Window->ResultBox;
-	result_box->Enabled=true;
-	result_box->SetFocus();
-	result_box->SelectAll();
-	});
+	OpenBinary(path);
+	}
+result_box->Enabled=true;
+result_box->SetFocus();
+result_box->SelectAll();
 }
 
 

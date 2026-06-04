@@ -35,7 +35,6 @@ if(m_Parent)
 	{
 	m_Parent->PointerEntered.Remove(this);
 	m_Parent->PointerLeft.Remove(this);
-	m_Parent=nullptr;
 	}
 }
 
@@ -46,11 +45,16 @@ if(m_Parent)
 
 VOID ToolTip::Close()
 {
-m_Timer=nullptr;
+if(m_Timer)
+	{
+	m_Timer->Triggered.Remove(this);
+	m_Timer=nullptr;
+	}
 if(m_Panel)
 	{
-	m_Panel->Visible=false;
-	DispatchedQueue::Append(this, &ToolTip::DoClose);
+	auto frame=m_Parent->GetFrame();
+	frame->Children->Remove(m_Panel);
+	m_Panel=nullptr;
 	}
 }
 
@@ -71,16 +75,6 @@ OnTextChanged();
 //================
 // Common Private
 //================
-
-VOID ToolTip::DoClose()
-{
-if(m_Panel)
-	{
-	auto frame=m_Parent->GetFrame();
-	frame->Children->Remove(m_Panel);
-	m_Panel=nullptr;
-	}
-}
 
 VOID ToolTip::OnParentClicked()
 {

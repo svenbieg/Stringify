@@ -67,9 +67,11 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Storage\Registry.cpp">
       <Filter>Storage</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Timing\ClockHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Network\Ip\IpAddress.cpp">
       <Filter>Network\Ip</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Timing\ClockHelper.cpp">
+      <Filter>Timing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -163,7 +165,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Registry.h">
       <Filter>Storage</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Timing\ClockHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Network\Ip\IpAddress.h">
       <Filter>Network\Ip</Filter>
     </ClInclude>
@@ -172,6 +173,9 @@
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Devices\System\Memory.h">
       <Filter>Devices\System</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Timing\ClockHelper.h">
+      <Filter>Timing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -225,6 +229,9 @@
     </Filter>
     <Filter Include="Network\Ip">
       <UniqueIdentifier>{293eed10-ca2f-4018-99e6-9750a16c9181}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Timing">
+      <UniqueIdentifier>{78cae1dd-9417-4b51-a069-aca0b77e3d47}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

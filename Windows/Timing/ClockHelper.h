@@ -26,7 +26,7 @@ namespace Timing {
 class ClockHelper
 {
 public:
-	static BOOL ClockGetTime(Timing::TIME_POINT& TimePoint, UINT Delta=0);
+	static BOOL GetTime(Timing::TIME_POINT* TimePoint);
 };
 
 }

@@ -9,9 +9,6 @@
 // Using
 //=======
 
-#include "Timing/Clock.h"
-
-using namespace Devices::Timers;
 using namespace Graphics;
 
 
@@ -193,6 +190,20 @@ switch(m_Orientation)
 return ScrollBarButton::None;
 }
 
+VOID ScrollBar::OnClockTick()
+{
+INT pos=Position+m_Step;
+pos=TypeHelper::Max(pos, 0);
+pos=TypeHelper::Min(pos, (INT)Range);
+if(Position==pos)
+	{
+	StopScrolling();
+	return;
+	}
+Position=pos;
+Scrolled(this);
+}
+
 VOID ScrollBar::OnPointerDown(Handle<PointerEventArgs> args)
 {
 POINT const& pt=args->Point;
@@ -287,36 +298,22 @@ if(m_StartPoint.Left!=-1)
 	}
 }
 
-VOID ScrollBar::OnSystemTimer()
-{
-INT pos=Position+m_Step;
-pos=TypeHelper::Max(pos, 0);
-pos=TypeHelper::Min(pos, (INT)Range);
-if(Position==pos)
-	{
-	StopScrolling();
-	return;
-	}
-Position=pos;
-Scrolled(this);
-}
-
 VOID ScrollBar::StartScrolling(INT step)
 {
-if(!m_Timer)
+if(!m_Clock)
 	{
-	m_Timer=SystemTimer::Get();
-	m_Timer->Triggered.Add(this, &ScrollBar::OnSystemTimer);
+	m_Clock=Clock::Create();
+	m_Clock->Tick.Add(this, &ScrollBar::OnClockTick);
 	}
 m_Step=step;
 }
 
 VOID ScrollBar::StopScrolling()
 {
-if(m_Timer)
+if(m_Clock)
 	{
-	m_Timer->Triggered.Remove(this);
-	m_Timer=nullptr;
+	m_Clock->Tick.Remove(this);
+	m_Clock=nullptr;
 	}
 m_Step=0;
 }
