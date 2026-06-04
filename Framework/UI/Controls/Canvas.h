@@ -27,8 +27,11 @@ namespace UI {
 class Canvas: public Control
 {
 public:
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
-	static inline Handle<Canvas> Create(Window* Parent) { return new Canvas(Parent); }
+	static inline Handle<Canvas> Create(Window* Parent) { return Object::Create<Canvas>(Parent); }
 
 	// Common
 	SIZE GetMinSize(RenderTarget* Target)override;

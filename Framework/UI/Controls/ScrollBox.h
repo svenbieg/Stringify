@@ -31,8 +31,11 @@ public:
 	// Using
 	using PointerEventArgs=UI::Input::PointerEventArgs;
 
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
-	static inline Handle<ScrollBox> Create(Window* Parent) { return new ScrollBox(Parent); }
+	static inline Handle<ScrollBox> Create(Window* Parent) { return Object::Create<ScrollBox>(Parent); }
 
 	// Common
 	HorizontalAlignment AlignHorizontal;

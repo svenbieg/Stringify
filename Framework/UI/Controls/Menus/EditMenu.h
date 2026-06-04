@@ -28,8 +28,11 @@ namespace UI {
 class EditMenu: public PopupMenu
 {
 public:
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
-	static inline Handle<EditMenu> Create() { return new EditMenu(); }
+	static inline Handle<EditMenu> Create() { return Object::Create<EditMenu>(); }
 
 	// Common
 	Handle<PopupMenuItem> Copy;

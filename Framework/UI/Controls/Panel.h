@@ -27,8 +27,11 @@ namespace UI {
 class Panel: public Control
 {
 public:
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
-	static inline Handle<Panel> Create(Window* Parent) { return new Panel(Parent); }
+	static inline Handle<Panel> Create(Window* Parent) { return Object::Create<Panel>(Parent); }
 
 	// Common
 	Handle<Brush> Background;

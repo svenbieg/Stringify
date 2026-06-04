@@ -32,8 +32,14 @@ public:
 	// Using
 	using Sentence=Culture::Sentence;
 
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
-	static inline Handle<Group> Create(Window* Parent, Handle<Sentence> Title=nullptr) { return new Group(Parent, Title); }
+	static inline Handle<Group> Create(Window* Parent, Handle<Sentence> Title=nullptr)
+		{
+		return Object::Create<Group>(Parent, Title);
+		}
 
 	// Common
 	SIZE GetMinSize(RenderTarget* Target)override;

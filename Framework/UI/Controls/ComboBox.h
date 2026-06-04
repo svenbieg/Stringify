@@ -29,8 +29,11 @@ namespace UI {
 class ComboBox: public Grid
 {
 public:
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
-	static inline Handle<ComboBox> Create(Window* Parent) { return new ComboBox(Parent); }
+	static inline Handle<ComboBox> Create(Window* Parent) { return Object::Create<ComboBox>(Parent); }
 
 private:
 	// Con-/Destructors

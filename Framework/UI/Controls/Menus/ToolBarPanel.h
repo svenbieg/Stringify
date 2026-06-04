@@ -36,8 +36,11 @@ class ToolBar;
 class ToolBarPanel: public StackPanel
 {
 public:
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
-	static inline Handle<ToolBarPanel> Create(ToolBar* Parent) { return new ToolBarPanel(Parent); }
+	static inline Handle<ToolBarPanel> Create(ToolBar* Parent) { return Object::Create<ToolBarPanel>(Parent); }
 
 	// Common
 	Handle<ToolBarItem> Add(Handle<Culture::Sentence> ToolTip=nullptr);

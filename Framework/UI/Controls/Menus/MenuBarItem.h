@@ -40,10 +40,13 @@ public:
 	using KeyEventArgs=UI::Input::KeyEventArgs;
 	using Sentence=Culture::Sentence;
 
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
 	static inline Handle<MenuBarItem> Create(MenuBar* Parent, Handle<Sentence> Label)
 		{
-		return new MenuBarItem(Parent, Label);
+		return Object::Create<MenuBarItem>(Parent, Label);
 		}
 
 	// Common

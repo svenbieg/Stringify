@@ -41,10 +41,13 @@ public:
 	using Bitmap=Graphics::Bitmap;
 	using Sentence=Culture::Sentence;
 
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
 	static inline Handle<ToolBarItem> Create(ToolBarPanel* Parent, Handle<Sentence> ToolTip=nullptr)
 		{
-		return new ToolBarItem(Parent, ToolTip);
+		return Object::Create<ToolBarItem>(Parent, ToolTip);
 		}
 
 	// Common

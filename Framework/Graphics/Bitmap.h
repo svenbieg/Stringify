@@ -29,15 +29,18 @@ namespace Graphics {
 class Bitmap: public Object
 {
 public:
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
 	~Bitmap();
 	static inline Handle<Bitmap> Create(UINT Width, UINT Height, WORD BitsPerPixel)
 		{
-		return new Bitmap(Width, Height, BitsPerPixel);
+		return Object::Create<Bitmap>(Width, Height, BitsPerPixel);
 		}
 	static inline Handle<Bitmap> Create(UINT Width, UINT Height, WORD BitsPerPixel, LPCSTR Resource)
 		{
-		return new Bitmap(Width, Height, BitsPerPixel, Resource);
+		return Object::Create<Bitmap>(Width, Height, BitsPerPixel, Resource);
 		}
 
 	// Common

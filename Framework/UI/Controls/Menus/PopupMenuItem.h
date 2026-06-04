@@ -46,10 +46,13 @@ public:
 	using Sentence=Culture::Sentence;
 	using Timer=Timing::Timer;
 
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
 	static inline Handle<PopupMenuItem> Create(PopupMenu* Parent, Handle<Sentence> Label)
 		{
-		return new PopupMenuItem(Parent, Label);
+		return Object::Create<PopupMenuItem>(Parent, Label);
 		}
 
 	// Common

@@ -27,10 +27,13 @@ namespace UI {
 class Button: public Interactive
 {
 public:
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
 	static inline Handle<Button> Create(Window* Parent, Handle<String> Text=nullptr)
 		{
-		return new Button(Parent, Text);
+		return Object::Create<Button>(Parent, Text);
 		}
 
 	// Common

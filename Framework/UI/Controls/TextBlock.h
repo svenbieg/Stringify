@@ -28,10 +28,13 @@ namespace UI {
 class TextBlock: public Control
 {
 public:
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
 	static inline Handle<TextBlock> Create(Window* Parent, Handle<String> Text=nullptr)
 		{
-		return new TextBlock(Parent, Text);
+		return Object::Create<TextBlock>(Parent, Text);
 		}
 
 	// Common

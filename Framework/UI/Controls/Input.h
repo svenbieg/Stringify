@@ -39,8 +39,11 @@ public:
 	using StringList=Collections::StringList;
 	using Timer=Timing::Timer;
 
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
-	static inline Handle<Input> Create(Window* Parent) { return new Input(Parent); }
+	static inline Handle<Input> Create(Window* Parent) { return Object::Create<Input>(Parent); }
 
 	// Common
 	VOID AppendLine(Handle<String> Line);

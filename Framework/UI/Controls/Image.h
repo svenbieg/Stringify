@@ -32,8 +32,11 @@ public:
 	// Using
 	using Bitmap=Graphics::Bitmap;
 
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
-	static inline Handle<Image> Create(Window* Parent) { return new Image(Parent); }
+	static inline Handle<Image> Create(Window* Parent) { return Object::Create<Image>(Parent); }
 
 	// Common
 	SIZE GetMinSize(RenderTarget* Target)override;

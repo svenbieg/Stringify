@@ -93,8 +93,11 @@ public:
 	using ColumnList=Collections::List<Handle<GridColumn>>;
 	using RowList=Collections::List<Handle<GridRow>>;
 
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
-	static inline Handle<Grid> Create(Window* Parent) { return new Grid(Parent); }
+	static inline Handle<Grid> Create(Window* Parent) { return Object::Create<Grid>(Parent); }
 
 	// Common
 	Handle<GridColumn> AddColumn(UINT Width=0, GridUnit Unit=GridUnit::Pixel, HorizontalAlignment Alignment=HorizontalAlignment::Stretch);

@@ -26,7 +26,7 @@ namespace Graphics {
 Bitmap::~Bitmap()
 {
 if(!m_Resource)
-	delete m_Buffer;
+	MemoryHelper::Free(m_Buffer);
 }
 
 
@@ -209,7 +209,7 @@ m_Width(width)
 {
 m_Pitch=width*bpp/8;
 m_Size=m_Height*m_Pitch;
-m_Buffer=new BYTE[m_Size];
+m_Buffer=(BYTE*)MemoryHelper::Allocate(m_Size);
 }
 
 Bitmap::Bitmap(UINT width, UINT height, WORD bpp, LPCSTR resource):

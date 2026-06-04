@@ -42,8 +42,11 @@ public:
 	using RenderTarget=Graphics::RenderTarget;
 	using VirtualKey=UI::Input::VirtualKey;
 
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
-	static inline Handle<Frame> Create() { return new Frame(); }
+	static inline Handle<Frame> Create() { return Object::Create<Frame>(); }
 
 	// Common
 	Handle<Interactive> GetFocus()const { return m_Focus; }

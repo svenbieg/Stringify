@@ -29,8 +29,11 @@ namespace UI {
 class ToolBar: public WrapPanel
 {
 public:
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
-	static inline Handle<ToolBar> Create(Window* Parent) { return new ToolBar(Parent); }
+	static inline Handle<ToolBar> Create(Window* Parent) { return Object::Create<ToolBar>(Parent); }
 
 	// Common
 	Handle<ToolBarPanel> AddPanel();

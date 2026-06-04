@@ -33,9 +33,12 @@ public:
 	// Using
 	using Sentence=Culture::Sentence;
 
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
 	~MenuBar();
-	static inline Handle<MenuBar> Create(Window* Parent) { return new MenuBar(Parent); }
+	static inline Handle<MenuBar> Create(Window* Parent) { return Object::Create<MenuBar>(Parent); }
 
 	// Common
 	Handle<MenuBarItem> Add(Handle<Sentence> Label);

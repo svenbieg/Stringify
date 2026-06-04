@@ -29,10 +29,13 @@ namespace UI {
 class StackPanel: public Panel
 {
 public:
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
 	static inline Handle<StackPanel> Create(Window* Parent, Orientation Orientation=Orientation::Horizontal)
 		{
-		return new StackPanel(Parent, Orientation);
+		return Object::Create<StackPanel>(Parent, Orientation);
 		}
 
 	// Common

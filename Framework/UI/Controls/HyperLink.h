@@ -28,8 +28,11 @@ namespace UI {
 class HyperLink: public Interactive
 {
 public:
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
-	static inline Handle<HyperLink> Create(Window* Parent) { return new HyperLink(Parent); }
+	static inline Handle<HyperLink> Create(Window* Parent) { return Object::Create<HyperLink>(Parent); }
 
 	// Common
 	Handle<Brush> Color;

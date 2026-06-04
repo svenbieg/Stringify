@@ -36,11 +36,14 @@ public:
 	using Sentence=Culture::Sentence;
 	using Timer=Timing::Timer;
 
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
 	~ToolTip();
 	static inline Handle<ToolTip> Create(Interactive* Parent, Handle<Sentence> Text=nullptr)
 		{
-		return new ToolTip(Parent, Text);
+		return Object::Create<ToolTip>(Parent, Text);
 		}
 
 	// Common

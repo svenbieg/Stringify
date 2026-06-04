@@ -28,8 +28,11 @@ namespace UI {
 class TabView: public Control
 {
 public:
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
-	static inline Handle<TabView> Create(Window* Parent) { return new TabView(Parent); }
+	static inline Handle<TabView> Create(Window* Parent) { return Object::Create<TabView>(Parent); }
 
 private:
 	// Con-/Destructors

@@ -44,8 +44,11 @@ public:
 	using KeyEventType=UI::Input::KeyEventType;
 	using Sentence=Culture::Sentence;
 
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
-	static inline Handle<PopupMenu> Create(Menu* Parent=nullptr) { return new PopupMenu(Parent); }
+	static inline Handle<PopupMenu> Create(Menu* Parent=nullptr) { return Object::Create<PopupMenu>(Parent); }
 
 	// Common
 	Handle<PopupMenuItem> Add(Handle<Sentence> Label);

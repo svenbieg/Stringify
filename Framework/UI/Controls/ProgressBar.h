@@ -27,8 +27,11 @@ namespace UI {
 class ProgressBar: public Panel
 {
 public:
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
-	static inline Handle<ProgressBar> Create(Window* Parent) { return new ProgressBar(Parent); }
+	static inline Handle<ProgressBar> Create(Window* Parent) { return Object::Create<ProgressBar>(Parent); }
 
 	// Common
 	Handle<Brush> GetBorderBrush()override;

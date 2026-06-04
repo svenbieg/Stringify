@@ -27,8 +27,11 @@ namespace UI {
 class WrapPanel: public Panel
 {
 public:
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
-	static inline Handle<WrapPanel> Create(Window* Parent) { return new WrapPanel(Parent); }
+	static inline Handle<WrapPanel> Create(Window* Parent) { return Object::Create<WrapPanel>(Parent); }
 
 	// Common
 	VOID Rearrange(RenderTarget* Target, RECT& Rect)override;

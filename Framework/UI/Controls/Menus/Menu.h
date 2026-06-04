@@ -38,7 +38,6 @@ public:
 	// Common
 	BOOL Accelerate(VirtualKey Key);
 	virtual VOID Close();
-	//VOID Close(MenuItem* Item);
 	VOID DoKey(KeyEventType Type, Handle<KeyEventArgs> Args);
 	VOID Exit();
 	Window* GetPanel()const { return m_Panel; }

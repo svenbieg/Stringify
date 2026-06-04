@@ -57,10 +57,13 @@ public:
 	// Using
 	using SystemTimer=Devices::Timers::SystemTimer;
 
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
 	static inline Handle<ScrollBar> Create(Window* Parent, Orientation Orientation=Orientation::Horizontal)
 		{
-		return new ScrollBar(Parent, Orientation);
+		return Object::Create<ScrollBar>(Parent, Orientation);
 		}
 	~ScrollBar();
 

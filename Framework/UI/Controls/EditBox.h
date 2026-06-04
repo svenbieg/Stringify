@@ -28,8 +28,11 @@ namespace UI {
 class EditBox: public ScrollBox
 {
 public:
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
-	static inline Handle<EditBox> Create(Window* Parent) { return new EditBox(Parent); }
+	static inline Handle<EditBox> Create(Window* Parent) { return Object::Create<EditBox>(Parent); }
 
 	// Common
 	Handle<Brush> GetBackground()override;

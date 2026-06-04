@@ -28,9 +28,15 @@ namespace UI {
 class Label: public TextBlock
 {
 public:
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
 	~Label();
-	static inline Handle<Label> Create(Window* Parent, Handle<Variable> Variable) { return new Label(Parent, Variable); }
+	static inline Handle<Label> Create(Window* Parent, Handle<Variable> Variable)
+		{
+		return Object::Create<Label>(Parent, Variable);
+		}
 
 private:
 	// Con-/Destructors

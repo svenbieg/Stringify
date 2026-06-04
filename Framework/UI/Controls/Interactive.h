@@ -50,8 +50,11 @@ public:
 	using PointerEventArgs=UI::Input::PointerEventArgs;
 	using VirtualKey=UI::Input::VirtualKey;
 
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
-	static inline Handle<Interactive> Create(Window* Parent) { return new Interactive(Parent); }
+	static inline Handle<Interactive> Create(Window* Parent) { return Object::Create<Interactive>(Parent); }
 
 	// Common
 	VOID CapturePointer();

@@ -28,10 +28,13 @@ namespace UI {
 class SplitView: public Interactive
 {
 public:
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
 	static inline Handle<SplitView> Create(Window* Parent, Orientation Orientation=Orientation::Vertical)
 		{
-		return new SplitView(Parent, Orientation);
+		return Object::Create<SplitView>(Parent, Orientation);
 		}
 
 	// Common

@@ -32,8 +32,11 @@ public:
 	using InputStream=Storage::Streams::InputStream;
 	using StringList=Collections::StringList;
 
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
-	static inline Handle<TextBox> Create(Window* Parent) { return new TextBox(Parent); }
+	static inline Handle<TextBox> Create(Window* Parent) { return Object::Create<TextBox>(Parent); }
 
 	// Common
 	VOID AppendLine(Handle<String> Line);
