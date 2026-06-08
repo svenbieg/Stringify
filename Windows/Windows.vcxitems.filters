@@ -177,6 +177,8 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Timing\ClockHelper.h">
       <Filter>Timing</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\CriticalSection.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\SpinLock.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Configuration">

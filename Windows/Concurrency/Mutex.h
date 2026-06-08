@@ -9,8 +9,8 @@
 // Using
 //=======
 
-#include <mutex>
 #include "TypeHelper.h"
+#include <mutex>
 
 
 //===========
@@ -52,12 +52,12 @@ public:
 	Mutex(Mutex const&)=delete;
 
 	// Common
-	virtual inline VOID Lock() { lock(); }
-	virtual inline VOID Lock(AccessMode Access) { lock(); }
-	virtual inline BOOL TryLock() { return try_lock(); }
-	virtual inline BOOL TryLock(AccessMode Access) { return try_lock(); }
-	virtual inline VOID Unlock() { unlock(); }
-	virtual inline VOID Unlock(AccessMode Access) { unlock(); }
+	inline VOID Lock() { lock(); }
+	inline VOID Lock(AccessMode Access) { lock(); }
+	inline BOOL TryLock() { return try_lock(); }
+	inline BOOL TryLock(AccessMode Access) { return try_lock(); }
+	inline VOID Unlock() { unlock(); }
+	inline VOID Unlock(AccessMode Access) { unlock(); }
 };
 
 }

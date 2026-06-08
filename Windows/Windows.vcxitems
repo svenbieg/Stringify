@@ -17,6 +17,7 @@
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)CommandLine.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ComPointer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\CriticalSection.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\DispatchedHandler.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\DispatchedQueue.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\Mutex.h" />
@@ -24,6 +25,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\Scheduler.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\ScopedLock.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\Signal.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\SpinLock.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\Task.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\WriteLock.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Devices\Serial\SerialPort.h" />
