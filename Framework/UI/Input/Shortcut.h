@@ -38,6 +38,11 @@ Alt=0x400
 // Common
 //========
 
-UINT ShortcutFromString(Handle<String> Text);
+class Shortcut
+{
+public:
+	// Common
+	static UINT FromString(Handle<String> Text);
+};
 
 }}

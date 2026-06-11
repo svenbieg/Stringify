@@ -208,7 +208,7 @@ if(label)
 	Accelerator=MenuHelper::GetAccelerator(label->Begin());
 	Shortcut=MenuHelper::GetShortcut(label->Begin());
 	Text=MenuHelper::GetLabel(label->Begin());
-	auto shortcut=ShortcutFromString(Shortcut);
+	auto shortcut=Shortcut::FromString(Shortcut);
 	if(shortcut)
 		Application::GetCurrent()->Shortcuts->Set(shortcut, this, false);
 	Enabled=true;

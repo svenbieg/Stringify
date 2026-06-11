@@ -27,7 +27,7 @@ namespace UI {
 // Common
 //========
 
-UINT ShortcutFromString(Handle<String> text)
+UINT Shortcut::FromString(Handle<String> text)
 {
 if(!text)
 	return 0;
