@@ -49,7 +49,7 @@ if(!title)
 if(!filter)
 	filter=STR_FILE_FILTER_ALL;
 Handle<String> title_str=title->Begin();
-Handle<String> filter_str=FilterFromSentence(filter);
+Handle<String> filter_str=DialogHelper::FilterFromSentence(filter);
 auto app_wnd=AppWindow::GetCurrent();
 OPENFILENAME ofn={ 0 };
 ofn.lStructSize=sizeof(OPENFILENAME);
@@ -62,6 +62,11 @@ ofn.nMaxFile=MAX_PATH;
 ofn.lpstrFilter=filter_str->Begin();
 if(!GetSaveFileName(&ofn))
 	return nullptr;
+if(ofn.nFilterIndex>0)
+	{
+	LPCTSTR filter_ext=DialogHelper::ExtensionFromFilter(filter_str, ofn.nFilterIndex-1);
+	PathHelper::SetExtension(file_path, MAX_PATH, filter_ext);
+	}
 return String::Create(file_path);
 }
 

@@ -26,7 +26,24 @@ namespace Desktop {
 // Common
 //========
 
-Handle<String> FilterFromSentence(Handle<Sentence> sentence)
+LPCTSTR DialogHelper::ExtensionFromFilter(Handle<String> filter, UINT id)
+{
+auto str=filter->Begin();
+UINT pos=0;
+while(id>0)
+	{
+	UINT len=StringHelper::Length(&str[pos]);
+	pos+=len+1;
+	len=StringHelper::Length(&str[pos]);
+	pos+=len+1;
+	id--;
+	}
+UINT len=StringHelper::Length(&str[pos]);
+pos+=len+3;
+return &str[pos];
+}
+
+Handle<String> DialogHelper::FilterFromSentence(Handle<Sentence> sentence)
 {
 if(!sentence)
 	return nullptr;

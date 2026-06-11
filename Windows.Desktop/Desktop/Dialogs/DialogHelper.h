@@ -24,6 +24,15 @@ namespace Desktop {
 // Common
 //========
 
-Handle<String> FilterFromSentence(Handle<Culture::Sentence> Sentence);
+class DialogHelper
+{
+public:
+	// Using
+	using Sentence=Culture::Sentence;
+
+	// Common
+	static LPCTSTR ExtensionFromFilter(Handle<String> Filter, UINT Id);
+	static Handle<String> FilterFromSentence(Handle<Sentence> Sentence);
+};
 
 }}

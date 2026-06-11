@@ -49,12 +49,13 @@ if(!title)
 if(!filter)
 	filter=STR_FILE_FILTER_ALL;
 Handle<String> title_str=title->Begin();
-Handle<String> filter_str=FilterFromSentence(filter);
+Handle<String> filter_str=DialogHelper::FilterFromSentence(filter);
 auto app_wnd=AppWindow::GetCurrent();
 OPENFILENAME ofn={ 0 };
 ofn.lStructSize=sizeof(OPENFILENAME);
 ofn.hInstance=GetModuleHandle(nullptr);
 ofn.hwndOwner=app_wnd? app_wnd->GetHandle(): HWND_DESKTOP;
+ofn.Flags=OFN_FILEMUSTEXIST;
 ofn.lpstrFile=file_path;
 ofn.lpstrInitialDir=folder? folder->Begin(): nullptr;
 ofn.lpstrTitle=title_str->Begin();
