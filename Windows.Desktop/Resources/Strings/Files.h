@@ -24,21 +24,21 @@ namespace Resources {
 // Files
 //=======
 
-constexpr STRING STR_FILE_FILTER_ALL[]=
+const STRING STR_FILE_FILTER_ALL[]=
 	{
 	{ LNG::DE, L"Alle Dateien (*.*)|*.*" },
 	{ LNG::EN, L"All files (*.*)|*.*" },
 	{ LNG::None, nullptr }
 	};
 
-constexpr STRING STR_FILE_OPEN[]=
+const STRING STR_FILE_OPEN[]=
 	{
 	{ LNG::DE, L"Datei öffnen" },
 	{ LNG::EN, L"Open file" },
 	{ LNG::None, nullptr }
 	};
 
-constexpr STRING STR_FILE_SAVE[]=
+const STRING STR_FILE_SAVE[]=
 	{
 	{ LNG::DE, L"Datei speichern" },
 	{ LNG::EN, L"Save file" },

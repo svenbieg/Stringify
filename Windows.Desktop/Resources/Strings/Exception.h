@@ -24,7 +24,7 @@ namespace Resources {
 // Errors
 //========
 
-constexpr STRING STR_EXCEPTION[]=
+const STRING STR_EXCEPTION[]=
 	{
 	{ LNG::DE, L"Unbehandelte Ausnahme" },
 	{ LNG::EN, L"Unhandled Exception" },

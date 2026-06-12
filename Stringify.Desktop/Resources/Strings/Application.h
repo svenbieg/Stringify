@@ -24,16 +24,16 @@ namespace Resources {
 // Application
 //=============
 
-constexpr LPCSTR STR_APP_TITLE="Stringify";
+const LPCSTR STR_APP_TITLE="Stringify";
 
-constexpr STRING STR_SOURCE[]=
+const STRING STR_SOURCE[]=
 	{
 	{ LNG::DE, L"Quelle" },
 	{ LNG::EN, L"Source" },
 	{ LNG::None, nullptr }
 	};
 
-constexpr STRING STR_STRING[]=
+const STRING STR_STRING[]=
 	{
 	{ LNG::DE, L"Zeichenfolge" },
 	{ LNG::EN, L"String" },
