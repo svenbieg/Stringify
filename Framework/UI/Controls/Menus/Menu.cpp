@@ -89,7 +89,7 @@ args->Handled=true;
 
 VOID Menu::Exit()
 {
-this->Close();
+Close();
 if(m_ParentMenu)
 	m_ParentMenu->Exit();
 }

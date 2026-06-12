@@ -37,7 +37,11 @@ VOID PopupMenu::Close()
 {
 Menu::Close();
 SetParent(nullptr);
-m_Popup=nullptr;
+if(m_Popup)
+	{
+	m_Popup->Visible=false;
+	m_Popup=nullptr;
+	}
 }
 
 Graphics::SIZE PopupMenu::GetMinSize(RenderTarget* target)
