@@ -26,9 +26,15 @@ namespace Graphics {
 class Cursor: public Object
 {
 public:
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
 	~Cursor();
-	static inline Handle<Cursor> Create(LPCTSTR Id) { return new Cursor(Id); }
+	static inline Handle<Cursor> Create(LPCTSTR Id)
+		{
+		return Object::Create<Cursor>(Id);
+		}
 
 	// Common
 	inline HCURSOR GetHandle()const { return m_Cursor; }

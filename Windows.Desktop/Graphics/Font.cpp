@@ -27,8 +27,6 @@ IDWriteTextFormat* Font::GetFormat()
 {
 if(m_Format)
 	return m_Format;
-if(!m_Factory)
-	m_Factory=DWriteFactory::Get();
 m_Format=m_Factory->CreateTextFormat(m_Info);
 m_Format->SetWordWrapping(DWRITE_WORD_WRAPPING_NO_WRAP);
 return m_Format;
@@ -51,6 +49,7 @@ Font::Font(LPCSTR family, UINT size, UINT weight):
 m_Format(nullptr),
 m_Info({ 0 })
 {
+m_Factory=DWriteFactory::Create();
 StringHelper::Copy(m_Info.lfFaceName, 32, family);
 m_Info.lfHeight=size;
 m_Info.lfWeight=weight;

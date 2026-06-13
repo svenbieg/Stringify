@@ -9,6 +9,7 @@
 // Using
 //=======
 
+#include "ErrorHelper.h"
 #include <assert.h>
 
 
@@ -18,23 +19,6 @@
 
 namespace Graphics {
 	namespace Direct2D {
-
-
-//==================
-// Con-/Destructors
-//==================
-
-ImagingFactory::~ImagingFactory()
-{
-s_Current=nullptr;
-}
-
-Handle<ImagingFactory> ImagingFactory::Get()
-{
-if(!s_Current)
-	s_Current=new ImagingFactory();
-return s_Current;
-}
 
 
 //========
@@ -49,19 +33,18 @@ HGLOBAL handle=LoadResource(NULL, resource);
 assert(handle);
 VOID* ptr=LockResource(handle);
 DWORD size=SizeofResource(NULL, resource);
-IWICStream* stream=nullptr;
-m_Factory->CreateStream(&stream);
+ComPointer<IWICStream> stream;
+m_Factory->CreateStream(stream.AddressOf());
 stream->InitializeFromMemory((BYTE*)ptr, size);
-IWICBitmap* bitmap=CreateBitmap(stream);
-stream->Release();
+auto bitmap=CreateBitmap(stream.Get());
 UnlockResource(handle);
 return bitmap;
 }
 
 ComPointer<IWICBitmap> ImagingFactory::CreateBitmap(HICON ico)
 {
-IWICBitmap* bitmap=nullptr;
-m_Factory->CreateBitmapFromHICON(ico, &bitmap);
+ComPointer<IWICBitmap> bitmap;
+m_Factory->CreateBitmapFromHICON(ico, bitmap.AddressOf());
 return bitmap;
 }
 
@@ -72,40 +55,36 @@ UINT height=0;
 source->GetSize(&width, &height);
 WICPixelFormatGUID format;
 source->GetPixelFormat(&format);
-IWICBitmapLock* lock=nullptr;
-source->Lock(nullptr, WICBitmapLockRead, &lock);
+ComPointer<IWICBitmapLock> lock;
+source->Lock(nullptr, WICBitmapLockRead, lock.AddressOf());
 UINT size=0;
 WICInProcPointer ptr=nullptr;
 lock->GetDataPointer(&size, &ptr);
 UINT stride=0;
 lock->GetStride(&stride);
-IWICBitmap* bitmap=nullptr;
-m_Factory->CreateBitmapFromMemory(width, height, format, stride, size, ptr, &bitmap);
-lock->Release();
+ComPointer<IWICBitmap> bitmap;
+m_Factory->CreateBitmapFromMemory(width, height, format, stride, size, ptr, bitmap.AddressOf());
 return bitmap;
 }
 
 ComPointer<IWICBitmap> ImagingFactory::CreateBitmap(IWICStream* stream)
 {
-IWICBitmapDecoder* decoder=nullptr;
-m_Factory->CreateDecoderFromStream(stream, nullptr, WICDecodeMetadataCacheOnLoad, &decoder);
-IWICBitmapFrameDecode* frame=nullptr;
-decoder->GetFrame(0, &frame);
-IWICFormatConverter* converter=nullptr;
-m_Factory->CreateFormatConverter(&converter);
+ComPointer<IWICBitmapDecoder> decoder;
+m_Factory->CreateDecoderFromStream(stream, nullptr, WICDecodeMetadataCacheOnLoad, decoder.AddressOf());
+ComPointer<IWICBitmapFrameDecode> frame;
+decoder->GetFrame(0, frame.AddressOf());
+ComPointer<IWICFormatConverter> converter;
+m_Factory->CreateFormatConverter(converter.AddressOf());
 converter->Initialize(frame, GUID_WICPixelFormat32bppPBGRA, WICBitmapDitherTypeNone, nullptr, 0., WICBitmapPaletteTypeMedianCut);
-IWICBitmap* bitmap=nullptr;
-m_Factory->CreateBitmapFromSource(converter, WICBitmapNoCache, &bitmap);
-converter->Release();
-frame->Release();
-decoder->Release();
+ComPointer<IWICBitmap> bitmap;
+m_Factory->CreateBitmapFromSource(converter, WICBitmapNoCache, bitmap.AddressOf());
 return bitmap;
 }
 
 ComPointer<IWICBitmap> ImagingFactory::CreateBitmap(Handle<String> path)
 {
-IWICStream* stream=nullptr;
-m_Factory->CreateStream(&stream);
+ComPointer<IWICStream> stream;
+m_Factory->CreateStream(stream.AddressOf());
 #ifndef _UNICODE
 WCHAR str[MAX_PATH];
 StringHelper::Copy(str, MAX_PATH, path->Begin());
@@ -113,15 +92,14 @@ StringHelper::Copy(str, MAX_PATH, path->Begin());
 LPCWSTR str=path->Begin();
 #endif
 stream->InitializeFromFilename(str, GENERIC_READ);
-IWICBitmap* bitmap=CreateBitmap(stream);
-stream->Release();
+auto bitmap=CreateBitmap(stream.Get());
 return bitmap;
 }
 
 ComPointer<IWICBitmap> ImagingFactory::CreateBitmap(UINT width, UINT height)
 {
-IWICBitmap* bitmap=nullptr;
-m_Factory->CreateBitmap(width, height, GUID_WICPixelFormat32bppPBGRA, WICBitmapCacheOnLoad, &bitmap);
+ComPointer<IWICBitmap> bitmap;
+m_Factory->CreateBitmap(width, height, GUID_WICPixelFormat32bppPBGRA, WICBitmapCacheOnLoad, bitmap.AddressOf());
 return bitmap;
 }
 
@@ -132,17 +110,9 @@ return bitmap;
 
 ImagingFactory::ImagingFactory()
 {
-CoInitialize(nullptr);
-IWICImagingFactory2* factory=nullptr;
-CoCreateInstance(CLSID_WICImagingFactory2, 0, CLSCTX_INPROC_SERVER, __uuidof(IWICImagingFactory2), (VOID**)&factory);
-m_Factory.Initialize(factory);
+HRESULT hr=CoInitialize(nullptr);
+ErrorHelper::ThrowIfFailed(hr);
+CoCreateInstance(CLSID_WICImagingFactory2, 0, CLSCTX_INPROC_SERVER, __uuidof(IWICImagingFactory2), (VOID**)m_Factory.AddressOf());
 }
-
-
-//================
-// Common Private
-//================
-
-ImagingFactory* ImagingFactory::s_Current=nullptr;
 
 }}

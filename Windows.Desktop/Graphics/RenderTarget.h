@@ -37,9 +37,12 @@ public:
 	using D2DFactory=Graphics::Direct2D::D2DFactory;
 	using DWriteFactory=Graphics::Direct2D::DWriteFactory;
 
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
 	~RenderTarget();
-	static inline Handle<RenderTarget> Create() { return new RenderTarget(); }
+	static inline Handle<RenderTarget> Create() { return Object::Create<RenderTarget>(); }
 
 	// Common
 	VOID BeginDraw(HDC DeviceContext, RECT const& Rect);

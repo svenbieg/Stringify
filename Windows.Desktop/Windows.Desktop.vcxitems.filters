@@ -58,6 +58,12 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Font.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\Dialog.cpp">
+      <Filter>Desktop\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Resources\Bitmaps\BitmapHelper.cpp">
+      <Filter>Resources\Bitmaps</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\D2DFactory.h">
@@ -123,6 +129,12 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Theme.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\Dialog.h">
+      <Filter>Desktop\Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Bitmaps\BitmapHelper.h">
+      <Filter>Resources\Bitmaps</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Graphics">
@@ -154,6 +166,9 @@
     </Filter>
     <Filter Include="UI\Controls">
       <UniqueIdentifier>{7a820d70-8ad9-4ff3-a42a-fa0560a2aef6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Bitmaps">
+      <UniqueIdentifier>{7fed223e-3343-40d8-9bfd-eb9ef932e38f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -9,11 +9,9 @@
 // Using
 //=======
 
-#include "Culture/Sentence.h"
 #include "Graphics/Icon.h"
 #include "UI/Controls/StackPanel.h"
 #include "UI/Overlapped.h"
-#include "DynamicHandle.h"
 
 
 //===========
@@ -42,14 +40,12 @@ public:
 	VOID Activate();
 	Event<AppWindow> Activated;
 	Handle<Panel> Body;
-	VOID Close();
 	Event<AppWindow> Closed;
 	Handle<StackPanel> Footer;
 	static inline AppWindow* GetCurrent() { return s_Current; }
 	Handle<StackPanel> Header;
 	Event<AppWindow> Maximized;
 	Event<AppWindow> Minimized;
-	DynamicHandle<AppWindow, Sentence> Title;
 
 protected:
 	// Con-/Destructors
@@ -62,7 +58,6 @@ private:
 	// Common
 	VOID OnClosed();
 	VOID OnSettingChanged(LPCTSTR Setting);
-	VOID OnTitleChanged(Handle<Sentence> Title);
 	static AppWindow* s_Current;
 };
 

@@ -31,8 +31,14 @@ public:
 	// Using
 	using Sentence=Culture::Sentence;
 
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
-	static inline Handle<ToolWindow> Create() { return new ToolWindow(); }
+	static inline Handle<ToolWindow> Create()
+		{
+		return Object::Create<ToolWindow>();
+		}
 
 	// Common
 	DynamicHandle<ToolWindow, Sentence> Title;

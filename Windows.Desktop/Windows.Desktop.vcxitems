@@ -2,7 +2,6 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="Globals">
     <HasSharedItems>true</HasSharedItems>
-    <ItemsProjectGuid>{0360ACE2-9F06-419D-AC64-A9E24FAB3F24}</ItemsProjectGuid>
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
     <NMakeIncludeSearchPath>$(NMakeIncludeSearchPath);$(MSBuildThisFileDirectory)</NMakeIncludeSearchPath>
   </PropertyGroup>
@@ -18,6 +17,7 @@
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Culture\LanguageHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Application.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\Dialog.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\DialogHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\MessageBox.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\OpenFileDialog.h" />
@@ -29,6 +29,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Font.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\RenderTarget.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Theme.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Bitmaps\BitmapHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Strings\Exception.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Strings\Files.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Clipboard.h" />
@@ -41,6 +42,7 @@
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Culture\LanguageHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Application.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\Dialog.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\DialogHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\MessageBox.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\OpenFileDialog.cpp" />
@@ -52,6 +54,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Font.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\RenderTarget.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Theme.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Resources\Bitmaps\BitmapHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Storage\Clipboard.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\AppWindow.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\PathEdit.cpp" />

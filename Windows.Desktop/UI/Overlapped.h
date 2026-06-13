@@ -9,7 +9,10 @@
 // Using
 //=======
 
+#include "Culture/Sentence.h"
+#include "Graphics/Icon.h"
 #include "UI/Frame.h"
+#include "DynamicHandle.h"
 
 
 //===========
@@ -36,11 +39,15 @@ Size
 class Overlapped: public Frame
 {
 public:
+	// Using
+	using Sentence=Culture::Sentence;
+
 	// Con-/Destructors
 	~Overlapped();
 
 	// Common
 	VOID BringToFront()override;
+	VOID Close();
 	Event<Overlapped> FocusLost;
 	Handle<Brush> GetBackground()override;
 	RECT GetBorderWidth()const;
@@ -49,6 +56,7 @@ public:
 	SIZE GetMinSize(RenderTarget* Target)override;
 	RenderTarget* GetRenderTarget()const override;
 	POINT GetScreenOffset()const override;
+	DynamicHandle<Overlapped, Graphics::Icon> Icon;
 	VOID Minimize();
 	VOID Minimize(Minimization);
 	VOID Move(RECT const& Rect)override;
@@ -56,6 +64,7 @@ public:
 	VOID SetCursor(Cursor* Cursor)override;
 	VOID SetPointerCapture(Interactive* Capture)override;
 	VOID Show(INT Show);
+	DynamicHandle<Overlapped, Sentence> Title;
 
 protected:
 	// Con-/Destructors
@@ -63,17 +72,21 @@ protected:
 
 	// Common
 	virtual LRESULT HandleMessage(UINT Message, WPARAM WParam, LPARAM LParam, BOOL& Handled);
+	HCURSOR m_Cursor;
 	HWND m_Handle;
+	HICON m_IconBig;
+	HICON m_IconSmall;
 	Handle<RenderTarget> m_RenderTarget;
 	Handle<Theme> m_Theme;
 
 private:
 	// Common
+	VOID OnIconChanged(Handle<Graphics::Icon> Icon);
 	VOID OnInvalidated();
 	VOID OnThemeChanged();
+	VOID OnTitleChanged(Handle<Sentence> Title);
 	VOID OnVisibleChanged(BOOL Visible);
 	static LRESULT CALLBACK WndProc(HWND Window, UINT Message, WPARAM WParam, LPARAM LParam);
-	HCURSOR m_Cursor;
 };
 
 }

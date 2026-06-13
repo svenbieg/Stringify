@@ -11,6 +11,7 @@
 
 #pragma comment(lib, "dwrite.lib")
 
+#include "ErrorHelper.h"
 #include "StringHelper.h"
 
 
@@ -20,23 +21,6 @@
 
 namespace Graphics {
 	namespace Direct2D {
-
-
-//==================
-// Con-/Destructors
-//==================
-
-DWriteFactory::~DWriteFactory()
-{
-s_Current=nullptr;
-}
-
-Handle<DWriteFactory> DWriteFactory::Get()
-{
-if(!s_Current)
-	s_Current=new DWriteFactory();
-return s_Current;
-}
 
 
 //========
@@ -74,16 +58,9 @@ return layout;
 
 DWriteFactory::DWriteFactory()
 {
-IDWriteFactory* factory=nullptr;
-DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), (IUnknown**)&factory);
-m_Factory.Initialize(factory);
+HRESULT hr=CoInitialize(nullptr);
+ErrorHelper::ThrowIfFailed(hr);
+DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), (IUnknown**)m_Factory.AddressOf());
 }
-
-
-//================
-// Common Private
-//================
-
-DWriteFactory* DWriteFactory::s_Current=nullptr;
 
 }}

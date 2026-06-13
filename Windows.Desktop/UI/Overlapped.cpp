@@ -36,7 +36,12 @@ namespace UI {
 Overlapped::~Overlapped()
 {
 m_Theme->Changed.Remove(this);
-DestroyWindow(m_Handle);
+if(m_Handle)
+	DestroyWindow(m_Handle);
+if(m_IconBig)
+	DestroyIcon(m_IconBig);
+if(m_IconSmall)
+	DestroyIcon(m_IconSmall);
 }
 
 
@@ -48,6 +53,12 @@ VOID Overlapped::BringToFront()
 {
 SetWindowPos(m_Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOACTIVATE|SWP_NOMOVE|SWP_NOSIZE);
 Frame::BringToFront();
+}
+
+VOID Overlapped::Close()
+{
+if(m_Handle!=NULL)
+	CloseWindow(m_Handle);
 }
 
 Handle<Brush> Overlapped::GetBackground()
@@ -168,12 +179,18 @@ ShowWindow(m_Handle, show);
 //============================
 
 Overlapped::Overlapped():
+Icon(this),
+Title(this),
 m_Cursor(NULL),
-m_Handle(NULL)
+m_Handle(NULL),
+m_IconBig(NULL),
+m_IconSmall(NULL)
 {
+Icon.Changed.Add(this, &Overlapped::OnIconChanged);
+Title.Changed.Add(this, &Overlapped::OnTitleChanged);
 m_Cursor=LoadCursor(NULL, IDC_ARROW);
 m_RenderTarget=RenderTarget::Create();
-m_Theme=Theme::Get();
+m_Theme=Theme::Create();
 Window::m_Theme=m_Theme;
 Invalidated.Add(this, &Overlapped::OnInvalidated);
 Visible.Changed.Add(this, &Overlapped::OnVisibleChanged);
@@ -200,9 +217,9 @@ OnThemeChanged();
 }
 
 
-//================
-// Common Private
-//================
+//==================
+// Common Protected
+//==================
 
 LRESULT Overlapped::HandleMessage(UINT msg, WPARAM wparam, LPARAM lparam, BOOL& handled)
 {
@@ -388,6 +405,13 @@ switch(msg)
 		handled=false;
 		break;
 		}
+	case WM_SIZE:
+		{
+		UINT width=LOWORD(lparam);
+		UINT height=HIWORD(lparam);
+		m_Rect.SetSize(width, height);
+		break;
+		}
 	case WM_SIZING:
 		{
 		auto rc_ptr=(::RECT*)lparam;
@@ -424,6 +448,33 @@ switch(msg)
 return 0;
 }
 
+
+//================
+// Common Private
+//================
+
+VOID Overlapped::OnIconChanged(Handle<Graphics::Icon> icon)
+{
+if(m_IconBig)
+	{
+	DestroyIcon(m_IconBig);
+	m_IconBig=NULL;
+	}
+if(m_IconSmall)
+	{
+	DestroyIcon(m_IconSmall);
+	m_IconSmall=NULL;
+	}
+UINT size_small=GetSystemMetrics(SM_CXSMICON);
+UINT size_big=GetSystemMetrics(SM_CXICON);
+auto bmp_small=icon->GetBitmap(size_small);
+auto bmp_big=icon->GetBitmap(size_big);
+m_IconSmall=CreateIcon(NULL, bmp_small->GetWidth(), bmp_small->GetHeight(), 1, 32, nullptr, bmp_small->Begin());
+m_IconBig=CreateIcon(NULL, bmp_big->GetWidth(), bmp_big->GetHeight(), 1, 32, nullptr, bmp_big->Begin());
+SendMessage(m_Handle, WM_SETICON, ICON_SMALL, (LPARAM)m_IconSmall);
+SendMessage(m_Handle, WM_SETICON, ICON_BIG, (LPARAM)m_IconBig);
+}
+
 VOID Overlapped::OnInvalidated()
 {
 DispatchedQueue::Append(this, &Overlapped::Repaint);
@@ -435,6 +486,11 @@ auto scheme=m_Theme->GetColorScheme();
 BOOL dark=(scheme==ColorScheme::Dark);
 DwmSetWindowAttribute(m_Handle, DWMWA_USE_IMMERSIVE_DARK_MODE, &dark, sizeof(BOOL));
 Invalidate(true);
+}
+
+VOID Overlapped::OnTitleChanged(Handle<Sentence> title)
+{
+SetWindowText(m_Handle, title? title->Begin(): TEXT(""));
 }
 
 VOID Overlapped::OnVisibleChanged(BOOL visible)

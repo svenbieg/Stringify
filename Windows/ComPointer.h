@@ -22,11 +22,13 @@ public:
 			m_Object->Release();
 		m_Object=nullptr;
 		}
-	inline VOID Initialize(_obj_t* Object) { m_Object=Object; }
 
 	// Access
+	inline operator bool()const { return m_Object!=nullptr; }
 	inline operator _obj_t*()const { return m_Object; }
 	inline _obj_t* operator->()const { return m_Object; }
+	inline _obj_t** AddressOf() { return &m_Object; }
+	inline _obj_t* Get()const { return m_Object; }
 
 	// Modification
 	ComPointer& operator=(_obj_t* Object)

@@ -149,8 +149,6 @@ SIZE RenderTarget::MeasureText(Font* font, FLOAT scale, LPCWSTR text, UINT len)
 {
 if(!len)
 	len=StringHelper::Length(text);
-if(!m_DWriteFactory)
-	m_DWriteFactory=DWriteFactory::Get();
 auto d2d_format=font->GetFormat();
 auto layout=m_DWriteFactory->CreateTextLayout(text, len, d2d_format);
 DWRITE_TEXT_METRICS metrics={ 0 };
@@ -171,7 +169,8 @@ m_Target->PopAxisAlignedClip();
 
 RenderTarget::RenderTarget()
 {
-m_D2DFactory=D2DFactory::Get();
+m_D2DFactory=D2DFactory::Create();
+m_DWriteFactory=DWriteFactory::Create();
 m_Target=m_D2DFactory->CreateRenderTarget();
 m_Target->SetAntialiasMode(D2D1_ANTIALIAS_MODE_ALIASED);
 m_Target->SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_CLEARTYPE);

@@ -11,6 +11,7 @@
 
 #include "Concurrency/DispatchedQueue.h"
 #include "Concurrency/Task.h"
+#include "Resources/Bitmaps/BitmapHelper.h"
 #include "Resources/Strings/Application.h"
 #include "Storage/Filesystem/File.h"
 #include "Storage/Streams/StreamReader.h"
@@ -21,6 +22,7 @@
 #include "PathHelper.h"
 
 using namespace Concurrency;
+using namespace Resources::Bitmaps;
 using namespace Resources::Strings;
 using namespace Storage;
 using namespace Storage::Streams;
@@ -94,7 +96,15 @@ result_box->Clear();
 LPCTSTR ext=PathHelper::GetExtension(path->Begin());
 if(!ext)
 	return;
-if(StringHelper::Compare(ext, "ico")==0)
+if(StringHelper::Compare(ext, "bmp", 0, CompareMode::IgnoreCase)==0)
+	{
+	OpenBitmap(path);
+	}
+else if(StringHelper::Compare(ext, "png", 0, CompareMode::IgnoreCase)==0)
+	{
+	OpenBitmap(path);
+	}
+else if(StringHelper::Compare(ext, "ico", 0, CompareMode::IgnoreCase)==0)
 	{
 	OpenIcon(path);
 	}
@@ -132,6 +142,15 @@ if(file->Create()!=Status::Success)
 auto name=PathHelper::GetName(path->Begin());
 auto var=String::Create("BIN_%S", name->Begin());
 Stringify(var, file);
+}
+
+VOID Application::OpenBitmap(Handle<String> path)
+{
+auto bmp=BitmapHelper::CreateBitmap(path);
+auto buf=StaticBuffer::Create((BYTE*)bmp->Begin(), bmp->GetSize());
+auto name=PathHelper::GetName(path);
+auto var=String::Create("BMP_%S", name);
+Stringify(var, buf);
 }
 
 VOID Application::OpenIcon(Handle<String> path)

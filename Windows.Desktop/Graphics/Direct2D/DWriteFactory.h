@@ -11,7 +11,7 @@
 
 #include <dwrite.h>
 #include "ComPointer.h"
-#include "Handle.h"
+#include "Global.h"
 
 
 //===========
@@ -26,12 +26,14 @@ namespace Graphics {
 // DWrite-Factory
 //================
 
-class DWriteFactory: public Object
+class DWriteFactory: public Global<DWriteFactory>
 {
 public:
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
-	~DWriteFactory();
-	static Handle<DWriteFactory> Get();
+	static inline Handle<DWriteFactory> Create() { return Global::Create(); }
 
 	// Common
 	ComPointer<IDWriteTextFormat> CreateTextFormat(LOGFONT const& Info);
@@ -43,7 +45,6 @@ private:
 
 	// Common
 	ComPointer<IDWriteFactory> m_Factory;
-	static DWriteFactory* s_Current;
 };
 
 }}

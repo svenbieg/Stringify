@@ -11,6 +11,7 @@
 
 #include <wincodec.h>
 #include "ComPointer.h"
+#include "Global.h"
 #include "StringClass.h"
 
 
@@ -26,12 +27,14 @@ namespace Graphics {
 // Imaging-Factory
 //=================
 
-class ImagingFactory: public Object
+class ImagingFactory: public Global<ImagingFactory>
 {
 public:
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
-	~ImagingFactory();
-	static Handle<ImagingFactory> Get();
+	static inline Handle<ImagingFactory> Create() { return Global::Create(); }
 
 	// Common
 	ComPointer<IWICBitmap> CreateBitmap(WORD Resource);
@@ -47,7 +50,6 @@ private:
 
 	// Common
 	ComPointer<IWICImagingFactory2> m_Factory;
-	static ImagingFactory* s_Current;
 };
 
 }}

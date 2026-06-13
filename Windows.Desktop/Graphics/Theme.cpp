@@ -21,27 +21,9 @@ using namespace Storage;
 namespace Graphics {
 
 
-//==================
-// Con-/Destructors
-//==================
-
-Theme::~Theme()
-{
-if(s_Current==this)
-	s_Current=nullptr;
-}
-
-
 //========
 // Common
 //========
-
-Handle<Theme> Theme::Get()
-{
-if(!s_Current)
-	s_Current=new Theme();
-return s_Current;
-}
 
 VOID Theme::SetColorScheme(ColorScheme scheme)
 {
@@ -123,12 +105,5 @@ SizeVerticalCursor=Cursor::Create(IDC_SIZENS);
 TextCursor=Cursor::Create(IDC_IBEAM);
 Update();
 }
-
-
-//================
-// Common Private
-//================
-
-Theme* Theme::s_Current=nullptr;
 
 }

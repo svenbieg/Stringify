@@ -12,6 +12,7 @@
 #include "Graphics/Brush.h"
 #include "Graphics/Cursor.h"
 #include "Graphics/Font.h"
+#include "Global.h"
 
 
 //===========
@@ -36,16 +37,17 @@ Light
 // Theme
 //=======
 
-class Theme: public Object
+class Theme: public Global<Theme>
 {
 public:
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
-	~Theme();
-	static inline Handle<Theme> Create() { return new Theme(); }
+	static inline Handle<Theme> Create() { return Global::Create(); }
 
 	// Common
 	Event<Theme> Changed;
-	static Handle<Theme> Get();
 	inline ColorScheme GetColorScheme()const { return m_ColorScheme; }
 	VOID SetColorScheme(ColorScheme Scheme);
 	VOID Update();
@@ -80,10 +82,6 @@ protected:
 
 	// Common
 	ColorScheme m_ColorScheme;
-
-private:
-	// Common
-	static Theme* s_Current;
 };
 
 }

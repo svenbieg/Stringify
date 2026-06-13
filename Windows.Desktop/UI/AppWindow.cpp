@@ -48,19 +48,12 @@ SetWindowPos(m_Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOSIZE);
 SetForegroundWindow(m_Handle);
 }
 
-VOID AppWindow::Close()
-{
-if(m_Handle)
-	SendMessage(m_Handle, WM_CLOSE, 0, 0);
-}
-
 
 //============================
 // Con-/Destructors Protected
 //============================
 
-AppWindow::AppWindow():
-Title(this)
+AppWindow::AppWindow()
 {
 s_Current=this;
 SetWindowLong(m_Handle, GWL_STYLE, WS_OVERLAPPEDWINDOW);
@@ -68,12 +61,11 @@ SetWindowLong(m_Handle, GWL_EXSTYLE, WS_EX_APPWINDOW);
 UINT size_small=GetSystemMetrics(SM_CXSMICON);
 UINT size_big=GetSystemMetrics(SM_CXICON);
 HINSTANCE hinst=GetModuleHandle(nullptr);
-HICON ico_small=(HICON)LoadImage(hinst, MAKEINTRESOURCE(ICO_APP), IMAGE_ICON, size_small, size_small, 0);
-HICON ico_big=(HICON)LoadImage(hinst, MAKEINTRESOURCE(ICO_APP), IMAGE_ICON, size_big, size_big, 0);
-SendMessage(m_Handle, WM_SETICON, ICON_SMALL, (LPARAM)ico_small);
-SendMessage(m_Handle, WM_SETICON, ICON_BIG, (LPARAM)ico_big);
+m_IconSmall=(HICON)LoadImage(hinst, MAKEINTRESOURCE(ICO_APP), IMAGE_ICON, size_small, size_small, 0);
+m_IconBig=(HICON)LoadImage(hinst, MAKEINTRESOURCE(ICO_APP), IMAGE_ICON, size_big, size_big, 0);
+SendMessage(m_Handle, WM_SETICON, ICON_SMALL, (LPARAM)m_IconSmall);
+SendMessage(m_Handle, WM_SETICON, ICON_BIG, (LPARAM)m_IconBig);
 Closed.Add(this, &AppWindow::OnClosed);
-Title.Changed.Add(this, &AppWindow::OnTitleChanged);
 Title=Application::GetCurrent()->GetName();
 auto grid=Grid::Create(this);
 grid->AddRow(1, GridUnit::Auto);
@@ -155,11 +147,6 @@ if(StringHelper::Compare(setting, "ImmersiveColorSet")==0)
 	m_Theme->Update();
 	return;
 	}
-}
-
-VOID AppWindow::OnTitleChanged(Handle<Sentence> title)
-{
-SetWindowText(m_Handle, title? title->Begin(): TEXT(""));
 }
 
 AppWindow* AppWindow::s_Current=nullptr;

@@ -11,7 +11,7 @@
 
 #include <d2d1_2.h>
 #include "ComPointer.h"
-#include "Handle.h"
+#include "Global.h"
 
 
 //===========
@@ -26,12 +26,14 @@ namespace Graphics {
 // D2D-Factory
 //=============
 
-class D2DFactory: public Object
+class D2DFactory: public Global<D2DFactory>
 {
 public:
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
-	~D2DFactory();
-	static Handle<D2DFactory> Get();
+	static inline Handle<D2DFactory> Create() { return Global::Create(); }
 
 	// Common
 	ComPointer<ID2D1PathGeometry> CreatePathGeometry();
@@ -44,7 +46,6 @@ private:
 
 	// Common
 	ComPointer<ID2D1Factory> m_Factory;
-	static D2DFactory* s_Current;
 };
 
 }}

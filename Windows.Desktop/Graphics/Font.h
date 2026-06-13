@@ -32,10 +32,13 @@ public:
 	// Using
 	using DWriteFactory=Graphics::Direct2D::DWriteFactory;
 
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
 	static inline Handle<Font> Create(LPCSTR Family="Segoe UI", UINT Size=14, UINT Weight=400)
 		{
-		return new Font(Family, Size, Weight);
+		return Object::Create<Font>(Family, Size, Weight);
 		}
 
 	// Common

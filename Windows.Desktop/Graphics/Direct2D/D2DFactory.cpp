@@ -11,6 +11,7 @@
 
 #pragma comment(lib, "d2d1.lib")
 
+#include "ErrorHelper.h"
 #include "MemoryHelper.h"
 
 
@@ -20,23 +21,6 @@
 
 namespace Graphics {
 	namespace Direct2D {
-
-
-//==================
-// Con-/Destructors
-//==================
-
-D2DFactory::~D2DFactory()
-{
-s_Current=nullptr;
-}
-
-Handle<D2DFactory> D2DFactory::Get()
-{
-if(!s_Current)
-	s_Current=new D2DFactory();
-return s_Current;
-}
 
 
 //========
@@ -68,21 +52,14 @@ return target;
 
 D2DFactory::D2DFactory()
 {
+HRESULT hr=CoInitialize(nullptr);
+ErrorHelper::ThrowIfFailed(hr);
 D2D1_FACTORY_OPTIONS d2dfo;
 MemoryHelper::Fill(&d2dfo, sizeof(d2dfo), 0);
 #ifdef _DEBUG
 d2dfo.debugLevel=D2D1_DEBUG_LEVEL_INFORMATION;
 #endif
-ID2D1Factory* factory=nullptr;
-D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, __uuidof(ID2D1Factory), &d2dfo, (VOID**)&factory);
-m_Factory.Initialize(factory);
+D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, __uuidof(ID2D1Factory), &d2dfo, (VOID**)m_Factory.AddressOf());
 }
-
-
-//================
-// Common Private
-//================
-
-D2DFactory* D2DFactory::s_Current=nullptr;
 
 }}
