@@ -50,9 +50,9 @@ Status File::Create(FileCreateMode create, FileAccessMode access, FileShareMode 
 {
 WriteLock lock(m_Mutex);
 CloseInternal();
-UINT ucreate=FileGetCreateMode(create);
-UINT uacc=FileGetAccessMode(access);
-UINT ushare=FileGetShareMode(share);
+UINT ucreate=FileHelper::GetCreateMode(create);
+UINT uacc=FileHelper::GetAccessMode(access);
+UINT ushare=FileHelper::GetShareMode(share);
 LPCTSTR path=m_Path->Begin();
 SetLastError(0);
 HANDLE file=CreateFile(path, uacc, ushare, nullptr, ucreate, 0, NULL);
@@ -185,7 +185,7 @@ SIZE_T File::GetSize()
 WriteLock lock(m_Mutex);
 if(!m_File)
 	return 0;
-return GetFileSize(m_File);
+return FileHelper::GetFileSize(m_File);
 }
 
 BOOL File::Seek(SIZE_T pos)
@@ -253,7 +253,7 @@ SIZE_T File::AvailableInternal()
 {
 if(!m_File)
 	return 0;
-UINT64 size=GetFileSize(m_File);
+UINT64 size=FileHelper::GetFileSize(m_File);
 UINT64 available=size-m_Position;
 if(available>SIZE_MAX)
 	return SIZE_MAX;

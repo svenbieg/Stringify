@@ -31,7 +31,17 @@ namespace UI {
 
 Handle<Brush> Button::GetBackground()
 {
-return m_Theme->ControlBrush;
+if(!m_Theme)
+	return nullptr;
+auto brush=m_Theme->ControlBrush;
+if(IsEnabled())
+	{
+	BOOL has_focus=HasFocus();
+	has_focus|=HasPointerFocus();
+	if(has_focus)
+		brush=m_Theme->HighlightBrush;
+	}
+return brush;
 }
 
 Graphics::SIZE Button::GetMinSize(RenderTarget* target)

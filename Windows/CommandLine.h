@@ -10,28 +10,33 @@
 //=======
 
 #include "Collections/StringList.h"
+#include "Global.h"
 
 
 //==============
 // Command-Line
 //==============
 
-class CommandLine: public Object
+class CommandLine: public Global<CommandLine>
 {
 public:
 	// Using
 	using StringList=Collections::StringList;
 
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
-	CommandLine(LPTSTR CommandLine);
+	static inline Handle<CommandLine> Create() { return Global::Create(); }
 
 	// Common
 	Handle<StringList> Arguments;
 	LPCTSTR Begin();
-	static Handle<CommandLine> Get();
 
 private:
+	// Con-/Destructors
+	CommandLine();
+
 	// Common
 	LPCTSTR ScanArgument(LPCTSTR CommandLine, LPCTSTR* Argument, UINT* Length);
-	static Handle<CommandLine> m_Current;
 };

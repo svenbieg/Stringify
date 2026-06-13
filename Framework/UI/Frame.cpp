@@ -271,12 +271,9 @@ for(auto it=window->Children->End(); it->HasCurrent(); it->MovePrevious())
 auto control=dynamic_cast<Interactive*>(window);
 if(control)
 	{
-	if(control->IsEnabled())
-		{
-		if(!*focus_ptr)
-			*focus_ptr=control;
-		DoPointer(control, type, args);
-		}
+	if(!*focus_ptr)
+		*focus_ptr=control;
+	DoPointer(control, type, args);
 	}
 return inside;
 }

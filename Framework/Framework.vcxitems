@@ -35,6 +35,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Input.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Interactive.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Label.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\ListView.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\EditMenu.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\Menu.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\MenuBar.cpp" />
@@ -53,9 +54,9 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\ScrollBox.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\SplitView.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\StackPanel.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\TabView.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\TextBlock.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\TextBox.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\TreeView.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\WrapPanel.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Frame.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Input\KeyEvent.cpp" />
@@ -74,8 +75,10 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Size.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Bitmaps\Edit.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Bitmaps\File.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Bitmaps\Menu.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Icons\Edit.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Icons\File.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Icons\Menu.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Strings\Edit.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Alignment.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Application.h" />
@@ -91,6 +94,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Input.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Interactive.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Label.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\ListView.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\EditMenu.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\Menu.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\MenuBar.h" />
@@ -109,9 +113,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\ScrollBox.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\SplitView.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\StackPanel.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\TabView.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\TextBlock.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\TextBox.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\TreeView.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\WrapPanel.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Frame.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Input\KeyEvent.h" />

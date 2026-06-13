@@ -212,22 +212,6 @@ target->FillRect(rc_fill, background);
 VOID Window::SetParent(Window* parent)
 {
 Handle<Window> self=this;
-if(!parent)
-	{
-	if(!m_Parent)
-		return;
-	m_Parent->Children->Remove(this);
-	m_Parent->Invalidate(true);
-	m_Parent=nullptr;
-	m_Frame=nullptr;
-	m_Theme=nullptr;
-	for(auto it=Children->Begin(); it->HasCurrent(); it->MoveNext())
-		{
-		auto child=it->GetCurrent();
-		child->SetParent(this);
-		}
-	return;
-	}
 if(m_Parent!=parent)
 	{
 	if(m_Parent)
@@ -236,16 +220,27 @@ if(m_Parent!=parent)
 		m_Parent->Invalidate(true);
 		}
 	m_Parent=parent;
-	m_Parent->Children->Append(this);
+	if(m_Parent)
+		{
+		m_Parent->Children->Append(this);
+		m_Parent->Invalidate(true);
+		}
 	}
-m_Frame=m_Parent->m_Frame;
-m_Theme=m_Parent->m_Theme;
+if(m_Parent)
+	{
+	m_Frame=m_Parent->m_Frame;
+	m_Theme=m_Parent->m_Theme;
+	}
+else
+	{
+	m_Frame=nullptr;
+	m_Theme=nullptr;
+	}
 for(auto it=Children->Begin(); it->HasCurrent(); it->MoveNext())
 	{
 	auto child=it->GetCurrent();
 	child->SetParent(this);
 	}
-Invalidate(true);
 }
 
 VOID Window::SetPosition(POINT const& pt)

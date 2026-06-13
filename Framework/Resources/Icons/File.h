@@ -25,6 +25,13 @@ namespace Resources {
 // Common
 //========
 
+const ICON ICO_FILE_CLOSE[]=
+	{
+	{ 16, Bitmaps::BMP_FILE_CLOSE_16 },
+	{ 24, Bitmaps::BMP_FILE_CLOSE_24 },
+	{ 0, nullptr }
+	};
+
 const ICON ICO_FILE_NEW[]=
 	{
 	{ 16, Bitmaps::BMP_FILE_NEW_16 },

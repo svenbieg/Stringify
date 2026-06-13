@@ -73,6 +73,31 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Timing\ClockHelper.cpp">
       <Filter>Timing</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Culture\LanguageHelper.cpp">
+      <Filter>Culture</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Cursor.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Font.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\RenderTarget.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Theme.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\D2DFactory.cpp">
+      <Filter>Graphics\Direct2D</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\DWriteFactory.cpp">
+      <Filter>Graphics\Direct2D</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\ImagingFactory.cpp">
+      <Filter>Graphics\Direct2D</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Environment.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)ComPointer.h" />
@@ -177,8 +202,37 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Timing\ClockHelper.h">
       <Filter>Timing</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\CriticalSection.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\SpinLock.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\SpinLock.h">
+      <Filter>Concurrency</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Concurrency\CriticalSection.h">
+      <Filter>Concurrency</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Culture\LanguageHelper.h">
+      <Filter>Culture</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Cursor.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Font.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\RenderTarget.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Theme.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\D2DFactory.h">
+      <Filter>Graphics\Direct2D</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\DWriteFactory.h">
+      <Filter>Graphics\Direct2D</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\ImagingFactory.h">
+      <Filter>Graphics\Direct2D</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Environment.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Configuration">
@@ -234,6 +288,15 @@
     </Filter>
     <Filter Include="Timing">
       <UniqueIdentifier>{78cae1dd-9417-4b51-a069-aca0b77e3d47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Culture">
+      <UniqueIdentifier>{a8cdbc3f-9de9-4f44-9b9f-2e1a312fca62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{f097eabd-0dd5-4554-ac1f-9e79c4ad8120}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Direct2D">
+      <UniqueIdentifier>{ff3c3c78-c062-4c17-b3b0-3d2dc9a05247}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

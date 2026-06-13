@@ -73,9 +73,22 @@ if(changed)
 	UpdateSelection();
 }
 
+Handle<Brush> Input::GetBackground()
+{
+if(!m_Theme)
+	return nullptr;
+auto brush=m_Theme->WindowBrush;
+if(!IsEnabled())
+	brush=m_Theme->ControlBrush;
+return brush;
+}
+
 Handle<Cursor> Input::GetCursor()
 {
-return m_Theme->TextCursor;
+auto cursor=m_Theme->DefaultCursor;
+if(IsEnabled())
+	cursor=m_Theme->TextCursor;
+return cursor;
 }
 
 Graphics::RECT Input::GetCursorRect()
@@ -164,20 +177,21 @@ while(1)
 VOID Input::Render(RenderTarget* target, RECT& rc)
 {
 auto background=GetBackground();
-BOOL enabled=IsEnabled();
-if(!enabled)
-	background=m_Theme->ControlBrush;
 RECT rc_fill(rc);
-auto offset=target->GetOffset();
-rc_fill.Move(offset);
 if(background)
 	target->FillRect(rc_fill, background);
+auto offset=target->GetOffset();
 FLOAT scale=GetScaleFactor();
 rc.SetPadding(Padding*scale);
 UINT client_height=rc.GetHeight();
 UINT line_height=m_LineHeight*scale;
 UINT first_line=offset.Top/line_height;
-UINT line_count=client_height/line_height+2;
+if(first_line>m_Lines.get_count())
+	return;
+UINT line_count=m_Lines.get_count()-first_line;
+if(line_count==0)
+	return;
+line_count=TypeHelper::Min(line_count, client_height/line_height+2);
 UINT last_line=first_line+line_count-1;
 BOOL show_sel=true;
 if(m_SelectionFirst==m_SelectionLast)
@@ -189,26 +203,34 @@ if(show_sel)
 	auto highlight=m_Theme->HighlightBrush;
 	if(!HasFocus())
 		highlight=m_Theme->HighlightInactiveBrush;
-	POINT pt_first=PointFromChar(m_SelectionFirst, scale);
-	POINT pt_last=PointFromChar(m_SelectionLast, scale);
-	if(m_SelectionFirst.Top==m_SelectionLast.Top)
+	POINT sel_first=m_SelectionFirst;
+	if(sel_first.Top<first_line)
+		{
+		sel_first.Top=first_line;
+		sel_first.Left=0;
+		}
+	POINT sel_last=m_SelectionLast;
+	if(sel_last.Top>last_line)
+		{
+		sel_last.Top=last_line;
+		sel_last.Left=0;
+		}
+	POINT pt_first=PointFromChar(sel_first, scale);
+	POINT pt_last=PointFromChar(sel_last, scale);
+	if(sel_first.Top==sel_last.Top)
 		{
 		RECT rc_fill(pt_first.Left, pt_first.Top, pt_last.Left, pt_last.Top+line_height);
 		target->FillRect(rc_fill, highlight);
 		}
 	else
 		{
-		auto it=m_Lines.cbegin(m_SelectionFirst.Top);
+		auto it=m_Lines.cbegin(sel_first.Top);
 		UINT right=rc.Left+GetLineWidth(it.get_current(), scale);
 		RECT rc_first(pt_first.Left, pt_first.Top, right, pt_first.Top+line_height);
 		target->FillRect(rc_first, highlight);
-		for(UINT line=m_SelectionFirst.Top+1; line<m_SelectionLast.Top; line++)
+		for(UINT line=sel_first.Top+1; line<sel_last.Top; line++)
 			{
-			if(line>last_line)
-				break;
 			it.move_next();
-			if(line<first_line)
-				continue;
 			right=rc.Left+GetLineWidth(it.get_current(), scale);
 			UINT line_top=rc.Top+line*line_height;
 			RECT rc_fill(rc.Left, line_top, right, line_top+line_height);
@@ -221,7 +243,7 @@ if(show_sel)
 auto font=m_Theme->DefaultFont;
 auto brush=m_Theme->TextBrush;
 UINT top=rc.Top+first_line*line_height;
-UINT line=0;
+UINT line=first_line;
 for(auto it=m_Lines.cbegin(first_line); it.has_current(); it.move_next(), line++)
 	{
 	if(line>last_line)
@@ -252,7 +274,6 @@ if(show_cursor)
 
 VOID Input::ReplaceSelection(LPCTSTR replace)
 {
-
 if(ReadOnly)
 	return;
 if(!replace)
@@ -306,11 +327,13 @@ UINT line_start=0;
 UINT str_pos=0;
 while(replace[str_pos])
 	{
-	if(replace[str_pos]!='\r')
+	if(!CharHelper::IsLineBreak(replace[str_pos]))
 		{
 		str_pos++;
 		continue;
 		}
+	if(!MultiLine)
+		break;
 	UINT insert_len=str_pos-line_start;
 	UINT line_len=before_len+insert_len;
 	StringBuilder builder(line_len);
@@ -677,6 +700,8 @@ Invalidate();
 
 VOID Input::OnFocused()
 {
+if(!IsEnabled())
+	return;
 ShowCursor(true);
 Invalidate();
 }
@@ -803,6 +828,8 @@ switch(args->Key)
 
 VOID Input::OnPointerDown(Handle<PointerEventArgs> args)
 {
+if(!IsEnabled())
+	return;
 SetFocus(FocusReason::Pointer);
 if(args->Button==PointerButton::Wheel)
 	return;

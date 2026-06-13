@@ -52,6 +52,7 @@ public:
 
 	// Common
 	Event<ToolBarItem> Clicked;
+	Handle<Brush> GetBackground()override;
 	SIZE GetMinSize(RenderTarget* Target)override;
 	Handle<Graphics::Icon> Icon;
 	RECT Padding;

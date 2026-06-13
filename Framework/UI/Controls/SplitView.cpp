@@ -29,9 +29,9 @@ Handle<Cursor> SplitView::GetCursor()
 switch(m_Orientation)
 	{
 	case Orientation::Horizontal:
-		return m_Theme->SizeVerticalCursor;
-	case Orientation::Vertical:
 		return m_Theme->SizeHorizontalCursor;
+	case Orientation::Vertical:
+		return m_Theme->SizeVerticalCursor;
 	}
 return nullptr;
 }
@@ -58,14 +58,14 @@ switch(m_Orientation)
 	{
 	case Orientation::Horizontal:
 		{
-		rc1.Bottom=rc1.Top+Size;
-		rc2.Top=rc1.Bottom+Distance;
+		rc1.Right=rc1.Left+Size;
+		rc2.Left=rc1.Right+Distance;
 		break;
 		}
 	case Orientation::Vertical:
 		{
-		rc1.Right=rc1.Left+Size;
-		rc2.Left=rc1.Right+Distance;
+		rc1.Bottom=rc1.Top+Size;
+		rc2.Top=rc1.Bottom+Distance;
 		break;
 		}
 	}
@@ -82,11 +82,11 @@ SplitView::SplitView(Window* parent, Orientation orientation):
 Interactive(parent),
 Distance(0),
 Size(0),
-m_StartSize(0),
+m_Delta(0),
 m_Orientation(orientation)
 {
 FLOAT scale=GetScaleFactor();
-Distance=8*scale;
+Distance=4*scale;
 Size=200*scale;
 PointerDown.Add(this, &SplitView::OnPointerDown);
 PointerMoved.Add(this, &SplitView::OnPointerMoved);
@@ -102,33 +102,45 @@ VOID SplitView::OnPointerDown(Handle<PointerEventArgs> args)
 {
 if(args->Button!=PointerButton::Left)
 	return;
-m_StartSize=Size;
 m_StartPoint=args->Point;
+switch(m_Orientation)
+	{
+	case Orientation::Horizontal:
+		{
+		m_Delta=m_StartPoint.Left-Size;
+		break;
+		}
+	case Orientation::Vertical:
+		{
+		m_Delta=m_StartPoint.Top-Size;
+		break;
+		}
+	}
 CapturePointer();
 args->Handled=true;
 }
 
 VOID SplitView::OnPointerMoved(Handle<PointerEventArgs> args)
 {
-if(m_StartSize==0)
+if(!IsCapturingPointer())
 	return;
 POINT const& pt=args->Point;
 switch(m_Orientation)
 	{
 	case Orientation::Horizontal:
 		{
-		UINT height=m_Rect.GetHeight();
-		Size+=m_StartPoint.Top-pt.Top;
-		Size=TypeHelper::Max(Size, 20U);
-		Size=TypeHelper::Min(Size, height-20);
+		UINT width=m_Rect.GetWidth();
+		UINT left=TypeHelper::Max(pt.Left, 20);
+		left=TypeHelper::Min(left, width-20);
+		Size=left-m_Delta;
 		break;
 		}
 	case Orientation::Vertical:
 		{
-		UINT width=m_Rect.GetWidth();
-		Size+=m_StartPoint.Left-pt.Left;
-		Size=TypeHelper::Max(Size, 20U);
-		Size=TypeHelper::Min(Size, width-20);
+		UINT height=m_Rect.GetHeight();
+		UINT top=TypeHelper::Max(pt.Top, 20);
+		top=TypeHelper::Min(top, height-20);
+		Size=top-m_Delta;
 		break;
 		}
 	}
@@ -139,7 +151,6 @@ VOID SplitView::OnPointerUp(Handle<PointerEventArgs> args)
 {
 if(args->Button!=PointerButton::Left)
 	return;
-m_StartSize=0;
 ReleasePointer();
 args->Handled=true;
 }

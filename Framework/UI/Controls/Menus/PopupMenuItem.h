@@ -56,7 +56,9 @@ public:
 		}
 
 	// Common
+	Property<PopupMenuItem, BOOL> Checked;
 	Event<PopupMenuItem> Clicked;
+	Handle<Brush> GetBackground()override;
 	SIZE GetMinSize(RenderTarget* Target)override;
 	Handle<Graphics::Icon> Icon;
 	BOOL IsSeparator() { return Text==nullptr; }
@@ -73,6 +75,7 @@ private:
 
 	// Common
 	VOID DoClick();
+	VOID OnCheckedChanged(BOOL Checked);
 	VOID OnClicked();
 	VOID OnLabelChanged(Handle<Sentence> Label);
 	VOID OnKeyDown(Handle<KeyEventArgs> Args);

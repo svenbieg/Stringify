@@ -36,7 +36,7 @@ INT WINAPI WinMain(HINSTANCE inst, HINSTANCE prev_inst, LPSTR cmd_line, INT show
 {
 SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
 DispatchedQueue::Initialize();
-Language::Current=GetCurrentLanguage();
+Language::Current=LanguageHelper::GetCurrentLanguage();
 g_ShowCommand=show_cmd;
 return Main();
 }

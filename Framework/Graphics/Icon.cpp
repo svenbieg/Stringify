@@ -19,6 +19,21 @@ using namespace Resources::Icons;
 namespace Graphics {
 
 
+//==================
+// Con-/Destructors
+//==================
+
+Handle<Icon> Icon::Create(ICON const* resource)
+{
+Handle<Icon> icon;
+if(s_Resources.try_get(resource, &icon))
+	return icon;
+icon=new Icon(resource);
+s_Resources.add(resource, icon);
+return icon;
+}
+
+
 //========
 // Common
 //========
@@ -66,5 +81,7 @@ for(ICON const* icon=m_Icons; icon->Size>0; icon++)
 	}
 return prev;
 }
+
+Icon::ResourceMap Icon::s_Resources;
 
 }

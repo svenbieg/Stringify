@@ -10,6 +10,8 @@
 //=======
 
 #include "Storage/File.h"
+#include "BitHelper.h"
+#include "StringClass.h"
 
 
 //=============
@@ -31,19 +33,24 @@ namespace Storage {
 // Common
 //========
 
-BOOL CreateDirectoryTree(LPCTSTR Path);
-BOOL DeleteDirectoryTree(LPCTSTR Path);
-BOOL DirectoryExists(LPCTSTR Path);
-BOOL FileDelete(LPCTSTR Path);
-BOOL FileExists(LPCTSTR Path);
-UINT FileGetAccessMode(FileAccessMode Access);
-BOOL FileGetBasicInfo(LPCTSTR Path, FILE_BASIC_INFO& Info);
-UINT FileGetCreateMode(FileCreateMode Create);
-UINT FileGetShareMode(FileShareMode Share);
-Handle<String> FileGetTemporaryPath(LPCTSTR Prefix);
-UINT GetFileCount(LPCTSTR Mask);
-UINT64 GetFileSize(HANDLE File);
-Handle<String> GetNextFileName(LPCTSTR Path);
-inline BOOL IsAccessReadOnly(UINT Access) { return !(Access&(GENERIC_WRITE|FILE_WRITE_DATA|FILE_APPEND_DATA)); }
+class FileHelper
+{
+public:
+	static BOOL CreateDirectoryTree(LPCTSTR Path);
+	static BOOL Delete(LPCTSTR Path);
+	static BOOL DeleteDirectoryTree(LPCTSTR Path);
+	static BOOL DirectoryExists(LPCTSTR Path);
+	static BOOL FileExists(LPCTSTR Path);
+	static BOOL FileExists(Handle<String> const& Path);
+	static UINT GetAccessMode(FileAccessMode Access);
+	static BOOL GetBasicInfo(LPCTSTR Path, FILE_BASIC_INFO& Info);
+	static UINT GetCreateMode(FileCreateMode Create);
+	static UINT GetFileCount(LPCTSTR Mask);
+	static UINT64 GetFileSize(HANDLE File);
+	static Handle<String> GetNextFileName(LPCTSTR Path);
+	static UINT GetShareMode(FileShareMode Share);
+	static Handle<String> GetTemporaryPath(LPCTSTR Prefix);
+	static BOOL IsAccessReadOnly(UINT Access);
+};
 
 }}

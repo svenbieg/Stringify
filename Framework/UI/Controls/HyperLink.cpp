@@ -9,6 +9,8 @@
 // Using
 //=======
 
+#include "Environment.h"
+
 using namespace Graphics;
 
 
@@ -23,6 +25,13 @@ namespace UI {
 //========
 // Common
 //========
+
+Handle<Cursor> HyperLink::GetCursor()
+{
+if(!m_Theme)
+	return nullptr;
+return m_Theme->HandPointCursor;
+}
 
 Graphics::SIZE HyperLink::GetMinSize(RenderTarget* target)
 {
@@ -59,7 +68,22 @@ target->DrawLine(POINT(rc.Left, rc.Bottom), POINT(rc.Right, rc.Bottom), Color);
 HyperLink::HyperLink(Window* parent):
 Interactive(parent)
 {
+Clicked.Add(this, &HyperLink::OnClicked);
 Color=Brush::Create(Colors::Blue);
+TabStop=true;
+}
+
+
+//================
+// Common Private
+//================
+
+VOID HyperLink::OnClicked()
+{
+auto link=Link;
+if(!link)
+	link=Text;
+Environment::Open(link);
 }
 
 }}

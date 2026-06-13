@@ -81,7 +81,7 @@ return nullptr;
 
 Handle<Directory> Directory::Open(Handle<String> path)
 {
-if(!DirectoryExists(path->Begin()))
+if(!FileHelper::DirectoryExists(path->Begin()))
 	return nullptr;
 return new Directory(path);
 }

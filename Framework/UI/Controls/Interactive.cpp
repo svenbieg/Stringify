@@ -103,21 +103,6 @@ if(frame->GetPointerCapture()==this)
 	frame->SetPointerCapture(nullptr);
 }
 
-VOID Interactive::Render(RenderTarget* target, RECT& rc)
-{
-auto background=GetBackground();
-BOOL focus=HasFocus();
-focus|=HasPointerFocus();
-if(focus)
-	background=m_Theme->HighlightBrush;
-if(!background)
-	return;
-RECT rc_fill(rc);
-auto offset=target->GetOffset();
-rc_fill.Move(offset);
-target->FillRect(rc_fill, background);
-}
-
 VOID Interactive::SetFocus(FocusReason reason)
 {
 auto frame=GetFrame();
@@ -257,6 +242,7 @@ if(!frame)
 	return;
 auto cursor=GetCursor();
 frame->SetCursor(cursor);
+Invalidate(false);
 }
 
 VOID Interactive::OnPointerLeft()
@@ -266,6 +252,7 @@ if(!frame)
 	return;
 auto cursor=m_Theme->DefaultCursor;
 frame->SetCursor(cursor);
+Invalidate(false);
 }
 
 VOID Interactive::OnPointerUp(Handle<PointerEventArgs> args)

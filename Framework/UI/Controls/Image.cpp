@@ -23,7 +23,7 @@ FLOAT scale=GetScaleFactor();
 if(!Source)
 	return MinSize*scale;
 SIZE size=Source->GetDimensions();
-size*=Scale;
+size*=scale;
 return size.Max(MinSize*scale);
 }
 

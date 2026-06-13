@@ -78,7 +78,6 @@ public:
 	Event<Interactive, Handle<PointerEventArgs>> PointerUp;
 	Event<Interactive, Handle<PointerEventArgs>> PointerWheel;
 	VOID ReleasePointer();
-	virtual VOID Render(RenderTarget* Target, RECT& Rect)override;
 	virtual VOID SetFocus(FocusReason Reason=FocusReason::None);
 	BOOL TabStop;
 

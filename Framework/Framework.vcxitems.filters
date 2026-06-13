@@ -123,9 +123,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\MenuItem.cpp">
       <Filter>UI\Controls\Menus</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\TabView.cpp">
-      <Filter>UI\Controls</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\ComboBox.cpp">
       <Filter>UI\Controls</Filter>
     </ClCompile>
@@ -170,6 +167,12 @@
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Brush.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\TreeView.cpp">
+      <Filter>UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\ListView.cpp">
+      <Filter>UI\Controls</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -272,9 +275,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\MenuItem.h">
       <Filter>UI\Controls\Menus</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\TabView.h">
-      <Filter>UI\Controls</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\TextBlock.h">
       <Filter>UI\Controls</Filter>
     </ClInclude>
@@ -336,6 +336,18 @@
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Icons\Edit.h">
+      <Filter>Resources\Icons</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\TreeView.h">
+      <Filter>UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\ListView.h">
+      <Filter>UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Bitmaps\Menu.h">
+      <Filter>Resources\Bitmaps</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Icons\Menu.h">
       <Filter>Resources\Icons</Filter>
     </ClInclude>
   </ItemGroup>

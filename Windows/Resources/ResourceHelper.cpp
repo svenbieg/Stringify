@@ -9,8 +9,15 @@
 // Using
 //=======
 
+#include "Graphics/Direct2D/ImagingFactory.h"
+#include "Storage/Filesystem/FileHelper.h"
+#include "CommandLine.h"
+#include "PathHelper.h"
 #include <assert.h>
-#include "StringHelper.h"
+
+using namespace Graphics;
+using namespace Graphics::Direct2D;
+using namespace Storage::Filesystem;
 
 
 //=======
@@ -214,6 +221,28 @@ ICONGROUPENTRY Entries[1];
 
 #pragma pack(pop)
 
+Handle<Bitmap> ResourceHelper::CreateBitmap(Handle<String> path)
+{
+path=Lookup(path);
+auto factory=ImagingFactory::Create();
+auto source=factory->CreateBitmap(path);
+UINT width=0;
+UINT height=0;
+source->GetSize(&width, &height);
+ComPointer<IWICBitmapLock> lock;
+source->Lock(nullptr, WICBitmapLockRead, lock.AddressOf());
+UINT size=0;
+WICInProcPointer ptr=nullptr;
+lock->GetDataPointer(&size, &ptr);
+assert(size==width*height*4);
+UINT stride=0;
+lock->GetStride(&stride);
+auto bmp=Bitmap::Create(width, height, 32);
+auto buf=const_cast<BYTE*>(bmp->Begin());
+source->CopyPixels(nullptr, stride, size, buf);
+return bmp;
+}
+
 BITMAPINFO* ResourceHelper::GetIcon(UINT id, UINT size)
 {
 assert(id);
@@ -293,6 +322,29 @@ for(UINT u=0; u<icon_count; u++)
 	pos++;
 	}
 return pos;
+}
+
+
+//================
+// Common Private
+//================
+
+Handle<String> ResourceHelper::Lookup(Handle<String> path)
+{
+if(FileHelper::FileExists(path))
+	return path;
+auto cmd_line=CommandLine::Create();
+auto exe=cmd_line->Arguments->GetAt(0);
+auto root=PathHelper::GetDirectory(exe->Begin());
+auto full_path=String::Create("%s\\..\\%s", root, path);
+if(FileHelper::FileExists(full_path))
+	return full_path;
+TCHAR current[MAX_PATH];
+GetCurrentDirectory(MAX_PATH, current);
+full_path=String::Create("%s\\..\\AppX\\%s", current, path);
+if(FileHelper::FileExists(full_path))
+	return full_path;
+throw NotFoundException();
 }
 
 }

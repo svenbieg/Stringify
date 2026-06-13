@@ -9,9 +9,9 @@
 // Using
 //=======
 
-#include <random>
 #include "Devices/Timers/SystemTimer.h"
 #include "StringBuilder.h"
+#include <random>
 
 using namespace Devices::Timers;
 

@@ -36,6 +36,7 @@ public:
 
 	// Common
 	Handle<Brush> Color;
+	Handle<Cursor> GetCursor()override;
 	SIZE GetMinSize(RenderTarget* Target)override;
 	Handle<String> Link;
 	VOID Render(RenderTarget* Target, RECT& Rect)override;
@@ -44,6 +45,9 @@ public:
 private:
 	// Con-/Destructors
 	HyperLink(Window* Parent);
+
+	// Common
+	VOID OnClicked();
 };
 
 }}

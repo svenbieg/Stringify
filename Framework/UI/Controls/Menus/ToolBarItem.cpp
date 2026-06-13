@@ -30,6 +30,18 @@ namespace UI {
 // Common
 //========
 
+Handle<Brush> ToolBarItem::GetBackground()
+{
+if(!m_Theme)
+	return nullptr;
+auto brush=m_Theme->ControlBrush;
+BOOL has_focus=HasFocus();
+has_focus|=HasPointerFocus();
+if(has_focus)
+	brush=m_Theme->HighlightBrush;
+return brush;
+}
+
 Graphics::SIZE ToolBarItem::GetMinSize(RenderTarget* target)
 {
 FLOAT scale=GetScaleFactor();

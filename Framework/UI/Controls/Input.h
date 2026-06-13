@@ -51,6 +51,7 @@ public:
 	VOID Clear();
 	VOID ClearSelection();
 	Handle<EditMenu> ContextMenu;
+	Handle<Brush> GetBackground()override;
 	Handle<Cursor> GetCursor()override;
 	RECT GetCursorRect();
 	UINT GetLineHeight()const;

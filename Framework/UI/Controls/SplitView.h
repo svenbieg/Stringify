@@ -32,7 +32,7 @@ public:
 	friend Object;
 
 	// Con-/Destructors
-	static inline Handle<SplitView> Create(Window* Parent, Orientation Orientation=Orientation::Vertical)
+	static inline Handle<SplitView> Create(Window* Parent, Orientation Orientation=Orientation::Horizontal)
 		{
 		return Object::Create<SplitView>(Parent, Orientation);
 		}
@@ -51,8 +51,8 @@ private:
 	VOID OnPointerDown(Handle<PointerEventArgs> Args);
 	VOID OnPointerMoved(Handle<PointerEventArgs> Args);
 	VOID OnPointerUp(Handle<PointerEventArgs> Args);
+	UINT m_Delta;
 	POINT m_StartPoint;
-	UINT m_StartSize;
 	Orientation m_Orientation;
 };
 

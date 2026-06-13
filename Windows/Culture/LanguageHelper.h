@@ -19,10 +19,15 @@
 namespace Culture {
 
 
-//========
-// Common
-//========
+//=================
+// Language-Helper
+//=================
 
-LanguageCode GetCurrentLanguage();
+class LanguageHelper
+{
+public:
+	// Common
+	static LanguageCode GetCurrentLanguage();
+};
 
 }

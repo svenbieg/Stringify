@@ -68,7 +68,7 @@ VOID ProcessClient::SendCommandLine()
 if(!m_NamedPipe)
 	return;
 StreamWriter writer(m_NamedPipe);
-auto cmd_line=CommandLine::Get();
+auto cmd_line=CommandLine::Create();
 auto args=cmd_line->Arguments;
 for(auto it=args->Begin(); it->HasCurrent(); it->MoveNext())
 	{

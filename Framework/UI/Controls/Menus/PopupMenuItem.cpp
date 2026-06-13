@@ -10,6 +10,7 @@
 //=======
 
 #include "Concurrency/DispatchedQueue.h"
+#include "Resources/Icons/Menu.h"
 #include "UI/Controls/Menus/MenuBar.h"
 #include "UI/Controls/Menus/MenuHelper.h"
 #include "UI/Controls/Menus/PopupMenu.h"
@@ -18,6 +19,7 @@
 
 using namespace Concurrency;
 using namespace Graphics;
+using namespace Resources::Icons;
 using namespace UI::Input;
 
 
@@ -33,6 +35,21 @@ namespace UI {
 //========
 // Common
 //========
+
+Handle<Brush> PopupMenuItem::GetBackground()
+{
+if(!m_Theme)
+	return nullptr;
+auto brush=m_Theme->ControlBrush;
+if(IsEnabled())
+	{
+	BOOL has_focus=HasFocus();
+	has_focus|=HasPointerFocus();
+	if(has_focus)
+		brush=m_Theme->HighlightBrush;
+	}
+return brush;
+}
 
 Graphics::SIZE PopupMenuItem::GetMinSize(RenderTarget* target)
 {
@@ -168,12 +185,14 @@ m_ShortcutWidth=shortcut_width;
 PopupMenuItem::PopupMenuItem(PopupMenu* parent, Handle<Sentence> label):
 Interactive(parent->GetPanel()),
 MenuItem(this, parent),
+Checked(this, false),
 Label(this),
 Padding(12, 3, 12, 3),
 m_IconWidth(0),
 m_LabelWidth(0),
 m_ShortcutWidth(0)
 {
+Checked.Changed.Add(this, &PopupMenuItem::OnCheckedChanged);
 Interactive::Clicked.Add(this, &PopupMenuItem::OnClicked);
 if(!label)
 	Enabled=false;
@@ -193,6 +212,18 @@ PointerLeft.Add(this, &PopupMenuItem::OnPointerLeft);
 VOID PopupMenuItem::DoClick()
 {
 Clicked(this);
+}
+
+VOID PopupMenuItem::OnCheckedChanged(BOOL checked)
+{
+if(checked)
+	{
+	Icon=Icon::Create(ICO_MENU_CHECKED);
+	}
+else
+	{
+	Icon=nullptr;
+	}
 }
 
 VOID PopupMenuItem::OnClicked()

@@ -5,12 +5,24 @@
 #include "CommandLine.h"
 
 
-//==================
-// Con-/Destructors
-//==================
 
-CommandLine::CommandLine(LPTSTR cmd_line)
+//========
+// Common
+//========
+
+LPCTSTR CommandLine::Begin()
 {
+return GetCommandLine();
+}
+
+
+//==========================
+// Con-/Destructors Private
+//==========================
+
+CommandLine::CommandLine()
+{
+LPTSTR cmd_line=GetCommandLine();
 Arguments=StringList::Create();
 if(!cmd_line||!cmd_line[0])
 	return;
@@ -27,24 +39,9 @@ while(next)
 }
 
 
-//========
-// Common
-//========
-
-LPCTSTR CommandLine::Begin()
-{
-return GetCommandLine();
-}
-
-Handle<CommandLine> CommandLine::Get()
-{
-if(!m_Current)
-	{
-	LPTSTR cmd_line=GetCommandLine();
-	m_Current=new CommandLine(cmd_line);
-	}
-return m_Current;
-}
+//================
+// Common Private
+//================
 
 LPCTSTR CommandLine::ScanArgument(LPCTSTR cmd_line, LPCTSTR* arg_ptr, UINT* len_ptr)
 {
@@ -80,10 +77,3 @@ if(next[0])
 	return next;
 return nullptr;
 }
-
-
-//================
-// Common Private
-//================
-
-Handle<CommandLine> CommandLine::m_Current;

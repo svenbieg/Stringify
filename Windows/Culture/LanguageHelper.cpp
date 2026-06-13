@@ -16,7 +16,7 @@ namespace Culture {
 // Common
 //========
 
-LanguageCode GetCurrentLanguage()
+LanguageCode LanguageHelper::GetCurrentLanguage()
 {
 LANGID id=GetUserDefaultUILanguage();
 BYTE lng=(BYTE)id;

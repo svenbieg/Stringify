@@ -28,7 +28,7 @@ namespace Storage {
 // Common
 //========
 
-BOOL CreateDirectoryTree(LPCTSTR path)
+BOOL FileHelper::CreateDirectoryTree(LPCTSTR path)
 {
 if(!path)
 	return false;
@@ -44,23 +44,7 @@ if(dir_len>0)
 return CreateDirectory(&path[dir_len], nullptr);
 }
 
-BOOL DeleteDirectoryTree(LPCTSTR path)
-{
-if(!path)
-	return false;
-if(!DirectoryExists(path))
-	return false;
-return RemoveDirectory(path);
-}
-
-BOOL DirectoryExists(LPCTSTR path)
-{
-if(!path)
-	return false;
-return PathIsDirectory(path);
-}
-
-BOOL FileDelete(LPCTSTR path)
+BOOL FileHelper::Delete(LPCTSTR path)
 {
 if(!path)
 	return false;
@@ -71,8 +55,26 @@ if(DirectoryExists(path))
 return false;
 }
 
-BOOL FileExists(LPCTSTR path)
+BOOL FileHelper::DeleteDirectoryTree(LPCTSTR path)
 {
+if(!path)
+	return false;
+if(!DirectoryExists(path))
+	return false;
+return RemoveDirectory(path);
+}
+
+BOOL FileHelper::DirectoryExists(LPCTSTR path)
+{
+if(!path)
+	return false;
+return PathIsDirectory(path);
+}
+
+BOOL FileHelper::FileExists(LPCTSTR path)
+{
+if(!path||!path[0])
+	throw InvalidArgumentException();
 DWORD att=GetFileAttributes(path);
 if(att==INVALID_FILE_ATTRIBUTES)
 	return false;
@@ -81,7 +83,14 @@ if(att&FILE_ATTRIBUTE_DIRECTORY)
 return true;
 }
 
-UINT FileGetAccessMode(FileAccessMode access)
+BOOL FileHelper::FileExists(Handle<String> const& path)
+{
+if(!path)
+	throw InvalidArgumentException();
+return FileExists(path->Begin());
+}
+
+UINT FileHelper::GetAccessMode(FileAccessMode access)
 {
 switch(access)
 	{
@@ -93,7 +102,7 @@ switch(access)
 return 0;
 }
 
-BOOL FileGetBasicInfo(LPCTSTR path, FILE_BASIC_INFO& info)
+BOOL FileHelper::GetBasicInfo(LPCTSTR path, FILE_BASIC_INFO& info)
 {
 if(!path)
 	return false;
@@ -113,7 +122,7 @@ CloseHandle(file);
 return status;
 }
 
-UINT FileGetCreateMode(FileCreateMode create)
+UINT FileHelper::GetCreateMode(FileCreateMode create)
 {
 switch(create)
 	{
@@ -129,30 +138,7 @@ switch(create)
 return 0;
 }
 
-UINT FileGetShareMode(FileShareMode share)
-{
-switch(share)
-	{
-	case FileShareMode::Exclusive:
-		return 0;
-	case FileShareMode::ShareRead:
-		return FILE_SHARE_READ;
-	case FileShareMode::ShareWrite:
-		return FILE_SHARE_READ|FILE_SHARE_WRITE;
-	}
-return 0;
-}
-
-Handle<String> FileGetTemporaryPath(LPCTSTR prefix)
-{
-TCHAR tmp_path[MAX_PATH];
-GetTempPath(MAX_PATH, tmp_path);
-TCHAR path[MAX_PATH];
-GetTempFileName(tmp_path, prefix, 0, path);
-return path;
-}
-
-UINT GetFileCount(LPCTSTR mask)
+UINT FileHelper::GetFileCount(LPCTSTR mask)
 {
 if(!mask)
 	return 0;
@@ -167,7 +153,7 @@ FindClose(find);
 return count;
 }
 
-UINT64 GetFileSize(HANDLE file)
+UINT64 FileHelper::GetFileSize(HANDLE file)
 {
 if(!file)
 	return 0;
@@ -177,7 +163,7 @@ if(!GetFileSizeEx(file, &li))
 return li.QuadPart;
 }
 
-Handle<String> GetNextFileName(LPCTSTR path)
+Handle<String> FileHelper::GetNextFileName(LPCTSTR path)
 {
 if(!path)
 	return nullptr;
@@ -199,6 +185,34 @@ if(StringHelper::Scan(file_name, "%s (%u).%s", name, MAX_PATH, &id, ext, 8)==3)
 if(StringHelper::Scan(file_name, "%s.%s", name, MAX_PATH, ext, 8)==2)
 	 return String::Create("%s%s (%u).%s", dir_ptr, name, 1, ext);
 return nullptr;
+}
+
+UINT FileHelper::GetShareMode(FileShareMode share)
+{
+switch(share)
+	{
+	case FileShareMode::Exclusive:
+		return 0;
+	case FileShareMode::ShareRead:
+		return FILE_SHARE_READ;
+	case FileShareMode::ShareWrite:
+		return FILE_SHARE_READ|FILE_SHARE_WRITE;
+	}
+return 0;
+}
+
+Handle<String> FileHelper::GetTemporaryPath(LPCTSTR prefix)
+{
+TCHAR tmp_path[MAX_PATH];
+GetTempPath(MAX_PATH, tmp_path);
+TCHAR path[MAX_PATH];
+GetTempFileName(tmp_path, prefix, 0, path);
+return path;
+}
+
+BOOL FileHelper::IsAccessReadOnly(UINT acc)
+{
+return !BitHelper::Get(acc, GENERIC_WRITE|FILE_WRITE_DATA|FILE_APPEND_DATA);
 }
 
 }}

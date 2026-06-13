@@ -1,15 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\D2DFactory.cpp">
-      <Filter>Graphics\Direct2D</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\DWriteFactory.cpp">
-      <Filter>Graphics\Direct2D</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\ImagingFactory.cpp">
-      <Filter>Graphics\Direct2D</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Application.cpp">
       <Filter>Desktop</Filter>
     </ClCompile>
@@ -28,9 +19,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\DialogHelper.cpp">
       <Filter>Desktop\Dialogs</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Culture\LanguageHelper.cpp">
-      <Filter>Culture</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Popup.cpp">
       <Filter>UI</Filter>
     </ClCompile>
@@ -46,35 +34,11 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\PathEdit.cpp">
       <Filter>UI\Controls</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Theme.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\RenderTarget.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Cursor.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Font.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\Dialog.cpp">
       <Filter>Desktop\Dialogs</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Resources\Bitmaps\BitmapHelper.cpp">
-      <Filter>Resources\Bitmaps</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\D2DFactory.h">
-      <Filter>Graphics\Direct2D</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\DWriteFactory.h">
-      <Filter>Graphics\Direct2D</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\ImagingFactory.h">
-      <Filter>Graphics\Direct2D</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Application.h">
       <Filter>Desktop</Filter>
     </ClInclude>
@@ -99,9 +63,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\DialogHelper.h">
       <Filter>Desktop\Dialogs</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Culture\LanguageHelper.h">
-      <Filter>Culture</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Popup.h">
       <Filter>UI</Filter>
     </ClInclude>
@@ -117,32 +78,11 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\PathEdit.h">
       <Filter>UI\Controls</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Cursor.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Font.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\RenderTarget.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Theme.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\Dialog.h">
       <Filter>Desktop\Dialogs</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Bitmaps\BitmapHelper.h">
-      <Filter>Resources\Bitmaps</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Graphics">
-      <UniqueIdentifier>{b0c105a0-17ac-4956-b2bc-33bc32db5344}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Graphics\Direct2D">
-      <UniqueIdentifier>{ef0a6273-b647-4760-9d9c-78b985652d2e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Desktop">
       <UniqueIdentifier>{669d1369-7960-4a96-97a7-d84dc1f11691}</UniqueIdentifier>
     </Filter>
@@ -158,17 +98,11 @@
     <Filter Include="Storage">
       <UniqueIdentifier>{f8b30e27-2ce5-4ed2-8246-e734ed4c37bf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Culture">
-      <UniqueIdentifier>{ec9990a8-de7b-40bc-9025-c43f89716a41}</UniqueIdentifier>
-    </Filter>
     <Filter Include="UI">
       <UniqueIdentifier>{30b6e3fa-b728-4123-8798-b28f0a07e0e7}</UniqueIdentifier>
     </Filter>
     <Filter Include="UI\Controls">
       <UniqueIdentifier>{7a820d70-8ad9-4ff3-a42a-fa0560a2aef6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resources\Bitmaps">
-      <UniqueIdentifier>{7fed223e-3343-40d8-9bfd-eb9ef932e38f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

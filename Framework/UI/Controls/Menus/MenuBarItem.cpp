@@ -36,6 +36,21 @@ if(!SubMenu)
 return SubMenu->Add(label);
 }
 
+Handle<Brush> MenuBarItem::GetBackground()
+{
+if(!m_Theme)
+	return nullptr;
+auto brush=m_Theme->ControlBrush;
+if(IsEnabled())
+	{
+	BOOL has_focus=HasFocus();
+	has_focus|=HasPointerFocus();
+	if(has_focus)
+		brush=m_Theme->HighlightBrush;
+	}
+return brush;
+}
+
 Graphics::SIZE MenuBarItem::GetMinSize(RenderTarget* target)
 {
 auto font=m_Theme->DefaultFont;
@@ -132,7 +147,7 @@ switch(args->Key)
 		}
 	case VirtualKey::Right:
 		{
-		auto control=Interactive::GetNextControl(m_Parent, this, -1);
+		auto control=Interactive::GetNextControl(m_Parent, this, 1);
 		if(control)
 			{
 			auto item=dynamic_cast<MenuItem*>(control);
