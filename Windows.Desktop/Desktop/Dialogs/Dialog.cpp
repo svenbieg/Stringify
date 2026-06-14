@@ -28,6 +28,11 @@ namespace Desktop {
 // Common
 //========
 
+VOID Dialog::Close()
+{
+SendMessage(m_Handle, WM_CLOSE, 0, 0);
+}
+
 INT Dialog::Show()
 {
 auto app_wnd=AppWindow::GetCurrent();
@@ -51,10 +56,12 @@ while(m_Status==Status::Pending)
 	TranslateMessage(&msg);
 	DispatchMessage(&msg);
 	}
+Overlapped::Show(SW_HIDE);
 if(app_wnd)
 	{
 	auto hwnd=app_wnd->GetHandle();
 	EnableWindow(hwnd, true);
+	app_wnd->Activate();
 	}
 return 0;
 }
@@ -66,9 +73,7 @@ return 0;
 
 Dialog::Dialog():
 m_Status(Status::Success)
-{
-SetWindowLong(m_Handle, GWL_STYLE, WS_CAPTION|WS_OVERLAPPED|WS_SYSMENU);
-}
+{}
 
 
 //==================

@@ -34,9 +34,7 @@ public:
 	static inline Handle<Panel> Create(Window* Parent) { return Object::Create<Panel>(Parent); }
 
 	// Common
-	Handle<Brush> Background;
-	BOOL Border;
-	Handle<Brush> GetBackground()override;
+	Property<Panel, BOOL> Border;
 	virtual Handle<Brush> GetBorderBrush();
 	virtual SIZE GetMinSize(RenderTarget* Target)override;
 	RECT Padding;
@@ -46,6 +44,10 @@ public:
 protected:
 	// Con-/Destructors
 	Panel(Window* Parent);
+
+private:
+	// Common
+	VOID OnBorderChanged();
 };
 
 }}

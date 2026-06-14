@@ -24,11 +24,6 @@ namespace UI {
 // Common
 //========
 
-Handle<Brush> Panel::GetBackground()
-{
-return Background;
-}
-
 Handle<Brush> Panel::GetBorderBrush()
 {
 if(!Border)
@@ -96,7 +91,19 @@ if(border)
 
 Panel::Panel(Window* parent):
 Control(parent),
-Border(false)
-{}
+Border(this, false)
+{
+Border.Changed.Add(this, &Panel::OnBorderChanged);
+}
+
+
+//================
+// Common Private
+//================
+
+VOID Panel::OnBorderChanged()
+{
+Invalidate(true);
+}
 
 }}

@@ -43,6 +43,7 @@ public:
 	friend Object;
 
 	// Con-/Destructors
+	~Input();
 	static inline Handle<Input> Create(Window* Parent) { return Object::Create<Input>(Parent); }
 
 	// Common

@@ -38,15 +38,13 @@ namespace UI {
 
 Handle<Brush> PopupMenuItem::GetBackground()
 {
-if(!m_Theme)
-	return nullptr;
-auto brush=m_Theme->ControlBrush;
+auto brush=Background;
 if(IsEnabled())
 	{
 	BOOL has_focus=HasFocus();
 	has_focus|=HasPointerFocus();
 	if(has_focus)
-		brush=m_Theme->HighlightBrush;
+		brush=Highlight;
 	}
 return brush;
 }
@@ -94,12 +92,13 @@ if(!Text)
 rc.SetPadding(Padding*scale);
 UINT height=rc.GetHeight();
 UINT left=rc.Left;
+BOOL enabled=IsEnabled();
 if(Icon)
 	{
 	if(!m_Icon)
 		m_Icon=Icon->GetBitmap(height);
 	auto icon=m_Icon;
-	if(!Enabled)
+	if(!enabled)
 		{
 		if(!m_IconDisabled)
 			{
@@ -120,7 +119,7 @@ if(Icon)
 left+=m_IconWidth;
 auto font=m_Theme->DefaultFont;
 auto text_brush=m_Theme->TextBrush;
-if(!Enabled)
+if(!enabled)
 	text_brush=m_Theme->TextInactiveBrush;
 auto label=Text->Begin();
 SIZE label_size=target->MeasureText(font, scale, label);
@@ -128,7 +127,7 @@ UINT top=rc.Top+(height-label_size.Height)/2;
 RECT label_rc(left, top, left+label_size.Width, top+label_size.Height);
 target->DrawText(label_rc, scale, font, text_brush, label);
 BOOL accelerate=Accelerator;
-if(!Enabled)
+if(!enabled)
 	accelerate=false;
 if(!m_Menu->HasAcceleration())
 	accelerate=false;
@@ -154,7 +153,7 @@ if(Shortcut)
 	UINT top=rc.Top+(height-shortcut_size.Height)/2;
 	RECT shortcut_rc(left, top, left+shortcut_size.Width, top+shortcut_size.Height);
 	auto shortcut_brush=m_Theme->TextBrush;
-	if(!Enabled)
+	if(!enabled)
 		shortcut_brush=m_Theme->TextInactiveBrush;
 	target->DrawText(shortcut_rc, scale, font, shortcut_brush, shortcut);
 	}
@@ -164,7 +163,7 @@ if(SubMenu)
 	UINT top=rc.Top+(height-arrow_size.Height)/2;
 	RECT arrow_rc(rc.Right-arrow_size.Width, top, rc.Right, top+arrow_size.Height);
 	auto arrow_brush=m_Theme->TextBrush;
-	if(!Enabled)
+	if(!enabled)
 		arrow_brush=m_Theme->TextInactiveBrush;
 	target->DrawText(arrow_rc, scale, font, arrow_brush, TEXT(">"));
 	}
@@ -192,10 +191,15 @@ m_IconWidth(0),
 m_LabelWidth(0),
 m_ShortcutWidth(0)
 {
-Checked.Changed.Add(this, &PopupMenuItem::OnCheckedChanged);
-Interactive::Clicked.Add(this, &PopupMenuItem::OnClicked);
 if(!label)
+	{
 	Enabled=false;
+	return;
+	}
+Interactive::Clicked.Add(this, &PopupMenuItem::OnInteractiveClicked);
+Background=m_Theme->ControlBrush;
+Checked.Changed.Add(this, &PopupMenuItem::OnCheckedChanged);
+Highlight=m_Theme->HighlightBrush;
 Label.Changed.Add(this, &PopupMenuItem::OnLabelChanged);
 Label=label;
 KeyDown.Add(this, &PopupMenuItem::OnKeyDown);
@@ -209,11 +213,6 @@ PointerLeft.Add(this, &PopupMenuItem::OnPointerLeft);
 // Common Private
 //================
 
-VOID PopupMenuItem::DoClick()
-{
-Clicked(this);
-}
-
 VOID PopupMenuItem::OnCheckedChanged(BOOL checked)
 {
 if(checked)
@@ -226,10 +225,10 @@ else
 	}
 }
 
-VOID PopupMenuItem::OnClicked()
+VOID PopupMenuItem::OnInteractiveClicked()
 {
 m_Menu->Exit();
-DispatchedQueue::Append(this, &PopupMenuItem::DoClick);
+DispatchedQueue::Append(this, [this](){ Clicked(this); });
 }
 
 VOID PopupMenuItem::OnLabelChanged(Handle<Sentence> label)

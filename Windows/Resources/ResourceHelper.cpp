@@ -295,7 +295,7 @@ for(WORD u=0; u<dir.Count; u++)
 	if(entry.BitCount!=32)
 		continue;
 	auto& info=icon_info.append();
-	info.ImageOffset=entry.ImageOffset;
+	info.ImageOffset=entry.ImageOffset+40;
 	info.Size=entry.Width;
 	}
 UINT count=icon_info.get_count();
@@ -307,8 +307,14 @@ for(auto& icon: icon_info)
 	auto bmp=Bitmap::Create(icon.Size, icon.Size, 32);
 	auto buf=const_cast<BYTE*>(bmp->Begin());
 	SIZE_T size=icon.Size*icon.Size*4;
-	file->Seek(icon.ImageOffset);
-	file->Read(buf, size);
+	UINT end=icon.ImageOffset+size;
+	UINT height=icon.Size;
+	UINT line_size=icon.Size*4;
+	for(UINT line=0; line<height; line++)
+		{
+		file->Seek(end-(line+1)*line_size);
+		file->Read(&buf[line*line_size], line_size);
+		}
 	bitmaps.add(icon.Size, bmp);
 	}
 return Icon::Create(bitmaps);

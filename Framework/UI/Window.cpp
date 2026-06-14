@@ -38,7 +38,7 @@ Invalidate(true);
 
 Handle<Brush> Window::GetBackground()
 {
-return nullptr;
+return Background;
 }
 
 Graphics::RECT Window::GetClientRect()const
@@ -257,14 +257,11 @@ Invalidate(true);
 //============================
 
 Window::Window(Window* parent):
-MinSize(0, 0),
 Scale(1.f),
 Visible(this, true),
-// Protected
 m_Flags(WindowFlags::None),
 m_Frame(nullptr),
 m_Parent(parent),
-m_Rect(0, 0, 0, 0),
 m_Theme(nullptr)
 {
 Children=ChildList::Create();
@@ -273,8 +270,14 @@ if(m_Parent)
 	{
 	m_Parent->Children->Append(this);
 	m_Parent->Invalidate(true);
+	Background=m_Parent->Background;
 	m_Frame=m_Parent->m_Frame;
 	m_Theme=m_Parent->m_Theme;
+	}
+else
+	{
+	m_Theme=Theme::Create();
+	Background=m_Theme->ControlBrush;
 	}
 }
 

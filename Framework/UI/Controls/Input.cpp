@@ -32,6 +32,18 @@ namespace UI {
 	namespace Controls {
 
 
+//==================
+// Con-/Destructors
+//==================
+
+Input::~Input()
+{
+auto app=Application::GetCurrent();
+if(app->m_CurrentInput==this)
+	app->m_CurrentInput=nullptr;
+}
+
+
 //========
 // Common
 //========

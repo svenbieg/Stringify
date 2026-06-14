@@ -37,10 +37,11 @@ public:
 		}
 
 	// Common
-	BOOL Border;
+	Property<Button, BOOL> Border;
 	Event<Button> Clicked;
 	Handle<Brush> GetBackground()override;
 	SIZE GetMinSize(RenderTarget* Target)override;
+	Handle<Brush> Highlight;
 	RECT Padding;
 	VOID Render(RenderTarget* Target, RECT& Rect)override;
 	Handle<String> Text;
@@ -50,7 +51,7 @@ private:
 	Button(Window* Parent, Handle<String> Text);
 
 	// Common
-	VOID DoClick();
+	VOID OnBorderChanged();
 	VOID OnFocused();
 	VOID OnFocusLost();
 	VOID OnInteractiveClicked();

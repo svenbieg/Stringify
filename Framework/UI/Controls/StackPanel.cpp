@@ -58,6 +58,8 @@ if(border)
 	rc.SetPadding(1, 1, 1, 1);
 FLOAT scale=GetScaleFactor();
 rc.SetPadding(Padding*scale);
+UINT width=rc.GetWidth();
+UINT height=rc.GetHeight();
 RECT rc_move(rc);
 for(auto it=Children->Begin(); it->HasCurrent(); it->MoveNext())
 	{
@@ -77,11 +79,11 @@ for(auto it=Children->Begin(); it->HasCurrent(); it->MoveNext())
 			{
 			if(m_Orientation==Orientation::Horizontal)
 				{
-				rc_move.Top=rc.Bottom-child_size.Height;
+				rc_move.Top=rc.Right-child_size.Height;
 				}
 			else
 				{
-				rc_move.Left=rc.Right-child_size.Width;
+				rc_move.Left=rc.Bottom-child_size.Width;
 				}
 			break;
 			}
@@ -89,11 +91,11 @@ for(auto it=Children->Begin(); it->HasCurrent(); it->MoveNext())
 			{
 			if(m_Orientation==Orientation::Horizontal)
 				{
-				rc_move.Top=(rc.Bottom-child_size.Height)/2;
+				rc_move.Top=rc.Top+(height-child_size.Height)/2;
 				}
 			else
 				{
-				rc_move.Left=(rc.Right-child_size.Width)/2;
+				rc_move.Left=rc.Left+(width-child_size.Width)/2;
 				}
 			break;
 			}
@@ -105,7 +107,7 @@ for(auto it=Children->Begin(); it->HasCurrent(); it->MoveNext())
 				}
 			else
 				{
-				child_size.Width=rc.Right-rc.Left;
+				child_size.Width=width;
 				}
 			break;
 			}

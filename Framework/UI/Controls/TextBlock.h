@@ -38,6 +38,8 @@ public:
 		}
 
 	// Common
+	DynamicHandle<TextBlock, Brush> Color;
+	DynamicHandle<TextBlock, Graphics::Font> Font;
 	SIZE GetMinSize(RenderTarget* Target)override;
 	VOID Render(RenderTarget* Target, RECT& Rect)override;
 	DynamicHandle<TextBlock, String> Text;
@@ -48,6 +50,8 @@ protected:
 
 private:
 	// Common
+	VOID OnColorChanged();
+	VOID OnFontChanged();
 	VOID OnTextChanged(Handle<String> Text);
 };
 

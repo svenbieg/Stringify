@@ -93,7 +93,11 @@ public:
 		{}
 
 	// Common
-	inline VOID Run()override { (m_Owner->*m_Procedure)(); }
+	inline VOID Run()override
+		{
+		assert(m_Owner->GetReferenceCount()>0);
+		(m_Owner->*m_Procedure)();
+		}
 
 private:
 	// Common

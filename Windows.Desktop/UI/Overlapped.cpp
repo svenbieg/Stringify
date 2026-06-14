@@ -190,8 +190,6 @@ Icon.Changed.Add(this, &Overlapped::OnIconChanged);
 Title.Changed.Add(this, &Overlapped::OnTitleChanged);
 m_Cursor=LoadCursor(NULL, IDC_ARROW);
 m_RenderTarget=RenderTarget::Create();
-m_Theme=Theme::Create();
-Window::m_Theme=m_Theme;
 Invalidated.Add(this, &Overlapped::OnInvalidated);
 Visible.Changed.Add(this, &Overlapped::OnVisibleChanged);
 Visible.Set(false, false);
@@ -465,12 +463,22 @@ if(m_IconSmall)
 	DestroyIcon(m_IconSmall);
 	m_IconSmall=NULL;
 	}
-UINT size_small=GetSystemMetrics(SM_CXSMICON);
-UINT size_big=GetSystemMetrics(SM_CXICON);
-auto bmp_small=icon->GetBitmap(size_small);
-auto bmp_big=icon->GetBitmap(size_big);
-m_IconSmall=CreateIcon(NULL, bmp_small->GetWidth(), bmp_small->GetHeight(), 1, 32, nullptr, bmp_small->Begin());
-m_IconBig=CreateIcon(NULL, bmp_big->GetWidth(), bmp_big->GetHeight(), 1, 32, nullptr, bmp_big->Begin());
+LONG style=GetWindowLong(m_Handle, GWL_STYLE);
+if(icon)
+	{
+	UINT size_small=GetSystemMetrics(SM_CXSMICON);
+	UINT size_big=GetSystemMetrics(SM_CXICON);
+	auto bmp_small=icon->GetBitmap(size_small);
+	auto bmp_big=icon->GetBitmap(size_big);
+	m_IconSmall=CreateIcon(NULL, bmp_small->GetWidth(), bmp_small->GetHeight(), 1, 32, nullptr, bmp_small->Begin());
+	m_IconBig=CreateIcon(NULL, bmp_big->GetWidth(), bmp_big->GetHeight(), 1, 32, nullptr, bmp_big->Begin());
+	FlagHelper::Set(style, WS_SYSMENU);
+	}
+else
+	{
+	FlagHelper::Clear(style, WS_SYSMENU);
+	}
+SetWindowLong(m_Handle, GWL_STYLE, style);
 SendMessage(m_Handle, WM_SETICON, ICON_SMALL, (LPARAM)m_IconSmall);
 SendMessage(m_Handle, WM_SETICON, ICON_BIG, (LPARAM)m_IconBig);
 }
@@ -490,7 +498,18 @@ Invalidate(true);
 
 VOID Overlapped::OnTitleChanged(Handle<Sentence> title)
 {
-SetWindowText(m_Handle, title? title->Begin(): TEXT(""));
+LONG style=GetWindowLong(m_Handle, GWL_STYLE);
+if(title)
+	{
+	FlagHelper::Set(style, WS_CAPTION);
+	SetWindowText(m_Handle, title->Begin());
+	}
+else
+	{
+	FlagHelper::Clear(style, WS_CAPTION);
+	SetWindowText(m_Handle, TEXT(""));
+	}
+SetWindowLong(m_Handle, GWL_STYLE, style);
 }
 
 VOID Overlapped::OnVisibleChanged(BOOL visible)

@@ -20,11 +20,42 @@ namespace UI {
 Graphics::SIZE Image::GetMinSize(RenderTarget* target)
 {
 FLOAT scale=GetScaleFactor();
+SIZE min=MinSize*scale;
 if(!Source)
-	return MinSize*scale;
+	return min;
 SIZE size=Source->GetDimensions();
-size*=scale;
-return size.Max(MinSize*scale);
+if(size.Width<min.Width)
+	{
+	FLOAT f=(FLOAT)min.Width/size.Width;
+	size.Width*=f;
+	size.Height*=f;
+	}
+if(size.Height<min.Height)
+	{
+	FLOAT f=(FLOAT)min.Height/size.Height;
+	size.Width*=f;
+	size.Height*=f;
+	}
+SIZE max=MaxSize*scale;
+if(max.Width)
+	{
+	if(size.Width>max.Width)
+		{
+		FLOAT f=(FLOAT)max.Width/size.Width;
+		size.Width*=f;
+		size.Height*=f;
+		}
+	}
+if(max.Height)
+	{
+	if(size.Height>max.Height)
+		{
+		FLOAT f=(FLOAT)max.Height/size.Height;
+		size.Width*=f;
+		size.Height*=f;
+		}
+	}
+return size;
 }
 
 VOID Image::Render(RenderTarget* target, RECT& rc)

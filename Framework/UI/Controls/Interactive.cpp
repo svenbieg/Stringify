@@ -23,6 +23,18 @@ namespace UI {
 	namespace Controls {
 
 
+//==================
+// Con-/Destructors
+//==================
+
+Interactive::~Interactive()
+{
+auto app=Application::GetCurrent();
+if(app->m_PointerFocus==this)
+	app->m_PointerFocus=nullptr;
+}
+
+
 //========
 // Common
 //========
@@ -55,6 +67,8 @@ return next;
 BOOL Interactive::HasFocus()
 {
 auto frame=GetFrame();
+if(!frame)
+	return false;
 return frame->GetFocus()==this;
 }
 

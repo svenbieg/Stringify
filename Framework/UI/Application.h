@@ -39,6 +39,11 @@ public:
 	using ShortcutMap=Collections::Map<UINT, Interactive*>;
 	using Theme=Graphics::Theme;
 
+	// Friends
+	friend Input;
+	friend Interactive;
+	friend Menu;
+
 	// Con-/Destructors
 	~Application();
 

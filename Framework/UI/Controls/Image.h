@@ -40,6 +40,7 @@ public:
 
 	// Common
 	SIZE GetMinSize(RenderTarget* Target)override;
+	SIZE MaxSize;
 	VOID Render(RenderTarget* Target, RECT& Rect)override;
 	DynamicHandle<Image, Bitmap> Source;
 

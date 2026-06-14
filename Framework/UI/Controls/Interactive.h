@@ -54,6 +54,7 @@ public:
 	friend Object;
 
 	// Con-/Destructors
+	~Interactive();
 	static inline Handle<Interactive> Create(Window* Parent) { return Object::Create<Interactive>(Parent); }
 
 	// Common

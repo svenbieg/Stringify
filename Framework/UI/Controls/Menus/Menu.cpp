@@ -21,6 +21,17 @@ namespace UI {
 		namespace Menus {
 
 
+//==================
+// Con-/Destructors
+//==================
+
+Menu::~Menu()
+{
+auto app=Application::GetCurrent();
+if(app->m_CurrentMenu==this)
+	app->m_CurrentMenu=nullptr;
+}
+
 //========
 // Common
 //========

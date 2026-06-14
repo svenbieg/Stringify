@@ -28,6 +28,7 @@ class Dialog: public UI::Overlapped
 {
 public:
 	// Common
+	VOID Close()override;
 	INT Show();
 
 protected:

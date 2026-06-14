@@ -47,7 +47,7 @@ public:
 
 	// Common
 	VOID BringToFront()override;
-	VOID Close();
+	virtual VOID Close();
 	Event<Overlapped> FocusLost;
 	Handle<Brush> GetBackground()override;
 	RECT GetBorderWidth()const;
@@ -77,7 +77,6 @@ protected:
 	HICON m_IconBig;
 	HICON m_IconSmall;
 	Handle<RenderTarget> m_RenderTarget;
-	Handle<Theme> m_Theme;
 
 private:
 	// Common

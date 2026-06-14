@@ -47,6 +47,7 @@ public:
 	using Theme=Graphics::Theme;
 
 	// Common
+	Handle<Brush> Background;
 	virtual VOID BringToFront();
 	Handle<ChildList> Children;
 	virtual Handle<Brush> GetBackground();
@@ -98,7 +99,7 @@ protected:
 	Frame* m_Frame;
 	Window* m_Parent;
 	RECT m_Rect;
-	Theme* m_Theme;
+	Handle<Theme> m_Theme;
 
 private:
 	// Common

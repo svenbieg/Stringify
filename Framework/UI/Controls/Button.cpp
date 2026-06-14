@@ -31,15 +31,13 @@ namespace UI {
 
 Handle<Brush> Button::GetBackground()
 {
-if(!m_Theme)
-	return nullptr;
-auto brush=m_Theme->ControlBrush;
+auto brush=Background;
 if(IsEnabled())
 	{
 	BOOL has_focus=HasFocus();
 	has_focus|=HasPointerFocus();
 	if(has_focus)
-		brush=m_Theme->HighlightBrush;
+		brush=Highlight;
 	}
 return brush;
 }
@@ -76,6 +74,8 @@ if(Text)
 	{
 	auto font=m_Theme->DefaultFont;
 	auto brush=m_Theme->TextBrush;
+	if(!IsEnabled())
+		brush=m_Theme->TextInactiveBrush;
 	target->DrawText(rc, scale, font, brush, Text->Begin());
 	}
 }
@@ -87,13 +87,16 @@ if(Text)
 
 Button::Button(Window* parent, Handle<String> text):
 Interactive(parent),
-Border(false),
+Border(this, false),
 Padding(20, 4, 20, 4),
 Text(text)
 {
 Interactive::Clicked.Add(this, &Button::OnInteractiveClicked);
+Background=m_Theme->ControlBrush;
+Border.Changed.Add(this, &Button::OnBorderChanged);
 Focused.Add(this, &Button::OnFocused);
 FocusLost.Add(this, &Button::OnFocusLost);
+Highlight=m_Theme->HighlightBrush;
 PointerEntered.Add(this, &Button::OnPointerEntered);
 PointerLeft.Add(this, &Button::OnPointerLeft);
 }
@@ -103,9 +106,9 @@ PointerLeft.Add(this, &Button::OnPointerLeft);
 // Common Private
 //================
 
-VOID Button::DoClick()
+VOID Button::OnBorderChanged()
 {
-Clicked(this);
+Invalidate(true);
 }
 
 VOID Button::OnFocused()
@@ -120,7 +123,7 @@ Invalidate();
 
 VOID Button::OnInteractiveClicked()
 {
-DispatchedQueue::Append(this, &Button::DoClick);
+Clicked(this);
 }
 
 VOID Button::OnPointerEntered()

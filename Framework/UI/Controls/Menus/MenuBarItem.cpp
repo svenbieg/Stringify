@@ -38,15 +38,13 @@ return SubMenu->Add(label);
 
 Handle<Brush> MenuBarItem::GetBackground()
 {
-if(!m_Theme)
-	return nullptr;
-auto brush=m_Theme->ControlBrush;
+auto brush=Background;
 if(IsEnabled())
 	{
 	BOOL has_focus=HasFocus();
 	has_focus|=HasPointerFocus();
 	if(has_focus)
-		brush=m_Theme->HighlightBrush;
+		brush=Highlight;
 	}
 return brush;
 }
@@ -63,9 +61,10 @@ return size.Max(MinSize*scale);
 VOID MenuBarItem::Render(RenderTarget* target, RECT& rc)
 {
 Interactive::Render(target, rc);
+BOOL enabled=IsEnabled();
 auto font=m_Theme->DefaultFont;
 auto text_brush=m_Theme->TextBrush;
-if(!Enabled)
+if(!enabled)
 	text_brush=m_Theme->TextInactiveBrush;
 FLOAT scale=GetScaleFactor();
 RECT rc_text=rc;
@@ -73,7 +72,7 @@ rc_text.SetPadding(Padding*scale);
 auto label=m_Label->Begin();
 target->DrawText(rc_text, scale, font, text_brush, label);
 BOOL accelerate=Accelerator;
-if(!Enabled)
+if(!enabled)
 	accelerate=false;
 if(!m_Menu->HasAcceleration())
 	accelerate=false;
@@ -104,6 +103,8 @@ MenuItem(this, parent),
 Label(this),
 Padding(6, 2, 6, 2)
 {
+Background=m_Theme->ControlBrush;
+Highlight=m_Theme->HighlightBrush;
 Label.Changed.Add(this, &MenuBarItem::OnLabelChanged);
 Label=label;
 KeyDown.Add(this, &MenuBarItem::OnKeyDown);

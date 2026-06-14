@@ -35,6 +35,9 @@ public:
 	using KeyEventType=UI::Input::KeyEventType;
 	using VirtualKey=UI::Input::VirtualKey;
 
+	// Con-/Destructors
+	~Menu();
+
 	// Common
 	BOOL Accelerate(VirtualKey Key);
 	virtual VOID Close();

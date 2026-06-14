@@ -60,6 +60,7 @@ public:
 	Event<PopupMenuItem> Clicked;
 	Handle<Brush> GetBackground()override;
 	SIZE GetMinSize(RenderTarget* Target)override;
+	Handle<Brush> Highlight;
 	Handle<Graphics::Icon> Icon;
 	BOOL IsSeparator() { return Text==nullptr; }
 	DynamicHandle<PopupMenuItem, Sentence> Label;
@@ -74,9 +75,8 @@ private:
 	PopupMenuItem(PopupMenu* Parent, Handle<Sentence> Label);
 
 	// Common
-	VOID DoClick();
 	VOID OnCheckedChanged(BOOL Checked);
-	VOID OnClicked();
+	VOID OnInteractiveClicked();
 	VOID OnLabelChanged(Handle<Sentence> Label);
 	VOID OnKeyDown(Handle<KeyEventArgs> Args);
 	VOID OnPointerDown();
