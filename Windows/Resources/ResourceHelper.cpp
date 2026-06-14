@@ -9,15 +9,23 @@
 // Using
 //=======
 
+#include "Collections/list.hpp"
+#include "Collections/map.hpp"
 #include "Graphics/Direct2D/ImagingFactory.h"
-#include "Storage/Filesystem/FileHelper.h"
+#include "Resources/Icons/Icon.h"
+#include "Storage/Filesystem/File.h"
+#include "Storage/Streams/StreamReader.h"
 #include "CommandLine.h"
 #include "PathHelper.h"
 #include <assert.h>
 
+using namespace Collections;
 using namespace Graphics;
 using namespace Graphics::Direct2D;
+using namespace Resources::Icons;
+using namespace Storage;
 using namespace Storage::Filesystem;
+using namespace Storage::Streams;
 
 
 //=======
@@ -221,6 +229,35 @@ ICONGROUPENTRY Entries[1];
 
 #pragma pack(pop)
 
+typedef struct ICONDIR
+{
+WORD Reserved;
+WORD Type;
+WORD Count;
+}ICONDIR;
+
+typedef struct {
+BYTE Width;
+BYTE Height;
+BYTE ColorCount;
+BYTE Reserved;
+WORD Planes;
+WORD BitCount;
+DWORD BytesInRes;
+DWORD ImageOffset;
+}ICONDIRENTRY;
+
+typedef struct
+{
+UINT ImageOffset;
+UINT Size;
+}ICONINFO;
+
+
+//========
+// Common
+//========
+
 Handle<Bitmap> ResourceHelper::CreateBitmap(Handle<String> path)
 {
 path=Lookup(path);
@@ -241,6 +278,40 @@ auto bmp=Bitmap::Create(width, height, 32);
 auto buf=const_cast<BYTE*>(bmp->Begin());
 source->CopyPixels(nullptr, stride, size, buf);
 return bmp;
+}
+
+Handle<Icon> ResourceHelper::CreateIcon(Handle<String> path)
+{
+path=Lookup(path);
+auto file=Filesystem::File::Create(path, FileCreateMode::OpenExisting);
+list<ICONINFO> icon_info;
+StreamReader reader(file);
+ICONDIR dir;
+reader.Read(&dir, sizeof(ICONDIR));
+for(WORD u=0; u<dir.Count; u++)
+	{
+	ICONDIRENTRY entry;
+	reader.Read(&entry, sizeof(ICONDIRENTRY));
+	if(entry.BitCount!=32)
+		continue;
+	auto& info=icon_info.append();
+	info.ImageOffset=entry.ImageOffset;
+	info.Size=entry.Width;
+	}
+UINT count=icon_info.get_count();
+if(!count)
+	throw NotFoundException();
+Icon::IconMap bitmaps;
+for(auto& icon: icon_info)
+	{
+	auto bmp=Bitmap::Create(icon.Size, icon.Size, 32);
+	auto buf=const_cast<BYTE*>(bmp->Begin());
+	SIZE_T size=icon.Size*icon.Size*4;
+	file->Seek(icon.ImageOffset);
+	file->Read(buf, size);
+	bitmaps.add(icon.Size, bmp);
+	}
+return Icon::Create(bitmaps);
 }
 
 BITMAPINFO* ResourceHelper::GetIcon(UINT id, UINT size)

@@ -28,7 +28,7 @@ Handle<Icon> Icon::Create(ICON const* resource)
 Handle<Icon> icon;
 if(s_Resources.try_get(resource, &icon))
 	return icon;
-icon=new Icon(resource);
+icon=Object::Create<Icon>(resource);
 s_Resources.add(resource, icon);
 return icon;
 }
@@ -40,15 +40,19 @@ return icon;
 
 Handle<Bitmap> Icon::GetBitmap(UINT size)
 {
-auto icon=GetIcon(size);
-if(!icon)
-	return nullptr;
-size=icon->Size;
-auto bmp=m_Bitmaps.get(size);
-if(bmp)
-	return bmp;
-bmp=Bitmap::Create(size, size, 32, icon->Buffer);
-m_Bitmaps.add(size, bmp);
+Handle<Bitmap> bmp;
+if(!Bitmaps.try_get(size, &bmp))
+	{
+	auto icon=GetIcon(size);
+	if(!icon)
+		return nullptr;
+	size=icon->Size;
+	if(!Bitmaps.try_get(size, &bmp))
+		{
+		bmp=Bitmap::Create(size, size, 32, icon->Buffer);
+		Bitmaps.add(size, bmp);
+		}
+	}
 return bmp;
 }
 
@@ -59,6 +63,11 @@ return bmp;
 
 Icon::Icon(ICON const* resource):
 m_Icons(resource)
+{}
+
+Icon::Icon(IconMap const& bitmaps):
+Bitmaps(bitmaps),
+m_Icons(nullptr)
 {}
 
 

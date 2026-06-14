@@ -11,18 +11,17 @@
 
 #include "Concurrency/DispatchedQueue.h"
 #include "Concurrency/Task.h"
-#include "Resources/Bitmaps/BitmapHelper.h"
 #include "Resources/Strings/Application.h"
+#include "Resources/ResourceHelper.h"
 #include "Storage/Filesystem/File.h"
 #include "Storage/Streams/StreamReader.h"
 #include "Storage/Streams/StreamWriter.h"
 #include "Storage/Buffer.h"
-#include "Storage/Icon.h"
 #include "Storage/StaticBuffer.h"
 #include "PathHelper.h"
 
 using namespace Concurrency;
-using namespace Resources::Bitmaps;
+using namespace Resources;
 using namespace Resources::Strings;
 using namespace Storage;
 using namespace Storage::Streams;
@@ -146,7 +145,7 @@ Stringify(var, file);
 
 VOID Application::OpenBitmap(Handle<String> path)
 {
-auto bmp=BitmapHelper::CreateBitmap(path);
+auto bmp=ResourceHelper::CreateBitmap(path);
 auto buf=StaticBuffer::Create((BYTE*)bmp->Begin(), bmp->GetSize());
 auto name=PathHelper::GetName(path);
 auto var=String::Create("BMP_%S", name);
@@ -155,20 +154,22 @@ Stringify(var, buf);
 
 VOID Application::OpenIcon(Handle<String> path)
 {
-auto icon=Icon::Create(path);
+auto icon=ResourceHelper::CreateIcon(path);
 auto name=PathHelper::GetName(path);
-for(auto it=icon->cbegin(); it.has_current(); it.move_next())
+for(auto it=icon->Bitmaps.cbegin(); it.has_current(); it.move_next())
 	{
-	auto ico=it.get_current();
-	auto var=String::Create("BMP_%S_%u", name, ico.Width);
-	Stringify(var, ico.Buffer);
+	auto size=it.get_key();
+	auto bmp=it.get_value();
+	auto var=String::Create("BMP_%S_%u", name, size);
+	auto buf=StaticBuffer::Create((BYTE*)bmp->Begin(), bmp->GetSize());
+	Stringify(var, buf);
 	}
 }
 
 VOID Application::Stringify(Handle<String> name, InputStream* src)
 {
 auto result_box=m_Window->ResultBox;
-auto str=String::Create("constexpr char %s[]=", name);
+auto str=String::Create("const char %s[]=", name);
 result_box->AppendLine(str);
 CHAR buf[LINE_LEN+8];
 auto dst=StaticBuffer::Create(buf, LINE_LEN+8);
