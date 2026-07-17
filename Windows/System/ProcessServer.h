@@ -40,7 +40,7 @@ private:
 	// Common
 	VOID OnNamedPipeConnectionReceived();
 	VOID OnMessageReceived(Handle<String> Message);
-	Handle<NamedPipe> hNamedPipe;
+	Handle<NamedPipe> m_NamedPipe;
 };
 
 }

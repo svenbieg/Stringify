@@ -39,12 +39,12 @@ ProcessServer::ProcessServer()
 
 VOID ProcessServer::Listen()
 {
-CHAR exe_path[MAX_PATH];
-GetModuleFileNameA(NULL, exe_path, MAX_PATH);
+TCHAR exe_path[MAX_PATH];
+GetModuleFileName(NULL, exe_path, MAX_PATH);
 auto exe_name=PathHelper::GetLastComponent(exe_path);
-hNamedPipe=new NamedPipe(exe_name);
-hNamedPipe->ConnectionReceived.Add(this, &ProcessServer::OnNamedPipeConnectionReceived);
-hNamedPipe->Listen();
+m_NamedPipe=NamedPipe::Create(exe_name);
+m_NamedPipe->ConnectionReceived.Add(this, &ProcessServer::OnNamedPipeConnectionReceived);
+m_NamedPipe->Listen();
 }
 
 
@@ -54,7 +54,7 @@ hNamedPipe->Listen();
 
 VOID ProcessServer::OnNamedPipeConnectionReceived()
 {
-StreamReader reader(hNamedPipe);
+StreamReader reader(m_NamedPipe);
 while(1)
 	{
 	auto msg=reader.ReadString(nullptr, "\n");
@@ -65,9 +65,9 @@ while(1)
 		UINT id=GetCurrentProcessId();
 		CHAR id_str[32];
 		StringHelper::Print(id_str, 32, "0x%x\n", id);
-		StreamWriter writer(hNamedPipe);
+		StreamWriter writer(m_NamedPipe);
 		writer.Print(id_str);
-		hNamedPipe->Flush();
+		m_NamedPipe->Flush();
 		continue;
 		}
 	DispatchedQueue::Append(this, [this, msg]() { OnMessageReceived(msg); });

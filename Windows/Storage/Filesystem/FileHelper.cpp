@@ -83,13 +83,6 @@ if(att&FILE_ATTRIBUTE_DIRECTORY)
 return true;
 }
 
-BOOL FileHelper::FileExists(Handle<String> const& path)
-{
-if(!path)
-	throw InvalidArgumentException();
-return FileExists(path->Begin());
-}
-
 UINT FileHelper::GetAccessMode(FileAccessMode access)
 {
 switch(access)

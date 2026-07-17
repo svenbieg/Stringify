@@ -41,7 +41,6 @@ public:
 	static BOOL DeleteDirectoryTree(LPCTSTR Path);
 	static BOOL DirectoryExists(LPCTSTR Path);
 	static BOOL FileExists(LPCTSTR Path);
-	static BOOL FileExists(Handle<String> const& Path);
 	static UINT GetAccessMode(FileAccessMode Access);
 	static BOOL GetBasicInfo(LPCTSTR Path, FILE_BASIC_INFO& Info);
 	static UINT GetCreateMode(FileCreateMode Create);

@@ -240,7 +240,7 @@ if(label)
 	Text=MenuHelper::GetLabel(label->Begin());
 	auto shortcut=Shortcut::FromString(Shortcut);
 	if(shortcut)
-		Application::GetCurrent()->Shortcuts->Set(shortcut, this, false);
+		Application::GetCurrent()->Shortcuts->Set(shortcut, this, EventNotification::None);
 	Enabled=true;
 	}
 else

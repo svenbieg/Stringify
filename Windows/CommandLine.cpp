@@ -34,7 +34,7 @@ while(next)
 	UINT len=0;
 	next=ScanArgument(next, &str, &len);
 	auto cmd=String::Create(len, str);
-	Arguments->Append(cmd, false);
+	Arguments->Append(cmd, EventNotification::None);
 	}
 }
 

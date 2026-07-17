@@ -32,9 +32,15 @@ public:
 	// Using
 	using Task=Concurrency::Task;
 
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
-	NamedPipe(Handle<String> Name);
 	~NamedPipe();
+	static inline Handle<NamedPipe> Create(Handle<String> Name)
+		{
+		return Object::Create<NamedPipe>(Name);
+		}
 
 	// Common
 	VOID Close();
@@ -51,6 +57,9 @@ public:
 	SIZE_T Write(VOID const* Buffer, SIZE_T Size)override;
 
 private:
+	// Con-/Destructors
+	NamedPipe(Handle<String> Name);
+
 	// Common
 	VOID DoListen();
 	Handle<Task> m_ListenTask;

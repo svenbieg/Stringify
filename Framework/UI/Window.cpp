@@ -31,8 +31,8 @@ VOID Window::BringToFront()
 if(!m_Parent)
 	return;
 auto children=m_Parent->Children;
-children->Remove(this, false);
-children->Append(this, false);
+children->Remove(this, EventNotification::None);
+children->Append(this, EventNotification::None);
 Invalidate(true);
 }
 

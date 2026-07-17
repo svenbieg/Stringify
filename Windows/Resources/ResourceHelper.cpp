@@ -408,18 +408,18 @@ return pos;
 
 Handle<String> ResourceHelper::Lookup(Handle<String> path)
 {
-if(FileHelper::FileExists(path))
+if(FileHelper::FileExists(path->Begin()))
 	return path;
 auto cmd_line=CommandLine::Create();
 auto exe=cmd_line->Arguments->GetAt(0);
 auto root=PathHelper::GetDirectory(exe->Begin());
 auto full_path=String::Create("%s\\..\\%s", root, path);
-if(FileHelper::FileExists(full_path))
+if(FileHelper::FileExists(full_path->Begin()))
 	return full_path;
 TCHAR current[MAX_PATH];
 GetCurrentDirectory(MAX_PATH, current);
 full_path=String::Create("%s\\..\\AppX\\%s", current, path);
-if(FileHelper::FileExists(full_path))
+if(FileHelper::FileExists(full_path->Begin()))
 	return full_path;
 throw NotFoundException();
 }

@@ -169,7 +169,7 @@ else
 VOID Overlapped::Show(INT show)
 {
 BOOL visible=!(show==SW_HIDE);
-Visible.Set(visible, false);
+Visible.Set(visible, EventNotification::None);
 ShowWindow(m_Handle, show);
 }
 
@@ -192,7 +192,7 @@ m_Cursor=LoadCursor(NULL, IDC_ARROW);
 m_RenderTarget=RenderTarget::Create();
 Invalidated.Add(this, &Overlapped::OnInvalidated);
 Visible.Changed.Add(this, &Overlapped::OnVisibleChanged);
-Visible.Set(false, false);
+Visible.Set(false, EventNotification::None);
 LPCTSTR class_name=TEXT("Overlapped");
 HINSTANCE inst=GetModuleHandle(nullptr);
 WNDCLASSEX wc={ 0 };

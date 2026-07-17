@@ -49,10 +49,10 @@ m_NamedPipe->Flush();
 
 BOOL ProcessClient::Connect()
 {
-CHAR exe_path[MAX_PATH];
-GetModuleFileNameA(NULL, exe_path, MAX_PATH);
+TCHAR exe_path[MAX_PATH];
+GetModuleFileName(NULL, exe_path, MAX_PATH);
 auto exe_name=PathHelper::GetLastComponent(exe_path);
-m_NamedPipe=new NamedPipe(exe_name);
+m_NamedPipe=NamedPipe::Create(exe_name);
 if(m_NamedPipe->Connect())
 	{
 	m_ServerProcessId=GetServerProcessId();

@@ -147,7 +147,7 @@ VOID Application::OpenBitmap(Handle<String> path)
 {
 auto bmp=ResourceHelper::CreateBitmap(path);
 auto buf=StaticBuffer::Create((BYTE*)bmp->Begin(), bmp->GetSize());
-auto name=PathHelper::GetName(path);
+auto name=PathHelper::GetName(path->Begin());
 auto var=String::Create("BMP_%S", name);
 Stringify(var, buf);
 }
@@ -155,7 +155,7 @@ Stringify(var, buf);
 VOID Application::OpenIcon(Handle<String> path)
 {
 auto icon=ResourceHelper::CreateIcon(path);
-auto name=PathHelper::GetName(path);
+auto name=PathHelper::GetName(path->Begin());
 for(auto it=icon->Bitmaps.cbegin(); it.has_current(); it.move_next())
 	{
 	auto size=it.get_key();

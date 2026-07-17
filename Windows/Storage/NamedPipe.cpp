@@ -16,12 +16,6 @@ namespace Storage {
 // Con-/Destructors
 //==================
 
-NamedPipe::NamedPipe(Handle<String> name):
-m_NamedPipe(NULL)
-{
-m_Path=String::Create("\\\\.\\pipe\\ipc_%s", name);
-}
-
 NamedPipe::~NamedPipe()
 {
 Close();
@@ -117,6 +111,17 @@ if(!WriteFile(m_NamedPipe, buf, (DWORD)size, &written, nullptr))
 	return 0;
 	}
 return written;
+}
+
+
+//==========================
+// Con-/Destructors Private
+//==========================
+
+NamedPipe::NamedPipe(Handle<String> name):
+m_NamedPipe(NULL)
+{
+m_Path=String::Create("\\\\.\\pipe\\ipc_%s", name);
 }
 
 
