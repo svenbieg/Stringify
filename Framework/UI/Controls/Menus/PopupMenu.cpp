@@ -131,7 +131,11 @@ if(!m_Popup)
 	m_Popup->Visible=true;
 	}
 if(reason==FocusReason::Keyboard)
+	{
 	Select(reason);
+	if(m_ParentMenu)
+		m_ParentMenu->Invalidate();
+	}
 }
 
 

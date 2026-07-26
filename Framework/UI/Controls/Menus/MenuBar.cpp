@@ -71,7 +71,7 @@ if(args->Key==VirtualKey::Alt)
 		{
 		FlagHelper::Set(m_MenuFlags, MenuFlags::KeyboardAccess);
 		s_Current=this;
-		Invalidate();
+		WrapPanel::Invalidate();
 		}
 	args->Handled=true;
 	return;

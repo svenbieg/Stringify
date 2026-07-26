@@ -107,6 +107,11 @@ FlagHelper::Set(m_MenuFlags, MenuFlags::Expand);
 Select(item, reason);
 }
 
+VOID Menu::Invalidate()
+{
+m_Panel->Invalidate();
+}
+
 BOOL Menu::IsParentMenu(Menu* menu)
 {
 if(!m_ParentMenu)

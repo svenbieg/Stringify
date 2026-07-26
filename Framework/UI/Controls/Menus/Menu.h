@@ -49,6 +49,7 @@ public:
 	Window* GetPanel()const { return m_Panel; }
 	Menu* GetParentMenu()const { return m_ParentMenu; }
 	MenuItem* GetSelected()const { return m_Selected; }
+	VOID Invalidate();
 	BOOL IsParentMenu(Menu* Menu);
 	VOID Select(FocusReason Reason);
 	VOID Select(MenuItem* Item, FocusReason Reason);

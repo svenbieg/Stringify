@@ -133,9 +133,8 @@ m_Menu->Select(this, reason);
 VOID MenuBarItem::OnFocusLost(Interactive* focus, FocusReason reason)
 {
 auto item=dynamic_cast<MenuItem*>(focus);
-if(item)
-	return;
-m_Menu->ClearSelection(this, reason);
+if(!item)
+	m_Menu->ClearSelection(this, reason);
 }
 
 VOID MenuBarItem::OnKeyDown(Handle<KeyEventArgs> args)
