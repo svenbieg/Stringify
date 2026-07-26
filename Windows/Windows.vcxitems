@@ -54,7 +54,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Network\Udp\UdpSocket.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Platform.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)RandomHelper.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Resources\ResourceHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Security\Rsa\RsaKey.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Filesystem\Directory.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Filesystem\File.h" />
@@ -91,7 +90,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Network\Udp\UdpMessage.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Network\Udp\UdpSocket.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)RandomHelper.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Resources\ResourceHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Security\Rsa\RsaKey.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Storage\Filesystem\Directory.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Storage\Filesystem\File.cpp" />

@@ -56,7 +56,10 @@ if(!Text)
 	return;
 FLOAT scale=GetScaleFactor();
 auto font=m_Theme->DefaultFont;
-target->DrawText(rc, scale, font, Color, Text->Begin());
+auto brush=Color;
+if(HasFocus())
+	brush=m_Theme->HighlightBrush;
+target->DrawText(rc, scale, font, brush, Text->Begin());
 target->DrawLine(POINT(rc.Left, rc.Bottom), POINT(rc.Right, rc.Bottom), Color);
 }
 

@@ -14,7 +14,6 @@
 #include "Storage/Clipboard.h"
 #include "Storage/Streams/StreamReader.h"
 #include "UI/Controls/Menus/EditMenu.h"
-#include "UI/Application.h"
 
 using namespace Concurrency;
 using namespace Devices::Timers;
@@ -38,9 +37,8 @@ namespace UI {
 
 Input::~Input()
 {
-auto app=Application::GetCurrent();
-if(app->m_CurrentInput==this)
-	app->m_CurrentInput=nullptr;
+if(s_Current==this)
+	s_Current=nullptr;
 }
 
 
@@ -161,14 +159,6 @@ GetText(pt_start, pt_end, builder);
 return builder.ToString();
 }
 
-BOOL Input::KillFocus()
-{
-auto app=Application::GetCurrent();
-if(app->GetCurrentInput()==this)
-	app->SetCurrentInput(nullptr);
-return Interactive::KillFocus();
-}
-
 VOID Input::ReadFromStream(InputStream* stream)
 {
 Clear();
@@ -189,9 +179,11 @@ while(1)
 VOID Input::Render(RenderTarget* target, RECT& rc)
 {
 auto background=GetBackground();
-RECT rc_fill(rc);
 if(background)
+	{
+	RECT rc_fill=GetClientRect();
 	target->FillRect(rc_fill, background);
+	}
 auto offset=target->GetOffset();
 FLOAT scale=GetScaleFactor();
 rc.SetPadding(Padding*scale);
@@ -208,7 +200,7 @@ UINT last_line=first_line+line_count-1;
 BOOL show_sel=true;
 if(m_SelectionFirst==m_SelectionLast)
 	show_sel=false;
-if(Application::GetCurrent()->GetCurrentInput()!=this)
+if(s_Current!=this)
 	show_sel=false;
 if(show_sel)
 	{
@@ -402,12 +394,6 @@ SetSelection(pt_start, pt_end);
 VOID Input::SelectNone()
 {
 SetSelection(m_SelectionEnd, m_SelectionEnd);
-}
-
-VOID Input::SetFocus(FocusReason reason)
-{
-Interactive::SetFocus(reason);
-Application::GetCurrent()->SetCurrentInput(this);
 }
 
 VOID Input::SetSelection(POINT const& pt_start, POINT const& pt_end)
@@ -714,12 +700,23 @@ VOID Input::OnFocused()
 {
 if(!IsEnabled())
 	return;
+if(s_Current!=this)
+	{
+	if(s_Current)
+		s_Current->SelectNone();
+	s_Current=this;
+	}
 ShowCursor(true);
 Invalidate();
 }
 
 VOID Input::OnFocusLost()
 {
+if(s_Current==this)
+	{
+	s_Current->SelectNone();
+	s_Current=nullptr;
+	}
 ShowCursor(false);
 if(FlagHelper::Get(m_InputFlags, InputFlags::Pointing))
 	{
@@ -782,7 +779,7 @@ switch(key)
 	case VirtualKey::Escape:
 		{
 		ClearSelection();
-		KillFocus();
+		KillFocus(FocusReason::Keyboard);
 		args->Handled=true;
 		break;
 		}
@@ -843,6 +840,7 @@ VOID Input::OnPointerDown(Handle<PointerEventArgs> args)
 if(!IsEnabled())
 	return;
 SetFocus(FocusReason::Pointer);
+ShowCursor(true);
 if(args->Button==PointerButton::Wheel)
 	return;
 if(args->Button==PointerButton::Left)
@@ -886,7 +884,7 @@ switch(args->Button)
 		}
 	case PointerButton::Right:
 		{
-		ShowContextMenu(args->Point);
+		ShowContextMenu(args->Point, FocusReason::Pointer);
 		break;
 		}
 	default:
@@ -942,7 +940,7 @@ if(line_pt==m_SelectionLast.Top)
 return true;
 }
 
-BOOL Input::ShowContextMenu(POINT pt)
+BOOL Input::ShowContextMenu(POINT pt, FocusReason reason)
 {
 if(!ContextMenu)
 	return false;
@@ -961,7 +959,7 @@ if(ContextMenu)
 	ContextMenu->Paste->Visible=(!ReadOnly&&paste);
 	}
 pt+=GetScreenOffset();
-ContextMenu->Show(pt);
+ContextMenu->Show(pt, reason);
 return true;
 }
 
@@ -1079,5 +1077,7 @@ else
 Invalidate(true);
 DispatchedQueue::Append(this, &Input::NotifySelectionChanged);
 }
+
+Input* Input::s_Current=nullptr;
 
 }}

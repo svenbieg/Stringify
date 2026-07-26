@@ -75,7 +75,7 @@ m_Input->TabStop=true;
 // Common Private
 //================
 
-VOID EditBox::OnInputFocused(FocusReason reason)
+VOID EditBox::OnInputFocused(Interactive* previous, FocusReason reason)
 {
 if(reason==FocusReason::Keyboard)
 	m_Input->SelectAll();

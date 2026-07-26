@@ -47,7 +47,7 @@ private:
 	EditBox(Window* Parent);
 
 	// Common
-	VOID OnInputFocused(FocusReason Reason);
+	VOID OnInputFocused(Interactive* Previous, FocusReason Reason);
 	VOID OnInputSelectionChanged();
 	VOID OnMaskChanged(TCHAR Mask);
 	VOID OnTextChanged(Handle<String> Text);

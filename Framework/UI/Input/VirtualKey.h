@@ -24,6 +24,8 @@ namespace UI {
 // Virtual-Key
 //=============
 
+const UINT VIRTUAL_KEY_COUNT=256;
+
 enum class VirtualKey: BYTE
 {
 None=0,
@@ -124,7 +126,7 @@ F11=0x7A,
 F12=0x7B,
 NumLock=0x90,
 Scroll=0x91,
-OE=0xC0
+OE=0xC0,
 };
 
 

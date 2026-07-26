@@ -99,6 +99,7 @@ FocusLost.Add(this, &Button::OnFocusLost);
 Highlight=m_Theme->HighlightBrush;
 PointerEntered.Add(this, &Button::OnPointerEntered);
 PointerLeft.Add(this, &Button::OnPointerLeft);
+TabStop=true;
 }
 
 

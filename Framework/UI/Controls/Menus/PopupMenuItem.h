@@ -48,6 +48,7 @@ public:
 
 	// Friends
 	friend Object;
+	friend PopupMenu;
 
 	// Con-/Destructors
 	static inline Handle<PopupMenuItem> Create(PopupMenu* Parent, Handle<Sentence> Label)
@@ -56,6 +57,7 @@ public:
 		}
 
 	// Common
+	Handle<PopupMenuItem> Add(Handle<Sentence> Label);
 	Property<PopupMenuItem, BOOL> Checked;
 	Event<PopupMenuItem> Clicked;
 	Handle<Brush> GetBackground()override;
@@ -68,7 +70,6 @@ public:
 	VOID Render(RenderTarget* Target, RECT& Rect)override;
 	VOID SetColumns(UINT IconWidth, UINT LabelWidth, UINT ShortcutWidth);
 	Handle<String> Shortcut;
-	Handle<String> Text;
 
 private:
 	// Con-/Destructors
@@ -76,9 +77,11 @@ private:
 
 	// Common
 	VOID OnCheckedChanged(BOOL Checked);
+	VOID OnFocused(Interactive* Previous, FocusReason Reason);
 	VOID OnInteractiveClicked();
 	VOID OnLabelChanged(Handle<Sentence> Label);
 	VOID OnKeyDown(Handle<KeyEventArgs> Args);
+	VOID OnKeyPressed(Handle<KeyEventArgs> Args);
 	VOID OnPointerDown();
 	VOID OnPointerEntered();
 	VOID OnPointerLeft();

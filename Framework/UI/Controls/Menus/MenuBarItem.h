@@ -63,12 +63,13 @@ private:
 	MenuBarItem(MenuBar* Parent, Handle<Sentence> Label);
 
 	// Common
+	VOID OnFocused(Interactive* Previous, FocusReason Reason);
+	VOID OnFocusLost(Interactive* Focus, FocusReason Reason);
 	VOID OnKeyDown(Handle<KeyEventArgs> Args);
+	VOID OnKeyPressed(Handle<KeyEventArgs> Args);
 	VOID OnLabelChanged(Handle<Sentence> Label);
 	VOID OnPointerDown();
 	VOID OnPointerEntered();
-	VOID OnPointerLeft();
-	Handle<String> m_Label;
 };
 
 }}}

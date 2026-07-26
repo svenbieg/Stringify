@@ -39,13 +39,17 @@ return SubMenu->Add(label);
 Handle<Brush> MenuBarItem::GetBackground()
 {
 auto brush=Background;
-if(IsEnabled())
+if(!IsEnabled())
+	return brush;
+BOOL has_focus=HasFocus();
+has_focus|=HasPointerFocus();
+if(SubMenu)
 	{
-	BOOL has_focus=HasFocus();
-	has_focus|=HasPointerFocus();
-	if(has_focus)
-		brush=Highlight;
+	if(SubMenu->Visible)
+		has_focus=true;
 	}
+if(has_focus)
+	brush=Highlight;
 return brush;
 }
 
@@ -53,7 +57,7 @@ Graphics::SIZE MenuBarItem::GetMinSize(RenderTarget* target)
 {
 auto font=m_Theme->DefaultFont;
 FLOAT scale=GetScaleFactor();
-SIZE size=target->MeasureText(font, scale, m_Label->Begin());
+SIZE size=target->MeasureText(font, scale, Text->Begin());
 size.AddPadding(Padding*scale);
 return size.Max(MinSize*scale);
 }
@@ -69,22 +73,22 @@ if(!enabled)
 FLOAT scale=GetScaleFactor();
 RECT rc_text=rc;
 rc_text.SetPadding(Padding*scale);
-auto label=m_Label->Begin();
-target->DrawText(rc_text, scale, font, text_brush, label);
-BOOL accelerate=Accelerator;
+auto text=Text->Begin();
+target->DrawText(rc_text, scale, font, text_brush, text);
+BOOL accelerate=(Accelerator!=0);
 if(!enabled)
 	accelerate=false;
-if(!m_Menu->HasAcceleration())
+if(!m_Menu->Acceleration())
 	accelerate=false;
 if(accelerate)
 	{
 	UINT pos=0;
-	if(StringHelper::FindChar(label, Accelerator, &pos, CompareMode::IgnoreCase))
+	if(StringHelper::FindChar(text, Accelerator, &pos, CompareMode::IgnoreCase))
 		{
 		SIZE size_from(0, 0);
 		if(pos>0)
-			size_from=target->MeasureText(font, scale, label, pos);
-		SIZE size_to=target->MeasureText(font, scale, label, pos+1);
+			size_from=target->MeasureText(font, scale, text, pos);
+		SIZE size_to=target->MeasureText(font, scale, text, pos+1);
 		POINT from(rc_text.Left+size_from.Width, rc_text.Bottom);
 		POINT to(rc_text.Left+size_to.Width, rc_text.Bottom);
 		target->DrawLine(from, to, text_brush, 1);
@@ -104,13 +108,16 @@ Label(this),
 Padding(6, 2, 6, 2)
 {
 Background=m_Theme->ControlBrush;
+Focused.Add(this, &MenuBarItem::OnFocused);
+FocusLost.Add(this, &MenuBarItem::OnFocusLost);
 Highlight=m_Theme->HighlightBrush;
 Label.Changed.Add(this, &MenuBarItem::OnLabelChanged);
 Label=label;
 KeyDown.Add(this, &MenuBarItem::OnKeyDown);
+KeyPressed.Add(this, &MenuBarItem::OnKeyPressed);
 PointerDown.Add(this, &MenuBarItem::OnPointerDown);
 PointerEntered.Add(this, &MenuBarItem::OnPointerEntered);
-PointerLeft.Add(this, &MenuBarItem::OnPointerLeft);
+TabStop=true;
 }
 
 
@@ -118,78 +125,75 @@ PointerLeft.Add(this, &MenuBarItem::OnPointerLeft);
 // Common Private
 //================
 
+VOID MenuBarItem::OnFocused(Interactive* previous, FocusReason reason)
+{
+m_Menu->Select(this, reason);
+}
+
+VOID MenuBarItem::OnFocusLost(Interactive* focus, FocusReason reason)
+{
+auto item=dynamic_cast<MenuItem*>(focus);
+if(item)
+	return;
+m_Menu->ClearSelection(this, reason);
+}
+
 VOID MenuBarItem::OnKeyDown(Handle<KeyEventArgs> args)
 {
-MenuItem::OnKeyDown(args);
 if(args->Handled)
 	return;
-args->Handled=true;
 switch(args->Key)
 	{
+	case VirtualKey::Escape:
+		{
+		m_Menu->Escape(FocusReason::Keyboard);
+		break;
+		}
 	case VirtualKey::Down:
 		{
-		m_Menu->Open(this);
-		return;
-		}
-	case VirtualKey::Left:
-		{
-		auto control=Interactive::GetNextControl(m_Parent, this, -1);
-		if(control)
-			{
-			auto item=dynamic_cast<MenuItem*>(control);
-			m_Menu->Select(item);
-			}
-		return;
-		}
-	case VirtualKey::Return:
-		{
-		m_Menu->Open(this);
-		return;
-		}
-	case VirtualKey::Right:
-		{
-		auto control=Interactive::GetNextControl(m_Parent, this, 1);
-		if(control)
-			{
-			auto item=dynamic_cast<MenuItem*>(control);
-			m_Menu->Select(item);
-			}
-		return;
-		}
-	case VirtualKey::Up:
-		{
-		Close();
-		return;
+		Expand(FocusReason::Keyboard);
+		break;
 		}
 	default:
-		break;
+		{
+		return;
+		}
 	}
-args->Handled=false;
+args->Handled=true;
+}
+
+VOID MenuBarItem::OnKeyPressed(Handle<KeyEventArgs> args)
+{
+switch(args->Key)
+	{
+	case VirtualKey::Return:
+		{
+		Expand(FocusReason::Keyboard);
+		break;
+		}
+	default:
+		{
+		return;
+		}
+	}
+args->Handled=true;
 }
 
 VOID MenuBarItem::OnLabelChanged(Handle<Sentence> label)
 {
 Accelerator=MenuHelper::GetAccelerator(label->Begin());
-m_Label=MenuHelper::GetLabel(label->Begin());
+Text=MenuHelper::GetText(label->Begin());
 Invalidate(true);
 }
 
 VOID MenuBarItem::OnPointerDown()
 {
-m_Menu->KillKeyboardAccess();
-m_Menu->Switch(this);
+m_Menu->Expand(this, FocusReason::Pointer);
 }
 
 VOID MenuBarItem::OnPointerEntered()
 {
-m_Menu->KillKeyboardAccess();
-m_Menu->Select(this);
-Invalidate();
-}
-
-VOID MenuBarItem::OnPointerLeft()
-{
-Invalidate();
+m_Menu->Select(this, FocusReason::Pointer);
 }
 
 }}}

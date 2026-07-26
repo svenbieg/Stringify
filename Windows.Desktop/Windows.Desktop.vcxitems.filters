@@ -37,6 +37,9 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\Dialog.cpp">
       <Filter>Desktop\Dialogs</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Resources\ResourceHelper.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Application.h">
@@ -80,6 +83,9 @@
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\Dialog.h">
       <Filter>Desktop\Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resources\ResourceHelper.h">
+      <Filter>Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

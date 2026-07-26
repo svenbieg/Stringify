@@ -52,10 +52,11 @@ public:
 
 	// Common
 	Handle<PopupMenuItem> Add(Handle<Sentence> Label);
-	VOID Close()override;
+	VOID Close(FocusReason Reason)override;
 	SIZE GetMinSize(RenderTarget* Target)override;
+	Handle<Popup> GetPopup()const { return m_Popup; }
 	Event<PopupMenu> Opened;
-	VOID Show(POINT const& Point);
+	VOID Show(POINT const& Point, FocusReason Reason);
 
 protected:
 	// Con-/Destructors
@@ -63,7 +64,7 @@ protected:
 
 private:
 	// Common
-	VOID OnPopupLostFocus();
+	VOID OnPopupFocusLost(Frame* Sender, FocusReason Reason, Frame* Active);
 	Handle<Popup> m_Popup;
 };
 

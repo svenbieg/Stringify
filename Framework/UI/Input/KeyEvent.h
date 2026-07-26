@@ -52,14 +52,29 @@ KeyUp
 class KeyEventArgs: public Object
 {
 public:
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
-	KeyEventArgs(VirtualKey Key, TCHAR Char=0);
+	static inline Handle<KeyEventArgs> Create(VirtualKey Key, TCHAR Char=0)
+		{
+		return Object::Create<KeyEventArgs>(Key, Char);
+		}
 
 	// Common
 	TCHAR Char;
 	KeyEventFlags Flags;
 	BOOL Handled;
 	VirtualKey Key;
+
+private:
+	// Con-/Destructors
+	KeyEventArgs(VirtualKey Key, TCHAR Char):
+		Char(Char),
+		Flags(KeyEventFlags::None),
+		Handled(false),
+		Key(Key)
+		{}
 };
 
 }}

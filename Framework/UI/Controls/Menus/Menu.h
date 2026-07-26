@@ -35,43 +35,46 @@ public:
 	using KeyEventType=UI::Input::KeyEventType;
 	using VirtualKey=UI::Input::VirtualKey;
 
-	// Con-/Destructors
-	~Menu();
-
 	// Common
-	BOOL Accelerate(VirtualKey Key);
-	virtual VOID Close();
-	VOID DoKey(KeyEventType Type, Handle<KeyEventArgs> Args);
-	VOID Exit();
+	MenuItem* Accelerate(VirtualKey Key);
+	BOOL Acceleration();
+	VOID ClearSelection(MenuItem* Item, FocusReason Reason);
+	virtual VOID Close(FocusReason Reason);
+	VOID Collapse(FocusReason Reason);
+	VOID Escape(FocusReason Reason);
+	VOID Exit(FocusReason Reason);
+	VOID Expand(FocusReason Reason);
+	VOID Expand(MenuItem* Item, FocusReason Reason);
+	static inline Menu* GetCurrent() { return s_Current; }
 	Window* GetPanel()const { return m_Panel; }
 	Menu* GetParentMenu()const { return m_ParentMenu; }
-	BOOL HasAcceleration();
-	BOOL HasKeyboardAccess() { return FlagHelper::Get(m_MenuFlags, MenuFlags::KeyboardAccess); }
-	BOOL IsOpen();
+	MenuItem* GetSelected()const { return m_Selected; }
 	BOOL IsParentMenu(Menu* Menu);
-	VOID KillKeyboardAccess();
-	VOID Open(MenuItem* Item);
-	VOID Select();
-	VOID Select(MenuItem* Item);
-	VOID Switch(MenuItem* Item);
+	VOID Select(FocusReason Reason);
+	VOID Select(MenuItem* Item, FocusReason Reason);
 
 protected:
 	// Flags
-	enum class MenuFlags
+	enum class MenuFlags: UINT
 		{
 		None=0,
-		KeyboardAccess=1
+		All=7,
+		Exit=(1<<0),
+		Expand=(1<<1),
+		Keyboard=(3<<2),
+		KeyboardAccess=(1<<2),
+		KeyboardNavigation=(1<<3),
 		};
 
 	// Con-/Destructors
-	Menu(Menu* ParentMenu);
+	Menu(Menu* ParentMenu, Window* Panel);
 
 	// Common
 	MenuFlags m_MenuFlags;
-	MenuItem* m_OpenItem;
 	Window* m_Panel;
 	Menu* m_ParentMenu;
-	MenuItem* m_SelectedItem;
+	MenuItem* m_Selected;
+	static Menu* s_Current;
 };
 
 }}}

@@ -29,36 +29,26 @@ using namespace Graphics;
 namespace UI {
 
 
-//==================
-// Con-/Destructors
-//==================
-
-Overlapped::~Overlapped()
-{
-m_Theme->Changed.Remove(this);
-if(m_Handle)
-	DestroyWindow(m_Handle);
-if(m_IconBig)
-	DestroyIcon(m_IconBig);
-if(m_IconSmall)
-	DestroyIcon(m_IconSmall);
-}
-
-
 //========
 // Common
 //========
 
+VOID Overlapped::Activate(FocusReason reason)
+{
+if(m_Handle)
+	SetActiveWindow(m_Handle);
+}
+
 VOID Overlapped::BringToFront()
 {
-SetWindowPos(m_Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOACTIVATE|SWP_NOMOVE|SWP_NOSIZE);
-Frame::BringToFront();
+if(m_Handle!=NULL)
+	SetWindowPos(m_Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOACTIVATE|SWP_NOMOVE|SWP_NOSIZE);
 }
 
 VOID Overlapped::Close()
 {
 if(m_Handle!=NULL)
-	CloseWindow(m_Handle);
+	SendMessage(m_Handle, WM_CLOSE, 0, 0);
 }
 
 Handle<Brush> Overlapped::GetBackground()
@@ -68,7 +58,7 @@ return m_Theme->ControlBrush;
 
 Graphics::RECT Overlapped::GetBorderWidth()const
 {
-if(!m_Handle)
+if(m_Handle==NULL)
 	return RECT();
 ::RECT rc({ 0, 0, 0, 0});
 UINT style=GetWindowLongA(m_Handle, GWL_STYLE);
@@ -111,15 +101,12 @@ return pt;
 
 VOID Overlapped::Minimize()
 {
-if(!m_Handle)
-	return;
-ShowWindow(m_Handle, SW_MINIMIZE);
+if(m_Handle!=NULL)
+	ShowWindow(m_Handle, SW_MINIMIZE);
 }
 
 VOID Overlapped::Minimize(Minimization)
 {
-if(!m_Handle)
-	return;
 SIZE size=GetMinSize(m_RenderTarget);
 RECT rc(m_Rect);
 rc.SetSize(size);
@@ -128,7 +115,7 @@ Move(rc);
 
 VOID Overlapped::Move(RECT const& rc)
 {
-if(!m_Handle)
+if(m_Handle==NULL)
 	return;
 SIZE size=GetMinSize(m_RenderTarget);
 size.Max(rc.GetSize());
@@ -137,7 +124,7 @@ MoveWindow(m_Handle, rc.Left, rc.Top, size.Width, size.Height, true);
 
 VOID Overlapped::Repaint()
 {
-if(m_Handle)
+if(m_Handle!=NULL)
 	{
 	InvalidateRect(m_Handle, nullptr, false);
 	UpdateWindow(m_Handle);
@@ -146,10 +133,12 @@ if(m_Handle)
 
 VOID Overlapped::SetCursor(Cursor* cursor)
 {
-if(!cursor)
+if(m_Handle==NULL)
 	return;
-HCURSOR hcursor=cursor->GetHandle();
-SetClassLongPtr(m_Handle, GCLP_HCURSOR, (LONG_PTR)hcursor);
+HCURSOR hcur=NULL;
+if(cursor)
+	hcur=cursor->GetHandle();
+SetClassLongPtr(m_Handle, GCLP_HCURSOR, (LONG_PTR)hcur);
 }
 
 VOID Overlapped::SetPointerCapture(Interactive* capture)
@@ -170,7 +159,8 @@ VOID Overlapped::Show(INT show)
 {
 BOOL visible=!(show==SW_HIDE);
 Visible.Set(visible, EventNotification::None);
-ShowWindow(m_Handle, show);
+if(m_Handle!=NULL)
+	ShowWindow(m_Handle, show);
 }
 
 
@@ -178,13 +168,14 @@ ShowWindow(m_Handle, show);
 // Con-/Destructors Protected
 //============================
 
-Overlapped::Overlapped():
+Overlapped::Overlapped(Overlapped* parent):
 Icon(this),
 Title(this),
 m_Cursor(NULL),
 m_Handle(NULL),
 m_IconBig(NULL),
-m_IconSmall(NULL)
+m_IconSmall(NULL),
+m_Parent(parent)
 {
 Icon.Changed.Add(this, &Overlapped::OnIconChanged);
 Title.Changed.Add(this, &Overlapped::OnTitleChanged);
@@ -204,12 +195,17 @@ wc.lpszClassName=class_name;
 wc.style=CS_HREDRAW|CS_VREDRAW;
 SetLastError(0);
 RegisterClassEx(&wc);
-auto app_wnd=AppWindow::GetCurrent();
-HWND hwnd=app_wnd? app_wnd->GetHandle(): HWND_DESKTOP;
+HWND hwnd_parent=HWND_DESKTOP;
+if(!m_Parent)
+	m_Parent=AppWindow::GetCurrent();
+if(m_Parent)
+	hwnd_parent=m_Parent->GetHandle();
 UINT style=WS_OVERLAPPED;
-m_Handle=CreateWindowEx(0, class_name, nullptr, style, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, hwnd, NULL, inst, this);
+m_Handle=CreateWindowEx(0, class_name, nullptr, style, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, hwnd_parent, NULL, inst, this);
 if(m_Handle==INVALID_HANDLE_VALUE)
 	m_Handle=NULL;
+if(m_Handle==NULL)
+	throw InvalidArgumentException();
 m_Theme->Changed.Add(this, &Overlapped::OnThemeChanged);
 OnThemeChanged();
 }
@@ -219,19 +215,30 @@ OnThemeChanged();
 // Common Protected
 //==================
 
-LRESULT Overlapped::HandleMessage(UINT msg, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT Overlapped::HandleMessage(UINT msg, WPARAM wparam, LPARAM lparam)
 {
 switch(msg)
 	{
+	case WM_ACTIVATE:
+		{
+		if(wparam==WA_INACTIVE)
+			break;
+		auto reason=FocusReason::None;
+		if(wparam==WA_CLICKACTIVE)
+			reason=FocusReason::Pointer;
+		Frame::Activate(reason);
+		break;
+		}
 	case WM_CHAR:
+	case WM_SYSCHAR:
 		{
 		TCHAR c=(TCHAR)wparam;
 		if(c<' ')
 			break;
 		VirtualKey key=VirtualKey::None;
-		Handle<KeyEventArgs> args=new KeyEventArgs(key, c);
-		DoKey(KeyEventType::KeyDown, args);
-		handled=args->Handled;
+		auto args=KeyEventArgs::Create(key, c);
+		if(DoKey(KeyEventType::KeyDown, args))
+			return 0;
 		break;
 		}
 	case WM_CREATE:
@@ -245,8 +252,15 @@ switch(msg)
 		}
 	case WM_DESTROY:
 		{
+		if(m_IconBig)
+			DestroyIcon(m_IconBig);
+		if(m_IconSmall)
+			DestroyIcon(m_IconSmall);
+		if(m_Theme)
+			m_Theme->Changed.Remove(this);
+		SetPropA(m_Handle, "WindowHandle", NULL);
 		m_Handle=NULL;
-		break;
+		return 0;
 		}
 	case WM_DPICHANGED:
 		{
@@ -262,33 +276,27 @@ switch(msg)
 	case WM_HOTKEY:
 		{
 		VirtualKey key=(VirtualKey)LOWORD(wparam);
-		Handle<KeyEventArgs> args=new KeyEventArgs(key);
-		DoKey(KeyEventType::KeyDown, args);
-		handled=args->Handled;
+		auto args=KeyEventArgs::Create(key);
+		if(DoKey(KeyEventType::KeyDown, args))
+			return 0;
 		break;
 		}
 	case WM_KEYDOWN:
 	case WM_SYSKEYDOWN:
 		{
 		VirtualKey key=(VirtualKey)LOWORD(wparam);
-		Handle<KeyEventArgs> args=new KeyEventArgs(key);
-		DoKey(KeyEventType::KeyDown, args);
-		handled=args->Handled;
+		auto args=KeyEventArgs::Create(key);
+		if(DoKey(KeyEventType::KeyDown, args))
+			return 0;
 		break;
 		}
 	case WM_KEYUP:
 	case WM_SYSKEYUP:
 		{
 		VirtualKey key=(VirtualKey)LOWORD(wparam);
-		Handle<KeyEventArgs> args=new KeyEventArgs(key);
-		DoKey(KeyEventType::KeyUp, args);
-		handled=args->Handled;
-		break;
-		}
-	case WM_KILLFOCUS:
-		{
-		KillFocus();
-		FocusLost(this);
+		auto args=KeyEventArgs::Create(key);
+		if(DoKey(KeyEventType::KeyUp, args))
+			return 0;
 		break;
 		}
 	case WM_LBUTTONDOWN:
@@ -296,9 +304,9 @@ switch(msg)
 		INT x=GET_X_LPARAM(lparam);
 		INT y=GET_Y_LPARAM(lparam);
 		POINT pt(x, y);
-		Handle<PointerEventArgs> args=new PointerEventArgs(PointerButton::Left, pt);
-		DoPointer(PointerEventType::ButtonDown, args);
-		handled=args->Handled;
+		auto args=PointerEventArgs::Create(PointerButton::Left, pt);
+		if(DoPointer(PointerEventType::ButtonDown, args))
+			return 0;
 		break;
 		}
 	case WM_LBUTTONUP:
@@ -306,9 +314,9 @@ switch(msg)
 		INT x=GET_X_LPARAM(lparam);
 		INT y=GET_Y_LPARAM(lparam);
 		POINT pt(x, y);
-		Handle<PointerEventArgs> args=new PointerEventArgs(PointerButton::Left, pt);
-		DoPointer(PointerEventType::ButtonUp, args);
-		handled=args->Handled;
+		auto args=PointerEventArgs::Create(PointerButton::Left, pt);
+		if(DoPointer(PointerEventType::ButtonUp, args))
+			return 0;
 		break;
 		}
 	case WM_MBUTTONDOWN:
@@ -316,9 +324,9 @@ switch(msg)
 		INT x=GET_X_LPARAM(lparam);
 		INT y=GET_Y_LPARAM(lparam);
 		POINT pt(x, y);
-		Handle<PointerEventArgs> args=new PointerEventArgs(PointerButton::Wheel, pt);
-		DoPointer(PointerEventType::ButtonDown, args);
-		handled=args->Handled;
+		auto args=PointerEventArgs::Create(PointerButton::Wheel, pt);
+		if(DoPointer(PointerEventType::ButtonDown, args))
+			return 0;
 		break;
 		}
 	case WM_MBUTTONUP:
@@ -326,9 +334,9 @@ switch(msg)
 		INT x=GET_X_LPARAM(lparam);
 		INT y=GET_Y_LPARAM(lparam);
 		POINT pt(x, y);
-		Handle<PointerEventArgs> args=new PointerEventArgs(PointerButton::Wheel, pt);
-		DoPointer(PointerEventType::ButtonUp, args);
-		handled=args->Handled;
+		auto args=PointerEventArgs::Create(PointerButton::Wheel, pt);
+		if(DoPointer(PointerEventType::ButtonUp, args))
+			return 0;
 		break;
 		}
 	case WM_MOUSEMOVE:
@@ -336,9 +344,9 @@ switch(msg)
 		INT x=GET_X_LPARAM(lparam);
 		INT y=GET_Y_LPARAM(lparam);
 		POINT pt(x, y);
-		Handle<PointerEventArgs> args=new PointerEventArgs(PointerButton::None, pt);
-		DoPointer(PointerEventType::Move, args);
-		handled=args->Handled;
+		auto args=PointerEventArgs::Create(PointerButton::None, pt);
+		if(DoPointer(PointerEventType::Move, args))
+			return 0;
 		break;
 		}
 	case WM_MOUSEWHEEL:
@@ -351,9 +359,9 @@ switch(msg)
 		x-=rc_screen.left;
 		y-=rc_screen.top;
 		POINT pt(x, y);
-		Handle<PointerEventArgs> args=new PointerEventArgs(PointerButton::Wheel, pt, delta);
-		DoPointer(PointerEventType::Wheel, args);
-		handled=args->Handled;
+		auto args=PointerEventArgs::Create(PointerButton::Wheel, pt, delta);
+		if(DoPointer(PointerEventType::Wheel, args))
+			return 0;
 		break;
 		}
 	case WM_MOVE:
@@ -383,9 +391,9 @@ switch(msg)
 		INT x=GET_X_LPARAM(lparam);
 		INT y=GET_Y_LPARAM(lparam);
 		POINT pt(x, y);
-		Handle<PointerEventArgs> args=new PointerEventArgs(PointerButton::Right, pt);
-		DoPointer(PointerEventType::ButtonDown, args);
-		handled=args->Handled;
+		auto args=PointerEventArgs::Create(PointerButton::Right, pt);
+		if(DoPointer(PointerEventType::ButtonDown, args))
+			return 0;
 		break;
 		}
 	case WM_RBUTTONUP:
@@ -393,14 +401,9 @@ switch(msg)
 		INT x=GET_X_LPARAM(lparam);
 		INT y=GET_Y_LPARAM(lparam);
 		POINT pt(x, y);
-		Handle<PointerEventArgs> args=new PointerEventArgs(PointerButton::Right, pt);
-		DoPointer(PointerEventType::ButtonUp, args);
-		handled=args->Handled;
-		break;
-		}
-	case WM_SHOWWINDOW:
-		{
-		handled=false;
+		auto args=PointerEventArgs::Create(PointerButton::Right, pt);
+		if(DoPointer(PointerEventType::ButtonUp, args))
+			return 0;
 		break;
 		}
 	case WM_SIZE:
@@ -437,13 +440,23 @@ switch(msg)
 			}
 		break;
 		}
-	default:
-		{
-		handled=false;
-		break;
-		}
 	}
-return 0;
+return DefWindowProc(m_Handle, msg, wparam, lparam);
+}
+
+UINT Overlapped::Release()noexcept
+{
+if(m_ReferenceCount==1)
+	{
+	if(GetActiveWindow()==m_Handle)
+		{
+		if(m_Parent)
+			m_Parent->Activate(FocusReason::None);
+		}
+	SetPropA(m_Handle, "WindowHandle", NULL);
+	DestroyWindow(m_Handle);
+	}
+return Object::Release();
 }
 
 
@@ -463,7 +476,9 @@ if(m_IconSmall)
 	DestroyIcon(m_IconSmall);
 	m_IconSmall=NULL;
 	}
-LONG style=GetWindowLong(m_Handle, GWL_STYLE);
+LONG style=0;
+if(m_Handle!=NULL)
+	style=GetWindowLong(m_Handle, GWL_STYLE);
 if(icon)
 	{
 	UINT size_small=GetSystemMetrics(SM_CXSMICON);
@@ -478,9 +493,12 @@ else
 	{
 	FlagHelper::Clear(style, WS_SYSMENU);
 	}
-SetWindowLong(m_Handle, GWL_STYLE, style);
-SendMessage(m_Handle, WM_SETICON, ICON_SMALL, (LPARAM)m_IconSmall);
-SendMessage(m_Handle, WM_SETICON, ICON_BIG, (LPARAM)m_IconBig);
+if(m_Handle!=NULL)
+	{
+	SetWindowLong(m_Handle, GWL_STYLE, style);
+	SendMessage(m_Handle, WM_SETICON, ICON_SMALL, (LPARAM)m_IconSmall);
+	SendMessage(m_Handle, WM_SETICON, ICON_BIG, (LPARAM)m_IconBig);
+	}
 }
 
 VOID Overlapped::OnInvalidated()
@@ -490,6 +508,8 @@ DispatchedQueue::Append(this, &Overlapped::Repaint);
 
 VOID Overlapped::OnThemeChanged()
 {
+if(m_Handle==NULL)
+	return;
 auto scheme=m_Theme->GetColorScheme();
 BOOL dark=(scheme==ColorScheme::Dark);
 DwmSetWindowAttribute(m_Handle, DWMWA_USE_IMMERSIVE_DARK_MODE, &dark, sizeof(BOOL));
@@ -498,6 +518,8 @@ Invalidate(true);
 
 VOID Overlapped::OnTitleChanged(Handle<Sentence> title)
 {
+if(m_Handle==NULL)
+	return;
 LONG style=GetWindowLong(m_Handle, GWL_STYLE);
 if(title)
 	{
@@ -527,12 +549,8 @@ if(msg==WM_CREATE)
 	SetPropA(hwnd, "WindowHandle", window);
 	window->m_Handle=hwnd;
 	}
-if(!window)
-	return DefWindowProc(hwnd, msg, wparam, lparam);
-BOOL handled=true;
-LRESULT lr=window->HandleMessage(msg, wparam, lparam, handled);
-if(handled)
-	return lr;
+if(window)
+	return window->HandleMessage(msg, wparam, lparam);
 return DefWindowProc(hwnd, msg, wparam, lparam);
 }
 

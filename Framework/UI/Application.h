@@ -12,8 +12,8 @@
 #include "Collections/Map.h"
 #include "Culture/Sentence.h"
 #include "Graphics/Theme.h"
-#include "UI/Controls/Menus/Menu.h"
-#include "UI/Controls/Input.h"
+#include "UI/Controls/Interactive.h"
+#include "UI/Input/KeyEvent.h"
 
 
 //===========
@@ -27,46 +27,32 @@ namespace UI {
 // Application
 //=============
 
-class Application: public virtual Object
+class Application: public Object
 {
 public:
 	// Using
-	using Input=UI::Controls::Input;
 	using Interactive=UI::Controls::Interactive;
 	using KeyEventArgs=UI::Input::KeyEventArgs;
-	using Menu=UI::Controls::Menus::Menu;
 	using Sentence=Culture::Sentence;
 	using ShortcutMap=Collections::Map<UINT, Interactive*>;
 	using Theme=Graphics::Theme;
-
-	// Friends
-	friend Input;
-	friend Interactive;
-	friend Menu;
 
 	// Con-/Destructors
 	~Application();
 
 	// Common
-	VOID ExitMenu();
 	static inline Application* GetCurrent() { return s_Current; }
-	inline Input* GetCurrentInput()const { return m_CurrentInput; }
-	inline Menu* GetCurrentMenu()const { return m_CurrentMenu; }
 	inline Handle<Sentence> GetName()const { return m_Name; }
-	inline Interactive* GetPointerFocus()const { return m_PointerFocus; }
 	virtual VOID Quit()=0;
-	VOID SetCurrentInput(Input* Input);
-	inline VOID SetCurrentMenu(Menu* Menu) { m_CurrentMenu=Menu; }
-	VOID SetPointerFocus(Interactive* Focus);
 	BOOL Shortcut(Handle<KeyEventArgs> Args);
 	Handle<ShortcutMap> Shortcuts;
 
 	// Edit
-	VOID EditCopy();
-	VOID EditCut();
-	VOID EditDelete();
-	VOID EditPaste();
-	VOID EditSelectAll();
+	virtual VOID EditCopy();
+	virtual VOID EditCut();
+	virtual VOID EditDelete();
+	virtual VOID EditPaste();
+	virtual VOID EditSelectAll();
 
 protected:
 	// Con-/Destructors
@@ -74,10 +60,7 @@ protected:
 
 private:
 	// Common
-	Input* m_CurrentInput;
-	Menu* m_CurrentMenu;
 	Handle<Sentence> m_Name;
-	Interactive* m_PointerFocus;
 	static Application* s_Current;
 };
 

@@ -52,7 +52,7 @@ public:
 	Handle<ChildList> Children;
 	virtual Handle<Brush> GetBackground();
 	virtual RECT GetClientRect()const;
-	inline Frame* GetFrame() { return m_Frame; }
+	inline Frame* GetFrame()const { return m_Frame; }
 	virtual POINT GetFrameOffset()const;
 	RECT GetFrameRect()const;
 	virtual SIZE GetMinSize(RenderTarget* Target);

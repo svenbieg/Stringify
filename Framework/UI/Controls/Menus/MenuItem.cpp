@@ -27,39 +27,45 @@ namespace UI {
 // Common
 //========
 
-VOID MenuItem::Close()
+VOID MenuItem::Collapse(FocusReason reason)
 {
-m_Control->KillFocus();
 if(SubMenu)
-	SubMenu->Close();
+	SubMenu->Collapse(reason);
 }
 
-VOID MenuItem::KillFocus()
+VOID MenuItem::Enter(FocusReason reason)
 {
-m_Control->KillFocus();
-}
-
-VOID MenuItem::Open()
-{
-if(!SubMenu)
+if(SubMenu)
+	{
+	Expand(reason);
+	}
+else
 	{
 	m_Control->Clicked(m_Control, nullptr);
-	return;
 	}
+}
+
+VOID MenuItem::Expand(FocusReason reason)
+{
+if(!SubMenu)
+	return;
 Graphics::RECT rc=m_Control->GetScreenRect();
 Graphics::POINT pt(rc.Left, rc.Bottom);
 auto parent=m_Control->GetParent();
 auto popup=dynamic_cast<PopupMenu*>(parent);
 if(popup)
 	pt.Set(rc.Right, rc.Top);
-SubMenu->Show(pt);
-if(m_Menu->HasKeyboardAccess())
-	SubMenu->Select();
+SubMenu->Show(pt, reason);
 }
 
-VOID MenuItem::SetFocus()
+VOID MenuItem::KillFocus(FocusReason reason)
 {
-m_Control->SetFocus();
+m_Control->KillFocus(reason);
+}
+
+VOID MenuItem::SetFocus(FocusReason reason)
+{
+m_Control->SetFocus(reason);
 }
 
 
@@ -72,26 +78,5 @@ Accelerator(0),
 m_Control(control),
 m_Menu(menu)
 {}
-
-
-//==================
-// Common Protected
-//==================
-
-VOID MenuItem::OnKeyDown(Handle<KeyEventArgs> args)
-{
-args->Handled=true;
-switch(args->Key)
-	{
-	case VirtualKey::Escape:
-		{
-		m_Menu->Close();
-		return;
-		}
-	default:
-		break;
-	}
-args->Handled=m_Menu->Accelerate(args->Key);
-}
 
 }}}

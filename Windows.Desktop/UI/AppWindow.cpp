@@ -32,23 +32,6 @@ s_Current=nullptr;
 }
 
 
-//========
-// Common
-//========
-
-VOID AppWindow::Activate()
-{
-WINDOWPLACEMENT place={ 0 };
-place.length=sizeof(WINDOWPLACEMENT);
-GetWindowPlacement(m_Handle, &place);
-if(place.showCmd==SW_SHOWMINIMIZED)
-	place.showCmd=SW_RESTORE;
-ShowWindow(m_Handle, place.showCmd);
-SetWindowPos(m_Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOSIZE);
-SetForegroundWindow(m_Handle);
-}
-
-
 //============================
 // Con-/Destructors Protected
 //============================
@@ -83,15 +66,10 @@ Footer->AlignChildren=Alignment::Stretch;
 // Common Protected
 //==================
 
-LRESULT AppWindow::HandleMessage(UINT msg, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT AppWindow::HandleMessage(UINT msg, WPARAM wparam, LPARAM lparam)
 {
 switch(msg)
 	{
-	case WM_ACTIVATE:
-		{
-		Activated(this);
-		return 0;
-		}
 	case WM_CLOSE:
 		{
 		if(Closed)
@@ -127,7 +105,7 @@ switch(msg)
 		break;
 		}
 	}
-return Overlapped::HandleMessage(msg, wparam, lparam, handled);
+return Overlapped::HandleMessage(msg, wparam, lparam);
 }
 
 

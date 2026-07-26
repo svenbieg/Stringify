@@ -42,13 +42,10 @@ public:
 	// Using
 	using Sentence=Culture::Sentence;
 
-	// Con-/Destructors
-	~Overlapped();
-
 	// Common
+	VOID Activate(FocusReason Reason)override;
 	VOID BringToFront()override;
-	virtual VOID Close();
-	Event<Overlapped> FocusLost;
+	VOID Close();
 	Handle<Brush> GetBackground()override;
 	RECT GetBorderWidth()const;
 	RECT GetClientRect()const override;
@@ -68,14 +65,16 @@ public:
 
 protected:
 	// Con-/Destructors
-	Overlapped();
+	Overlapped(Overlapped* Parent=nullptr);
 
 	// Common
-	virtual LRESULT HandleMessage(UINT Message, WPARAM WParam, LPARAM LParam, BOOL& Handled);
+	virtual LRESULT HandleMessage(UINT Message, WPARAM WParam, LPARAM LParam);
+	virtual UINT Release()noexcept override;
 	HCURSOR m_Cursor;
 	HWND m_Handle;
 	HICON m_IconBig;
 	HICON m_IconSmall;
+	Overlapped* m_Parent;
 	Handle<RenderTarget> m_RenderTarget;
 
 private:

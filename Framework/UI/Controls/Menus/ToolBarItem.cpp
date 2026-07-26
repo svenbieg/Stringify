@@ -85,10 +85,7 @@ Interactive(parent),
 Padding(3, 3, 3, 3)
 {
 Interactive::Clicked.Add(this, &ToolBarItem::OnClicked);
-Focused.Add(this, &ToolBarItem::OnFocused);
-FocusLost.Add(this, &ToolBarItem::OnFocusLost);
-PointerEntered.Add(this, &ToolBarItem::OnPointerEntered);
-PointerLeft.Add(this, &ToolBarItem::OnPointerLeft);
+TabStop=true;
 if(tool_tip)
 	ToolTip=Menus::ToolTip::Create(this, tool_tip);
 }
@@ -106,26 +103,6 @@ Clicked(this);
 VOID ToolBarItem::OnClicked()
 {
 DispatchedQueue::Append(this, &ToolBarItem::DoClick);
-}
-
-VOID ToolBarItem::OnFocused()
-{
-Invalidate();
-}
-
-VOID ToolBarItem::OnFocusLost()
-{
-Invalidate();
-}
-
-VOID ToolBarItem::OnPointerEntered()
-{
-Invalidate();
-}
-
-VOID ToolBarItem::OnPointerLeft()
-{
-Invalidate();
 }
 
 }}}

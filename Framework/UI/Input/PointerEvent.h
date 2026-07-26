@@ -56,15 +56,31 @@ class PointerEventArgs: public Object
 public:
 	// Using
 	using POINT=Graphics::POINT;
+	
+	// Friends
+	friend Object;
 
 	// Con-/Destructors
-	PointerEventArgs(PointerButton Button, POINT const& Point, INT Delta=0);
+	static inline Handle<PointerEventArgs> Create(PointerButton Button, POINT const& Point, INT Delta=0)
+		{
+		return Object::Create<PointerEventArgs>(Button, Point, Delta);
+		}
 
 	// Common
 	PointerButton Button;
 	INT Delta;
 	BOOL Handled;
 	POINT Point;
+
+private:
+	// Con-/Destructors
+	PointerEventArgs(PointerButton Button, POINT const& Point, INT Delta):
+		Button(Button),
+		Delta(Delta),
+		Handled(false),
+		Point(Point)
+		{}
+
 };
 
 }}

@@ -59,8 +59,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\TreeView.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\WrapPanel.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Frame.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Input\KeyEvent.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Input\PointerEvent.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Input\Shortcut.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Input\VirtualKey.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Window.cpp" />

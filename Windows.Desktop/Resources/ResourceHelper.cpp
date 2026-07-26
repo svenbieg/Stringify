@@ -11,15 +11,15 @@
 
 #include "Collections/list.hpp"
 #include "Collections/map.hpp"
+#include "Desktop/Application.h"
 #include "Graphics/Direct2D/ImagingFactory.h"
 #include "Resources/Icons/Icon.h"
 #include "Storage/Filesystem/File.h"
 #include "Storage/Streams/StreamReader.h"
-#include "CommandLine.h"
-#include "PathHelper.h"
 #include <assert.h>
 
 using namespace Collections;
+using namespace Desktop;
 using namespace Graphics;
 using namespace Graphics::Direct2D;
 using namespace Resources::Icons;
@@ -408,19 +408,16 @@ return pos;
 
 Handle<String> ResourceHelper::Lookup(Handle<String> path)
 {
+if(!path)
+	return nullptr;
 if(FileHelper::FileExists(path->Begin()))
 	return path;
-auto cmd_line=CommandLine::Create();
-auto exe=cmd_line->Arguments->GetAt(0);
-auto root=PathHelper::GetDirectory(exe->Begin());
-auto full_path=String::Create("%s\\..\\%s", root, path);
-if(FileHelper::FileExists(full_path->Begin()))
-	return full_path;
-TCHAR current[MAX_PATH];
-GetCurrentDirectory(MAX_PATH, current);
-full_path=String::Create("%s\\..\\AppX\\%s", current, path);
-if(FileHelper::FileExists(full_path->Begin()))
-	return full_path;
+auto app=Application::GetCurrent();
+auto res_path=app->GetResourcePath();
+auto lookup=String::Create("%s\\%s", res_path, path);
+if(FileHelper::FileExists(lookup->Begin()))
+	return lookup;
+DebugBreak();
 throw NotFoundException();
 }
 

@@ -22,6 +22,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\MessageBox.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\OpenFileDialog.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\SaveFileDialog.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resources\ResourceHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Strings\Exception.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Strings\Files.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Clipboard.h" />
@@ -38,6 +39,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\MessageBox.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\OpenFileDialog.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Desktop\Dialogs\SaveFileDialog.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Resources\ResourceHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Storage\Clipboard.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\AppWindow.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\PathEdit.cpp" />

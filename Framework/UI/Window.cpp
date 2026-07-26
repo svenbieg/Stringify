@@ -9,6 +9,7 @@
 // Using
 //=======
 
+#include "UI/Application.h"
 #include "UI/Frame.h"
 
 using namespace Graphics;
@@ -31,8 +32,9 @@ VOID Window::BringToFront()
 if(!m_Parent)
 	return;
 auto children=m_Parent->Children;
-children->Remove(this, EventNotification::None);
-children->Append(this, EventNotification::None);
+Handle<Window> self=this;
+children->Remove(self, EventNotification::None);
+children->Append(self, EventNotification::None);
 Invalidate(true);
 }
 
@@ -203,17 +205,15 @@ VOID Window::Render(RenderTarget* target, RECT& rc)
 auto background=GetBackground();
 if(!background)
 	return;
-RECT rc_fill(rc);
-auto offset=target->GetOffset();
-rc_fill.Move(offset);
+RECT rc_fill=GetClientRect();
 target->FillRect(rc_fill, background);
 }
 
 VOID Window::SetParent(Window* parent)
 {
-Handle<Window> self=this;
 if(m_Parent!=parent)
 	{
+	Handle<Window> self=this;
 	if(m_Parent)
 		{
 		m_Parent->Children->Remove(this);
@@ -294,14 +294,13 @@ if(visible)
 	Invalidate(true);
 	return;
 	}
-auto frame=GetFrame();
-if(frame)
+if(m_Frame)
 	{
-	auto focus=frame->GetFocus();
+	auto focus=m_Frame->GetFocus();
 	if(focus)
 		{
 		if(!focus->IsVisible())
-			frame->SetFocus(nullptr);
+			focus->KillFocus(FocusReason::None);
 		}
 	}
 if(m_Parent)

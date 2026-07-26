@@ -10,7 +10,6 @@
 //=======
 
 #include "UI/Controls/Menus/PopupMenu.h"
-#include "UI/Application.h"
 #include "UI/Frame.h"
 
 using namespace Graphics;
@@ -32,8 +31,8 @@ namespace UI {
 
 MenuBar::~MenuBar()
 {
-auto frame=GetFrame();
-frame->KeyEvent.Remove(this);
+if(m_Frame)
+	m_Frame->KeyEvent.Remove(this);
 }
 
 
@@ -53,13 +52,10 @@ return MenuBarItem::Create(this, label);
 
 MenuBar::MenuBar(Window* parent):
 WrapPanel(parent),
-Menu(nullptr),
-m_Entering(false)
+Menu(nullptr, this)
 {
 Padding.Set(2, 0, 2, 0);
-m_Panel=this;
-auto frame=GetFrame();
-frame->KeyEvent.Add(this, &MenuBar::OnFrameKeyEvent);
+m_Frame->KeyEvent.Add(this, &MenuBar::OnFrameKeyEvent);
 }
 
 
@@ -69,27 +65,26 @@ frame->KeyEvent.Add(this, &MenuBar::OnFrameKeyEvent);
 
 VOID MenuBar::OnFrameKeyDown(Handle<KeyEventArgs> args)
 {
-if(Accelerate(args->Key))
+if(args->Key==VirtualKey::Alt)
 	{
-	m_Entering=false;
+	if(!FlagHelper::Get(m_MenuFlags, MenuFlags::KeyboardAccess))
+		{
+		FlagHelper::Set(m_MenuFlags, MenuFlags::KeyboardAccess);
+		s_Current=this;
+		Invalidate();
+		}
 	args->Handled=true;
 	return;
 	}
-if(args->Key!=VirtualKey::Alt)
+if(!FlagHelper::Get(m_MenuFlags, MenuFlags::Keyboard))
 	return;
-if(m_Entering)
-	return;
-if(FlagHelper::Get(m_MenuFlags, MenuFlags::KeyboardAccess))
+auto shortcut=Accelerate(args->Key);
+if(shortcut)
 	{
-	Exit();
-	return;
+	FlagHelper::Clear(m_MenuFlags, MenuFlags::KeyboardAccess);
+	Expand(shortcut, FocusReason::Keyboard);
+	args->Handled=true;
 	}
-Exit();
-FlagHelper::Set(m_MenuFlags, MenuFlags::KeyboardAccess);
-Application::GetCurrent()->SetCurrentMenu(this);
-m_Entering=true;
-Invalidate();
-args->Handled=true;
 }
 
 VOID MenuBar::OnFrameKeyEvent(KeyEventType type, Handle<KeyEventArgs> args)
@@ -113,12 +108,16 @@ VOID MenuBar::OnFrameKeyUp(Handle<KeyEventArgs> args)
 {
 if(args->Key!=VirtualKey::Alt)
 	return;
-args->Handled=true;
-if(m_Entering)
+if(FlagHelper::Get(m_MenuFlags, MenuFlags::KeyboardNavigation))
 	{
-	m_Entering=false;
-	Select();
+	Exit(FocusReason::Keyboard);
 	}
+else
+	{
+	if(FlagHelper::Get(m_MenuFlags, MenuFlags::KeyboardAccess))
+		Select(FocusReason::Keyboard);
+	}
+args->Handled=true;
 }
 
 }}}

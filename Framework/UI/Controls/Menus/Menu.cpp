@@ -5,13 +5,6 @@
 #include "Menu.h"
 
 
-//=======
-// Using
-//=======
-
-#include "UI/Application.h"
-
-
 //===========
 // Namespace
 //===========
@@ -21,25 +14,14 @@ namespace UI {
 		namespace Menus {
 
 
-//==================
-// Con-/Destructors
-//==================
-
-Menu::~Menu()
-{
-auto app=Application::GetCurrent();
-if(app->m_CurrentMenu==this)
-	app->m_CurrentMenu=nullptr;
-}
-
 //========
 // Common
 //========
 
-BOOL Menu::Accelerate(VirtualKey key)
+MenuItem* Menu::Accelerate(VirtualKey key)
 {
-if(!FlagHelper::Get(m_MenuFlags, MenuFlags::KeyboardAccess))
-	return false;
+if(!Acceleration())
+	return nullptr;
 CHAR acc=(CHAR)key;
 for(auto it=m_Panel->Children->Begin(); it->HasCurrent(); it->MoveNext())
 	{
@@ -51,70 +33,78 @@ for(auto it=m_Panel->Children->Begin(); it->HasCurrent(); it->MoveNext())
 	if(!control->Visible||!control->Enabled)
 		continue;
 	if(item->Accelerator==acc)
-		{
-		item->Open();
-		return true;
-		}
+		return item;
 	}
-return false;
+return nullptr;
 }
 
-VOID Menu::Close()
+BOOL Menu::Acceleration()
 {
-if(m_OpenItem)
-	{
-	m_OpenItem->Close();
-	m_OpenItem=nullptr;
-	}
-if(m_SelectedItem)
-	{
-	m_SelectedItem->KillFocus();
-	m_SelectedItem=nullptr;
-	}
-FlagHelper::Clear(m_MenuFlags, MenuFlags::KeyboardAccess);
-Application::GetCurrent()->SetCurrentMenu(m_ParentMenu);
-if(m_ParentMenu)
-	{
-	m_ParentMenu->m_OpenItem=nullptr;
-	if(m_ParentMenu->HasKeyboardAccess())
-		m_ParentMenu->Select();
-	}
-}
-
-VOID Menu::DoKey(KeyEventType type, Handle<KeyEventArgs> args)
-{
-if(type!=KeyEventType::KeyDown)
-	return;
-switch(args->Key)
-	{
-	case VirtualKey::Escape:
-		{
-		Close();
-		break;
-		}
-	default:
-		break;
-	}
-args->Handled=true;
-}
-
-VOID Menu::Exit()
-{
-Close();
-if(m_ParentMenu)
-	m_ParentMenu->Exit();
-}
-
-BOOL Menu::HasAcceleration()
-{
-if(!FlagHelper::Get(m_MenuFlags, MenuFlags::KeyboardAccess))
+if(!FlagHelper::Get(m_MenuFlags, MenuFlags::Keyboard))
 	return false;
-return Application::GetCurrent()->GetCurrentMenu()==this;
+return s_Current==this;
 }
 
-BOOL Menu::IsOpen()
+VOID Menu::ClearSelection(MenuItem* item, FocusReason reason)
 {
-return m_OpenItem!=nullptr;
+if(m_Selected!=item)
+	return;
+FlagHelper::Clear(m_MenuFlags, MenuFlags::Keyboard);
+m_Selected=nullptr;
+m_Panel->Invalidate();
+}
+
+VOID Menu::Close(FocusReason reason)
+{
+FlagHelper::Clear(m_MenuFlags, MenuFlags::All);
+m_Panel->Invalidate();
+if(m_Selected)
+	{
+	m_Selected->Collapse(reason);
+	m_Selected->KillFocus(reason);
+	m_Selected=nullptr;
+	}
+}
+
+VOID Menu::Collapse(FocusReason reason)
+{
+FlagHelper::Clear(m_MenuFlags, MenuFlags::Expand);
+Select(reason);
+}
+
+VOID Menu::Escape(FocusReason reason)
+{
+if(m_ParentMenu)
+	{
+	m_ParentMenu->Collapse(reason);
+	}
+else
+	{
+	Close(reason);
+	}
+}
+
+VOID Menu::Exit(FocusReason reason)
+{
+Close(reason);
+FlagHelper::Set(m_MenuFlags, MenuFlags::Exit);
+if(m_ParentMenu)
+	m_ParentMenu->Exit(reason);
+}
+
+VOID Menu::Expand(FocusReason reason)
+{
+FlagHelper::Set(m_MenuFlags, MenuFlags::Expand);
+Select(reason);
+}
+
+VOID Menu::Expand(MenuItem* item, FocusReason reason)
+{
+BOOL exit=FlagHelper::Clear(m_MenuFlags, MenuFlags::Exit);
+if(exit)
+	return;
+FlagHelper::Set(m_MenuFlags, MenuFlags::Expand);
+Select(item, reason);
 }
 
 BOOL Menu::IsParentMenu(Menu* menu)
@@ -126,73 +116,54 @@ if(m_ParentMenu==menu)
 return m_ParentMenu->IsParentMenu(menu);
 }
 
-VOID Menu::KillKeyboardAccess()
+VOID Menu::Select(FocusReason reason)
 {
-FlagHelper::Clear(m_MenuFlags, MenuFlags::KeyboardAccess);
-if(m_SelectedItem)
-	{
-	m_SelectedItem->KillFocus();
-	m_SelectedItem=nullptr;
-	}
-if(m_ParentMenu)
-	m_ParentMenu->KillKeyboardAccess();
-}
-
-VOID Menu::Open(MenuItem* item)
-{
-if(m_OpenItem==item)
-	return;
-if(m_OpenItem)
-	{
-	m_OpenItem->Close();
-	m_OpenItem=nullptr;
-	}
-m_OpenItem=item;
-if(m_OpenItem)
-	m_OpenItem->Open();
-}
-
-VOID Menu::Select()
-{
-auto item=m_SelectedItem;
+auto item=m_Selected;
 if(!item)
 	{
-	auto control=Interactive::GetNextControl(m_Panel, nullptr, 0);
-	item=dynamic_cast<MenuItem*>(control);
+	auto next=Interactive::GetNextControl(m_Panel, nullptr);
+	item=dynamic_cast<MenuItem*>(next);
 	}
-Select(item);
+Select(item, reason);
 }
 
-VOID Menu::Select(MenuItem* item)
+VOID Menu::Select(MenuItem* item, FocusReason reason)
 {
-if(m_SelectedItem!=item)
+auto old_menu=s_Current;
+s_Current=this;
+m_Selected=item;
+FlagHelper::Clear(m_MenuFlags, MenuFlags::Exit);
+if(reason==FocusReason::Keyboard)
+	FlagHelper::Set(m_MenuFlags, MenuFlags::KeyboardNavigation);
+m_Panel->Invalidate();
+if(m_Selected)
 	{
-	if(m_SelectedItem)
+	if(reason==FocusReason::Keyboard)
+		m_Selected->SetFocus(reason);
+	if(FlagHelper::Get(m_MenuFlags, MenuFlags::Expand))
 		{
-		m_SelectedItem->KillFocus();
-		m_SelectedItem=nullptr;
+		if(m_Selected->SubMenu)
+			{
+			m_Selected->Expand(reason);
+			}
+		else
+			{
+			FlagHelper::Clear(m_MenuFlags, MenuFlags::Expand);
+			}
 		}
-	m_SelectedItem=item;
 	}
-if(m_SelectedItem)
+while(old_menu)
 	{
-	if(FlagHelper::Get(m_MenuFlags, MenuFlags::KeyboardAccess))
-		m_SelectedItem->SetFocus();
-	if(IsOpen())
-		Open(m_SelectedItem);
+	if(s_Current==old_menu)
+		break;
+	if(s_Current)
+		{
+		if(s_Current->IsParentMenu(old_menu))
+			break;
+		}
+	old_menu->Close(FocusReason::None);
+	old_menu=old_menu->GetParentMenu();
 	}
-}
-
-VOID Menu::Switch(MenuItem* item)
-{
-if(!item)
-	return;
-if(m_OpenItem==item)
-	{
-	this->Close();
-	return;
-	}
-this->Open(item);
 }
 
 
@@ -200,12 +171,18 @@ this->Open(item);
 // Con-/Destructors Protected
 //============================
 
-Menu::Menu(Menu* parent_menu):
+Menu::Menu(Menu* parent_menu, Window* panel):
 m_MenuFlags(MenuFlags::None),
-m_OpenItem(nullptr),
-m_Panel(nullptr),
+m_Panel(panel),
 m_ParentMenu(parent_menu),
-m_SelectedItem(nullptr)
+m_Selected(nullptr)
 {}
+
+
+//==================
+// Common Protected
+//==================
+
+Menu* Menu::s_Current=nullptr;
 
 }}}

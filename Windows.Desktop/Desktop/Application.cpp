@@ -12,13 +12,17 @@
 #include "Concurrency/DispatchedQueue.h"
 #include "Culture/LanguageHelper.h"
 #include "Resources/Strings/Exception.h"
+#include "Storage/Filesystem/FileHelper.h"
 #include "UI/AppWindow.h"
+#include "CommandLine.h"
 #include "ExceptionHelper.h"
+#include "PathHelper.h"
 
 using namespace Concurrency;
 using namespace Culture;
 using namespace Graphics;
 using namespace Resources::Strings;
+using namespace Storage::Filesystem;
 using namespace UI;
 
 extern INT Main();
@@ -64,6 +68,32 @@ s_Current=nullptr;
 //========
 // Common
 //========
+
+Handle<String> Application::GetResourcePath()
+{
+if(m_ResourcePath)
+	return m_ResourcePath;
+auto cmd_line=CommandLine::Create();
+auto exe=cmd_line->Arguments->GetAt(0);
+auto exe_path=PathHelper::GetDirectory(exe->Begin());
+auto app_x=PathHelper::GetParentDirectory(exe_path->Begin());
+auto root=PathHelper::GetParentDirectory(app_x->Begin());
+auto lookup=String::Create("%s\\AppX", root);
+if(FileHelper::DirectoryExists(lookup->Begin()))
+	{
+	m_ResourcePath=app_x;
+	return m_ResourcePath;
+	}
+TCHAR current[MAX_PATH];
+GetCurrentDirectory(MAX_PATH, current);
+app_x=String::Create("%s\\AppX", current);
+if(FileHelper::DirectoryExists(app_x->Begin()))
+	{
+	m_ResourcePath=app_x;
+	return m_ResourcePath;
+	}
+throw NotFoundException();
+}
 
 VOID Application::Quit()
 {
@@ -127,7 +157,7 @@ else
 	{
 	StringHelper::Print(msg, 256, "%s", caption);
 	}
-auto app=Application::Get();
+auto app=Application::GetCurrent();
 auto app_wnd=AppWindow::GetCurrent();
 HWND hwnd=app_wnd? app_wnd->GetHandle(): HWND_DESKTOP;
 auto name=app->GetName();

@@ -64,16 +64,6 @@ for(UINT y=0; y<size.Height; y++)
 	}
 }
 
-Handle<String> MenuHelper::GetLabel(LPCTSTR text)
-{
-if(!text)
-	return nullptr;
-UINT len=0;
-StringHelper::FindChar(text, '|', &len);
-auto label=String::Create(len, text);
-return label->Replace("&", "");
-}
-
 Handle<String> MenuHelper::GetShortcut(LPCTSTR text)
 {
 if(!text)
@@ -82,6 +72,16 @@ UINT pos=0;
 if(StringHelper::FindChar(text, '|', &pos))
 	return String::Create(&text[pos+1]);
 return nullptr;
+}
+
+Handle<String> MenuHelper::GetText(LPCTSTR text)
+{
+if(!text)
+	return nullptr;
+UINT len=0;
+StringHelper::FindChar(text, '|', &len);
+auto label=String::Create(len, text);
+return label->Replace("&", "");
 }
 
 }}}

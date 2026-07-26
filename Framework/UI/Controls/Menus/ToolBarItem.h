@@ -66,10 +66,6 @@ private:
 	// Common
 	VOID DoClick();
 	VOID OnClicked();
-	VOID OnFocused();
-	VOID OnFocusLost();
-	VOID OnPointerEntered();
-	VOID OnPointerLeft();
 	Handle<Bitmap> m_Icon;
 	Handle<Bitmap> m_IconDisabled;
 };

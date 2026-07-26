@@ -43,13 +43,19 @@ public:
 	using VirtualKey=UI::Input::VirtualKey;
 
 	// Friends
+	friend Interactive;
 	friend Object;
 
 	// Con-/Destructors
+	~Frame();
 	static inline Handle<Frame> Create() { return Object::Create<Frame>(); }
 
 	// Common
-	Handle<Interactive> GetFocus()const { return m_Focus; }
+	virtual VOID Activate(FocusReason Reason);
+	Event<Frame, FocusReason, Frame*> Activated;
+	Event<Frame, FocusReason, Frame*> FocusLost;
+	VOID FocusNext(FocusReason Reason=FocusReason::None, BOOL Forward=true);
+	inline Handle<Interactive> GetFocus()const { return m_Focus; }
 	POINT GetFrameOffset()const override { return POINT(0, 0); }
 	SIZE GetMinSize(RenderTarget* Target)override;
 	Interactive* GetPointerCapture()const { return m_PointerCapture; }
@@ -57,13 +63,12 @@ public:
 	Event<Frame> Invalidated;
 	BOOL IsKeyDown(VirtualKey Key);
 	Event<Frame, KeyEventType, Handle<KeyEventArgs>> KeyEvent;
-	virtual VOID KillFocus();
 	Event<Frame> PointerCaptured;
 	Event<Frame> PointerReleased;
 	VOID Rearrange(RenderTarget* Target, RECT& Rect)override;
 	virtual VOID SetCursor(Cursor* Cursor) {}
 	VOID SetFocus(Interactive* Focus, FocusReason Reason=FocusReason::None);
-	virtual VOID SetPointerCapture(Interactive* Capture) { m_PointerCapture=Capture; }
+	virtual VOID SetPointerCapture(Interactive* Capture);
 
 protected:
 	// Con-/Destructors
@@ -71,18 +76,19 @@ protected:
 
 	// Common
 	BOOL DoKey(KeyEventType Type, Handle<KeyEventArgs> Args);
-	VOID DoPointer(PointerEventType Type, Handle<PointerEventArgs> Args);
+	BOOL DoPointer(PointerEventType Type, Handle<PointerEventArgs> Args);
 	VOID RenderWindow(Window* Window, RenderTarget* Target, RECT const& Rect, BOOL Override);
+	Interactive* m_Focus;
+	BYTE m_KeyDown[Input::VIRTUAL_KEY_COUNT/8];
 	Interactive* m_PointerCapture;
 
 private:
 	// Common
-	VOID DoPointer(Interactive* Control, PointerEventType Type, Handle<PointerEventArgs> Args);
+	BOOL DoPointer(Interactive* Control, PointerEventType Type, Handle<PointerEventArgs> Args);
 	BOOL DoPointer(Window* Window, PointerEventType Type, Handle<PointerEventArgs> Args, Interactive** Focus);
 	VOID UpdateKeys(KeyEventType Type, VirtualKey Key);
 	VOID UpdateKeys(PointerEventType Type, PointerButton Button);
-	Interactive* m_Focus;
-	BYTE m_Keys[256];
+	static Frame* s_Current;
 };
 
 }

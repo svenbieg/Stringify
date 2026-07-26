@@ -39,9 +39,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Devices\Timers\SystemTimer.cpp">
       <Filter>Devices\Timers</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Resources\ResourceHelper.cpp">
-      <Filter>Resources</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)RandomHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Network\Tcp\TcpConnection.cpp">
       <Filter>Network\Tcp</Filter>
@@ -140,9 +137,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Platform.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Devices\Timers\SystemTimer.h">
       <Filter>Devices\Timers</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Resources\ResourceHelper.h">
-      <Filter>Resources</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)RandomHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Network\Tcp\TcpConnection.h">
@@ -273,9 +267,6 @@
     </Filter>
     <Filter Include="Devices\Timers">
       <UniqueIdentifier>{004cef37-1d6f-4c69-845c-a686050ce9b7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resources">
-      <UniqueIdentifier>{015788a0-2389-42a7-b6aa-106a4db13bb0}</UniqueIdentifier>
     </Filter>
     <Filter Include="Network\Udp">
       <UniqueIdentifier>{546787c8-9d5b-4c83-9a6a-33c0cba07558}</UniqueIdentifier>

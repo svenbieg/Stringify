@@ -30,12 +30,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Input\KeyEvent.cpp">
-      <Filter>UI\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Input\PointerEvent.cpp">
-      <Filter>UI\Input</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Input\VirtualKey.cpp">
       <Filter>UI\Input</Filter>
     </ClCompile>

@@ -27,9 +27,37 @@ using namespace UI::Input;
 namespace UI {
 
 
+//==================
+// Con-/Destructors
+//==================
+
+Frame::~Frame()
+{
+if(s_Current==this)
+	s_Current=nullptr;
+}
+
+
 //========
 // Common
 //========
+
+VOID Frame::Activate(FocusReason reason)
+{
+if(s_Current==this)
+	return;
+auto previous=s_Current;
+s_Current=this;
+if(previous)
+	previous->FocusLost(previous, reason, s_Current);
+Activated(this, reason, previous);
+}
+
+VOID Frame::FocusNext(FocusReason reason, BOOL fwd)
+{
+auto focus=Interactive::GetNextControl(this, m_Focus, fwd);
+SetFocus(focus, reason);
+}
 
 Graphics::SIZE Frame::GetMinSize(RenderTarget* target)
 {
@@ -51,14 +79,7 @@ Invalidated(this);
 
 BOOL Frame::IsKeyDown(VirtualKey key)
 {
-return m_Keys[(BYTE)key];
-}
-
-VOID Frame::KillFocus()
-{
-SetFocus(nullptr);
-SetPointerCapture(nullptr);
-MemoryHelper::Fill(m_Keys, sizeof(m_Keys), 0);
+return BitHelper::Get(m_KeyDown, VIRTUAL_KEY_COUNT, (UINT)key);
 }
 
 VOID Frame::Rearrange(RenderTarget* target, RECT& rc)
@@ -85,11 +106,17 @@ VOID Frame::SetFocus(Interactive* focus, FocusReason reason)
 {
 if(m_Focus==focus)
 	return;
-if(m_Focus)
-	m_Focus->FocusLost(m_Focus);
+auto old_focus=m_Focus;
 m_Focus=focus;
+if(old_focus)
+	old_focus->FocusLost(old_focus, m_Focus, reason);
 if(m_Focus)
-	m_Focus->Focused(m_Focus, reason);
+	m_Focus->Focused(m_Focus, old_focus, reason);
+}
+
+VOID Frame::SetPointerCapture(Interactive* capture)
+{
+m_PointerCapture=capture;
 }
 
 
@@ -99,13 +126,11 @@ if(m_Focus)
 
 Frame::Frame():
 Window(nullptr),
-// Protected
 m_PointerCapture(nullptr),
-// Private
 m_Focus(nullptr)
 {
 m_Frame=this;
-MemoryHelper::Fill(m_Keys, sizeof(m_Keys), 0);
+BitHelper::Clear(m_KeyDown, VIRTUAL_KEY_COUNT);
 }
 
 
@@ -116,38 +141,66 @@ MemoryHelper::Fill(m_Keys, sizeof(m_Keys), 0);
 BOOL Frame::DoKey(KeyEventType type, Handle<KeyEventArgs> args)
 {
 UpdateKeys(type, args->Key);
-FlagHelper::Set(args->Flags, KeyEventFlags::Alt, IsKeyDown(VirtualKey::Alt));
-FlagHelper::Set(args->Flags, KeyEventFlags::Ctrl, IsKeyDown(VirtualKey::Control));
-FlagHelper::Set(args->Flags, KeyEventFlags::Shift, IsKeyDown(VirtualKey::Shift));
-if(type==KeyEventType::KeyDown)
-	{
-	if(Application::GetCurrent()->Shortcut(args))
-		return true;
-	}
+BOOL alt=IsKeyDown(VirtualKey::Alt);
+BOOL ctrl=IsKeyDown(VirtualKey::Control);
+BOOL shift=IsKeyDown(VirtualKey::Shift);
+FlagHelper::Set(args->Flags, KeyEventFlags::Alt, alt);
+FlagHelper::Set(args->Flags, KeyEventFlags::Ctrl, ctrl);
+FlagHelper::Set(args->Flags, KeyEventFlags::Shift, shift);
 KeyEvent(this, type, args);
 if(args->Handled)
 	return true;
-auto focus=dynamic_cast<Interactive*>(m_Focus);
-if(focus)
+if(m_Focus)
 	{
 	switch(type)
 		{
 		case KeyEventType::KeyDown:
 			{
-			focus->KeyDown(focus, args);
+			m_Focus->KeyDown(m_Focus, args);
 			break;
 			}
 		case KeyEventType::KeyUp:
 			{
-			focus->KeyUp(focus, args);
+			m_Focus->KeyUp(m_Focus, args);
 			break;
 			}
 		}
+	if(args->Handled)
+		return true;
 	}
-return args->Handled;
+if(type==KeyEventType::KeyDown)
+	{
+	auto app=Application::GetCurrent();
+	if(app->Shortcut(args))
+		return true;
+	switch(args->Key)
+		{
+		case VirtualKey::Escape:
+			{
+			SetFocus(nullptr);
+			return true;
+			}
+		case VirtualKey::Left:
+			{
+			FocusNext(FocusReason::Keyboard, false);
+			return true;
+			}
+		case VirtualKey::Right:
+			{
+			FocusNext(FocusReason::Keyboard);
+			return true;
+			}
+		case VirtualKey::Tab:
+			{
+			FocusNext(FocusReason::Keyboard, !shift);
+			return true;
+			}
+		}
+	}
+return false;
 }
 
-VOID Frame::DoPointer(PointerEventType type, Handle<PointerEventArgs> args)
+BOOL Frame::DoPointer(PointerEventType type, Handle<PointerEventArgs> args)
 {
 POINT pt(args->Point);
 if(m_PointerCapture)
@@ -156,7 +209,7 @@ if(m_PointerCapture)
 	args->Point-=offset;
 	DoPointer(m_PointerCapture, type, args);
 	args->Point=pt;
-	return;
+	return args->Handled;
 	}
 Interactive* focus=nullptr;
 for(auto it=Children->End(); it->HasCurrent(); it->MovePrevious())
@@ -176,7 +229,8 @@ for(auto it=Children->End(); it->HasCurrent(); it->MovePrevious())
 	if(args->Handled)
 		break;
 	}
-Application::GetCurrent()->SetPointerFocus(focus);
+Interactive::SetPointerFocus(focus);
+return args->Handled;
 }
 
 VOID Frame::RenderWindow(Window* window, RenderTarget* target, RECT const& rc, BOOL override)
@@ -219,7 +273,7 @@ for(auto it=children->Begin(); it->HasCurrent(); it->MoveNext())
 // Common Private
 //================
 
-VOID Frame::DoPointer(Interactive* control, PointerEventType type, Handle<PointerEventArgs> args)
+BOOL Frame::DoPointer(Interactive* control, PointerEventType type, Handle<PointerEventArgs> args)
 {
 switch(type)
 	{
@@ -244,6 +298,7 @@ switch(type)
 		break;
 		}
 	}
+return args->Handled;
 }
 
 BOOL Frame::DoPointer(Window* window, PointerEventType type, Handle<PointerEventArgs> args, Interactive** focus_ptr)
@@ -280,10 +335,8 @@ return inside;
 
 VOID Frame::UpdateKeys(KeyEventType type, VirtualKey key)
 {
-BYTE set=0;
-if(type==KeyEventType::KeyDown)
-	set=1;
-m_Keys[(BYTE)key]=set;
+BOOL set=(type==KeyEventType::KeyDown);
+BitHelper::Set(m_KeyDown, VIRTUAL_KEY_COUNT, (UINT)key, set);
 }
 
 VOID Frame::UpdateKeys(PointerEventType type, PointerButton button)
@@ -329,5 +382,7 @@ switch(type)
 		}
 	}
 }
+
+Frame* Frame::s_Current=nullptr;
 
 }

@@ -28,7 +28,6 @@ class Dialog: public UI::Overlapped
 {
 public:
 	// Common
-	VOID Close()override;
 	INT Show();
 
 protected:
@@ -36,7 +35,7 @@ protected:
 	Dialog();
 
 	// Common
-	LRESULT HandleMessage(UINT Message, WPARAM WParam, LPARAM LParam, BOOL& Handled)override;
+	LRESULT HandleMessage(UINT Message, WPARAM WParam, LPARAM LParam)override;
 
 private:
 	// Common

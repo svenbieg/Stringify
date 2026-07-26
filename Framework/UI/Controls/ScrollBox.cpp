@@ -187,8 +187,7 @@ VOID ScrollBox::OnBodyPointerDown(Handle<PointerEventArgs> args)
 {
 if(args->Button!=PointerButton::Wheel)
 	return;
-auto frame=GetFrame();
-BOOL ctrl=frame->IsKeyDown(VirtualKey::Control);
+BOOL ctrl=m_Frame->IsKeyDown(VirtualKey::Control);
 if(ctrl)
 	{
 	SetPosition(0, 0);
@@ -230,15 +229,14 @@ VOID ScrollBox::OnBodyPointerWheel(Handle<PointerEventArgs> args)
 if(args->Handled)
 	return;
 INT delta=args->Delta;
-auto frame=GetFrame();
-BOOL ctrl=frame->IsKeyDown(VirtualKey::Control);
+BOOL ctrl=m_Frame->IsKeyDown(VirtualKey::Control);
 if(ctrl)
 	{
 	ZoomStep(delta);
 	}
 else
 	{
-	BOOL shift=frame->IsKeyDown(VirtualKey::Shift);
+	BOOL shift=m_Frame->IsKeyDown(VirtualKey::Shift);
 	INT x=0;
 	INT y=0;
 	if(VerticalBar->Visible)

@@ -10,7 +10,6 @@
 //=======
 
 #include "UI/Controls/Menus/MenuBar.h"
-#include "UI/Application.h"
 
 using namespace Graphics;
 
@@ -33,14 +32,13 @@ Handle<PopupMenuItem> PopupMenu::Add(Handle<Sentence> label)
 return PopupMenuItem::Create(this, label);
 }
 
-VOID PopupMenu::Close()
+VOID PopupMenu::Close(FocusReason reason)
 {
 if(!m_Popup)
 	return;
-Menu::Close();
-SetParent(nullptr);
-m_Popup->Close();
+Menu::Close(reason);
 m_Popup=nullptr;
+Visible.Set(false, EventNotification::None);
 }
 
 Graphics::SIZE PopupMenu::GetMinSize(RenderTarget* target)
@@ -73,10 +71,10 @@ for(auto it=m_Panel->Children->Begin(); it->HasCurrent(); it->MoveNext())
 	last_sep=nullptr;
 	if(item->Icon)
 		icon=true;
-	auto label=item->Text;
-	if(label)
+	auto text=item->Text;
+	if(text)
 		{
-		SIZE size=target->MeasureText(font, scale, label->Begin());
+		SIZE size=target->MeasureText(font, scale, text->Begin());
 		label_width=TypeHelper::Max(label_width, size.Width);
 		}
 	auto shortcut=item->Shortcut;
@@ -114,26 +112,26 @@ for(auto it=m_Panel->Children->Begin(); it->HasCurrent(); it->MoveNext())
 return StackPanel::GetMinSize(target);
 }
 
-VOID PopupMenu::Show(POINT const& pt)
+VOID PopupMenu::Show(POINT const& pt, FocusReason reason)
 {
-Opened(this);
-auto app=Application::GetCurrent();
-auto current=app->GetCurrentMenu();
-if(current)
+s_Current=this;
+if(!m_Popup)
 	{
-	if(!IsParentMenu(current))
-		current->Close();
+	Visible=true;
+	Opened(this);
+	RECT rc(pt.Left, pt.Top, pt.Left, pt.Top);
+	Popup* parent=nullptr;
+	auto popup_menu=dynamic_cast<PopupMenu*>(m_ParentMenu);
+	if(popup_menu)
+		parent=popup_menu->GetPopup();
+	m_Popup=Popup::Create(parent);
+	m_Popup->Content=this;
+	m_Popup->FocusLost.Add(this, &PopupMenu::OnPopupFocusLost);
+	m_Popup->Move(rc);
+	m_Popup->Visible=true;
 	}
-app->SetCurrentMenu(this);
-BOOL keyboard=false;
-if(m_ParentMenu)
-	keyboard|=m_ParentMenu->HasKeyboardAccess();
-FlagHelper::Set(m_MenuFlags, MenuFlags::KeyboardAccess, keyboard);
-RECT rc(pt.Left, pt.Top, pt.Left, pt.Top);
-m_Popup=Popup::Create(this);
-m_Popup->FocusLost.Add(this, &PopupMenu::OnPopupLostFocus);
-m_Popup->Move(rc);
-m_Popup->Visible=true;
+if(reason==FocusReason::Keyboard)
+	Select(reason);
 }
 
 
@@ -143,11 +141,11 @@ m_Popup->Visible=true;
 
 PopupMenu::PopupMenu(Menu* parent):
 StackPanel(nullptr, Orientation::Vertical),
-Menu(parent)
+Menu(parent, this)
 {
 AlignChildren=Alignment::Stretch;
 Padding.Set(4, 4, 4, 4);
-m_Panel=this;
+Visible.Set(false, EventNotification::None);
 }
 
 
@@ -155,9 +153,14 @@ m_Panel=this;
 // Common Private
 //================
 
-VOID PopupMenu::OnPopupLostFocus()
+VOID PopupMenu::OnPopupFocusLost(Frame* sender, FocusReason reason, Frame* active)
 {
-Close();
+if(s_Current!=this)
+	return;
+auto popup=dynamic_cast<Popup*>(active);
+if(popup)
+	return;
+Exit(reason);
 }
 
 }}}

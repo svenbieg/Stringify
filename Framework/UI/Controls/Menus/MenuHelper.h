@@ -31,8 +31,8 @@ public:
 	// Common
 	static CHAR GetAccelerator(LPCTSTR Text);
 	static VOID GetBitmapDisabled(Handle<Graphics::Bitmap> Bitmap);
-	static Handle<String> GetLabel(LPCTSTR Text);
 	static Handle<String> GetShortcut(LPCTSTR Text);
+	static Handle<String> GetText(LPCTSTR Text);
 };
 
 }}}

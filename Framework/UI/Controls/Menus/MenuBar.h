@@ -31,6 +31,8 @@ class MenuBar: public WrapPanel, public Menu
 {
 public:
 	// Using
+	using KeyEventArgs=UI::Input::KeyEventArgs;
+	using KeyEventType=UI::Input::KeyEventType;
 	using Sentence=Culture::Sentence;
 
 	// Friends
@@ -44,10 +46,6 @@ public:
 	Handle<MenuBarItem> Add(Handle<Sentence> Label);
 
 private:
-	// Using
-	using KeyEventArgs=UI::Input::KeyEventArgs;
-	using KeyEventType=UI::Input::KeyEventType;
-
 	// Con-/Destructors
 	MenuBar(Window* Parent);
 
@@ -55,7 +53,6 @@ private:
 	VOID OnFrameKeyEvent(KeyEventType Type, Handle<KeyEventArgs> Args);
 	VOID OnFrameKeyDown(Handle<KeyEventArgs> Args);
 	VOID OnFrameKeyUp(Handle<KeyEventArgs> Args);
-	BOOL m_Entering;
 };
 
 }}}

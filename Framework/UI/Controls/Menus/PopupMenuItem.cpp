@@ -1,4 +1,4 @@
-//===================
+﻿//===================
 // PopupMenuItem.cpp
 //===================
 
@@ -35,6 +35,13 @@ namespace UI {
 //========
 // Common
 //========
+
+Handle<PopupMenuItem> PopupMenuItem::Add(Handle<Sentence> label)
+{
+if(!SubMenu)
+	SubMenu=PopupMenu::Create(m_Menu);
+return SubMenu->Add(label);
+}
 
 Handle<Brush> PopupMenuItem::GetBackground()
 {
@@ -121,25 +128,25 @@ auto font=m_Theme->DefaultFont;
 auto text_brush=m_Theme->TextBrush;
 if(!enabled)
 	text_brush=m_Theme->TextInactiveBrush;
-auto label=Text->Begin();
-SIZE label_size=target->MeasureText(font, scale, label);
-UINT top=rc.Top+(height-label_size.Height)/2;
-RECT label_rc(left, top, left+label_size.Width, top+label_size.Height);
-target->DrawText(label_rc, scale, font, text_brush, label);
-BOOL accelerate=Accelerator;
+auto text=Text->Begin();
+SIZE text_size=target->MeasureText(font, scale, text);
+UINT top=rc.Top+(height-text_size.Height)/2;
+RECT text_rc(left, top, left+text_size.Width, top+text_size.Height);
+target->DrawText(text_rc, scale, font, text_brush, text);
+BOOL accelerate=(Accelerator!=0);
 if(!enabled)
 	accelerate=false;
-if(!m_Menu->HasAcceleration())
+if(!m_Menu->Acceleration())
 	accelerate=false;
 if(accelerate)
 	{
 	UINT pos=0;
-	if(StringHelper::FindChar(label, Accelerator, &pos, CompareMode::IgnoreCase))
+	if(StringHelper::FindChar(text, Accelerator, &pos, CompareMode::IgnoreCase))
 		{
 		SIZE size_from(0, 0);
 		if(pos>0)
-			size_from=target->MeasureText(font, scale, label, pos);
-		SIZE size_to=target->MeasureText(font, scale, label, pos+1);
+			size_from=target->MeasureText(font, scale, text, pos);
+		SIZE size_to=target->MeasureText(font, scale, text, pos+1);
 		POINT from(left+size_from.Width, rc.Bottom);
 		POINT to(left+size_to.Width, rc.Bottom);
 		target->DrawLine(from, to, text_brush, 1);
@@ -159,13 +166,15 @@ if(Shortcut)
 	}
 if(SubMenu)
 	{
-	SIZE arrow_size=target->MeasureText(font, scale, TEXT(">"));
-	UINT top=rc.Top+(height-arrow_size.Height)/2;
-	RECT arrow_rc(rc.Right-arrow_size.Width, top, rc.Right, top+arrow_size.Height);
-	auto arrow_brush=m_Theme->TextBrush;
-	if(!enabled)
-		arrow_brush=m_Theme->TextInactiveBrush;
-	target->DrawText(arrow_rc, scale, font, arrow_brush, TEXT(">"));
+	UINT height=rc.Bottom-rc.Top;
+	UINT padding=6*scale;
+	RECT arrow_rc(rc);
+	arrow_rc.Left=arrow_rc.Right-height;
+	POINT pts[3];
+	pts[0].Set(arrow_rc.Left+padding, arrow_rc.Top+padding);
+	pts[1].Set(arrow_rc.Left+padding, arrow_rc.Bottom-padding);
+	pts[2].Set(arrow_rc.Right-padding, arrow_rc.Top+height/2);
+	target->FillPolygon(pts, 3, text_brush);
 	}
 }
 
@@ -199,6 +208,7 @@ if(!label)
 Interactive::Clicked.Add(this, &PopupMenuItem::OnInteractiveClicked);
 Background=m_Theme->ControlBrush;
 Checked.Changed.Add(this, &PopupMenuItem::OnCheckedChanged);
+Focused.Add(this, &PopupMenuItem::OnFocused);
 Highlight=m_Theme->HighlightBrush;
 Label.Changed.Add(this, &PopupMenuItem::OnLabelChanged);
 Label=label;
@@ -206,6 +216,7 @@ KeyDown.Add(this, &PopupMenuItem::OnKeyDown);
 PointerDown.Add(this, &PopupMenuItem::OnPointerDown);
 PointerEntered.Add(this, &PopupMenuItem::OnPointerEntered);
 PointerLeft.Add(this, &PopupMenuItem::OnPointerLeft);
+TabStop=true;
 }
 
 
@@ -225,10 +236,18 @@ else
 	}
 }
 
+VOID PopupMenuItem::OnFocused(Interactive* previous, FocusReason reason)
+{
+m_Menu->Select(this, reason);
+}
+
 VOID PopupMenuItem::OnInteractiveClicked()
 {
-m_Menu->Exit();
-DispatchedQueue::Append(this, [this](){ Clicked(this); });
+if(!SubMenu)
+	{
+	m_Menu->Exit(FocusReason::Pointer);
+	DispatchedQueue::Append(this, [this](){ Clicked(this); });
+	}
 }
 
 VOID PopupMenuItem::OnLabelChanged(Handle<Sentence> label)
@@ -237,7 +256,7 @@ if(label)
 	{
 	Accelerator=MenuHelper::GetAccelerator(label->Begin());
 	Shortcut=MenuHelper::GetShortcut(label->Begin());
-	Text=MenuHelper::GetLabel(label->Begin());
+	Text=MenuHelper::GetText(label->Begin());
 	auto shortcut=Shortcut::FromString(Shortcut);
 	if(shortcut)
 		Application::GetCurrent()->Shortcuts->Set(shortcut, this, EventNotification::None);
@@ -252,108 +271,99 @@ Invalidate();
 
 VOID PopupMenuItem::OnKeyDown(Handle<KeyEventArgs> args)
 {
-MenuItem::OnKeyDown(args);
 if(args->Handled)
 	return;
-args->Handled=true;
 switch(args->Key)
 	{
+	case VirtualKey::Escape:
+		{
+		m_Menu->Escape(FocusReason::Keyboard);
+		break;
+		}
 	case VirtualKey::Down:
 		{
-		auto control=Interactive::GetNextControl(m_Parent, this, 1);
-		if(control)
-			{
-			auto item=dynamic_cast<MenuItem*>(control);
-			m_Menu->Select(item);
-			}
-		return;
+		m_Frame->FocusNext(FocusReason::Keyboard);
+		break;
 		}
-	case VirtualKey::Return:
+	case VirtualKey::Left:
 		{
-		Open();
-		return;
+		m_Menu->Escape(FocusReason::Keyboard);
+		break;
 		}
 	case VirtualKey::Right:
 		{
-		return;
+		Expand(FocusReason::Keyboard);
+		break;
 		}
 	case VirtualKey::Up:
 		{
-		auto parent_menu=m_Menu->GetParentMenu();
-		auto menubar=dynamic_cast<MenuBar*>(parent_menu->GetPanel());
-		if(menubar)
+		auto control=Interactive::GetNextControl(m_Parent, nullptr, true);
+		if(control==this)
 			{
-			auto control=Interactive::GetNextControl(m_Parent, nullptr, 0);
-			if(control==this)
+			auto parent_menu=m_Menu->GetParentMenu();
+			auto menubar=dynamic_cast<MenuBar*>(parent_menu);
+			if(menubar)
 				{
-				m_Menu->Close();
-				return;
+				m_Menu->Escape(FocusReason::Keyboard);
+				break;
 				}
 			}
-		auto control=Interactive::GetNextControl(m_Parent, this, -1);
-		if(control)
-			{
-			auto item=dynamic_cast<MenuItem*>(control);
-			m_Menu->Select(item);
-			}
-		return;
+		m_Frame->FocusNext(FocusReason::Keyboard, false);
+		break;
 		}
 	default:
-		break;
+		{
+		return;
+		}
 	}
-args->Handled=false;
+args->Handled=true;
+}
+
+VOID PopupMenuItem::OnKeyPressed(Handle<KeyEventArgs> args)
+{
+switch(args->Key)
+	{
+	case VirtualKey::Return:
+		{
+		Enter(FocusReason::Keyboard);
+		break;
+		}
+	default:
+		{
+		return;
+		}
+	}
+args->Handled=true;
 }
 
 VOID PopupMenuItem::OnPointerDown()
 {
-if(SubMenu)
-	{
-	if(!SubMenu->Visible)
-		{
-		Open();
-		}
-	else
-		{
-		SubMenu->Close();
-		}
-	}
+m_Timer=nullptr;
+Enter(FocusReason::Pointer);
 }
 
 VOID PopupMenuItem::OnPointerEntered()
 {
-Invalidate();
-m_Menu->KillKeyboardAccess();
-auto app=Application::GetCurrent();
-auto current=app->GetCurrentMenu();
-if(SubMenu==current)
+m_Menu->Select(this, FocusReason::Pointer);
+if(!SubMenu)
 	return;
-auto menu=m_Menu;
-while(current!=menu)
-	{
-	current->Close();
-	current=app->GetCurrentMenu();
-	}
-if(SubMenu)
-	{
-	if(!SubMenu->Visible)
-		{
-		m_Timer=Timer::Create();
-		m_Timer->Triggered.Add(this, &PopupMenuItem::OnTimerTriggered);
-		m_Timer->StartOnce(300);
-		}
-	}
+if(SubMenu->Visible)
+	return;
+m_Timer=Timer::Create();
+m_Timer->Triggered.Add(this, &PopupMenuItem::OnTimerTriggered);
+m_Timer->StartOnce(300);
 }
 
 VOID PopupMenuItem::OnPointerLeft()
 {
-Invalidate();
 m_Timer=nullptr;
+Invalidate();
 }
 
 VOID PopupMenuItem::OnTimerTriggered()
 {
 m_Timer=nullptr;
-Open();
+Expand(FocusReason::Pointer);
 }
 
 }}}

@@ -53,13 +53,13 @@ public:
 	VOID ClearSelection();
 	Handle<EditMenu> ContextMenu;
 	Handle<Brush> GetBackground()override;
+	static Input* GetCurrent() { return s_Current; }
 	Handle<Cursor> GetCursor()override;
 	RECT GetCursorRect();
 	UINT GetLineHeight()const;
 	SIZE GetMinSize(RenderTarget* Target)override;
 	Handle<String> GetSelection();
 	Handle<String> GetText();
-	BOOL KillFocus()override;
 	TCHAR Mask;
 	BOOL MultiLine;
 	RECT Padding;
@@ -70,7 +70,6 @@ public:
 	VOID SelectAll();
 	VOID SelectNone();
 	Event<Input> SelectionChanged;
-	VOID SetFocus(FocusReason Reason=FocusReason::None)override;
 	VOID SetSelection(POINT const& Start, POINT const& End);
 	VOID SetText(Handle<String> Text);
 
@@ -114,7 +113,7 @@ private:
 	VOID OnPointerUp(Handle<PointerEventArgs> Args);
 	POINT PointFromChar(POINT const& Char, FLOAT ScaleFactor);
 	BOOL PointIsSelected(POINT const& Point);
-	BOOL ShowContextMenu(POINT Point);
+	BOOL ShowContextMenu(POINT Point, FocusReason Reason);
 	VOID ShowCursor(BOOL Show);
 	VOID UpdateLine(INPUT_LINE& Line);
 	VOID UpdatePointer();
@@ -131,6 +130,7 @@ private:
 	POINT m_SelectionFirst;
 	POINT m_SelectionLast;
 	POINT m_SelectionStart;
+	static Input* s_Current;
 };
 
 }}

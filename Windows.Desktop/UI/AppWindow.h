@@ -37,8 +37,6 @@ public:
 	~AppWindow();
 
 	// Common
-	VOID Activate();
-	Event<AppWindow> Activated;
 	Handle<Panel> Body;
 	Event<AppWindow> Closed;
 	Handle<StackPanel> Footer;
@@ -52,7 +50,7 @@ protected:
 	AppWindow();
 
 	// Common
-	LRESULT HandleMessage(UINT Message, WPARAM WParam, LPARAM LParam, BOOL& Handled)override;
+	LRESULT HandleMessage(UINT Message, WPARAM WParam, LPARAM LParam)override;
 
 private:
 	// Common

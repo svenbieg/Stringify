@@ -28,9 +28,10 @@ class Application: public UI::Application
 public:
 	// Con-/Destructors
 	~Application();
-	static inline Application* Get() { return s_Current; }
 
+	static inline Application* GetCurrent() { return s_Current; }
 	VOID Quit()override;
+	Handle<String> GetResourcePath();
 	INT Run();
 	Event<Application> UnhandledException;
 
@@ -41,6 +42,7 @@ protected:
 private:
 	// Common
 	static LONG WINAPI UnhandledExceptionHandler(EXCEPTION_POINTERS* Info);
+	Handle<String> m_ResourcePath;
 	Handle<Theme> m_Theme;
 	static Application* s_Current;
 };

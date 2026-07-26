@@ -28,11 +28,6 @@ namespace Desktop {
 // Common
 //========
 
-VOID Dialog::Close()
-{
-SendMessage(m_Handle, WM_CLOSE, 0, 0);
-}
-
 INT Dialog::Show()
 {
 auto app_wnd=AppWindow::GetCurrent();
@@ -56,12 +51,10 @@ while(m_Status==Status::Pending)
 	TranslateMessage(&msg);
 	DispatchMessage(&msg);
 	}
-Overlapped::Show(SW_HIDE);
 if(app_wnd)
 	{
 	auto hwnd=app_wnd->GetHandle();
 	EnableWindow(hwnd, true);
-	app_wnd->Activate();
 	}
 return 0;
 }
@@ -80,17 +73,27 @@ m_Status(Status::Success)
 // Common Protected
 //==================
 
-LRESULT Dialog::HandleMessage(UINT msg, WPARAM wparam, LPARAM lparam, BOOL& handled)
+LRESULT Dialog::HandleMessage(UINT msg, WPARAM wparam, LPARAM lparam)
 {
 switch(msg)
 	{
-	case WM_CLOSE:
+	case WM_DESTROY:
 		{
 		m_Status=Status::Success;
-		return 0;
+		break;
+		}
+	case WM_KEYDOWN:
+		{
+		VirtualKey key=(VirtualKey)LOWORD(wparam);
+		if(key==VirtualKey::Escape)
+			{
+			Close();
+			return 0;
+			}
+		break;
 		}
 	}
-return Overlapped::HandleMessage(msg, wparam, lparam, handled);
+return Overlapped::HandleMessage(msg, wparam, lparam);
 }
 
 

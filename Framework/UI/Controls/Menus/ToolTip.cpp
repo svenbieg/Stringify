@@ -45,11 +45,7 @@ if(m_Parent)
 
 VOID ToolTip::Close()
 {
-if(m_Timer)
-	{
-	m_Timer->Triggered.Remove(this);
-	m_Timer=nullptr;
-	}
+m_Timer=nullptr;
 if(m_Panel)
 	{
 	auto frame=m_Parent->GetFrame();

@@ -29,9 +29,15 @@ namespace UI {
 
 Interactive::~Interactive()
 {
-auto app=Application::GetCurrent();
-if(app->m_PointerFocus==this)
-	app->m_PointerFocus=nullptr;
+if(m_Frame)
+	{
+	if(m_Frame->m_Focus==this)
+		m_Frame->m_Focus=nullptr;
+	if(m_Frame->m_PointerCapture==this)
+		m_Frame->m_PointerCapture=nullptr;
+	}
+if(s_PointerFocus==this)
+	s_PointerFocus=nullptr;
 }
 
 
@@ -41,8 +47,7 @@ if(app->m_PointerFocus==this)
 
 VOID Interactive::CapturePointer()
 {
-auto frame=GetFrame();
-frame->SetPointerCapture(this);
+m_Frame->SetPointerCapture(this);
 }
 
 Handle<Cursor> Interactive::GetCursor()
@@ -50,37 +55,30 @@ Handle<Cursor> Interactive::GetCursor()
 return m_Theme->DefaultCursor;
 }
 
-Interactive* Interactive::GetNextControl(Window* window, Interactive* control, INT relative)
+Interactive* Interactive::GetNextControl(Window* window, Interactive* control, BOOL fwd)
 {
-if(!window)
-	{
-	if(!control)
-		return nullptr;
-	window=control->m_Parent;
-	}
 Interactive* next=nullptr;
-BOOL fwd=(relative>=0);
-GetNext(window, control, &next, &relative, fwd, 0);
+GetNext(window, control, &next, fwd, 0);
 return next;
 }
 
 BOOL Interactive::HasFocus()
 {
-auto frame=GetFrame();
-if(!frame)
+if(!m_Frame)
 	return false;
-return frame->GetFocus()==this;
+return m_Frame->GetFocus()==this;
 }
 
 BOOL Interactive::HasPointerFocus()
 {
-return Application::GetCurrent()->GetPointerFocus()==this;
+return s_PointerFocus==this;
 }
 
 BOOL Interactive::IsCapturingPointer()
 {
-auto frame=GetFrame();
-return frame->GetPointerCapture()==this;
+if(!m_Frame)
+	return false;
+return m_Frame->GetPointerCapture()==this;
 }
 
 BOOL Interactive::IsEnabled()
@@ -101,26 +99,39 @@ while(parent)
 return true;
 }
 
-BOOL Interactive::KillFocus()
+BOOL Interactive::KillFocus(FocusReason reason)
 {
-auto frame=GetFrame();
-if(frame->GetFocus()!=this)
+if(!m_Frame)
 	return false;
-frame->SetFocus(nullptr);
+auto focus=m_Frame->GetFocus();
+if(focus!=this)
+	return false;
+m_Frame->SetFocus(nullptr, reason);
 return true;
 }
 
 VOID Interactive::ReleasePointer()
 {
-auto frame=GetFrame();
-if(frame->GetPointerCapture()==this)
-	frame->SetPointerCapture(nullptr);
+if(m_Frame->GetPointerCapture()==this)
+	m_Frame->SetPointerCapture(nullptr);
 }
 
 VOID Interactive::SetFocus(FocusReason reason)
 {
-auto frame=GetFrame();
-frame->SetFocus(this, reason);
+if(m_Frame)
+	m_Frame->SetFocus(this, reason);
+}
+
+VOID Interactive::SetPointerFocus(Interactive* focus)
+{
+if(s_PointerFocus==focus)
+	return;
+auto old_focus=s_PointerFocus;
+s_PointerFocus=focus;
+if(old_focus)
+	old_focus->PointerLeft(old_focus);
+if(focus)
+	focus->PointerEntered(focus);
 }
 
 
@@ -132,12 +143,15 @@ Interactive::Interactive(Window* parent):
 Control(parent),
 Enabled(this, true),
 TabStop(false),
-m_InteractiveFlags(InteractiveFlags::None)
+m_InteractiveFlags(InteractiveFlags::None),
+m_KeyDown(VirtualKey::None)
 {
 Enabled.Changed.Add(this, &Interactive::OnEnabledChanged);
 Focused.Add(this, &Interactive::OnFocused);
 FocusLost.Add(this, &Interactive::OnFocusLost);
 KeyDown.Add(this, &Interactive::OnKeyDown);
+KeyPressed.Add(this, &Interactive::OnKeyPressed);
+KeyUp.Add(this, &Interactive::OnKeyUp);
 PointerDown.Add(this, &Interactive::OnPointerDown);
 PointerEntered.Add(this, &Interactive::OnPointerEntered);
 PointerLeft.Add(this, &Interactive::OnPointerLeft);
@@ -149,7 +163,7 @@ PointerUp.Add(this, &Interactive::OnPointerUp);
 // Common Private
 //================
 
-BOOL Interactive::GetNext(Window* window, Interactive* control, Interactive** next_ptr, INT* relative_ptr, BOOL fwd, UINT level)
+BOOL Interactive::GetNext(Window* window, Interactive* control, Interactive** next_ptr, BOOL fwd, UINT level)
 {
 auto it=window->Children->Begin();
 if(!it->HasCurrent())
@@ -162,23 +176,21 @@ if(control)
 		auto child=it->GetCurrent();
 		if(child==control)
 			break;
-		if(!child->Visible)
-			continue;
-		if(!child->IsParentOf(control))
-			continue;
-		if(GetNext(child, control, next_ptr, relative_ptr, fwd, level+1))
-			return true;
-		if(!it->Move(fwd, repeat))
-			return false;
-		break;
+		if(child->IsParentOf(control))
+			{
+			if(GetNext(child, control, next_ptr, fwd, level+1))
+				return true;
+			break;
+			}
 		}
+	if(!it->Move(fwd, repeat))
+		return false;
 	}
 else
 	{
 	if(!fwd)
 		it->End();
 	}
-INT dir=(fwd? 1: -1);
 for(; it->HasCurrent(); it->Move(fwd, repeat))
 	{
 	auto child=it->GetCurrent();
@@ -189,15 +201,12 @@ for(; it->HasCurrent(); it->Move(fwd, repeat))
 		{
 		if(!interactive->Enabled)
 			continue;
-		if(relative_ptr[0]==0)
-			{
-			next_ptr[0]=interactive;
-			return true;
-			}
-		relative_ptr[0]-=dir;
-		continue;
+		if(!interactive->TabStop)
+			continue;
+		*next_ptr=interactive;
+		return true;
 		}
-	if(GetNext(child, nullptr, next_ptr, relative_ptr, fwd, level+1))
+	if(GetNext(child, nullptr, next_ptr, fwd, level+1))
 		return true;
 	}
 return false;
@@ -220,26 +229,32 @@ Invalidate();
 
 VOID Interactive::OnKeyDown(Handle<KeyEventArgs> args)
 {
-if(!TabStop)
-	return;
-if(args->Key!=VirtualKey::Tab)
-	return;
-auto frame=GetFrame();
-BOOL shift=frame->IsKeyDown(VirtualKey::Shift);
-INT relative=shift? -1: 1;
-Interactive* control=this;
-while(control)
+m_KeyDown=args->Key;
+}
+
+VOID Interactive::OnKeyPressed(Handle<KeyEventArgs> args)
+{
+switch(args->Key)
 	{
-	control=GetNextControl(frame, control, relative);
-	if(!control)
-		break;
-	if(control==this)
-		break;
-	if(control->TabStop)
+	case VirtualKey::Return:
 		{
-		control->SetFocus();
+		Clicked(this, nullptr);
 		break;
 		}
+	default:
+		{
+		return;
+		}
+	}
+args->Handled=true;
+}
+
+VOID Interactive::OnKeyUp(Handle<KeyEventArgs> args)
+{
+if(m_KeyDown==args->Key)
+	{
+	m_KeyDown=VirtualKey::None;
+	KeyPressed(this, args);
 	}
 }
 
@@ -251,22 +266,18 @@ if(args->Button==PointerButton::Left)
 
 VOID Interactive::OnPointerEntered()
 {
-auto frame=GetFrame();
-if(!frame)
-	return;
 auto cursor=GetCursor();
-frame->SetCursor(cursor);
-Invalidate(false);
+m_Frame->SetCursor(cursor);
+Invalidate();
 }
 
 VOID Interactive::OnPointerLeft()
 {
-auto frame=GetFrame();
-if(!frame)
+if(!m_Frame)
 	return;
 auto cursor=m_Theme->DefaultCursor;
-frame->SetCursor(cursor);
-Invalidate(false);
+m_Frame->SetCursor(cursor);
+Invalidate();
 }
 
 VOID Interactive::OnPointerUp(Handle<PointerEventArgs> args)
@@ -278,5 +289,7 @@ FlagHelper::Clear(m_InteractiveFlags, InteractiveFlags::LeftButtonDown);
 if(clicked)
 	Clicked(this, args);
 }
+
+Interactive* Interactive::s_PointerFocus=nullptr;
 
 }}
