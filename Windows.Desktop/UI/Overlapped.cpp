@@ -29,6 +29,17 @@ using namespace Graphics;
 namespace UI {
 
 
+//==================
+// Con-/Destructors
+//==================
+
+Overlapped::~Overlapped()
+{
+if(m_Theme)
+	m_Theme->Changed.Remove(this);
+}
+
+
 //========
 // Common
 //========
@@ -206,8 +217,11 @@ if(m_Handle==INVALID_HANDLE_VALUE)
 	m_Handle=NULL;
 if(m_Handle==NULL)
 	throw InvalidArgumentException();
-m_Theme->Changed.Add(this, &Overlapped::OnThemeChanged);
-OnThemeChanged();
+if(m_Theme)
+	{
+	m_Theme->Changed.Add(this, &Overlapped::OnThemeChanged);
+	OnThemeChanged();
+	}
 }
 
 

@@ -28,9 +28,12 @@ namespace UI {
 class MenuHelper
 {
 public:
+	// Using
+	using Bitmap=Graphics::Bitmap;
+
 	// Common
 	static CHAR GetAccelerator(LPCTSTR Text);
-	static VOID GetBitmapDisabled(Handle<Graphics::Bitmap> Bitmap);
+	static Handle<Bitmap> GetBitmapDisabled(Handle<Bitmap> Bitmap);
 	static Handle<String> GetShortcut(LPCTSTR Text);
 	static Handle<String> GetText(LPCTSTR Text);
 };

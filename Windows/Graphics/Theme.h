@@ -50,7 +50,9 @@ public:
 	Event<Theme> Changed;
 	inline ColorScheme GetColorScheme()const { return m_ColorScheme; }
 	VOID SetColorScheme(ColorScheme Scheme);
+	BOOL SetColorScheme(ColorScheme Scheme, EventNotification Notification);
 	VOID Update();
+	BOOL Update(EventNotification Notification);
 
 	// Brushes
 	Handle<Brush> BackgroundBrush;

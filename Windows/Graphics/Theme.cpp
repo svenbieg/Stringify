@@ -27,8 +27,14 @@ namespace Graphics {
 
 VOID Theme::SetColorScheme(ColorScheme scheme)
 {
+if(SetColorScheme(scheme, EventNotification::None))
+	Changed(this);
+}
+
+BOOL Theme::SetColorScheme(ColorScheme scheme, EventNotification notification)
+{
 if(m_ColorScheme==scheme)
-	return;
+	return false;
 switch(scheme)
 	{
 	case ColorScheme::Dark:
@@ -65,13 +71,22 @@ switch(scheme)
 		}
 	}
 m_ColorScheme=scheme;
-Changed(this);
+return true;
 }
 
 VOID Theme::Update()
 {
+if(Update(EventNotification::None))
+	Changed(this);
+}
+
+BOOL Theme::Update(EventNotification notification)
+{
 INT light=Registry::GetValue(HKEY_CURRENT_USER, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "AppsUseLightTheme", 1);
-SetColorScheme(light? ColorScheme::Light: ColorScheme::Dark);
+auto scheme=(light? ColorScheme::Light: ColorScheme::Dark);
+if(m_ColorScheme==scheme)
+	return false;
+return SetColorScheme(scheme, notification);
 }
 
 
@@ -103,7 +118,7 @@ HandPointCursor=Cursor::Create(IDC_HAND);
 SizeHorizontalCursor=Cursor::Create(IDC_SIZEWE);
 SizeVerticalCursor=Cursor::Create(IDC_SIZENS);
 TextCursor=Cursor::Create(IDC_IBEAM);
-Update();
+Update(EventNotification::None);
 }
 
 }

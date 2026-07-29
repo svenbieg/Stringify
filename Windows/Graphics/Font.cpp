@@ -9,6 +9,7 @@
 // Using
 //=======
 
+#include "Graphics/RenderTarget.h"
 #include "StringHelper.h"
 
 
@@ -38,6 +39,12 @@ INT height=m_Info.lfHeight;
 if(height<0)
 	height*=-1;
 return height;
+}
+
+UINT Font::GetSize(RenderTarget* target, FLOAT scale)
+{
+SIZE size=target->MeasureText(this, scale, L"Ag", 2);
+return size.Height;
 }
 
 

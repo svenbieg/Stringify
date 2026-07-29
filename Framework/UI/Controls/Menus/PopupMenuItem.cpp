@@ -10,7 +10,6 @@
 //=======
 
 #include "Concurrency/DispatchedQueue.h"
-#include "Resources/Icons/Menu.h"
 #include "UI/Controls/Menus/MenuBar.h"
 #include "UI/Controls/Menus/MenuHelper.h"
 #include "UI/Controls/Menus/PopupMenu.h"
@@ -60,21 +59,15 @@ Graphics::SIZE PopupMenuItem::GetMinSize(RenderTarget* target)
 {
 SIZE size(0, 0);
 FLOAT scale=GetScaleFactor();
-size.Width+=m_IconWidth;
+if(m_SymbolWidth)
+	size.Width+=m_SymbolWidth+SYMBOL_PADDING*scale;
 size.Width+=m_LabelWidth;
-size.Width+=m_ShortcutWidth;
+if(m_ShortcutWidth)
+	size.Width+=m_ShortcutWidth+SHORTCUT_PADDING*scale;
 if(Text)
 	{
 	auto font=m_Theme->DefaultFont;
-	if(Icon)
-		size.Height=16*scale;
-	SIZE label_size=target->MeasureText(font, scale, Text->Begin());
-	size.Height=TypeHelper::Max(size.Height, label_size.Height);
-	if(Shortcut)
-		{
-		SIZE shortcut_size=target->MeasureText(font, scale, Shortcut->Begin());
-		size.Height=TypeHelper::Max(size.Height, shortcut_size.Height);
-		}
+	size.Height=font->GetSize(target, scale);
 	}
 else
 	{
@@ -100,6 +93,10 @@ rc.SetPadding(Padding*scale);
 UINT height=rc.GetHeight();
 UINT left=rc.Left;
 BOOL enabled=IsEnabled();
+auto font=m_Theme->DefaultFont;
+auto text_brush=m_Theme->TextBrush;
+if(!enabled)
+	text_brush=m_Theme->TextInactiveBrush;
 if(Icon)
 	{
 	if(!m_Icon)
@@ -108,26 +105,29 @@ if(Icon)
 	if(!enabled)
 		{
 		if(!m_IconDisabled)
-			{
-			m_IconDisabled=m_Icon->Copy();
-			MenuHelper::GetBitmapDisabled(m_IconDisabled);
-			}
+			m_IconDisabled=MenuHelper::GetBitmapDisabled(m_Icon);
 		icon=m_IconDisabled;
 		}
 	SIZE ico_size=icon->GetDimensions();
 	RECT ico_rc(ico_size);
-	ico_size.Width=height*0.9f;
-	ico_size.Height=height*0.9f;
+	ico_size.Width=m_SymbolWidth;
+	ico_size.Height=m_SymbolWidth;
+	UINT ico_left=left+(m_SymbolWidth-ico_size.Width)/2;
 	UINT ico_top=rc.Top+(height-ico_size.Height)/2;
-	UINT ico_left=left-6*scale;
 	RECT dst_rc(ico_left, ico_top, ico_left+ico_size.Width, ico_top+ico_size.Height);
 	target->DrawBitmap(dst_rc, icon, ico_rc);
 	}
-left+=m_IconWidth;
-auto font=m_Theme->DefaultFont;
-auto text_brush=m_Theme->TextBrush;
-if(!enabled)
-	text_brush=m_Theme->TextInactiveBrush;
+else if(Symbol)
+	{
+	auto symbol=Symbol->Begin();
+	SIZE text_size=target->MeasureText(font, scale, symbol);
+	UINT sym_left=left+(m_SymbolWidth-text_size.Width)/2;
+	UINT sym_top=rc.Top+(height-text_size.Height)/2;
+	RECT text_rc(sym_left, sym_top, sym_left+text_size.Width, sym_top+text_size.Height);
+	target->DrawText(text_rc, scale, font, text_brush, symbol);
+	}
+if(m_SymbolWidth)
+	left+=m_SymbolWidth+SYMBOL_PADDING*scale;
 auto text=Text->Begin();
 SIZE text_size=target->MeasureText(font, scale, text);
 UINT top=rc.Top+(height-text_size.Height)/2;
@@ -153,6 +153,8 @@ if(accelerate)
 		}
 	}
 left+=m_LabelWidth;
+if(m_ShortcutWidth)
+	left+=SHORTCUT_PADDING*scale;
 if(Shortcut)
 	{
 	auto shortcut=Shortcut->Begin();
@@ -164,7 +166,7 @@ if(Shortcut)
 		shortcut_brush=m_Theme->TextInactiveBrush;
 	target->DrawText(shortcut_rc, scale, font, shortcut_brush, shortcut);
 	}
-if(SubMenu)
+else if(SubMenu)
 	{
 	UINT height=rc.Bottom-rc.Top;
 	UINT padding=6*scale;
@@ -178,9 +180,9 @@ if(SubMenu)
 	}
 }
 
-VOID PopupMenuItem::SetColumns(UINT icon_width, UINT label_width, UINT shortcut_width)
+VOID PopupMenuItem::SetColumns(UINT symbol_width, UINT label_width, UINT shortcut_width)
 {
-m_IconWidth=icon_width;
+m_SymbolWidth=symbol_width;
 m_LabelWidth=label_width;
 m_ShortcutWidth=shortcut_width;
 }
@@ -196,9 +198,9 @@ MenuItem(this, parent),
 Checked(this, false),
 Label(this),
 Padding(12, 3, 12, 3),
-m_IconWidth(0),
 m_LabelWidth(0),
-m_ShortcutWidth(0)
+m_ShortcutWidth(0),
+m_SymbolWidth(0)
 {
 if(!label)
 	{
@@ -228,11 +230,11 @@ VOID PopupMenuItem::OnCheckedChanged(BOOL checked)
 {
 if(checked)
 	{
-	Icon=Icon::Create(ICO_MENU_CHECKED);
+	Symbol=L"\x2713";
 	}
 else
 	{
-	Icon=nullptr;
+	Symbol=L" ";
 	}
 }
 

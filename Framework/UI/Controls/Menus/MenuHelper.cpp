@@ -37,8 +37,9 @@ for(UINT pos=0; text[pos]; pos++)
 return 0;
 }
 
-VOID MenuHelper::GetBitmapDisabled(Handle<Graphics::Bitmap> bmp)
+Handle<Bitmap> MenuHelper::GetBitmapDisabled(Handle<Bitmap> bmp)
 {
+auto disabled=bmp->Copy();
 auto size=bmp->GetDimensions();
 for(UINT y=0; y<size.Height; y++)
 	{
@@ -59,9 +60,10 @@ for(UINT y=0; y<size.Height; y++)
 			}
 		b=TypeHelper::Min(b+0x30, 0xFF);
 		pc[0]=pc[1]=pc[2]=b;
-		bmp->SetPixel(x, y, c);
+		disabled->SetPixel(x, y, c);
 		}
 	}
+return disabled;
 }
 
 Handle<String> MenuHelper::GetShortcut(LPCTSTR text)

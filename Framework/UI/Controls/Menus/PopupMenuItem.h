@@ -68,10 +68,15 @@ public:
 	DynamicHandle<PopupMenuItem, Sentence> Label;
 	RECT Padding;
 	VOID Render(RenderTarget* Target, RECT& Rect)override;
-	VOID SetColumns(UINT IconWidth, UINT LabelWidth, UINT ShortcutWidth);
+	VOID SetColumns(UINT SymbolWidth, UINT LabelWidth, UINT ShortcutWidth);
 	Handle<String> Shortcut;
+	Handle<String> Symbol;
 
 private:
+	// Settings
+	static const UINT SHORTCUT_PADDING=12;
+	static const UINT SYMBOL_PADDING=12;
+
 	// Con-/Destructors
 	PopupMenuItem(PopupMenu* Parent, Handle<Sentence> Label);
 
@@ -88,9 +93,9 @@ private:
 	VOID OnTimerTriggered();
 	Handle<Bitmap> m_Icon;
 	Handle<Bitmap> m_IconDisabled;
-	UINT m_IconWidth;
 	UINT m_LabelWidth;
 	UINT m_ShortcutWidth;
+	UINT m_SymbolWidth;
 	Handle<Timer> m_Timer;
 };
 

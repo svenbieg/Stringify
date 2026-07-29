@@ -45,9 +45,9 @@ Graphics::SIZE PopupMenu::GetMinSize(RenderTarget* target)
 {
 FLOAT scale=GetScaleFactor();
 auto font=m_Theme->DefaultFont;
+UINT symbol_width=0;
 UINT label_width=0;
 UINT shortcut_width=0;
-bool icon=false;
 bool arrow=false;
 bool separator=true;
 Handle<UI::Window> last_sep;
@@ -70,7 +70,16 @@ for(auto it=m_Panel->Children->Begin(); it->HasCurrent(); it->MoveNext())
 	separator=false;
 	last_sep=nullptr;
 	if(item->Icon)
-		icon=true;
+		{
+		UINT ico_size=font->GetSize(target, scale*0.9f);
+		symbol_width=TypeHelper::Max(symbol_width, ico_size);
+		}
+	else if(item->Symbol)
+		{
+		auto symbol=item->Symbol;
+		SIZE size=target->MeasureText(font, scale, symbol->Begin());
+		symbol_width=TypeHelper::Max(symbol_width, size.Width);
+		}
 	auto text=item->Text;
 	if(text)
 		{
@@ -89,13 +98,6 @@ for(auto it=m_Panel->Children->Begin(); it->HasCurrent(); it->MoveNext())
 	}
 if(last_sep)
 	last_sep->Visible=false;
-UINT icon_width=0;
-if(icon)
-	{
-	icon_width=font->GetSize()*scale*0.9f;
-	icon_width+=8*scale;
-	}
-label_width+=12*scale;
 if(arrow)
 	{
 	SIZE arrow_size=target->MeasureText(font, scale, TEXT(">"));
@@ -107,7 +109,7 @@ for(auto it=m_Panel->Children->Begin(); it->HasCurrent(); it->MoveNext())
 	auto item=child.As<PopupMenuItem>();
 	if(!item)
 		continue;
-	item->SetColumns(icon_width, label_width, shortcut_width);
+	item->SetColumns(symbol_width, label_width, shortcut_width);
 	}
 return StackPanel::GetMinSize(target);
 }

@@ -42,6 +42,9 @@ public:
 	// Using
 	using Sentence=Culture::Sentence;
 
+	// Con-/Destructors
+	~Overlapped();
+
 	// Common
 	VOID Activate(FocusReason Reason)override;
 	VOID BringToFront()override;

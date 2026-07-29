@@ -22,6 +22,13 @@
 namespace Graphics {
 
 
+//======================
+// Forward-Declarations
+//======================
+
+class RenderTarget;
+
+
 //======
 // Font
 //======
@@ -44,6 +51,7 @@ public:
 	// Common
 	IDWriteTextFormat* GetFormat();
 	UINT GetSize()const;
+	UINT GetSize(RenderTarget* Target, FLOAT Scale=1.f);
 
 private:
 	// Con-/Destructors
