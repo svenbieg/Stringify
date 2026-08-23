@@ -76,6 +76,15 @@ if(args->Key==VirtualKey::Alt)
 	args->Handled=true;
 	return;
 	}
+if(!FlagHelper::Get(m_MenuFlags, MenuFlags::Keyboard))
+	return;
+auto shortcut=Accelerate(args->Key);
+if(shortcut)
+	{
+	FlagHelper::Clear(m_MenuFlags, MenuFlags::KeyboardAccess);
+	Expand(shortcut, FocusReason::Keyboard);
+	args->Handled=true;
+	}
 }
 
 VOID MenuBar::OnFrameKeyEvent(KeyEventType type, Handle<KeyEventArgs> args)

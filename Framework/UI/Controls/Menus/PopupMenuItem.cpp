@@ -299,17 +299,6 @@ switch(args->Key)
 		}
 	case VirtualKey::Up:
 		{
-		auto control=Interactive::GetNextControl(m_Parent, nullptr, true);
-		if(control==this)
-			{
-			auto parent_menu=m_Menu->GetParentMenu();
-			auto menubar=dynamic_cast<MenuBar*>(parent_menu);
-			if(menubar)
-				{
-				m_Menu->Escape(FocusReason::Keyboard);
-				break;
-				}
-			}
 		m_Frame->FocusNext(FocusReason::Keyboard, false);
 		break;
 		}
