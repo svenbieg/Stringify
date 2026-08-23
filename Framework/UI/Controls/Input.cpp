@@ -213,35 +213,46 @@ if(show_sel)
 		sel_first.Top=first_line;
 		sel_first.Left=0;
 		}
+	else if(sel_first.Top>last_line)
+		{
+		show_sel=false;
+		}
 	POINT sel_last=m_SelectionLast;
 	if(sel_last.Top>last_line)
 		{
 		sel_last.Top=last_line;
 		sel_last.Left=0;
 		}
-	POINT pt_first=PointFromChar(sel_first, scale);
-	POINT pt_last=PointFromChar(sel_last, scale);
-	if(sel_first.Top==sel_last.Top)
+	else if(sel_last.Top<first_line)
 		{
-		RECT rc_fill(pt_first.Left, pt_first.Top, pt_last.Left, pt_last.Top+line_height);
-		target->FillRect(rc_fill, highlight);
+		show_sel=false;
 		}
-	else
+	if(show_sel)
 		{
-		auto it=m_Lines.cbegin(sel_first.Top);
-		UINT right=rc.Left+GetLineWidth(it.get_current(), scale);
-		RECT rc_first(pt_first.Left, pt_first.Top, right, pt_first.Top+line_height);
-		target->FillRect(rc_first, highlight);
-		for(UINT line=sel_first.Top+1; line<sel_last.Top; line++)
+		POINT pt_first=PointFromChar(sel_first, scale);
+		POINT pt_last=PointFromChar(sel_last, scale);
+		if(sel_first.Top==sel_last.Top)
 			{
-			it.move_next();
-			right=rc.Left+GetLineWidth(it.get_current(), scale);
-			UINT line_top=rc.Top+line*line_height;
-			RECT rc_fill(rc.Left, line_top, right, line_top+line_height);
+			RECT rc_fill(pt_first.Left, pt_first.Top, pt_last.Left, pt_last.Top+line_height);
 			target->FillRect(rc_fill, highlight);
 			}
-		RECT rc_last(rc.Left, pt_last.Top, pt_last.Left, pt_last.Top+line_height);
-		target->FillRect(rc_last, highlight);
+		else
+			{
+			auto it=m_Lines.cbegin(sel_first.Top);
+			UINT right=rc.Left+GetLineWidth(it.get_current(), scale);
+			RECT rc_first(pt_first.Left, pt_first.Top, right, pt_first.Top+line_height);
+			target->FillRect(rc_first, highlight);
+			for(UINT line=sel_first.Top+1; line<sel_last.Top; line++)
+				{
+				it.move_next();
+				right=rc.Left+GetLineWidth(it.get_current(), scale);
+				UINT line_top=rc.Top+line*line_height;
+				RECT rc_fill(rc.Left, line_top, right, line_top+line_height);
+				target->FillRect(rc_fill, highlight);
+				}
+			RECT rc_last(rc.Left, pt_last.Top, pt_last.Left, pt_last.Top+line_height);
+			target->FillRect(rc_last, highlight);
+			}
 		}
 	}
 auto font=m_Theme->DefaultFont;
