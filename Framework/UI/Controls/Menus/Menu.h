@@ -41,6 +41,7 @@ public:
 	VOID ClearSelection(MenuItem* Item, FocusReason Reason);
 	virtual VOID Close(FocusReason Reason);
 	VOID Collapse(FocusReason Reason);
+	VOID Enter(MenuItem* Item, FocusReason Reason);
 	VOID Escape(FocusReason Reason);
 	VOID Exit(FocusReason Reason);
 	VOID Expand(FocusReason Reason);

@@ -315,6 +315,12 @@ switch(args->Key)
 		}
 	default:
 		{
+		auto item=m_Menu->Accelerate(args->Key);
+		if(item)
+			{
+			m_Menu->Enter(item, FocusReason::Keyboard);
+			break;
+			}
 		return;
 		}
 	}

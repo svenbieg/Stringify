@@ -72,6 +72,18 @@ FlagHelper::Clear(m_MenuFlags, MenuFlags::Expand);
 Select(reason);
 }
 
+VOID Menu::Enter(MenuItem* item, FocusReason reason)
+{
+if(item->SubMenu)
+	{
+	Expand(item, reason);
+	}
+else
+	{
+	item->Enter(reason);
+	}
+}
+
 VOID Menu::Escape(FocusReason reason)
 {
 if(m_ParentMenu)
