@@ -40,6 +40,27 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Resources\ResourceHelper.cpp">
       <Filter>Resources</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Cursor.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Font.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\RenderTarget.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Theme.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\D2DFactory.cpp">
+      <Filter>Graphics\Direct2D</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\DWriteFactory.cpp">
+      <Filter>Graphics\Direct2D</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\ImagingFactory.cpp">
+      <Filter>Graphics\Direct2D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Application.h">
@@ -87,6 +108,27 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\ResourceHelper.h">
       <Filter>Resources</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Cursor.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Font.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\RenderTarget.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Theme.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\D2DFactory.h">
+      <Filter>Graphics\Direct2D</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\DWriteFactory.h">
+      <Filter>Graphics\Direct2D</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\ImagingFactory.h">
+      <Filter>Graphics\Direct2D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Desktop">
@@ -109,6 +151,12 @@
     </Filter>
     <Filter Include="UI\Controls">
       <UniqueIdentifier>{7a820d70-8ad9-4ff3-a42a-fa0560a2aef6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{5d3f1212-06e7-4c69-ad7a-529dedf75cc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Direct2D">
+      <UniqueIdentifier>{6b02ebbd-7a14-4393-815d-ea6a07a10a5d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

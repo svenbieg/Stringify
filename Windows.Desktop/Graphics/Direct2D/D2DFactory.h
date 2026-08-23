@@ -1,0 +1,51 @@
+//==============
+// D2DFactory.h
+//==============
+
+#pragma once
+
+
+//=======
+// Using
+//=======
+
+#include <d2d1_2.h>
+#include "ComPointer.h"
+#include "Global.h"
+
+
+//===========
+// Namespace
+//===========
+
+namespace Graphics {
+	namespace Direct2D {
+
+
+//=============
+// D2D-Factory
+//=============
+
+class D2DFactory: public Global<D2DFactory>
+{
+public:
+	// Friends
+	friend Object;
+
+	// Con-/Destructors
+	static inline Handle<D2DFactory> Create() { return Global::Create(); }
+
+	// Common
+	ComPointer<ID2D1PathGeometry> CreatePathGeometry();
+	ComPointer<ID2D1DCRenderTarget> CreateRenderTarget();
+	ID2D1Factory* GetFactory()const { return m_Factory; }
+
+private:
+	// Con-/Destructors
+	D2DFactory();
+
+	// Common
+	ComPointer<ID2D1Factory> m_Factory;
+};
+
+}}

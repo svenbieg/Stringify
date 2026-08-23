@@ -36,13 +36,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Environment.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ErrorHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ExceptionHelper.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Cursor.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\D2DFactory.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\DWriteFactory.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\ImagingFactory.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Font.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\RenderTarget.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Theme.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Network\GatewayHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Network\Ip\IpAddress.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Network\Tcp\TcpConnection.h" />
@@ -74,13 +67,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Devices\Timers\SystemTimer.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Environment.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ExceptionHelper.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Cursor.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\D2DFactory.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\DWriteFactory.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\ImagingFactory.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Font.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\RenderTarget.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Theme.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Network\GatewayHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Network\Ip\IpAddress.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Network\Tcp\TcpConnection.cpp" />
