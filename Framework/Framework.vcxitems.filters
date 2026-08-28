@@ -51,9 +51,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\HyperLink.cpp">
       <Filter>UI\Controls</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Image.cpp">
-      <Filter>UI\Controls</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Interactive.cpp">
       <Filter>UI\Controls</Filter>
     </ClCompile>
@@ -159,13 +156,13 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Application.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Brush.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\TreeView.cpp">
       <Filter>UI\Controls</Filter>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\ListView.cpp">
+      <Filter>UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Image.cpp">
       <Filter>UI\Controls</Filter>
     </ClCompile>
   </ItemGroup>
@@ -198,9 +195,6 @@
       <Filter>UI\Controls</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\HyperLink.h">
-      <Filter>UI\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Image.h">
       <Filter>UI\Controls</Filter>
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Interactive.h">
@@ -338,11 +332,11 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\ListView.h">
       <Filter>UI\Controls</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Bitmaps\Menu.h">
-      <Filter>Resources\Bitmaps</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Icons\Menu.h">
       <Filter>Resources\Icons</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Image.h">
+      <Filter>UI\Controls</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

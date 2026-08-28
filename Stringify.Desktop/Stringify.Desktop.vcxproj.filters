@@ -3,6 +3,7 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="AppWindow.cpp" />
+    <ClCompile Include="..\Default\Collections\StringList.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -10,6 +11,7 @@
     <ClInclude Include="Resources\Strings\Application.h">
       <Filter>Resources\Strings</Filter>
     </ClInclude>
+    <ClInclude Include="..\Default\Collections\StringList.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Resources">

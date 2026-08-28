@@ -9,6 +9,7 @@
 // Using
 //=======
 
+#include "UI/Controls/PathEdit.h"
 #include "UI/Controls/TextBox.h"
 #include "UI/AppWindow.h"
 
@@ -28,13 +29,15 @@ class AppWindow: public UI::AppWindow
 {
 public:
 	// Using
+	using PathEdit=UI::Controls::PathEdit;
 	using TextBox=UI::Controls::TextBox;
 
 	// Con-/Destructors
 	static inline Handle<AppWindow> Create() { return new AppWindow(); }
 
 	// Common
-	Handle<TextBox> ResultBox;
+	Handle<PathEdit> Path;
+	Handle<TextBox> Result;
 
 private:
 	// Con-/Destructors

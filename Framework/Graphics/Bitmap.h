@@ -12,7 +12,6 @@
 #include "Graphics/Color.h"
 #include "Graphics/Rect.h"
 #include "Graphics/Size.h"
-#include "Event.h"
 
 
 //===========
@@ -45,10 +44,8 @@ public:
 
 	// Common
 	inline BYTE const* Begin()const { return m_Buffer; }
-	Event<Bitmap> Changed;
 	VOID Clear(COLOR Color);
 	Handle<Bitmap> Copy()const;
-	Event<Bitmap> Destroyed;
 	VOID FillRect(RECT const& Rect, COLOR Color);
 	WORD GetBitsPerPixel()const { return m_BitsPerPixel; }
 	inline SIZE GetDimensions()const { return SIZE(m_Width, m_Height); }
@@ -60,7 +57,6 @@ public:
 
 protected:
 	// Common
-	UINT Release()noexcept override;
 	WORD m_BitsPerPixel;
 	BYTE* m_Buffer;
 	UINT m_Height;

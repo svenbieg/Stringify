@@ -12,6 +12,7 @@
 #include "Graphics/Brush.h"
 #include "Graphics/Cursor.h"
 #include "Graphics/Font.h"
+#include "Event.h"
 #include "Global.h"
 
 

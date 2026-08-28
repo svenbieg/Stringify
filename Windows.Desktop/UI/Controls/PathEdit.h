@@ -52,6 +52,7 @@ public:
 		}
 
 	// Common
+	VOID Clear();
 	Handle<Sentence> Filter;
 	PathEditMode Mode;
 	DynamicHandle<PathEdit, String> Path;

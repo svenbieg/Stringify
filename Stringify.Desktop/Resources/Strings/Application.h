@@ -1,4 +1,4 @@
-//===============
+﻿//===============
 // Application.h
 //===============
 
@@ -37,6 +37,13 @@ const STRING STR_STRING[]=
 	{
 	{ LNG::DE, L"Zeichenfolge" },
 	{ LNG::EN, L"String" },
+	{ LNG::None, nullptr }
+	};
+
+const STRING STR_FILE_TYPE_NOT_SUPPORTED[]=
+	{
+	{ LNG::DE, L"Dateityp wird nicht unterstützt." },
+	{ LNG::EN, L"File-type is not supported." },
 	{ LNG::None, nullptr }
 	};
 

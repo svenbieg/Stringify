@@ -77,7 +77,6 @@ switch(m_BitsPerPixel)
 	default:
 		break;
 	}
-Changed(this);
 }
 
 Handle<Bitmap> Bitmap::Copy()const
@@ -105,7 +104,6 @@ for(INT y=(INT)rc_fill.Top; y<rc_fill.Bottom; y++)
 	for(INT x=(INT)rc_fill.Left; x<rc_fill.Right; x++)
 		SetPixel(x, y, c);
 	}
-Changed(this);
 }
 
 COLOR Bitmap::GetPixel(UINT left, UINT top)const
@@ -178,19 +176,6 @@ switch(m_BitsPerPixel)
 	default:
 		break;
 	}
-Changed(this);
-}
-
-
-//==================
-// Common Protected
-//==================
-
-UINT Bitmap::Release()noexcept
-{
-if(m_ReferenceCount==1)
-	Destroyed(this);
-return Object::Release();
 }
 
 

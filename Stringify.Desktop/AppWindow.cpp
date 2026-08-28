@@ -11,7 +11,6 @@
 
 #include "Resources/Strings/Application.h"
 #include "UI/Controls/Group.h"
-#include "UI/Controls/PathEdit.h"
 #include "Application.h"
 
 using namespace Graphics::Direct2D;
@@ -42,14 +41,13 @@ grid->AddRow(1, GridUnit::Auto);
 grid->AddRow(1, GridUnit::Auto);
 grid->AddRow(1, GridUnit::Star);
 auto group=Group::Create(grid, STR_SOURCE);
-auto edit=PathEdit::Create(group);
-edit->MinSize.Set(400, 0);
-edit->Path.Changed.Add(this, &AppWindow::OnPathEditPathChanged);
+Path=PathEdit::Create(group);
+Path->MinSize.Set(400, 0);
+Path->Path.Changed.Add(this, &AppWindow::OnPathEditPathChanged);
 group=Group::Create(grid, STR_STRING);
 group->Margin.Set(0, 8, 0, 0);
-ResultBox=TextBox::Create(group);
-ResultBox->Enabled=false;
-ResultBox->ReadOnly=true;
+Result=TextBox::Create(group);
+Result->Enabled=false;
 Minimize(Minimization::Size);
 }
 

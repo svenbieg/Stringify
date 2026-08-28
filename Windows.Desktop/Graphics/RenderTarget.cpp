@@ -12,31 +12,6 @@
 namespace Graphics {
 
 
-//==================
-// Con-/Destructors
-//==================
-
-RenderTarget::~RenderTarget()
-{
-for(auto it=m_Bitmaps.cbegin(); it.has_current(); it.move_next())
-	{
-	auto bmp=it.get_key();
-	auto d2d_bmp=it.get_value();
-	bmp->Changed.Remove(this);
-	bmp->Destroyed.Remove(this);
-	d2d_bmp->Release();
-	}
-for(auto it=m_Brushes.cbegin(); it.has_current(); it.move_next())
-	{
-	auto brush=it.get_key();
-	auto d2d_brush=it.get_value();
-	brush->Changed.Remove(this);
-	brush->Destroyed.Remove(this);
-	d2d_brush->Release();
-	}
-}
-
-
 //========
 // Common
 //========
@@ -191,58 +166,26 @@ if(pt.Top==0)
 return d2d_pt;
 }
 
-ID2D1Bitmap* RenderTarget::GetBitmap(Bitmap* bmp)
+ComPointer<ID2D1Bitmap> RenderTarget::GetBitmap(Bitmap* bmp)
 {
-ID2D1Bitmap* d2d_bmp=nullptr;
-if(m_Bitmaps.try_get(bmp, &d2d_bmp))
-	return d2d_bmp;
 D2D1_BITMAP_PROPERTIES props;
 MemoryHelper::Zero(&props, sizeof(props));
 props.pixelFormat=D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED);
 auto buf=bmp->Begin();
 auto size=bmp->GetDimensions();
 auto d2d_size=D2D1::SizeU(size.Width, size.Height);
-m_Target->CreateBitmap(d2d_size, buf, size.Width*4, props, &d2d_bmp);
-if(!d2d_bmp)
-	throw InvalidArgumentException();
-m_Bitmaps.add(bmp, d2d_bmp);
-bmp->Changed.Add(this, &RenderTarget::OnBitmapChanged);
-bmp->Destroyed.Add(this, &RenderTarget::OnBitmapChanged);
+ComPointer<ID2D1Bitmap> d2d_bmp;
+m_Target->CreateBitmap(d2d_size, buf, size.Width*4, props, d2d_bmp.AddressOf());
 return d2d_bmp;
 }
 
-ID2D1SolidColorBrush* RenderTarget::GetBrush(Brush* brush)
+ComPointer<ID2D1SolidColorBrush> RenderTarget::GetBrush(Brush* brush)
 {
-ID2D1SolidColorBrush* d2d_brush=nullptr;
-if(m_Brushes.try_get(brush, &d2d_brush))
-	return d2d_brush;
 COLOR c=brush->GetColor();
 D2D1_COLOR_F color({ (FLOAT)c.GetRed()/255, (FLOAT)c.GetGreen()/255, (FLOAT)c.GetBlue()/255, (FLOAT)c.GetAlpha()/255 });
-m_Target->CreateSolidColorBrush(color, &d2d_brush);
-if(!d2d_brush)
-	throw InvalidArgumentException();
-m_Brushes.add(brush, d2d_brush);
-brush->Changed.Add(this, &RenderTarget::OnBrushChanged);
-brush->Destroyed.Add(this, &RenderTarget::OnBrushChanged);
+ComPointer<ID2D1SolidColorBrush> d2d_brush;
+m_Target->CreateSolidColorBrush(color, d2d_brush.AddressOf());
 return d2d_brush;
-}
-
-VOID RenderTarget::OnBitmapChanged(Bitmap* bmp)
-{
-ID2D1Bitmap* d2d_bmp=nullptr;
-m_Bitmaps.remove(bmp, &d2d_bmp);
-bmp->Changed.Remove(this);
-bmp->Destroyed.Remove(this);
-d2d_bmp->Release();
-}
-
-VOID RenderTarget::OnBrushChanged(Brush* brush)
-{
-ID2D1SolidColorBrush* d2d_brush=nullptr;
-m_Brushes.remove(brush, &d2d_brush);
-brush->Changed.Remove(this);
-brush->Destroyed.Remove(this);
-d2d_brush->Release();
 }
 
 }

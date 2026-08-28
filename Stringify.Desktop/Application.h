@@ -9,6 +9,7 @@
 // Using
 //=======
 
+#include "Collections/StringList.h"
 #include "Desktop/Application.h"
 #include "AppWindow.h"
 
@@ -29,6 +30,7 @@ class Application: public Desktop::Application
 public:
 	// Using
 	using InputStream=Storage::Streams::InputStream;
+	using StringList=Collections::StringList;
 
 	// Con-/Destructors
 	static inline Handle<Application> Create() { return new Application(); }
@@ -42,10 +44,9 @@ private:
 	Application();
 
 	// Common
-	VOID OpenBinary(Handle<String> Path);
-	VOID OpenBitmap(Handle<String> Path);
 	VOID OpenIcon(Handle<String> Path);
-	VOID Stringify(Handle<String> Name, InputStream* Source);
+	VOID ScanImage(Handle<String> Path);
+	VOID Stringify(Handle<StringList> Destination, InputStream* Source);
 	Handle<AppWindow> m_Window;
 };
 

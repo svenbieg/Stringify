@@ -55,12 +55,14 @@ ScrollBox::Rearrange(target, rc);
 EditBox::EditBox(Window* parent):
 ScrollBox(parent),
 Mask(this, 0),
+ReadOnly(this, false),
 Text(this)
 {
 AlignHorizontal=HorizontalAlignment::Stretch;
 AlignVertical=VerticalAlignment::Center;
 HorizontalBar->Visibility=ScrollBarVisibility::Hidden;
 Mask.Changed.Add(this, &EditBox::OnMaskChanged);
+ReadOnly.Changed.Add(this, &EditBox::OnReadOnlyChanged);
 Text.Changed.Add(this, &EditBox::OnTextChanged);
 VerticalBar->Visibility=ScrollBarVisibility::Hidden;
 m_Input=Input::Create(Body);
@@ -92,6 +94,11 @@ VOID EditBox::OnMaskChanged(TCHAR mask)
 {
 m_Input->Mask=mask;
 m_Input->Invalidate(true);
+}
+
+VOID EditBox::OnReadOnlyChanged(BOOL read_only)
+{
+m_Input->ReadOnly=read_only;
 }
 
 VOID EditBox::OnTextChanged(Handle<String> text)

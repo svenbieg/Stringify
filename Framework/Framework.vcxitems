@@ -2,7 +2,6 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="Globals">
     <HasSharedItems>true</HasSharedItems>
-    <ItemsProjectGuid>{D136CB92-4C67-4B20-9C09-594D324E3F51}</ItemsProjectGuid>
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
     <NMakeIncludeSearchPath>$(NMakeIncludeSearchPath);$(MSBuildThisFileDirectory)</NMakeIncludeSearchPath>
   </PropertyGroup>
@@ -17,7 +16,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Bitmap.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Brush.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Color.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Icon.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Point.cpp" />
@@ -73,7 +71,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Size.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Bitmaps\Edit.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Bitmaps\File.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Bitmaps\Menu.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Icons\Edit.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Icons\File.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Icons\Menu.h" />

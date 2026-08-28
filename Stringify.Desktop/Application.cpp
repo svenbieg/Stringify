@@ -11,6 +11,8 @@
 
 #include "Concurrency/DispatchedQueue.h"
 #include "Concurrency/Task.h"
+#include "Desktop/Dialogs/MessageBox.h"
+#include "Graphics/Ocr/OcrScanner.h"
 #include "Resources/Strings/Application.h"
 #include "Resources/ResourceHelper.h"
 #include "Storage/Filesystem/File.h"
@@ -20,7 +22,10 @@
 #include "Storage/StaticBuffer.h"
 #include "PathHelper.h"
 
+using namespace Collections;
 using namespace Concurrency;
+using namespace Desktop::Dialogs;
+using namespace Graphics::Ocr;
 using namespace Resources;
 using namespace Resources::Strings;
 using namespace Storage;
@@ -89,19 +94,18 @@ VOID Application::Open(Handle<String> path)
 {
 if(!path)
 	return;
-auto result_box=m_Window->ResultBox;
-result_box->Enabled=false;
-result_box->Clear();
-LPCTSTR ext=PathHelper::GetExtension(path->Begin());
-if(!ext)
-	return;
+LPCTSTR ext=PathHelper::GetExtension(path);
 if(StringHelper::Compare(ext, "bmp", 0, CompareMode::IgnoreCase)==0)
 	{
-	OpenBitmap(path);
+	ScanImage(path);
+	}
+else if(StringHelper::Compare(ext, "jpg", 0, CompareMode::IgnoreCase)==0)
+	{
+	ScanImage(path);
 	}
 else if(StringHelper::Compare(ext, "png", 0, CompareMode::IgnoreCase)==0)
 	{
-	OpenBitmap(path);
+	ScanImage(path);
 	}
 else if(StringHelper::Compare(ext, "ico", 0, CompareMode::IgnoreCase)==0)
 	{
@@ -109,11 +113,13 @@ else if(StringHelper::Compare(ext, "ico", 0, CompareMode::IgnoreCase)==0)
 	}
 else
 	{
-	OpenBinary(path);
+	auto path_edit=m_Window->Path;
+	path_edit->Clear();
+	auto result_box=m_Window->Result;
+	result_box->Clear();
+	result_box->Enabled=false;
+	MessageBox::Error(STR_APP_TITLE, STR_FILE_TYPE_NOT_SUPPORTED);
 	}
-result_box->Enabled=true;
-result_box->SetFocus();
-result_box->SelectAll();
 }
 
 
@@ -133,44 +139,64 @@ m_Window=AppWindow::Create();
 // Common Private
 //================
 
-VOID Application::OpenBinary(Handle<String> path)
-{
-auto file=Filesystem::File::Create(path);
-if(file->Create()!=Status::Success)
-	return;
-auto name=PathHelper::GetName(path->Begin());
-auto var=String::Create("BIN_%S", name->Begin());
-Stringify(var, file);
-}
-
-VOID Application::OpenBitmap(Handle<String> path)
-{
-auto bmp=ResourceHelper::CreateBitmap(path);
-auto buf=StaticBuffer::Create((BYTE*)bmp->Begin(), bmp->GetSize());
-auto name=PathHelper::GetName(path->Begin());
-auto var=String::Create("BMP_%S", name);
-Stringify(var, buf);
-}
-
 VOID Application::OpenIcon(Handle<String> path)
 {
-auto icon=ResourceHelper::CreateIcon(path);
-auto name=PathHelper::GetName(path->Begin());
-for(auto it=icon->Bitmaps.cbegin(); it.has_current(); it.move_next())
+auto result_box=m_Window->Result;
+result_box->Clear();
+result_box->Enabled=false;
+auto task=Task::Create(this, [this, path]()
 	{
-	auto size=it.get_key();
-	auto bmp=it.get_value();
-	auto var=String::Create("BMP_%S_%u", name, size);
-	auto buf=StaticBuffer::Create((BYTE*)bmp->Begin(), bmp->GetSize());
-	Stringify(var, buf);
-	}
+	auto icon=ResourceHelper::CreateIcon(path);
+	auto name=PathHelper::GetName(path->Begin());
+	auto lines=StringList::Create();
+	for(auto const& item: icon->Bitmaps)
+		{
+		auto size=item.get_key();
+		auto bmp=item.get_value();
+		auto var=String::Create("const char BMP_%S_%u[]=", name, size);
+		lines->Append(var, EventNotification::None);
+		auto buf=StaticBuffer::Create((BYTE*)bmp->Begin(), bmp->GetSize());
+		Stringify(lines, buf);
+		}
+	auto task=Task::Get();
+	task->Result=lines;
+	});
+task->Then(this, [this, task, result_box]()
+	{
+	auto lines=task->Result.As<StringList>();
+	result_box->AppendLines(lines);
+	result_box->Enabled=true;
+	result_box->SetFocus();
+	result_box->SelectAll();
+	});
 }
 
-VOID Application::Stringify(Handle<String> name, InputStream* src)
+VOID Application::ScanImage(Handle<String> path)
 {
-auto result_box=m_Window->ResultBox;
-auto str=String::Create("const char %s[]=", name);
-result_box->AppendLine(str);
+auto result_box=m_Window->Result;
+result_box->Clear();
+result_box->Enabled=false;
+auto task=Task::Create(this, [this, path]()
+	{
+	auto task=Task::Get();
+	task->Result=OcrScanner::ScanImage(path);
+	});
+task->Then(this, [this, task, result_box]()
+	{
+	auto result=task->Result.As<OcrResult>();
+	if(result)
+		{
+		for(auto const& line: result->Lines)
+			result_box->AppendLine(line->Text);
+		}
+	result_box->Enabled=true;
+	result_box->SetFocus();
+	result_box->SelectAll();
+	});
+}
+
+VOID Application::Stringify(Handle<StringList> lines, InputStream* src)
+{
 CHAR buf[LINE_LEN+8];
 auto dst=StaticBuffer::Create(buf, LINE_LEN+8);
 StreamWriter writer(dst);
@@ -184,7 +210,7 @@ while(read>0)
 		writer.Print("\"");
 		writer.PrintChar('\0');
 		auto str=String::Create(buf);
-		result_box->AppendLine(str);
+		lines->Append(str, EventNotification::None);
 		dst->Reset();
 		line_len=writer.Print("\"");
 		}
@@ -196,9 +222,9 @@ while(read>0)
 	}
 writer.Print("\";");
 writer.PrintChar('\0');
-str=String::Create(buf);
-result_box->AppendLine(str);
-result_box->AppendLine("");
+auto str=String::Create(buf);
+lines->Append(str, EventNotification::None);
+lines->Append("", EventNotification::None);
 }
 
 }

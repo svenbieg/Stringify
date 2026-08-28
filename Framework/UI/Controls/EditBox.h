@@ -38,6 +38,7 @@ public:
 	Handle<Brush> GetBackground()override;
 	SIZE GetMinSize(RenderTarget* Target)override;
 	Property<EditBox, TCHAR> Mask;
+	Property<EditBox, BOOL> ReadOnly;
 	VOID Rearrange(RenderTarget* Target, RECT& Rect)override;
 	Event<EditBox> SelectionChanged;
 	DynamicHandle<EditBox, String> Text;
@@ -50,6 +51,7 @@ private:
 	VOID OnInputFocused(Interactive* Previous, FocusReason Reason);
 	VOID OnInputSelectionChanged();
 	VOID OnMaskChanged(TCHAR Mask);
+	VOID OnReadOnlyChanged(BOOL ReadOnly);
 	VOID OnTextChanged(Handle<String> Text);
 	Handle<Input> m_Input;
 };

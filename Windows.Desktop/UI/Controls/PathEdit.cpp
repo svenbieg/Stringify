@@ -23,6 +23,16 @@ namespace UI {
 	namespace Controls {
 
 
+//========
+// Common
+//========
+
+VOID PathEdit::Clear()
+{
+Path=nullptr;
+}
+
+
 //==========================
 // Con-/Destructors Private
 //==========================
@@ -37,6 +47,7 @@ AddColumn(1, GridUnit::Star);
 AddColumn(1, GridUnit::Auto);
 AddRow(1, GridUnit::Auto, VerticalAlignment::Center);
 m_EditBox=EditBox::Create(this);
+m_EditBox->ReadOnly=true;
 m_Button=Button::Create(this, "..");
 m_Button->Border=true;
 m_Button->Clicked.Add(this, &PathEdit::OnButtonClicked);
