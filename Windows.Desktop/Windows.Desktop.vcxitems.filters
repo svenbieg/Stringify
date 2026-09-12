@@ -61,6 +61,9 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\ImagingFactory.cpp">
       <Filter>Graphics\Direct2D</Filter>
     </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Timing\ClockHelper.cpp">
+      <Filter>Timing</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Desktop\Application.h">
@@ -129,6 +132,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Direct2D\ImagingFactory.h">
       <Filter>Graphics\Direct2D</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Timing\ClockHelper.h">
+      <Filter>Timing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Desktop">
@@ -157,6 +163,9 @@
     </Filter>
     <Filter Include="Graphics\Direct2D">
       <UniqueIdentifier>{6b02ebbd-7a14-4393-815d-ea6a07a10a5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Timing">
+      <UniqueIdentifier>{af3741bd-0672-4178-8d5e-48320005b47f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

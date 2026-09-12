@@ -49,6 +49,7 @@ class GridColumn: public Object
 public:
 	// Friends
 	friend Grid;
+	friend Object;
 
 	// Common
 	HorizontalAlignment Alignment;
@@ -58,6 +59,10 @@ public:
 private:
 	// Con-/Destructors
 	GridColumn(UINT Width, GridUnit Unit, HorizontalAlignment Alignment): Alignment(Alignment), Unit(Unit), Width(Width) {}
+	static inline Handle<GridColumn> Create(UINT Width, GridUnit Unit, HorizontalAlignment Alignment)
+		{
+		return Object::Create<GridColumn>(Width, Unit, Alignment);
+		}
 };
 
 
@@ -70,6 +75,7 @@ class GridRow: public Object
 public:
 	// Friends
 	friend Grid;
+	friend Object;
 
 	// Common
 	VerticalAlignment Alignment;
@@ -79,6 +85,10 @@ public:
 private:
 	// Con-/Destructors
 	GridRow(UINT Height, GridUnit Unit, VerticalAlignment Alignment): Alignment(Alignment), Height(Height), Unit(Unit) {}
+	static inline Handle<GridRow> Create(UINT Height, GridUnit Unit, VerticalAlignment Alignment)
+		{
+		return Object::Create<GridRow>(Height, Unit, Alignment);
+		}
 };
 
 

@@ -19,14 +19,14 @@ namespace UI {
 
 Handle<GridColumn> Grid::AddColumn(UINT width, GridUnit unit, HorizontalAlignment align)
 {
-auto column=new GridColumn(width, unit, align);
+auto column=GridColumn::Create(width, unit, align);
 Columns->Append(column);
 return column;
 }
 
 Handle<GridRow> Grid::AddRow(UINT height, GridUnit unit, VerticalAlignment align)
 {
-auto row=new GridRow(height, unit, align);
+auto row=GridRow::Create(height, unit, align);
 Rows->Append(row);
 return row;
 }

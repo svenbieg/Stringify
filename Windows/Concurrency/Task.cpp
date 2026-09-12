@@ -56,7 +56,7 @@ Cancelled=true;
 
 Handle<Task> Task::Create(VOID (*proc)(), Handle<String> name, UINT stack_size)
 {
-Handle<Task> task=new TaskProcedure(proc, name, stack_size);
+auto task=TaskProcedure::Create(proc, name, stack_size);
 RunDeferred(task);
 return task;
 }

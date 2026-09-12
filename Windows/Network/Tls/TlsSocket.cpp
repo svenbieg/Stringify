@@ -35,7 +35,7 @@ INT addr_len=sizeof(sockaddr_in);
 SOCKET client=accept(m_Socket, (sockaddr*)&addr, &addr_len);
 if(client==INVALID_SOCKET)
 	throw ConnectionFailedException();
-return new TlsConnection(client, addr.sin_addr.S_un.S_addr);
+return TlsConnection::Create(client, addr.sin_addr.S_un.S_addr);
 }
 
 VOID TlsSocket::Close()
@@ -64,7 +64,7 @@ addr.sin_port=htons(port);
 status=connect(m_Socket, (sockaddr*)&addr, sizeof(sockaddr_in));
 if(status!=S_OK)
 	throw DeviceNotReadyException();
-Handle<TlsConnection> con=new TlsConnection(m_Socket, host);
+auto con=TlsConnection::Create(m_Socket, host);
 m_Socket=INVALID_SOCKET;
 return con;
 }

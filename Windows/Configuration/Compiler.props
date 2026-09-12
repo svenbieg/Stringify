@@ -3,11 +3,11 @@
   <ItemDefinitionGroup>
     <ClCompile>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(SolutionDir);$(ProjectDir)</AdditionalIncludeDirectories>
-      <AdditionalOptions>%(AdditionalOptions) /MP</AdditionalOptions>
       <ConformanceMode>true</ConformanceMode>
       <DisableSpecificWarnings>4172</DisableSpecificWarnings>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <LanguageStandard_C>stdclatest</LanguageStandard_C>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ObjectFileName>$(IntDir)%(Directory)</ObjectFileName>
       <SDLCheck>true</SDLCheck>
     </ClCompile>

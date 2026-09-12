@@ -29,7 +29,7 @@ namespace Storage {
 
 Handle<File> File::Create(Handle<String> path, FileCreateMode create, FileAccessMode access, FileShareMode share)
 {
-Handle<File> file=new File(path);
+auto file=Object::Create<File>(path);
 if(StatusHelper::Failed(file->Create(create, access, share)))
 	return nullptr;
 return file;

@@ -74,7 +74,7 @@ VOID Application::EditCopy()
 auto input=Controls::Input::GetCurrent();
 if(!input)
 	return;
-auto clipboard=Clipboard::Open();
+auto clipboard=Clipboard::Create();
 auto text=input->GetSelection();
 clipboard->Copy(text);
 }
@@ -84,7 +84,7 @@ VOID Application::EditCut()
 auto input=Controls::Input::GetCurrent();
 if(!input)
 	return;
-auto clipboard=Clipboard::Open();
+auto clipboard=Clipboard::Create();
 auto text=input->GetSelection();
 clipboard->Copy(text);
 input->ReplaceSelection(nullptr);
@@ -103,7 +103,7 @@ VOID Application::EditPaste()
 auto input=Controls::Input::GetCurrent();
 if(!input)
 	return;
-auto clipboard=Clipboard::Open();
+auto clipboard=Clipboard::Create();
 auto text=clipboard->GetText();
 if(!text)
 	return;

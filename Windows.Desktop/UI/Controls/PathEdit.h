@@ -45,10 +45,13 @@ public:
 	using EditBox=UI::Controls::EditBox;
 	using Sentence=Culture::Sentence;
 
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
 	static inline Handle<PathEdit> Create(Window* Parent, PathEditMode Mode=PathEditMode::OpenFile)
 		{
-		return new PathEdit(Parent, Mode);
+		return Object::Create<PathEdit>(Parent, Mode);
 		}
 
 	// Common

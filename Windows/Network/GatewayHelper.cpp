@@ -11,6 +11,7 @@
 
 #pragma comment(lib, "Iphlpapi.lib")
 
+#include "MemoryHelper.h"
 #include <winsock2.h>
 #include <iphlpapi.h>
 
@@ -33,7 +34,7 @@ ULONG size=0;
 GetAdaptersAddresses(AF_INET, flags, nullptr, nullptr, &size);
 if(!size)
 	return 0;
-PIP_ADAPTER_ADDRESSES info=(PIP_ADAPTER_ADDRESSES)new BYTE[size];
+PIP_ADAPTER_ADDRESSES info=(PIP_ADAPTER_ADDRESSES)MemoryHelper::Allocate(size);
 if(!info)
 	return 0;
 GetAdaptersAddresses(AF_INET, GAA_FLAG_INCLUDE_GATEWAYS, nullptr, info, &size);
@@ -50,7 +51,7 @@ while(addr)
 		}
 	addr=addr->Next;
 	}
-delete info;
+MemoryHelper::Free(info);
 return ip;
 }
 

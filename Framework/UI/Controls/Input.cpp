@@ -957,7 +957,7 @@ if(!ContextMenu)
 	return false;
 if(ContextMenu)
 	{
-	auto clipboard=Clipboard::Open();
+	auto clipboard=Clipboard::Create();
 	BOOL content=m_Lines.get_count()>0;
 	BOOL paste=clipboard->HasText();
 	BOOL selection=m_SelectionFirst!=m_SelectionLast;

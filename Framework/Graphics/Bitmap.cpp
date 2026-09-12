@@ -81,7 +81,7 @@ switch(m_BitsPerPixel)
 
 Handle<Bitmap> Bitmap::Copy()const
 {
-Handle<Bitmap> bmp=new Bitmap(m_Width, m_Height, m_BitsPerPixel);
+auto bmp=Bitmap::Create(m_Width, m_Height, m_BitsPerPixel);
 auto src=Begin();
 auto dst=const_cast<BYTE*>(bmp->Begin());
 MemoryHelper::Copy(dst, src, m_Size);

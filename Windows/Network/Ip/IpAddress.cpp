@@ -13,31 +13,9 @@ namespace Network {
 	namespace Ip {
 
 
-//==================
-// Con-/Destructors
-//==================
-
-Handle<IpAddress> IpAddress::Create(IP_ADDR ip)
-{
-return new IpAddress(nullptr, ip);
-}
-
-Handle<IpAddress> IpAddress::Create(BYTE a0, BYTE a1, BYTE a2, BYTE a3)
-{
-auto ip=IpAddress::From(a0, a1, a2, a3);
-return new IpAddress(nullptr, ip);
-}
-
-Handle<IpAddress> IpAddress::Create(Handle<String> name, IP_ADDR ip)
-{
-return new IpAddress(name, ip);
-}
-
-Handle<IpAddress> IpAddress::Create(Handle<String> name, BYTE a0, BYTE a1, BYTE a2, BYTE a3)
-{
-auto ip=IpAddress::From(a0, a1, a2, a3);
-return new IpAddress(name, ip);
-}
+//========
+// Common
+//========
 
 IP_ADDR IpAddress::From(BYTE a0, BYTE a1, BYTE a2, BYTE a3)
 {
@@ -48,52 +26,6 @@ ptr[1]=a1;
 ptr[2]=a2;
 ptr[3]=a3;
 return ip;
-}
-
-
-//========
-// Access
-//========
-
-Handle<String> IpAddress::GetName()const
-{
-return m_Name;
-}
-
-Handle<String> IpAddress::ToString(LanguageCode lng)
-{
-return ToString(Get());
-}
-
-Handle<String> IpAddress::ToString(IP_ADDR ip)
-{
-BYTE* ptr=(BYTE*)&ip;
-UINT a0=ptr[0];
-UINT a1=ptr[1];
-UINT a2=ptr[2];
-UINT a3=ptr[3];
-return String::Create("%u.%u.%u.%u", a0, a1, a2, a3);
-}
-
-SIZE_T IpAddress::WriteToStream(OutputStream* Stream)
-{
-if(!Stream)
-	return sizeof(IP_ADDR);
-IP_ADDR value=Get();
-return Stream->Write(&value, sizeof(IP_ADDR));
-}
-
-
-//==============
-// Modification
-//==============
-
-BOOL IpAddress::FromString(Handle<String> str, BOOL notify)
-{
-IP_ADDR value;
-if(!FromString(str, &value))
-	return false;
-return Set(value, notify);
 }
 
 BOOL IpAddress::FromString(Handle<String> value, IP_ADDR* ip_ptr)
@@ -114,25 +46,14 @@ ptr[3]=(BYTE)a3;
 return true;
 }
 
-SIZE_T IpAddress::ReadFromStream(InputStream* stream, BOOL notify)
+Handle<String> IpAddress::ToString(IP_ADDR ip)
 {
-if(!stream)
-	return sizeof(IP_ADDR);
-IP_ADDR value;
-SIZE_T size=stream->Read(&value, sizeof(IP_ADDR));
-if(size==sizeof(IP_ADDR))
-	Set(value, notify);
-return size;
-}
-
-BOOL IpAddress::Set(IP_ADDR value, BOOL notify)
-{
-if(m_Value==value)
-	return false;
-m_Value=value;
-if(notify)
-	Changed(this);
-return true;
+BYTE* ptr=(BYTE*)&ip;
+UINT a0=ptr[0];
+UINT a1=ptr[1];
+UINT a2=ptr[2];
+UINT a3=ptr[3];
+return String::Create("%u.%u.%u.%u", a0, a1, a2, a3);
 }
 
 }}

@@ -37,9 +37,10 @@ class Directory: public Storage::Directory
 public:
 	// Friends
 	friend DirectoryIterator;
+	friend Object;
 
 	// Con-/Destructors
-	static inline Handle<Directory> Create(Handle<String> Path) { return new Directory(Path); }
+	static inline Handle<Directory> Create(Handle<String> Path) { return Object::Create<Directory>(Path); }
 
 	// Storage.Directory
 	Handle<Storage::DirectoryIterator> Begin()override;
@@ -67,8 +68,11 @@ private:
 class DirectoryIterator: public Storage::DirectoryIterator
 {
 public:
+	// Friends
+	friend Directory;
+	friend Object;
+
 	// Con-/Destructors
-	DirectoryIterator(Handle<Directory> Directory);
 	~DirectoryIterator();
 
 	// Common
@@ -78,10 +82,14 @@ public:
 	BOOL MoveNext()override;
 
 private:
+	// Con-/Destructors
+	DirectoryIterator(Directory* Directory);
+	static inline Handle<DirectoryIterator> Create(Directory* Directory) { return Object::Create<DirectoryIterator>(Directory); }
+
 	// Common
 	Handle<Object> m_Current;
 	Handle<Directory> m_Directory;
-	HANDLE hFind;
+	HANDLE m_Find;
 };
 
 }}

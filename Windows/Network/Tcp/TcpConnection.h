@@ -37,6 +37,7 @@ class TcpConnection: public Object, public Storage::Streams::RandomAccessStream
 {
 public:
 	// Friends
+	friend Object;
 	friend TcpSocket;
 
 	// Using
@@ -58,7 +59,11 @@ public:
 
 private:
 	// Con-/Destructors
-	TcpConnection(SOCKET Socket=INVALID_SOCKET, IP_ADDR RemoteIp=0);
+	TcpConnection(SOCKET Socket, IP_ADDR RemoteIp);
+	static inline Handle<TcpConnection> Create(SOCKET Socket=INVALID_SOCKET, IP_ADDR RemoteIp=0)
+		{
+		return Object::Create<TcpConnection>(Socket, RemoteIp);
+		}
 
 	// Common
 	IP_ADDR m_RemoteAddress;

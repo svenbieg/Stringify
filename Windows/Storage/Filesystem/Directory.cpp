@@ -39,7 +39,7 @@ m_Path(path)
 
 Handle<Storage::DirectoryIterator> Directory::Begin()
 {
-return new DirectoryIterator(this);
+return DirectoryIterator::Create(this);
 }
 
 Handle<Storage::File> Directory::CreateFile(Handle<String> path, FileCreateMode create, FileAccessMode access, FileShareMode share)
@@ -63,7 +63,7 @@ if(!find)
 FindClose(find);
 if(fd.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY)
 	{
-	return new Directory(item_path);
+	return Directory::Create(item_path);
 	}
 return File::Create(item_path);
 }
@@ -83,7 +83,7 @@ Handle<Directory> Directory::Open(Handle<String> path)
 {
 if(!FileHelper::DirectoryExists(path->Begin()))
 	return nullptr;
-return new Directory(path);
+return Directory::Create(path);
 }
 
 
@@ -91,9 +91,9 @@ return new Directory(path);
 // Iterator Con-/Destructors
 //===========================
 
-DirectoryIterator::DirectoryIterator(Handle<Directory> dir):
+DirectoryIterator::DirectoryIterator(Directory* dir):
 m_Directory(dir),
-hFind(NULL)
+m_Find(NULL)
 {
 m_Directory->m_Mutex.Lock();
 First();
@@ -101,8 +101,8 @@ First();
 
 DirectoryIterator::~DirectoryIterator()
 {
-if(hFind)
-	FindClose(hFind);
+if(m_Find)
+	FindClose(m_Find);
 m_Directory->m_Mutex.Unlock();
 }
 
@@ -114,25 +114,25 @@ m_Directory->m_Mutex.Unlock();
 BOOL DirectoryIterator::First()
 {
 m_Current=nullptr;
-if(hFind)
+if(m_Find)
 	{
-	FindClose(hFind);
-	hFind=NULL;
+	FindClose(m_Find);
+	m_Find=NULL;
 	}
 auto path=m_Directory->GetPath();
 WIN32_FIND_DATA fd={ 0 };
 auto mask=String::Create("%s\\*.*", path->Begin());
-hFind=FindFirstFileEx(mask->Begin(), FindExInfoBasic, &fd, FindExSearchNameMatch, nullptr, FIND_FIRST_EX_LARGE_FETCH);
-if(hFind==INVALID_HANDLE_VALUE)
-	hFind=NULL;
-if(!hFind)
+m_Find=FindFirstFileEx(mask->Begin(), FindExInfoBasic, &fd, FindExSearchNameMatch, nullptr, FIND_FIRST_EX_LARGE_FETCH);
+if(m_Find==INVALID_HANDLE_VALUE)
+	m_Find=NULL;
+if(!m_Find)
 	return false;
 while(fd.cFileName[0]=='.')
 	{
-	if(!FindNextFile(hFind, &fd))
+	if(!FindNextFile(m_Find, &fd))
 		{
-		FindClose(hFind);
-		hFind=NULL;
+		FindClose(m_Find);
+		m_Find=NULL;
 		return false;
 		}
 	}
@@ -150,16 +150,16 @@ return true;
 
 BOOL DirectoryIterator::MoveNext()
 {
-if(!hFind)
+if(!m_Find)
 	{
 	m_Current=nullptr;
 	return false;
 	}
 WIN32_FIND_DATA fd={ 0 };
-if(!FindNextFile(hFind, &fd))
+if(!FindNextFile(m_Find, &fd))
 	{
-	FindClose(hFind);
-	hFind=NULL;
+	FindClose(m_Find);
+	m_Find=NULL;
 	m_Current=nullptr;
 	return false;
 	}

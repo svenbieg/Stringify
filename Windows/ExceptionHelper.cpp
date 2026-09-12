@@ -22,43 +22,7 @@ constexpr UINT MAX_SYM_NAME_LEN=128;
 // Common
 //========
 
-BOOL LoadSymbols()
-{
-HANDLE proc=GetCurrentProcess();
-if(!SymInitialize(proc, 0, false))
-	return false;
-if(!SymSetOptions(SYMOPT_INCLUDE_32BIT_MODULES))
-	return false;
-SetLastError(0);
-HANDLE snap_shot=CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, 0);
-if(snap_shot==INVALID_HANDLE_VALUE)
-	snap_shot=NULL;
-if(!snap_shot)
-	return false;
-MODULEENTRY32 mod={ 0 };
-mod.dwSize=sizeof(MODULEENTRY32);
-if(!Module32First(snap_shot, &mod))
-	{
-	CloseHandle(snap_shot);
-	return false;
-	}
-while(mod.hModule)
-	{
-	#ifdef _UNICODE
-	CHAR str[MAX_PATH];
-	StringHelper::Copy(str, MAX_PATH, mod.szModule);
-	#else
-	LPSTR str=mod.szModule;
-	#endif
-	SymLoadModule64(proc, 0, str, 0, (UINT64)mod.modBaseAddr, mod.modBaseSize);
-	if(!Module32Next(snap_shot, &mod))
-		break;
-	}
-CloseHandle(snap_shot);
-return true;
-}
-
-UINT PrintExceptionContext(CONTEXT* pc, UINT levels, LPSTR str, UINT size)
+UINT ExceptionHelper::PrintContext(CONTEXT* pc, UINT levels, LPSTR str, UINT size)
 {
 if(!str||!size)
 	return 0;
@@ -98,7 +62,7 @@ sf.AddrPC.Mode=AddrModeFlat;
 sf.AddrStack.Offset=context.Rsp;
 sf.AddrStack.Mode=AddrModeFlat;
 #endif
-auto sym_info=(SYMBOL_INFO*)operator new(sizeof(SYMBOL_INFO)+MAX_SYM_NAME_LEN);
+auto sym_info=(SYMBOL_INFO*)MemoryHelper::Allocate(sizeof(SYMBOL_INFO)+MAX_SYM_NAME_LEN);
 MemoryHelper::Fill(sym_info, sizeof(SYMBOL_INFO), 0);
 sym_info->SizeOfStruct=sizeof(SYMBOL_INFO);
 sym_info->MaxNameLen=MAX_SYM_NAME_LEN;
@@ -117,6 +81,47 @@ for(UINT frame=0; frame<levels; frame++)
 	if(len>=size)
 		break;
 	}
-operator delete(sym_info);
+MemoryHelper::Free(sym_info);
 return len;
+}
+
+
+//================
+// Common Private
+//================
+
+BOOL ExceptionHelper::LoadSymbols()
+{
+HANDLE proc=GetCurrentProcess();
+if(!SymInitialize(proc, 0, false))
+	return false;
+if(!SymSetOptions(SYMOPT_INCLUDE_32BIT_MODULES))
+	return false;
+SetLastError(0);
+HANDLE snap_shot=CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, 0);
+if(snap_shot==INVALID_HANDLE_VALUE)
+	snap_shot=NULL;
+if(!snap_shot)
+	return false;
+MODULEENTRY32 mod={ 0 };
+mod.dwSize=sizeof(MODULEENTRY32);
+if(!Module32First(snap_shot, &mod))
+	{
+	CloseHandle(snap_shot);
+	return false;
+	}
+while(mod.hModule)
+	{
+	#ifdef _UNICODE
+	CHAR str[MAX_PATH];
+	StringHelper::Copy(str, MAX_PATH, mod.szModule);
+	#else
+	LPSTR str=mod.szModule;
+	#endif
+	SymLoadModule64(proc, 0, str, 0, (UINT64)mod.modBaseAddr, mod.modBaseSize);
+	if(!Module32Next(snap_shot, &mod))
+		break;
+	}
+CloseHandle(snap_shot);
+return true;
 }

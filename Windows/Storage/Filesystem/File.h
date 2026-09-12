@@ -29,8 +29,11 @@ namespace Storage {
 class File: public Storage::File
 {
 public:
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
-	static inline Handle<File> Create(Handle<String> Path) { return new File(Path); }
+	static inline Handle<File> Create(Handle<String> Path) { return Object::Create<File>(Path); }
 	static Handle<File> Create(Handle<String> Path, FileCreateMode Create, FileAccessMode Access=FileAccessMode::ReadOnly, FileShareMode Share=FileShareMode::ShareRead);
 
 	// Common

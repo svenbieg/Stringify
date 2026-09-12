@@ -33,6 +33,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Strings\Exception.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Resources\Strings\Files.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Clipboard.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Timing\ClockHelper.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\AppWindow.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\PathEdit.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Overlapped.h" />
@@ -55,6 +56,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Theme.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Resources\ResourceHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Storage\Clipboard.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Timing\ClockHelper.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\AppWindow.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\PathEdit.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Overlapped.cpp" />

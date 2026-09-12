@@ -30,9 +30,12 @@ public:
 	// Using
 	using IP_ADDR=Network::Ip::IP_ADDR;
 
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
 	~UdpSocket() { Close(); }
-	static inline Handle<UdpSocket> Create() { return new UdpSocket(); }
+	static inline Handle<UdpSocket> Create() { return Object::Create<UdpSocket>(); }
 
 	// Common
 	VOID Broadcast(WORD Port, Handle<UdpMessage> Message);

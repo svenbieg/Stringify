@@ -30,9 +30,12 @@ public:
 	// Using
 	using IP_ADDR=Network::Ip::IP_ADDR;
 
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
 	~TlsSocket() { Close(); }
-	static inline Handle<TlsSocket> Create() { return new TlsSocket(); }
+	static inline Handle<TlsSocket> Create() { return Object::Create<TlsSocket>(); }
 
 	// Common
 	Handle<TlsConnection> Accept();

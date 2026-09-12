@@ -30,8 +30,10 @@ public:
 	// Using
 	using IP_ADDR=Network::Ip::IP_ADDR;
 
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
-	~UdpMessage();
 	static Handle<UdpMessage> Create(IP_ADDR From);
 
 	// Common

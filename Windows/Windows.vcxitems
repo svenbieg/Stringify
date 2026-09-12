@@ -55,7 +55,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Storage\Registry.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)System\ProcessClient.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)System\ProcessServer.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)Timing\ClockHelper.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)CommandLine.cpp" />
@@ -84,7 +83,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Storage\Registry.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)System\ProcessClient.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)System\ProcessServer.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Timing\ClockHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)Configuration\Compiler.props" />

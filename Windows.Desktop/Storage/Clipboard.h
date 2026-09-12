@@ -9,6 +9,7 @@
 // Using
 //=======
 
+#include "Global.h"
 #include "StringClass.h"
 
 
@@ -23,21 +24,23 @@ namespace Storage {
 // Clipboard
 //===========
 
-class Clipboard: public Object
+class Clipboard: public Global<Clipboard>
 {
 public:
+	// Friends
+	friend Object;
+
+	// Con-/Destructors
+	static inline Handle<Clipboard> Create() { return Global::Create(); }
+
 	// Common
 	VOID Copy(Handle<String> Text);
 	Handle<String> GetText();
 	BOOL HasText();
-	static Handle<Clipboard> Open();
 
 private:
 	// Con-/Destructors
-	Clipboard();
-
-	// Common
-	static Handle<Clipboard> m_Current;
+	Clipboard() {}
 };
 
 }

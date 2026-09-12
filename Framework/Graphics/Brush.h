@@ -26,8 +26,11 @@ namespace Graphics {
 class Brush: public Object
 {
 public:
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
-	static inline Handle<Brush> Create(COLOR Color) { return new Brush(Color); }
+	static inline Handle<Brush> Create(COLOR Color) { return Object::Create<Brush>(Color); }
 
 	// Common
 	inline COLOR GetColor()const { return m_Color; }

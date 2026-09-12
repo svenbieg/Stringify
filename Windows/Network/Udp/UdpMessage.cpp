@@ -17,13 +17,9 @@ namespace Network {
 // Con-/Destructors
 //==================
 
-UdpMessage::~UdpMessage()
-{
-}
-
 Handle<UdpMessage> UdpMessage::Create(IP_ADDR ip)
 {
-return new UdpMessage(ip);
+return Object::Create<UdpMessage>(ip);
 }
 
 

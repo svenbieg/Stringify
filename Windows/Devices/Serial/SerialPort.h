@@ -47,9 +47,12 @@ Baud256000=CBR_256000
 class SerialPort: public Object, public Storage::Streams::RandomAccessStream
 {
 public:
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
 	~SerialPort();
-	static Handle<SerialPort> Create(UINT Id=0) { return new SerialPort(Id); }
+	static Handle<SerialPort> Create(UINT Id=0) { return Object::Create<SerialPort>(Id); }
 
 	// Common
 	VOID Close();

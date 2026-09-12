@@ -34,7 +34,7 @@ INT addr_len=sizeof(sockaddr_in);
 SOCKET sock=accept(m_Socket, (sockaddr*)&addr, &addr_len);
 if(sock==INVALID_SOCKET)
 	return nullptr;
-return new TcpConnection(sock, addr.sin_addr.S_un.S_addr);
+return TcpConnection::Create(sock, addr.sin_addr.S_un.S_addr);
 }
 
 VOID TcpSocket::Close()
@@ -63,7 +63,7 @@ addr.sin_port=htons(port);
 status=connect(m_Socket, (sockaddr*)&addr, sizeof(sockaddr_in));
 if(status!=S_OK)
 	throw DeviceNotReadyException();
-Handle<TcpConnection> con=new TcpConnection(m_Socket, host);
+auto con=TcpConnection::Create(m_Socket, host);
 m_Socket=INVALID_SOCKET;
 return con;
 }

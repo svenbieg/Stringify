@@ -147,7 +147,7 @@ LONG WINAPI Application::UnhandledExceptionHandler(EXCEPTION_POINTERS* info)
 {
 auto caption=Sentence::Translate(STR_EXCEPTION);
 CHAR context[128];
-UINT context_len=PrintExceptionContext(info->ContextRecord, 3, context, 128);
+UINT context_len=ExceptionHelper::PrintContext(info->ContextRecord, 3, context, 128);
 TCHAR msg[256];
 if(context_len>0)
 	{

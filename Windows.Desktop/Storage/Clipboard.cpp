@@ -74,26 +74,4 @@ if(IsClipboardFormatAvailable(CF_UNICODETEXT))
 return false;
 }
 
-Handle<Clipboard> Clipboard::Open()
-{
-if(!m_Current)
-	m_Current=new Clipboard();
-return m_Current;
-}
-
-
-//==========================
-// Con-/Destructors Private
-//==========================
-
-Clipboard::Clipboard()
-{}
-
-
-//================
-// Common Private
-//================
-
-Handle<Clipboard> Clipboard::m_Current;
-
 }

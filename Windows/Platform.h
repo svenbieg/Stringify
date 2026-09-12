@@ -21,6 +21,7 @@
 #undef TEXT
 
 #undef DrawText
+#undef GetCurrentTime
 #undef InterlockedDecrement
 #undef InterlockedIncrement
 

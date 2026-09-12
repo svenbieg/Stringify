@@ -30,9 +30,12 @@ public:
 	// Using
 	using IP_ADDR=Network::Ip::IP_ADDR;
 
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
 	~TcpSocket() { Close(); }
-	static inline Handle<TcpSocket> Create() { return new TcpSocket(); }
+	static inline Handle<TcpSocket> Create() { return Object::Create<TcpSocket>(); }
 
 	// Common
 	Handle<TcpConnection> Accept();

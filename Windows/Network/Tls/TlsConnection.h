@@ -38,6 +38,7 @@ class TlsConnection: public Object, public Storage::Streams::RandomAccessStream
 {
 public:
 	// Friends
+	friend Object;
 	friend TlsSocket;
 
 	// Using
@@ -64,6 +65,10 @@ private:
 
 	// Con-/Destructors
 	TlsConnection(SOCKET Socket, IP_ADDR Address);
+	static inline Handle<TlsConnection> Create(SOCKET Socket, IP_ADDR Address)
+		{
+		return Object::Create<TlsConnection>(Socket, Address);
+		}
 
 	// Common
 	VOID ShutdownTls();
