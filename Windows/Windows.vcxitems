@@ -86,7 +86,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)Configuration\Compiler.props" />
+    <None Include="$(MSBuildThisFileDirectory)Configuration\Compiler.targets" />
     <None Include="$(MSBuildThisFileDirectory)Configuration\Default.props" />
+    <None Include="$(MSBuildThisFileDirectory)Configuration\Build.targets" />
     <None Include="$(MSBuildThisFileDirectory)Configuration\Platform.props" />
   </ItemGroup>
 </Project>

@@ -23,6 +23,15 @@ public:
 	// Con-/Destructors
 	ComPointer(): m_Object(nullptr) {}
 	ComPointer(_obj_t* Object): m_Object(Object) {}
+	ComPointer(ComPointer const& Copy): m_Object(Copy.m_Object)
+		{
+		if(m_Object)
+			m_Object->AddRef();
+		}
+	ComPointer(ComPointer&& Move): m_Object(Move.m_Object)
+		{
+		Move.m_Object=nullptr;
+		}
 	~ComPointer()
 		{
 		if(m_Object)

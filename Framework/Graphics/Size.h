@@ -50,6 +50,7 @@ public:
 	VOID AddPadding(RECT const& Padding);
 	VOID AddPadding(INT Left, INT Top, INT Right, INT Bottom);
 	inline SIZE Max(SIZE const& Size) { return SIZE(TypeHelper::Max(Width, Size.Width), TypeHelper::Max(Height, Size.Height)); }
+	inline SIZE Max(UINT Width, UINT Height) { return SIZE(TypeHelper::Max(this->Width, Width), TypeHelper::Max(this->Height, Height)); }
 	inline VOID Set(UINT Width, UINT Height) { this->Width=Width; this->Height=Height; }
 
 	// Arithmetik

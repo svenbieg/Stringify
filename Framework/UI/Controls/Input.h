@@ -96,6 +96,7 @@ private:
 	POINT CharFromPoint(POINT Point, UINT LineHeight);
 	POINT GetEndPoint();
 	UINT GetLineHeight(RenderTarget* Target, FLOAT Scale);
+	UINT GetLineLength(UINT Line);
 	UINT GetLineWidth(INPUT_LINE const& Line, FLOAT ScaleFactor);
 	UINT GetText(POINT const& Start, POINT const& End, StringBuilder& Builder);
 	UINT GetText(POINT const& Start, POINT const& End, LPTSTR Buffer, UINT Size);

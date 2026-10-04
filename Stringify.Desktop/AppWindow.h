@@ -32,8 +32,11 @@ public:
 	using PathEdit=UI::Controls::PathEdit;
 	using TextBox=UI::Controls::TextBox;
 
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
-	static inline Handle<AppWindow> Create() { return new AppWindow(); }
+	static inline Handle<AppWindow> Create() { return Object::Create<AppWindow>(); }
 
 	// Common
 	Handle<PathEdit> Path;

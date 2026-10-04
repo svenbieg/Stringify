@@ -16,7 +16,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Ocr\OcrScanner.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Ocr\OcrWord.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Ocr\OcrLine.h" />

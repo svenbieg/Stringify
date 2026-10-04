@@ -12,6 +12,7 @@
 #include "Graphics/Color.h"
 #include "Graphics/Rect.h"
 #include "Graphics/Size.h"
+#include "Event.h"
 
 
 //===========
@@ -32,11 +33,7 @@ public:
 	friend Object;
 
 	// Con-/Destructors
-	~Bitmap();
-	static inline Handle<Bitmap> Create(UINT Width, UINT Height, WORD BitsPerPixel)
-		{
-		return Object::Create<Bitmap>(Width, Height, BitsPerPixel);
-		}
+	static Handle<Bitmap> Create(UINT Width, UINT Height, WORD BitsPerPixel);
 	static inline Handle<Bitmap> Create(UINT Width, UINT Height, WORD BitsPerPixel, LPCSTR Resource)
 		{
 		return Object::Create<Bitmap>(Width, Height, BitsPerPixel, Resource);
@@ -46,6 +43,7 @@ public:
 	inline BYTE const* Begin()const { return m_Buffer; }
 	VOID Clear(COLOR Color);
 	Handle<Bitmap> Copy()const;
+	Event<Bitmap> Destroyed;
 	VOID FillRect(RECT const& Rect, COLOR Color);
 	WORD GetBitsPerPixel()const { return m_BitsPerPixel; }
 	inline SIZE GetDimensions()const { return SIZE(m_Width, m_Height); }
@@ -57,6 +55,7 @@ public:
 
 protected:
 	// Common
+	UINT Release()noexcept override;
 	WORD m_BitsPerPixel;
 	BYTE* m_Buffer;
 	UINT m_Height;
@@ -67,7 +66,7 @@ protected:
 
 private:
 	// Con-/Destructors
-	Bitmap(UINT Width, UINT Height, WORD BitsPerPixel);
+	Bitmap(BYTE* Buffer, SIZE_T Size, UINT Width, UINT Height, WORD BitsPerPixel);
 	Bitmap(UINT Width, UINT Height, WORD BitsPerPixel, LPCSTR Resource);
 };
 

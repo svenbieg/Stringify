@@ -193,8 +193,6 @@ UINT first_line=offset.Top/line_height;
 if(first_line>m_Lines.get_count())
 	return;
 UINT line_count=m_Lines.get_count()-first_line;
-if(line_count==0)
-	return;
 line_count=TypeHelper::Min(line_count, client_height/line_height+2);
 UINT last_line=first_line+line_count-1;
 BOOL show_sel=true;
@@ -221,7 +219,7 @@ if(show_sel)
 	if(sel_last.Top>last_line)
 		{
 		sel_last.Top=last_line;
-		sel_last.Left=0;
+		sel_last.Left=GetLineLength(last_line);
 		}
 	else if(sel_last.Top<first_line)
 		{
@@ -539,6 +537,14 @@ UINT Input::GetLineHeight(RenderTarget* target, FLOAT scale)
 auto font=m_Theme->DefaultFont;
 SIZE size=target->MeasureText(font, scale, TEXT("Ag"), 2);
 return size.Height;
+}
+
+UINT Input::GetLineLength(UINT id)
+{
+INPUT_LINE line;
+if(!m_Lines.try_get_at(id, &line))
+	return 0;
+return line.Offsets.get_count();
 }
 
 UINT Input::GetLineWidth(INPUT_LINE const& line, FLOAT scale)

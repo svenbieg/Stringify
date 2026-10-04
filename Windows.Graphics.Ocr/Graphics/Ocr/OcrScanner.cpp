@@ -9,7 +9,7 @@
 // Using
 //=======
 
-#pragma comment(lib, "windowsapp.lib")
+#pragma comment(lib, "WindowsApp.lib")
 
 #include <WinRT/Windows.Foundation.h>
 #include <WinRT/Windows.Foundation.Collections.h>

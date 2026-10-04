@@ -32,11 +32,14 @@ public:
 	using InputStream=Storage::Streams::InputStream;
 	using StringList=Collections::StringList;
 
+	// Friends
+	friend Object;
+
 	// Con-/Destructors
-	static inline Handle<Application> Create() { return new Application(); }
+	static inline Handle<Application> Create() { return Object::Create<Application>(); }
 
 	// Common
-	static Application* Current;
+	static inline Application* GetCurrent() { return s_Current; }
 	VOID Open(Handle<String> Path);
 
 private:
@@ -48,6 +51,7 @@ private:
 	VOID ScanImage(Handle<String> Path);
 	VOID Stringify(Handle<StringList> Destination, InputStream* Source);
 	Handle<AppWindow> m_Window;
+	static Application* s_Current;
 };
 
 }

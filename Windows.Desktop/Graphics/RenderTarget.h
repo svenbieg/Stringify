@@ -41,6 +41,7 @@ public:
 	friend Object;
 
 	// Con-/Destructors
+	~RenderTarget();
 	static inline Handle<RenderTarget> Create() { return Object::Create<RenderTarget>(); }
 
 	// Common
@@ -66,6 +67,8 @@ private:
 	D2D_POINT_2F D2DPoint(POINT const& Point);
 	ComPointer<ID2D1Bitmap> GetBitmap(Bitmap* Bitmap);
 	ComPointer<ID2D1SolidColorBrush> GetBrush(Brush* Brush);
+	VOID OnBitmapDestroyed(Bitmap* Bitmap);
+	Collections::map<Bitmap*, ComPointer<ID2D1Bitmap>> m_Bitmaps;
 	Handle<D2DFactory> m_D2DFactory;
 	Handle<DWriteFactory> m_DWriteFactory;
 	POINT m_Offset;

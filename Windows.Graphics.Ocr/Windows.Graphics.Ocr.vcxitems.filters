@@ -12,9 +12,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Ocr\OcrScanner.cpp">
       <Filter>Graphics\Ocr</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Ocr\OcrWord.cpp">
-      <Filter>Graphics\Ocr</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Ocr\OcrScanner.h">

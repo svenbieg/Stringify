@@ -10,6 +10,7 @@
 //=======
 
 #pragma comment(lib, "dwrite.lib")
+#pragma comment(lib, "ole32.lib")
 
 #include "ErrorHelper.h"
 #include "StringHelper.h"

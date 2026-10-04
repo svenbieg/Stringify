@@ -178,7 +178,7 @@ private:
 		{}
 	static inline Handle<Task> Create(_owner_t* Owner, _lambda_t&& Lambda, Handle<String> Name, UINT StackSize)
 		{
-		return Object::Create<TaskLambda>(Owner, Lambda, Name, StackSize);
+		return Object::Create<TaskLambda>(Owner, std::forward<_lambda_t>(Lambda), Name, StackSize);
 		}
 
 	// Common
@@ -204,7 +204,7 @@ private:
 		{}
 	static inline Handle<Task> Create(_lambda_t&& Lambda, Handle<String> Name, UINT StackSize)
 		{
-		return Object::Create<TaskLambda>(Lambda, Name, StackSize);
+		return Object::Create<TaskLambda>(std::forward<_lambda_t>(Lambda), Name, StackSize);
 		}
 
 	// Common

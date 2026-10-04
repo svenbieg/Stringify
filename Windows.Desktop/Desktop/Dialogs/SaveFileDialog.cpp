@@ -9,6 +9,8 @@
 // Using
 //=======
 
+#pragma comment(lib, "comdlg32.lib")
+
 #include <commdlg.h>
 #include "Resources/Strings/Files.h"
 #include "UI/AppWindow.h"

@@ -23,10 +23,10 @@ namespace Graphics {
 // Con-/Destructors
 //==================
 
-Bitmap::~Bitmap()
+Handle<Bitmap> Bitmap::Create(UINT width, UINT height, WORD bpp)
 {
-if(!m_Resource)
-	MemoryHelper::Free(m_Buffer);
+SIZE_T size=width*height*bpp/8;
+return Object::CreateEx<Bitmap>(size, sizeof(SIZE_T), width, height, bpp);
 }
 
 
@@ -179,23 +179,37 @@ switch(m_BitsPerPixel)
 }
 
 
+//==================
+// Common Protected
+//==================
+
+UINT Bitmap::Release()noexcept
+{
+UINT ref_count=Cpu::InterlockedDecrement(&m_ReferenceCount);
+if(ref_count==0)
+	{
+	m_ReferenceCount=1;
+	Destroyed(this);
+	assert(m_ReferenceCount==1);
+	delete this;
+	}
+return ref_count;
+}
+
+
 //==========================
 // Con-/Destructors Private
 //==========================
 
-Bitmap::Bitmap(UINT width, UINT height, WORD bpp):
+Bitmap::Bitmap(BYTE* buf, SIZE_T size, UINT width, UINT height, WORD bpp):
 m_BitsPerPixel(bpp),
-m_Buffer(nullptr),
+m_Buffer(buf),
 m_Height(height),
-m_Pitch(0),
+m_Pitch(size/height),
 m_Resource(nullptr),
-m_Size(0),
+m_Size(size),
 m_Width(width)
-{
-m_Pitch=width*bpp/8;
-m_Size=m_Height*m_Pitch;
-m_Buffer=(BYTE*)MemoryHelper::Allocate(m_Size);
-}
+{}
 
 Bitmap::Bitmap(UINT width, UINT height, WORD bpp, LPCSTR resource):
 m_BitsPerPixel(bpp),

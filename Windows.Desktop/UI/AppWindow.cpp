@@ -48,7 +48,6 @@ m_IconSmall=(HICON)LoadImage(hinst, MAKEINTRESOURCE(ICO_APP), IMAGE_ICON, size_s
 m_IconBig=(HICON)LoadImage(hinst, MAKEINTRESOURCE(ICO_APP), IMAGE_ICON, size_big, size_big, 0);
 SendMessage(m_Handle, WM_SETICON, ICON_SMALL, (LPARAM)m_IconSmall);
 SendMessage(m_Handle, WM_SETICON, ICON_BIG, (LPARAM)m_IconBig);
-Closed.Add(this, &AppWindow::OnClosed);
 Title=Application::GetCurrent()->GetName();
 auto grid=Grid::Create(this);
 grid->AddRow(1, GridUnit::Auto);
@@ -82,6 +81,11 @@ switch(msg)
 			}
 		return 0;
 		}
+	case WM_DESTROY:
+		{
+		PostQuitMessage(0);
+		break;
+		}
 	case WM_SETTINGCHANGE:
 		{
 		OnSettingChanged((LPCTSTR)lparam);
@@ -112,11 +116,6 @@ return Overlapped::HandleMessage(msg, wparam, lparam);
 //================
 // Common Private
 //================
-
-VOID AppWindow::OnClosed()
-{
-Application::GetCurrent()->Quit();
-}
 
 VOID AppWindow::OnSettingChanged(LPCTSTR setting)
 {

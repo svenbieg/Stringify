@@ -51,7 +51,7 @@ private:
 		{}
 	static inline Handle<OcrWord> Create(Handle<String> Text, INT Left, INT Top, INT Right, INT Bottom)
 		{
-		return new OcrWord(Text, Left, Top, Right, Bottom);
+		return Object::Create<OcrWord>(Text, Left, Top, Right, Bottom);
 		}
 };
 

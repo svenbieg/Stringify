@@ -58,7 +58,7 @@ Minimize(Minimization::Size);
 
 VOID AppWindow::OnPathEditPathChanged(Handle<String> path)
 {
-auto app=Application::Current;
+auto app=Application::GetCurrent();
 app->Open(path);
 }
 

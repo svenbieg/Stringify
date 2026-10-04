@@ -71,7 +71,7 @@ public:
 	BOOL IsVisible();
 	SIZE MinSize;
 	virtual VOID Move(RECT const& Rect);
-	VOID Move(RenderTarget* Target, RECT const& Rect);
+	virtual VOID Move(RenderTarget* Target, RECT const& Rect);
 	virtual VOID Rearrange(RenderTarget* Target, RECT& Rect) {}
 	virtual VOID Render(RenderTarget* Target, RECT& Rect);
 	Event<Window, RenderTarget*, RECT&> Rendered;

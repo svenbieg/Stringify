@@ -132,9 +132,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\EditMenu.cpp">
       <Filter>UI\Controls\Menus</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Bitmap.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Color.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
@@ -164,6 +161,9 @@
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)UI\Controls\Image.cpp">
       <Filter>UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Bitmap.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -290,9 +290,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Menus\EditMenu.h">
       <Filter>UI\Controls\Menus</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Bitmap.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Brush.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -337,6 +334,9 @@
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)UI\Controls\Image.h">
       <Filter>UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Bitmap.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

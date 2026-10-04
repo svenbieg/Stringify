@@ -9,6 +9,8 @@
 // Using
 //=======
 
+#pragma comment(lib, "Advapi32.lib")
+
 #include "PathHelper.h"
 
 

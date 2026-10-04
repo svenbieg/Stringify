@@ -9,6 +9,8 @@
 // Using
 //=======
 
+#pragma comment(lib, "user32.lib")
+
 #include "Concurrency/DispatchedQueue.h"
 #include "Culture/LanguageHelper.h"
 #include "Resources/Strings/Exception.h"

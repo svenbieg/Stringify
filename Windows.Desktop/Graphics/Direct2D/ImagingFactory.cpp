@@ -9,6 +9,8 @@
 // Using
 //=======
 
+#pragma comment(lib, "ole32.lib")
+
 #include "ErrorHelper.h"
 #include <assert.h>
 

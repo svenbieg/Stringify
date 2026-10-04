@@ -9,7 +9,8 @@
 // Using
 //=======
 
-#pragma comment(lib, "dwmapi")
+#pragma comment(lib, "dwmapi.lib")
+#pragma comment(lib, "gdi32.lib")
 
 #include <dwmapi.h>
 #include <windowsx.h>
@@ -211,7 +212,7 @@ if(!m_Parent)
 	m_Parent=AppWindow::GetCurrent();
 if(m_Parent)
 	hwnd_parent=m_Parent->GetHandle();
-UINT style=WS_OVERLAPPED;
+UINT style=WS_CLIPCHILDREN|WS_OVERLAPPED;
 m_Handle=CreateWindowEx(0, class_name, nullptr, style, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, hwnd_parent, NULL, inst, this);
 if(m_Handle==INVALID_HANDLE_VALUE)
 	m_Handle=NULL;

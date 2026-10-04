@@ -88,8 +88,6 @@ const LPCSTR STR_TABLE[256]=
 // Common
 //========
 
-Application* Application::Current=nullptr;
-
 VOID Application::Open(Handle<String> path)
 {
 if(!path)
@@ -130,7 +128,7 @@ else
 Application::Application():
 Desktop::Application(STR_APP_TITLE)
 {
-Current=this;
+s_Current=this;
 m_Window=AppWindow::Create();
 }
 
@@ -226,5 +224,7 @@ auto str=String::Create(buf);
 lines->Append(str, EventNotification::None);
 lines->Append("", EventNotification::None);
 }
+
+Application* Application::s_Current=nullptr;
 
 }

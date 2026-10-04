@@ -64,7 +64,9 @@ return task;
 Handle<Task> Task::Get()
 {
 DWORD id=GetCurrentThreadId();
-return s_Tasks.get(id);
+Task* task=nullptr;
+s_Tasks.try_get(id, &task);
+return task;
 }
 
 Handle<Object> Task::GetResult()

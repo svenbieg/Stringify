@@ -54,7 +54,6 @@ protected:
 
 private:
 	// Common
-	VOID OnClosed();
 	VOID OnSettingChanged(LPCTSTR Setting);
 	static AppWindow* s_Current;
 };

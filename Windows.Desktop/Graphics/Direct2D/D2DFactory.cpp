@@ -10,6 +10,7 @@
 //=======
 
 #pragma comment(lib, "d2d1.lib")
+#pragma comment(lib, "ole32.lib")
 
 #include "ErrorHelper.h"
 #include "MemoryHelper.h"

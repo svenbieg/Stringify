@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <CompilerFlags>$(CompilerFlags) /nologo /std:c++latest</CompilerFlags>
+    <CompilerFlags>$(CompilerFlags) /EHsc /MTd</CompilerFlags>
+    <CompilerFlags Condition="'$(Configuration)'=='Debug'">$(CompilerFlags) /FS /Zi</CompilerFlags>
+    <LinkerFlags>$(LinkerFlags) /nologo</LinkerFlags>
+    <LinkerFlags Condition="'$(Configuration)'=='Debug'">$(LinkerFlags) /DEBUG</LinkerFlags>
+    <NinjaPath>$(VSAPPIDDIR)CommonExtensions\Microsoft\CMake\Ninja\</NinjaPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <ExecPath>$(NinjaPath);$(ExecutablePath)</ExecPath>
+    <ProjectName>$(MSBuildProjectName)</ProjectName>
+    <ProjectDir>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)'))\</ProjectDir>
+    <SolutionDir>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)\..'))\</SolutionDir>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IntDir>$(SolutionDir)$(Configuration)\$(ProjectName)\$(Platform)\obj\</IntDir>
+    <OutDir>$(SolutionDir)$(Configuration)\$(ProjectName)\$(Platform)\</OutDir>
+  </PropertyGroup>
+
+  <Target Name="NinjaSetup">
+    <ItemGroup>
+      <IncludeList Include="%(ClCompile.AdditionalIncludeDirectories);$(IncludePath)" />
+      <LibPathList Include="$(LibraryPath)" />
+      <TrimmedIncludeList Include="@(IncludeList)">
+        <NoSlash>$([System.String]::Copy('%(FullPath)').TrimEnd('\'))</NoSlash>
+      </TrimmedIncludeList>
+      <PreprocessorList Include="%(ClCompile.PreprocessorDefinitions)" />
+      <SourceList Include="@(ClCompile)">
+        <InputFileName>$([System.String]::Copy('%(FullPath)').Replace('$(SolutionDir)', '..\..\..\'))</InputFileName>
+        <OutputFileName>obj\$([System.String]::Copy('%(Directory)').Replace('\', '.'))%(FileName)%(Extension).obj</OutputFileName>
+      </SourceList>
+      <ResourceList Include="@(ResourceCompile)">
+        <InputFileName>$([System.String]::Copy('%(FullPath)').Replace('$(SolutionDir)', '..\..\..\'))</InputFileName>
+        <OutputFileName>obj\$([System.String]::Copy('%(Directory)').Replace('\', '.'))%(FileName)%(Extension).res</OutputFileName>
+      </ResourceList>
+    </ItemGroup>
+    <PropertyGroup>
+      <IncludeArg Condition="'@(IncludeList)'!=''">/I@(TrimmedIncludeList->'"%(NoSlash)"', ' /I')</IncludeArg>
+      <LibPathArg Condition="'@(LibPathList)'!=''">@(LibPathList->'/LIBPATH:"%(Identity)"', ' ')</LibPathArg>
+      <PreprocessorArg Condition="'@(PreprocessorList)'!=''">/D@(PreprocessorList->'%(Identity)', ' /D')</PreprocessorArg>
+      <PreprocessorArg>$([System.String]::Copy('$(PreprocessorArg)').Replace('"', '\"'))</PreprocessorArg>
+      <NinjaCompile Condition="'@(SourceList)'!=''">@(SourceList->'build %(OutputFileName): .cpp.obj %(InputFileName)', '%0D%0A')</NinjaCompile>
+      <NinjaResource Condition="'@(ResourceList)'!=''">@(ResourceList->'build %(OutputFileName): .rc.res %(InputFileName)', '%0D%0A')</NinjaResource>
+      <NinjaLink>%0D%0Abuild $(TargetName).exe: .exe</NinjaLink>
+      <NinjaLink Condition="'@(SourceList)'!=''">$(NinjaLink)$%0D%0A@(SourceList->'%(OutputFileName) ', '$%0D%0A')</NinjaLink>
+      <NinjaLink Condition="'@(ResourceList)'!=''">$(NinjaLink)$%0D%0A@(ResourceList->'%(OutputFileName) ', '$%0D%0A')</NinjaLink>
+      <NinjaLink>$(NinjaLink)%0D%0A%0D%0A</NinjaLink>
+    </PropertyGroup>
+    <ItemGroup>
+      <NinjaRules Include=".cpp.obj" Condition="'$(NinjaCompile)'!=''">
+        <Command>cl.exe /c $CFLAGS $PREPROC $INCLUDE /Fo"$out" "$in"</Command>
+      </NinjaRules>
+      <NinjaRules Include=".rc.res" Condition="'$(NinjaResource)'!=''">
+        <Command>rc.exe /nologo $INCLUDE /Fo"$out" "$in"</Command>
+      </NinjaRules>
+      <NinjaRules Include=".exe" Condition="'$(NinjaLink)'!=''">
+        <Command>link.exe $LFLAGS $LIBPATH $LIBS /OUT:"$out" $in</Command>
+      </NinjaRules>
+    </ItemGroup>
+    <MakeDir Directories="$(OutDir)" />
+  </Target>
+
+  <Target Name="NinjaCompile" DependsOnTargets="NinjaSetup">
+    <ItemGroup>
+      <NinjaLines Include="CFLAGS=$(CompilerFlags)" Condition="'$(CompilerFlags)'!=''"/>
+      <NinjaLines Include="LFLAGS=$(LinkerFlags)" Condition="'$(LinkerFlags)'!=''"/>
+      <NinjaLines Include="PREPROC=$(PreprocessorArg)" Condition="'$(PreprocessorArg)'!=''"/>
+      <NinjaLines Include="INCLUDE=$(IncludeArg)" Condition="'$(IncludeArg)'!=''"/>
+      <NinjaLines Include="LIBPATH=$(LibPathArg)" Condition="'$(LibPathArg)'!=''"/>
+      <NinjaLines Include="%0D%0A" />
+    </ItemGroup>
+    <ItemGroup>
+      <NinjaLines Include="@(NinjaRules->'rule %(Identity)%0D%0A%20%20deps=msvc%0D%0A%20%20command=%(Command)', '%0D%0A%0D%0A')" />
+      <NinjaLines Include="%0D%0A" />
+    </ItemGroup>
+    <ItemGroup>
+      <NinjaLines Include="$(NinjaCompile)" Condition="'$(NinjaCompile)'!=''" />
+      <NinjaLines Include="$(NinjaResource)" Condition="'$(NinjaResource)'!=''" />
+      <NinjaLines Include="$(NinjaLink)" Condition="'$(NinjaLink)'!=''" />
+    </ItemGroup>
+    <WriteLinesToFile File="$(OutDir)build.ninja" Lines="@(NinjaLines)" Overwrite="true" />
+    <ItemGroup>
+      <ExecPathList Include="$(ExecPath)" />
+    </ItemGroup>
+    <PropertyGroup>
+      <ExecPathSeparated>@(ExecPathList->'%(Identity)', '%3B')</ExecPathSeparated>
+    </PropertyGroup>
+    <ItemGroup>
+      <BuildLines Include="set &quot;PATH=$(ExecPathSeparated)&quot;" />
+      <BuildLines Include="ninja" />
+    </ItemGroup>
+    <Exec Condition="'$(NinjaLink)'!=''" Command="@(BuildLines->'%(Identity)&amp;')" WorkingDirectory="$(OutDir)" />
+  </Target>
+
+</Project>

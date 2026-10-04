@@ -12,6 +12,20 @@
 namespace Graphics {
 
 
+//==================
+// Con-/Destructors
+//==================
+
+RenderTarget::~RenderTarget()
+{
+for(auto const& item: m_Bitmaps)
+	{
+	Bitmap* bmp=item.get_key();
+	bmp->Destroyed.Remove(this);
+	}
+}
+
+
 //========
 // Common
 //========
@@ -168,14 +182,18 @@ return d2d_pt;
 
 ComPointer<ID2D1Bitmap> RenderTarget::GetBitmap(Bitmap* bmp)
 {
+ComPointer<ID2D1Bitmap> d2d_bmp;
+if(m_Bitmaps.try_get(bmp, &d2d_bmp))
+	return d2d_bmp;
 D2D1_BITMAP_PROPERTIES props;
 MemoryHelper::Zero(&props, sizeof(props));
 props.pixelFormat=D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED);
 auto buf=bmp->Begin();
 auto size=bmp->GetDimensions();
 auto d2d_size=D2D1::SizeU(size.Width, size.Height);
-ComPointer<ID2D1Bitmap> d2d_bmp;
 m_Target->CreateBitmap(d2d_size, buf, size.Width*4, props, d2d_bmp.AddressOf());
+m_Bitmaps.add(bmp, d2d_bmp);
+bmp->Destroyed.Add(this, &RenderTarget::OnBitmapDestroyed);
 return d2d_bmp;
 }
 
@@ -186,6 +204,11 @@ D2D1_COLOR_F color({ (FLOAT)c.GetRed()/255, (FLOAT)c.GetGreen()/255, (FLOAT)c.Ge
 ComPointer<ID2D1SolidColorBrush> d2d_brush;
 m_Target->CreateSolidColorBrush(color, d2d_brush.AddressOf());
 return d2d_brush;
+}
+
+VOID RenderTarget::OnBitmapDestroyed(Bitmap* bmp)
+{
+m_Bitmaps.remove(bmp);
 }
 
 }

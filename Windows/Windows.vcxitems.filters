@@ -243,5 +243,11 @@
     <None Include="$(MSBuildThisFileDirectory)Configuration\Platform.props">
       <Filter>Configuration</Filter>
     </None>
+    <None Include="$(MSBuildThisFileDirectory)Configuration\Build.targets">
+      <Filter>Configuration</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Configuration\Compiler.targets">
+      <Filter>Configuration</Filter>
+    </None>
   </ItemGroup>
 </Project>

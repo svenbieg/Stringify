@@ -5,6 +5,13 @@
 #include "Environment.h"
 
 
+//=======
+// Using
+//=======
+
+#pragma comment(lib, "shell32.lib")
+
+
 //========
 // Common
 //========
