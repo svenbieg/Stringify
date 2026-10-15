@@ -56,7 +56,7 @@ Cancelled=true;
 
 Handle<Task> Task::Create(VOID (*proc)(), Handle<String> name, UINT stack_size)
 {
-auto task=TaskProcedure::Create(proc, name, stack_size);
+auto task=TaskProcedure::Create(proc, std::forward<Handle<String>>(name), stack_size);
 RunDeferred(task);
 return task;
 }
@@ -109,10 +109,10 @@ return m_Status;
 // Con-/Destructors Protected
 //============================
 
-Task::Task(Handle<String> name, UINT stack_size):
+Task::Task(Handle<String>&& name, UINT stack_size):
 Cancelled(false),
 m_Id(0),
-m_Name(name),
+m_Name(std::move(name)),
 m_Status(Status::Pending),
 m_Then(nullptr),
 m_This(this),
