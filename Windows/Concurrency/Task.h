@@ -127,7 +127,7 @@ private:
 		{}
 	static inline Handle<Task> Create(TASK_PROC Procedure, Handle<String>&& Name, UINT StackSize)
 		{
-		return Object::Create<TaskProcedure, TASK_PROC, Handle<String>&&, UINT>(Procedure, std::forward<Handle<String>>(Name), StackSize);
+		return Object::Create<TaskProcedure>(Procedure, std::forward<Handle<String>>(Name), StackSize);
 		}
 
 	// Common
@@ -161,7 +161,7 @@ private:
 		{}
 	static inline Handle<Task> Create(_owner_t* Owner, TASK_PROC Procedure, Handle<String>&& Name, UINT StackSize)
 		{
-		return Object::Create<TaskMemberProcedure, _owner_t*, TASK_PROC, Handle<String>&&, UINT>(Owner, Procedure, std::forward<Handle<String>>(Name), StackSize);
+		return Object::Create<TaskMemberProcedure>(Owner, Procedure, std::forward<Handle<String>>(Name), StackSize);
 		}
 
 	// Common
@@ -193,7 +193,7 @@ private:
 		{}
 	static inline Handle<Task> Create(_owner_t* Owner, _lambda_t&& Lambda, Handle<String>&& Name, UINT StackSize)
 		{
-		return Object::Create<TaskLambda, _owner_t*, _lambda_t&&, Handle<String>&&, UINT>(Owner, std::forward<_lambda_t>(Lambda), std::forward<Handle<String>>(Name), StackSize);
+		return Object::Create<TaskLambda>(Owner, std::forward<_lambda_t>(Lambda), std::forward<Handle<String>>(Name), StackSize);
 		}
 
 	// Common
@@ -219,7 +219,7 @@ private:
 		{}
 	static inline Handle<Task> Create(_lambda_t&& Lambda, Handle<String>&& Name, UINT StackSize)
 		{
-		return Object::Create<TaskLambda, _lambda_t&&, Handle<String>&&, UINT>(std::forward<_lambda_t>(Lambda), std::forward<Handle<String>>(Name), StackSize);
+		return Object::Create<TaskLambda>(std::forward<_lambda_t>(Lambda), std::forward<Handle<String>>(Name), StackSize);
 		}
 
 	// Common
