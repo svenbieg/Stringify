@@ -55,8 +55,8 @@ while(s_First)
 	lock.Unlock();
 	while(handler)
 		{
-		handler->Run();
 		auto next=handler->m_Next;
+		handler->Run();
 		delete handler;
 		handler=next;
 		}

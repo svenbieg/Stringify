@@ -11,7 +11,6 @@
 
 #include <utility>
 #include "Handle.h"
-#include "TypeHelper.h"
 
 
 //===========
@@ -95,7 +94,6 @@ public:
 	// Common
 	inline VOID Run()override
 		{
-		assert(m_Owner->GetReferenceCount()>0);
 		(m_Owner->*m_Procedure)();
 		}
 
