@@ -41,12 +41,13 @@
 // Forward-Declarations
 //======================
 
-#define __COPY_MAX 2
-#define __LONG long
-#define __LONG_LONG long long
+#define __long long
+#define __long_long long long
 
 #ifdef _X86_
-#define __ADDR_T unsigned long
+#define __addr_t unsigned long
 #else
-#define __ADDR_T unsigned long long
+#define __addr_t unsigned long long
 #endif
+
+#define COPY_MAX 2
