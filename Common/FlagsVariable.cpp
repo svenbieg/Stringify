@@ -28,9 +28,9 @@ UINT count=0;
 for(auto it=m_Flags.cbegin(); it.has_current(); it.move_next())
 	{
 	if(count>0)
-		flags=flags+"|";
+		flags+="|";
 	auto flag=it.get_current();
-	flags=flags+flag;
+	flags+=flag;
 	count++;
 	}
 return flags;
