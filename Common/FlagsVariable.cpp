@@ -51,31 +51,27 @@ return size;
 // Modification
 //==============
 
-VOID FlagsVariable::Clear(BOOL notify)
+VOID FlagsVariable::Clear()
 {
 if(m_Flags.get_count()==0)
 	return;
 m_Flags.clear();
-if(notify)
-	Changed(this);
+Changed(this);
 }
 
-VOID FlagsVariable::Clear(Handle<String> flag, BOOL notify)
+VOID FlagsVariable::Clear(Handle<String> flag)
 {
-if(!m_Flags.contains(flag))
-	return;
-m_Flags.remove(flag);
-if(notify)
+if(m_Flags.remove(flag))
 	Changed(this);
 }
 
-BOOL FlagsVariable::FromString(Handle<String> str, BOOL notify)
+BOOL FlagsVariable::FromString(Handle<String> str)
 {
 if(!str)
 	return false;
 if(str=="0")
 	{
-	Clear(notify);
+	Clear();
 	return true;
 	}
 auto list=StringList::Create(str);
@@ -102,25 +98,24 @@ for(auto it=list->Begin(); it->HasCurrent(); it->MoveNext())
 			}
 		}
 	}
-if(changed&&notify)
+if(changed)
 	Changed(this);
 return true;
 }
 
-SIZE_T FlagsVariable::ReadFromStream(InputStream* stream, BOOL notify)
+SIZE_T FlagsVariable::ReadFromStream(InputStream* stream)
 {
 SIZE_T size=0;
 StreamReader reader(stream);
 auto str=reader.ReadString(&size);
-FromString(str, notify);
+FromString(str);
 return size;
 }
 
-VOID FlagsVariable::Set(Handle<String> flag, BOOL notify)
+VOID FlagsVariable::Set(Handle<String> flag)
 {
 if(m_Flags.contains(flag))
 	return;
 m_Flags.set(flag);
-if(notify)
-	Changed(this);
+Changed(this);
 }

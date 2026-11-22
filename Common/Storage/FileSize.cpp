@@ -39,24 +39,23 @@ return Stream->Write(&m_Value, sizeof(UINT64));
 // Modification
 //==============
 
-SIZE_T FileSize::ReadFromStream(InputStream* stream, BOOL notify)
+SIZE_T FileSize::ReadFromStream(InputStream* stream)
 {
 if(!stream)
 	return 0;
 UINT64 value=0;
 SIZE_T size=stream->Read(&value, sizeof(UINT64));
 if(size==sizeof(UINT64))
-	Set(value, notify);
+	Set(value);
 return size;
 }
 
-BOOL FileSize::Set(UINT64 value, BOOL notify)
+BOOL FileSize::Set(UINT64 value)
 {
 if(m_Value==value)
 	return false;
 m_Value=value;
-if(notify)
-	Changed(this);
+Changed(this);
 return true;
 }
 

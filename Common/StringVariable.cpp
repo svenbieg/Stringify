@@ -41,23 +41,27 @@ return size;
 // Modification
 //==============
 
-SIZE_T StringVariable::ReadFromStream(InputStream* stream, BOOL notify)
+BOOL StringVariable::FromString(Handle<String> value)
+{
+return Set(value);
+}
+
+SIZE_T StringVariable::ReadFromStream(InputStream* stream)
 {
 if(!stream)
 	return 0;
 SIZE_T size=0;
 StreamReader reader(stream);
 auto str=reader.ReadString();
-Set(str, notify);
+Set(str);
 return size;
 }
 
-BOOL StringVariable::Set(Handle<String> value, BOOL notify)
+BOOL StringVariable::Set(Handle<String> value)
 {
 if(m_Value==value)
 	return true;
 m_Value=value;
-if(notify)
-	Changed(this);
+Changed(this);
 return true;
 }

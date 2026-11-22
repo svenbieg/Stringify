@@ -48,8 +48,8 @@ public:
 	SIZE_T WriteToStream(OutputStream* Stream)override;
 
 	// Modification
-	SIZE_T ReadFromStream(InputStream* Stream, BOOL Notify=true)override;
-	BOOL Set(UINT64 Value, BOOL Notify=true);
+	SIZE_T ReadFromStream(InputStream* Stream)override;
+	BOOL Set(UINT64 Value);
 
 private:
 	// Con-/Destructors

@@ -38,12 +38,12 @@ return Stream->Write(&value, sizeof(BOOL));
 // Modification
 //==============
 
-BOOL BoolVariable::FromString(Handle<String> str, BOOL notify)
+BOOL BoolVariable::FromString(Handle<String> str)
 {
 BOOL value;
 if(FromString(str, &value))
 	{
-	Set(value, notify);
+	Set(value);
 	return true;
 	}
 return false;
@@ -74,23 +74,22 @@ for(UINT u=0; u<TypeHelper::ArraySize(STR_FALSE); u++)
 return false;
 }
 
-SIZE_T BoolVariable::ReadFromStream(InputStream* stream, BOOL notify)
+SIZE_T BoolVariable::ReadFromStream(InputStream* stream)
 {
 if(!stream)
 	return sizeof(BOOL);
 BOOL value;
 SIZE_T size=stream->Read(&value, sizeof(BOOL));
 if(size==sizeof(BOOL))
-	Set(value, notify);
+	Set(value);
 return size;
 }
 
-BOOL BoolVariable::Set(BOOL value, BOOL notify)
+BOOL BoolVariable::Set(BOOL value)
 {
 if(m_Value==value)
 	return false;
 m_Value=value;
-if(notify)
-	Changed(this);
+Changed(this);
 return true;
 }

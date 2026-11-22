@@ -35,9 +35,9 @@ public:
 	SIZE_T WriteToStream(OutputStream* Stream)override;
 
 	// Modification
-	BOOL FromString(Handle<String> Value, BOOL Notify=true)override;
-	SIZE_T ReadFromStream(InputStream* Stream, BOOL Notify=true)override;
-	BOOL Set(FLOAT Value, BOOL Notify=true);
+	BOOL FromString(Handle<String> Value)override;
+	SIZE_T ReadFromStream(InputStream* Stream)override;
+	BOOL Set(FLOAT Value);
 
 private:
 	// Con-/Destructors

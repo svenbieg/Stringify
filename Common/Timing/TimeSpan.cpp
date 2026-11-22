@@ -61,24 +61,23 @@ return stream->Write(&value, sizeof(UINT));
 // Modification
 //==============
 
-SIZE_T TimeSpan::ReadFromStream(InputStream* stream, BOOL notify)
+SIZE_T TimeSpan::ReadFromStream(InputStream* stream)
 {
 if(!stream)
 	return sizeof(UINT);
 UINT value;
 SIZE_T size=stream->Read(&value, sizeof(UINT));
 if(size==sizeof(UINT))
-	Set(value, notify);
+	Set(value);
 return size;
 }
 
-BOOL TimeSpan::Set(UINT value, BOOL notify)
+BOOL TimeSpan::Set(UINT value)
 {
 if(m_Value==value)
 	return false;
 m_Value=value;
-if(notify)
-	Changed(this);
+Changed(this);
 return true;
 }
 

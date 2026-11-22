@@ -64,8 +64,7 @@ m_ClockTask=Task::Create(this, &Clock::ClockTask);
 
 VOID Clock::ClockTask()
 {
-auto task=Task::Get();
-while(!task->Cancelled)
+while(1)
 	{
 	Task::Sleep(100);
 	DispatchedQueue::Append(this, [this](){ Tick(this); });

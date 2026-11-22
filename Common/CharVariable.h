@@ -41,8 +41,8 @@ public:
 	SIZE_T WriteToStream(OutputStream* Stream)override;
 
 	// Modification
-	SIZE_T ReadFromStream(InputStream* Stream, BOOL Notify=true)override;
-	VOID Set(WCHAR Value, BOOL Notify=true);
+	SIZE_T ReadFromStream(InputStream* Stream)override;
+	VOID Set(WCHAR Value);
 
 private:
 	// Con-/Destructors

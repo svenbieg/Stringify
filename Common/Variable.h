@@ -32,8 +32,8 @@ public:
 
 	// Common
 	Event<Variable> Changed;
-	virtual BOOL FromString(Handle<String> Value, BOOL Notify=true) { return false; }
-	virtual SIZE_T ReadFromStream(InputStream* Stream, BOOL Notify=true)=0;
+	virtual BOOL FromString(Handle<String> Value) { return false; }
+	virtual SIZE_T ReadFromStream(InputStream* Stream)=0;
 	virtual Handle<String> ToString(LanguageCode Language=LanguageCode::None)=0;
 
 protected:

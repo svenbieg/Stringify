@@ -115,11 +115,11 @@ public:
 	SIZE_T WriteToStream(OutputStream* Stream)override;
 
 	// Modification
-	VOID Clear(BOOL Notify=true);
+	VOID Clear();
 	static VOID FromSeconds(TIME_POINT* TimePoint, UINT64 Seconds);
 	static BOOL FromTimeStamp(TIME_POINT* TimePoint, LPCSTR TimeStamp);
-	SIZE_T ReadFromStream(InputStream* Stream, BOOL Notify=true)override;
-	BOOL Set(TIME_POINT const& TimePoint, BOOL Notify=true);
+	SIZE_T ReadFromStream(InputStream* Stream)override;
+	BOOL Set(TIME_POINT const& TimePoint);
 
 private:
 	// Con-/Destructors

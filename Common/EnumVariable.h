@@ -47,9 +47,9 @@ public:
 
 	// Modification
 	VOID Add(Handle<Sentence> Value);
-	BOOL FromString(Handle<String> Value, BOOL Notify=true)override;
-	SIZE_T ReadFromStream(InputStream* Stream, BOOL Notify=true)override;
-	BOOL Set(Handle<Sentence> Value, BOOL Notify=true);
+	BOOL FromString(Handle<String> Value)override;
+	SIZE_T ReadFromStream(InputStream* Stream)override;
+	BOOL Set(Handle<Sentence> Value);
 
 private:
 	// Con-/Destructors

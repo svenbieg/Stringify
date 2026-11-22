@@ -53,9 +53,9 @@ public:
 	// Common
 	static LanguageCode FromString(LPCSTR Value);
 	static LanguageCode FromString(LPCWSTR Value);
-	static inline LanguageCode FromString(Handle<String> Value) { return FromString(Value? Value->Begin(): nullptr); }
-	SIZE_T ReadFromStream(InputStream* Stream, BOOL Notify=true)override;
-	BOOL Set(LanguageCode Value, BOOL Notify=true);
+	BOOL FromString(Handle<String> Value)override;
+	SIZE_T ReadFromStream(InputStream* Stream)override;
+	BOOL Set(LanguageCode Value);
 
 private:
 	// Con-/Destructors

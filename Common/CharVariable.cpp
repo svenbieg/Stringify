@@ -38,23 +38,22 @@ return writer.PrintChar(value);
 // Modification
 //==============
 
-SIZE_T CharVariable::ReadFromStream(InputStream* stream, BOOL notify)
+SIZE_T CharVariable::ReadFromStream(InputStream* stream)
 {
 StreamReader reader(stream);
 WCHAR value=0;
 SIZE_T size=reader.ReadChar(&value);
 if(size)
-	Set(value, notify);
+	Set(value);
 return size;
 }
 
-VOID CharVariable::Set(WCHAR value, BOOL notify)
+VOID CharVariable::Set(WCHAR value)
 {
 if(m_Value==value)
 	return;
 m_Value=value;
-if(notify)
-	Changed(this);
+Changed(this);
 }
 
 

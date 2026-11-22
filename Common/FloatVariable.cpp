@@ -29,33 +29,32 @@ return Stream->Write(&value, sizeof(FLOAT));
 // Modification
 //==============
 
-BOOL FloatVariable::FromString(Handle<String> value, BOOL notify)
+BOOL FloatVariable::FromString(Handle<String> value)
 {
 if(!value)
 	return false;
 FLOAT f;
 if(value->Scan("%f", &f)!=1)
 	return false;
-return Set(f, notify);
+return Set(f);
 }
 
-SIZE_T FloatVariable::ReadFromStream(InputStream* stream, BOOL notify)
+SIZE_T FloatVariable::ReadFromStream(InputStream* stream)
 {
 if(!stream)
 	return sizeof(FLOAT);
 FLOAT value;
 SIZE_T size=stream->Read(&value, sizeof(FLOAT));
 if(size==sizeof(FLOAT))
-	Set(value, notify);
+	Set(value);
 return size;
 }
 
-BOOL FloatVariable::Set(FLOAT value, BOOL notify)
+BOOL FloatVariable::Set(FLOAT value)
 {
 if(m_Value==value)
 	return false;
 m_Value=value;
-if(notify)
-	Changed(this);
+Changed(this);
 return true;
 }

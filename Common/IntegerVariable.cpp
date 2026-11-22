@@ -29,12 +29,12 @@ return Stream->Write(&value, sizeof(INT));
 // Modification
 //==============
 
-BOOL IntegerVariable::FromString(Handle<String> str, BOOL notify)
+BOOL IntegerVariable::FromString(Handle<String> str)
 {
 INT value;
 if(FromString(str, &value))
 	{
-	Set(value, notify);
+	Set(value);
 	return true;
 	}
 return false;
@@ -52,23 +52,22 @@ if(value_ptr)
 return true;
 }
 
-SIZE_T IntegerVariable::ReadFromStream(InputStream* stream, BOOL notify)
+SIZE_T IntegerVariable::ReadFromStream(InputStream* stream)
 {
 if(!stream)
 	return sizeof(INT);
 INT value;
 SIZE_T size=stream->Read(&value, sizeof(INT));
 if(size==sizeof(INT))
-	Set(value, notify);
+	Set(value);
 return size;
 }
 
-BOOL IntegerVariable::Set(INT value, BOOL notify)
+BOOL IntegerVariable::Set(INT value)
 {
 if(m_Value==value)
 	return false;
 m_Value=value;
-if(notify)
-	Changed(this);
+Changed(this);
 return true;
 }

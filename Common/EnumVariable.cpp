@@ -54,7 +54,7 @@ if(!m_Value)
 	m_Value=value;
 }
 
-BOOL EnumVariable::FromString(Handle<String> str, BOOL notify)
+BOOL EnumVariable::FromString(Handle<String> str)
 {
 if(!str)
 	return false;
@@ -67,23 +67,22 @@ for(auto it=m_Values.cbegin(); it.has_current(); it.move_next())
 return false;
 }
 
-SIZE_T EnumVariable::ReadFromStream(InputStream* stream, BOOL notify)
+SIZE_T EnumVariable::ReadFromStream(InputStream* stream)
 {
 SIZE_T size=0;
 StreamReader reader(stream);
 auto str=reader.ReadString(&size);
-FromString(str, notify);
+FromString(str);
 return size;
 }
 
-BOOL EnumVariable::Set(Handle<Sentence> value, BOOL notify)
+BOOL EnumVariable::Set(Handle<Sentence> value)
 {
 if(m_Value==value)
 	return true;
 if(!m_Values.contains(value))
 	return false;
 m_Value=value;
-if(notify)
-	Changed(this);
+Changed(this);
 return true;
 }

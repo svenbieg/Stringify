@@ -179,10 +179,10 @@ return stream->Write(&tp, sizeof(TIME_POINT));
 // Modification
 //==============
 
-VOID TimePoint::Clear(BOOL notify)
+VOID TimePoint::Clear()
 {
 TIME_POINT tp(0);
-Set(tp, notify);
+Set(tp);
 }
 
 VOID TimePoint::FromSeconds(TIME_POINT* tp, UINT64 seconds)
@@ -261,24 +261,23 @@ tp->Year=(WORD)year;
 return true;
 }
 
-SIZE_T TimePoint::ReadFromStream(InputStream* stream, BOOL notify)
+SIZE_T TimePoint::ReadFromStream(InputStream* stream)
 {
 assert(stream);
 TIME_POINT value;
 SIZE_T size=stream->Read(&value, sizeof(TIME_POINT));
 if(size==sizeof(TIME_POINT))
-	Set(value, notify);
+	Set(value);
 return size;
 }
 
-BOOL TimePoint::Set(TIME_POINT const& value, BOOL notify)
+BOOL TimePoint::Set(TIME_POINT const& value)
 {
 if(m_Value==value)
 	return false;
 m_Value=value;
 UpdateClock();
-if(notify)
-	Changed(this);
+Changed(this);
 return true;
 }
 

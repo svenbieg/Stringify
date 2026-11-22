@@ -84,9 +84,9 @@ public:
 	SIZE_T WriteToStream(OutputStream* Stream)override;
 
 	// Modification
-	BOOL FromString(Handle<String> String, BOOL Notify=true)override;
-	SIZE_T ReadFromStream(InputStream* Stream, BOOL Notify=true)override;
-	BOOL Set(GLOBAL_UNIQUE_ID const& Value, BOOL Notify=true);
+	BOOL FromString(Handle<String> String)override;
+	SIZE_T ReadFromStream(InputStream* Stream)override;
+	BOOL Set(GLOBAL_UNIQUE_ID const& Value);
 
 private:
 	// Con-/Destructors

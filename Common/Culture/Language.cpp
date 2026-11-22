@@ -96,24 +96,36 @@ LanguageCode Language::FromString(LPCWSTR lng)
 return LanguageFromString(lng);
 }
 
-SIZE_T Language::ReadFromStream(InputStream* stream, BOOL notify)
+BOOL Language::FromString(Handle<String> str)
+{
+if(!str)
+	return false;
+LanguageCode lng=FromString(str->Begin());
+if(lng!=LanguageCode::None)
+	{
+	Set(lng);
+	return true;
+	}
+return false;
+}
+
+SIZE_T Language::ReadFromStream(InputStream* stream)
 {
 if(!stream)
 	return sizeof(LanguageCode);
 LanguageCode value;
 SIZE_T size=stream->Read(&value, sizeof(LanguageCode));
 if(size==sizeof(LanguageCode))
-	Set(value, notify);
+	Set(value);
 return size;
 }
 
-BOOL Language::Set(LanguageCode value, BOOL notify)
+BOOL Language::Set(LanguageCode value)
 {
 if(m_Value==value)
 	return false;
 m_Value=value;
-if(notify)
-	Changed(this);
+Changed(this);
 return true;
 }
 

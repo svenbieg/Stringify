@@ -87,31 +87,30 @@ return Stream->Write(&value, sizeof(GLOBAL_UNIQUE_ID));
 // Modification
 //==============
 
-BOOL GuidVariable::FromString(Handle<String> value, BOOL notify)
+BOOL GuidVariable::FromString(Handle<String> value)
 {
 GLOBAL_UNIQUE_ID id;
 if(!GLOBAL_UNIQUE_ID::FromString(value, &id))
 	return false;
-return Set(id, notify);
+return Set(id);
 }
 
-SIZE_T GuidVariable::ReadFromStream(InputStream* stream, BOOL notify)
+SIZE_T GuidVariable::ReadFromStream(InputStream* stream)
 {
 if(!stream)
 	return sizeof(GLOBAL_UNIQUE_ID);
 GLOBAL_UNIQUE_ID id;
 SIZE_T size=stream->Read(&id, sizeof(GLOBAL_UNIQUE_ID));
 if(size==sizeof(GLOBAL_UNIQUE_ID))
-	Set(id, notify);
+	Set(id);
 return size;
 }
 
-BOOL GuidVariable::Set(GLOBAL_UNIQUE_ID const& value, BOOL notify)
+BOOL GuidVariable::Set(GLOBAL_UNIQUE_ID const& value)
 {
 if(m_Value==value)
 	return false;
 m_Value=value;
-if(notify)
-	Changed(this);
+Changed(this);
 return true;
 }
